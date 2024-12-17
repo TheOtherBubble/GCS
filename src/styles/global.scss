@@ -1,0 +1,70 @@
+@use "mixins";
+@use "variables";
+
+:root {
+	font-family: variables.$font-body;
+	color: variables.$text-color;
+	background-color: variables.$bg-color;
+
+	// Theme colors. Set up with CSS variables to support the addition of a light theme later on.
+	--font-body: Arial, sans-serif;
+	--font-title: "Berlin Sans FB Demi", sans-serif; // Berlin Sans FB Demi Bold is available by default only on Windows.
+	--bg-color: #{variables.$black-russian};
+	--fg-color: #{variables.$pixie-powder};
+	--text-color: #{variables.$white};
+	--italic-color: #{variables.$bright-sun};
+	--bold-color: #{variables.$orange};
+}
+
+b,
+strong {
+	color: variables.$bold-color;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+	color: variables.$italic-color;
+	font-family: variables.$font-title;
+}
+
+a,
+hr,
+caption,
+i,
+em {
+	color: variables.$italic-color;
+}
+
+body {
+	margin: 0px;
+}
+
+main {
+	margin: 8px;
+}
+
+button {
+	color: variables.$text-color;
+	background-color: variables.$fg-color;
+	border: 1px solid variables.$text-color;
+	border-radius: 10px;
+	padding: 6px 8px;
+
+	&:hover {
+		color: variables.$fg-color;
+		background-color: variables.$text-color;
+		border: 1px solid variables.$fg-color;
+	}
+}
+
+table,
+th,
+td {
+	border: 1px solid variables.$bold-color;
+	border-collapse: collapse;
+	padding: 5px;
+}
