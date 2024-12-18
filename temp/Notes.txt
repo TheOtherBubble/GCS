@@ -32,3 +32,22 @@ Finally, some questions that came up while I was writing all of that:
  - Yes.
 - Would you like some sort of system for ranking players to help captains with the draft? If so, which metric would you like to use? Would you like a special page on the website for captains to draft from?
  - Putting draft in would be awesome, but they're just placing based on rank for now.
+
+Data Dragon notes:
+- Versions list at https://ddragon.leagueoflegends.com/api/versions.json (newest first).
+- Languages list at https://ddragon.leagueoflegends.com/cdn/languages.json.
+- Realm-specific version information at https://ddragon.leagueoflegends.com/realms/na.json, where `na` should be replaced by the realm code.
+ - Includes the Data Dragon CDN base URL, the region's language, and the region's Data Dragon version.
+- Champion list at https://ddragon.leagueoflegends.com/cdn/14.24.1/data/en_US/champion.json, where `14.24.1` should be replaced by the Data Dragon version and `en_US` should be replaced by the language.
+ - Includes a list of champion IDs as keys on an object.
+- Individual champions at https://ddragon.leagueoflegends.com/cdn/14.24.1/data/en_US/champion/Aatrox.json, replacing the version and language as listed above and `Aatrox` depending on the champion ID.
+ - Includes a list of skins with names and numbers.
+- Individual champion splash arts at https://ddragon.leagueoflegends.com/cdn/img/champion/splash/Aatrox_0.jpg, replacing the champion ID as listed above and replacing `0` with the skin number.
+
+Other ideas:
+- Allow players to link streaming accounts. For games that are in progress, show links to the players' streams if they are live. Maybe put this on the player cards?
+- Restrict PUUIDs that can join tournament codes.
+- Inhouse bot.
+- Generate draft links? Will want to use blind pick if so.
+- 404 page.
+- Button for admins to re-cache game result data.

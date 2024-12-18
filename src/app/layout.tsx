@@ -4,6 +4,12 @@ import type LayoutProps from "../scripts/LayoutProps";
 import domain from "../scripts/domain";
 import style from "./layout.module.scss";
 
+/**
+ * The root layout.
+ * @param params - The parameters passed to the layout.
+ * @returns The root layout.
+ * @public
+ */
 export default function Layout({ children }: LayoutProps) {
 	return (
 		<html lang="en-US">
@@ -16,11 +22,19 @@ export default function Layout({ children }: LayoutProps) {
 	);
 }
 
+/**
+ * The viewport of the website.
+ * @public
+ */
 export const viewport: Viewport = {
 	colorScheme: "dark",
 	themeColor: "#140031"
 };
 
+/**
+ * The base metadata of the website.
+ * @public
+ */
 export const metadata: Metadata = {
 	authors: [{ name: "Travis Martin", url: "https://www.lakuna.pw" }],
 	creator: "Travis Martin",

@@ -1,5 +1,10 @@
 import type { Metadata } from "next";
 
+/**
+ * The landing page.
+ * @returns The landing page.
+ * @public
+ */
 export default function Page() {
 	return (
 		<>
@@ -16,8 +21,12 @@ export default function Page() {
 	);
 }
 
+/**
+ * The metadata of the landing page.
+ * @public
+ */
 export const metadata: Metadata = {
 	description: "The home page of the VeryLastNerve League.",
 	openGraph: { url: "/" },
-	title: "Home"
+	title: "VLN League"
 };
