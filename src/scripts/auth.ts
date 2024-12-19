@@ -4,7 +4,7 @@ import { DrizzleAdapter } from "@auth/drizzle-adapter";
 import NextAuth from "next-auth";
 import db from "./db";
 
-// Can't import `env.ts` here because `process.cwd` is not a function, but environment variables are available anyway.
+// Can't import `env.ts` here because `process.cwd` is not a function, but environment variables are available anyway. Note that these environment variables must be available during the build process.
 
 const clientId = process.env["DISCORD_CLIENT_ID"];
 if (!clientId) {
