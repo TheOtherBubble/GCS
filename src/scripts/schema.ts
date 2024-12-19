@@ -35,28 +35,25 @@ export const players = pgTable("players", {
 	// The user's email address. Used by Auth.js to link OAuth accounts to users.
 	email: varchar({ length: 0x40 }),
 
-	// The time that the user's email address was verified.
+	// Required by Auth.js, but always null.
 	emailVerified: timestamp(),
 
-	// A UUID that represents the player. Supplied by Auth.js. Must be a `varchar` to make Auth.js happy.
-	id: varchar({ length: 0x40 })
+	// A UUID that represents the player. Supplied by Auth.js. Must be a `varchar` to make Auth.js happy, despite always being 36 characters.
+	id: varchar({ length: 36 })
 		.primaryKey()
 		.$defaultFn(() => crypto.randomUUID()),
 
-	// The player's image, provided by Auth.js. Not used, but required in the schema.
+	// Required by Auth.js, but always null. Image is instead determined with `backgroundChampionId` and `backgroundSkinId`.
 	image: varchar({ length: 0x200 }),
 
 	// Whether or not this user is an administrator.
 	isAdministator: boolean().notNull().default(false),
 
-	// A username. If this isn't defined, the game name of the player's primary Riot account is used instead. If neither is defined, the Discord snowflake is used instead.
-	name: varchar({ length: 0x40 }),
+	// The player's display name. Passed through `encodeURIComponent` and then used as a slug to make the player's URL.
+	name: varchar({ length: 0x40 }).notNull(),
 
 	// The player's Twitch ID.
 	twitchId: varchar({ length: 0x40 }),
-
-	// The player's vanity URL ending. Passed through `encodeURIComponent` and then used as a slug to make the player's URL. If this isn't defined, the Discord snowflake is used instead.
-	vanityUrl: varchar({ length: 0x20 }).unique(),
 
 	// The player's YouTube ID.
 	youtubeId: varchar({ length: 0x40 })
@@ -77,14 +74,14 @@ export const oauthAccounts = pgTable(
 		// eslint-disable-next-line camelcase
 		expires_at: integer(),
 
-		// The ID token.
+		// The ID token. Required by Auth.js, but always null.
 		// eslint-disable-next-line camelcase
 		id_token: varchar({ length: 0x100 }),
 
-		// The account's provider.
+		// The account's provider. Always `"discord"`.
 		provider: varchar({ length: 0x20 }).notNull(),
 
-		// The provider account ID.
+		// The provider account ID. Equivalent to the user's Discord snowflake.
 		providerAccountId: varchar({ length: 0x100 }).notNull(),
 
 		// The refresh token.
@@ -94,7 +91,7 @@ export const oauthAccounts = pgTable(
 		// The token's scope.
 		scope: varchar({ length: 0x100 }),
 
-		// The session's state.
+		// The session's state. Required by Auth.js, but always null.
 		// eslint-disable-next-line camelcase
 		session_state: varchar({ length: 0x100 }),
 
@@ -106,7 +103,7 @@ export const oauthAccounts = pgTable(
 		type: varchar({ length: 0x20 }).$type<AdapterAccountType>().notNull(),
 
 		// The ID of the associated player.
-		userId: varchar({ length: 0x40 })
+		userId: varchar({ length: 36 })
 			.notNull()
 			.references(() => players.id, { onDelete: "cascade" })
 	},
@@ -118,14 +115,14 @@ export const oauthAccounts = pgTable(
  * @public
  */
 export const sessions = pgTable("sessions", {
-	/** The timestamp that the session expires at. */
+	// The timestamp that the session expires at.
 	expires: timestamp().notNull(),
 
-	/** The session token. */
+	// The session token.
 	sessionToken: varchar({ length: 0x100 }).primaryKey(),
 
-	/** The player that the session belongs to. */
-	userId: varchar({ length: 0x40 })
+	// The player that the session belongs to.
+	userId: varchar({ length: 36 })
 		.notNull()
 		.references(() => players.id, { onDelete: "cascade" })
 });
@@ -147,7 +144,7 @@ export const accounts = pgTable(
 		isPrimary: boolean(),
 
 		// The ID of the player that the account is linked to.
-		playerId: varchar({ length: 0x40 })
+		playerId: varchar({ length: 36 })
 			.references(() => players.id, { onDelete: "cascade" })
 			.notNull(),
 
@@ -229,7 +226,7 @@ export const teamPlayers = pgTable(
 		isCaptain: boolean(),
 
 		// The ID of the player.
-		playerId: varchar({ length: 0x40 })
+		playerId: varchar({ length: 36 })
 			.references(() => players.id, { onDelete: "cascade" })
 			.notNull(),
 
@@ -509,7 +506,7 @@ export const playerGameResults = pgTable(
 		pentaKills: integer().notNull(),
 
 		// The ID of the player, if any. May be null if the game result isn't part of a tournament or inhouse (such as games that are just pulled from the Riot API to collect statistics).
-		playerId: varchar({ length: 0x40 }).references(() => players.id, {
+		playerId: varchar({ length: 36 }).references(() => players.id, {
 			onDelete: "set null"
 		}),
 
