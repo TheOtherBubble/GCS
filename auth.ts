@@ -1,10 +1,8 @@
-import { oauthAccounts, players } from "./src/db/schema";
+import { oauthAccounts, players, sessions } from "./src/db/schema";
 import Discord from "next-auth/providers/discord";
 import { DrizzleAdapter } from "@auth/drizzle-adapter";
 import NextAuth from "next-auth";
 import db from "./src/db/db";
-
-// TODO: Need to load environment variables?
 
 const clientId = process.env["DISCORD_CLIENT_ID"];
 if (!clientId) {
@@ -20,6 +18,7 @@ if (!clientSecret) {
 // eslint-disable-next-line new-cap
 const adapter = DrizzleAdapter(db, {
 	accountsTable: oauthAccounts,
+	sessionsTable: sessions,
 	usersTable: players
 });
 
@@ -27,9 +26,9 @@ const adapter = DrizzleAdapter(db, {
 // eslint-disable-next-line new-cap
 const provider = Discord({ clientId, clientSecret });
 provider.profile = (profile) => ({
-	discordId: profile.id, // TODO: Will this actually return a snowflake or just the UUID again?
+	discordId: profile.id, // This one is the actual Discord snowflake.
 	email: profile.email,
-	id: profile.id,
+	id: profile.id, // This one just makes a UUID for some reason.
 	name: profile.display_name
 });
 

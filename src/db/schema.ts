@@ -114,6 +114,23 @@ export const oauthAccounts = pgTable(
 );
 
 /**
+ * An OAuth session for a player.
+ * @public
+ */
+export const sessions = pgTable("sessions", {
+	/** The timestamp that the session expires at. */
+	expires: timestamp().notNull(),
+
+	/** The session token. */
+	sessionToken: varchar({ length: 0x100 }).primaryKey(),
+
+	/** The player that the session belongs to. */
+	userId: varchar({ length: 0x40 })
+		.notNull()
+		.references(() => players.id, { onDelete: "cascade" })
+});
+
+/**
  * The table of Riot accounts. Each Riot account is linked to one player. Riot account game names and tag lines are cached to reduce calls to the Riot API.
  * @public
  */
