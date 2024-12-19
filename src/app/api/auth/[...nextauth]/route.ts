@@ -1,5 +1,7 @@
 import auth from "../../../../../auth";
 
+// TODO: Custom sign in pages? See https://authjs.dev/getting-started/session-management/custom-pages.
+
 /**
  * The HTTP request handlers. Necessary for NextAuth.js to work.
  * @public

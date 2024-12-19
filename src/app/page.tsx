@@ -6,7 +6,9 @@ import auth from "../../auth";
  * @returns The landing page.
  * @public
  */
-export default function Page() {
+export default async function Page() {
+	const session = await auth.auth();
+
 	return (
 		<>
 			<h1 style={{ textAlign: "center" }}>{"Gauntlet Championship Series"}</h1>
@@ -18,14 +20,26 @@ export default function Page() {
 				<em>{" and this is italic"}</em>
 				{"!"}
 			</p>
-			<form
-				action={async () => {
-					"use server";
-					await auth.signIn("discord");
-				}}
-			>
-				<button type="submit">Sign in with Discord</button>
-			</form>
+			{/* TODO: Relocate and clean up sign in/out button. */}
+			{session ? (
+				<form
+					action={async () => {
+						"use server";
+						await auth.signOut();
+					}}
+				>
+					<button type="submit">Sign out</button>
+				</form>
+			) : (
+				<form
+					action={async () => {
+						"use server";
+						await auth.signIn("discord");
+					}}
+				>
+					<button type="submit">Sign in with Discord</button>
+				</form>
+			)}
 		</>
 	);
 }
@@ -39,3 +53,5 @@ export const metadata: Metadata = {
 	openGraph: { url: "/" },
 	title: "Gauntlet Championship Series"
 };
+
+// TODO: `metadataBase` property in `metadata` export is not set? See https://nextjs.org/docs/app/api-reference/functions/generate-metadata#metadatabase.
