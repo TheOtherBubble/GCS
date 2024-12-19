@@ -27,6 +27,7 @@ const adapter = DrizzleAdapter(db, {
 // eslint-disable-next-line new-cap
 const provider = Discord({ clientId, clientSecret });
 provider.profile = (profile) => ({
+	discordId: profile.id, // TODO: Will this actually return a snowflake or just the UUID again?
 	email: profile.email,
 	id: profile.id,
 	name: profile.display_name

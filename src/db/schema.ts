@@ -29,14 +29,19 @@ export const players = pgTable("players", {
 	// A player-defined biography.
 	biography: varchar({ length: 0x100 }),
 
+	// A Discord snowflake (64-bit integer) stored as a string.
+	discordId: varchar({ length: 0x40 }).notNull(),
+
 	// The user's email address. Used by Auth.js to link OAuth accounts to users.
 	email: varchar({ length: 0x40 }),
 
 	// The time that the user's email address was verified.
 	emailVerified: timestamp(),
 
-	// A Discord snowflake (64-bit integer) stored as a string. The longest 64-bit integer contains 20 digits.
-	id: varchar({ length: 20 }).primaryKey(),
+	// A UUID that represents the player. Supplied by Auth.js. Must be a `varchar` to make Auth.js happy.
+	id: varchar({ length: 0x40 })
+		.primaryKey()
+		.$defaultFn(() => crypto.randomUUID()),
 
 	// The player's image, provided by Auth.js. Not used, but required in the schema.
 	image: varchar({ length: 0x200 }),
@@ -101,7 +106,7 @@ export const oauthAccounts = pgTable(
 		type: varchar({ length: 0x20 }).$type<AdapterAccountType>().notNull(),
 
 		// The ID of the associated player.
-		userId: varchar({ length: 20 })
+		userId: varchar({ length: 0x40 })
 			.notNull()
 			.references(() => players.id, { onDelete: "cascade" })
 	},
@@ -125,7 +130,7 @@ export const accounts = pgTable(
 		isPrimary: boolean(),
 
 		// The ID of the player that the account is linked to.
-		playerId: char({ length: 36 })
+		playerId: varchar({ length: 0x40 })
 			.references(() => players.id, { onDelete: "cascade" })
 			.notNull(),
 
@@ -207,7 +212,7 @@ export const teamPlayers = pgTable(
 		isCaptain: boolean(),
 
 		// The ID of the player.
-		playerId: char({ length: 36 })
+		playerId: varchar({ length: 0x40 })
 			.references(() => players.id, { onDelete: "cascade" })
 			.notNull(),
 
@@ -487,7 +492,7 @@ export const playerGameResults = pgTable(
 		pentaKills: integer().notNull(),
 
 		// The ID of the player, if any. May be null if the game result isn't part of a tournament or inhouse (such as games that are just pulled from the Riot API to collect statistics).
-		playerId: char({ length: 36 }).references(() => players.id, {
+		playerId: varchar({ length: 0x40 }).references(() => players.id, {
 			onDelete: "set null"
 		}),
 
