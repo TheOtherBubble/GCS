@@ -53,3 +53,4 @@ Other ideas:
 - Button for admins to re-cache game result data.
 - Vanity URLs.
 - Rename to Gauntlet Championship Series (GCS) - new branding incoming.
+- Ability to mark other players that you do/don't want to play with? Maybe more information in a sort of "player review?"

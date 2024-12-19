@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import auth from "../../auth";
 
 /**
  * The landing page.
@@ -17,6 +18,14 @@ export default function Page() {
 				<em>{" and this is italic"}</em>
 				{"!"}
 			</p>
+			<form
+				action={async () => {
+					"use server";
+					await auth.signIn("discord");
+				}}
+			>
+				<button type="submit">Sign in with Discord</button>
+			</form>
 		</>
 	);
 }
