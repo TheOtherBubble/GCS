@@ -1,9 +1,10 @@
-import "./env";
 import { oauthAccounts, players, sessions } from "./schema";
 import Discord from "next-auth/providers/discord";
 import { DrizzleAdapter } from "@auth/drizzle-adapter";
 import NextAuth from "next-auth";
 import db from "./db";
+
+// Can't import `env.ts` here because `process.cwd` is not a function, but environment variables are available anyway.
 
 const clientId = process.env["DISCORD_CLIENT_ID"];
 if (!clientId) {
