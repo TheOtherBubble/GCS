@@ -8,7 +8,7 @@ import type { Metadata } from "next";
 export default function Page() {
 	return (
 		<>
-			<h1 style={{ textAlign: "center" }}>{"VLN League"}</h1>
+			<h1 style={{ textAlign: "center" }}>{"Gauntlet Championship Series"}</h1>
 			<hr />
 			<p style={{ textAlign: "center" }}>
 				{"This is some example text, "}
@@ -26,7 +26,7 @@ export default function Page() {
  * @public
  */
 export const metadata: Metadata = {
-	description: "The home page of the VeryLastNerve League.",
+	description: "The home page of the Gauntlet Championship Series.",
 	openGraph: { url: "/" },
-	title: "VLN League"
+	title: "Gauntlet Championship Series"
 };

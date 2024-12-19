@@ -14,11 +14,11 @@ import {
  * @public
  */
 export const players = pgTable("players", {
-	// A player-selected champion to use as a background on player cards, stored as a champion name.
-	backgroundChampion: varchar({ length: 0x20 }),
+	// A player-selected champion to use as a background on player cards, stored as a champion ID.
+	backgroundChampionId: varchar({ length: 0x20 }),
 
-	// A player-selected champion skin to use as a background on player cards, stored as a champion skin number.
-	backgroundSkinNumber: integer(),
+	// A player-selected champion skin to use as a background on player cards, stored as a skin ID.
+	backgroundSkinId: varchar({ length: 0x20 }),
 
 	// The date that the user is banned until.
 	bannedUntilDate: date(),
@@ -39,10 +39,13 @@ export const players = pgTable("players", {
 	name: varchar({ length: 0x20 }),
 
 	// The player's Twitch ID.
-	twitchId: varchar({ length: 0x40 }),
+	twitchId: varchar({ length: 0x40 }).unique(),
+
+	// The player's vanity URL ending. Passed through `encodeURIComponent` and then used as a slug to make the player's URL.
+	vanityUrl: varchar({ length: 0x20 }).notNull().unique(),
 
 	// The player's YouTube ID.
-	youtubeId: varchar({ length: 0x40 })
+	youtubeId: varchar({ length: 0x40 }).unique()
 });
 
 /**
@@ -121,7 +124,10 @@ export const teams = pgTable(
 		// The ID of the team's season.
 		seasonId: integer()
 			.references(() => seasons.id)
-			.notNull()
+			.notNull(),
+
+		// The team's vanity URL ending. Passed through `encodeURIComponent` and then used as a slug to make the team's URL.
+		vanityUrl: varchar({ length: 0x20 }).notNull().unique()
 	},
 	(self) => [
 		unique().on(self.code, self.seasonId),
@@ -295,7 +301,7 @@ export const teamGameResultBans = pgTable(
 	"teamGameResultBans",
 	{
 		// The ID of the champion that was banned.
-		championId: integer().notNull(),
+		championId: varchar({ length: 0x20 }).notNull(),
 
 		// The order in which this ban occurred.
 		order: integer().notNull(),
@@ -331,7 +337,7 @@ export const playerGameResults = pgTable(
 		championDamage: integer().notNull(),
 
 		// The ID of the champion that the player played.
-		championId: integer().notNull(),
+		championId: varchar({ length: 0x20 }).notNull(),
 
 		// The player's creep score from killing monsters in the enemy jungle.
 		counterJungleCreepScore: integer().notNull(),
@@ -359,6 +365,15 @@ export const playerGameResults = pgTable(
 
 		// Whether or not this player got the first tower kill.
 		firstTower: boolean().notNull(),
+
+		// The amount of gold that the player has over their lane opponent at 14 minutes into the game (when the Rift Herald spawns and turret plating falls off).
+		gd14: integer().notNull(),
+
+		// The amount of gold that the player has over their lane opponent at 20 minutes into the game (when Baron Nashor/Atakhan spawns).
+		gd20: integer().notNull(),
+
+		// The amount of gold that the player has over their lane opponent at 6 minutes into the game (when the Voidgrubs spawn).
+		gd6: integer().notNull(),
 
 		// The amount of gold that the player earned.
 		goldEarned: integer().notNull(),

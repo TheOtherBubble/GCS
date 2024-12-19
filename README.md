@@ -1,3 +1,3 @@
-# VLN
+# Gauntlet Championship Series
 
-VeryLastNerve League tooling.
+Gauntlet Championship Series (formerly VeryLastNerve League) tooling.

@@ -40,12 +40,12 @@ export const metadata: Metadata = {
 	creator: "Travis Martin",
 	metadataBase: new URL(domain),
 	openGraph: {
-		siteName: "VLN League",
+		siteName: "Gauntlet Championship Series",
 		type: "website"
 	},
 	publisher: "Travis Martin",
 	title: {
 		default: "Page",
-		template: "%s | VLN"
+		template: "%s | GCS"
 	}
 };
