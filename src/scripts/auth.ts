@@ -29,10 +29,9 @@ const adapter = DrizzleAdapter(db, {
 const provider = Discord({ clientId, clientSecret });
 provider.profile = (profile) => ({
 	discordId: profile.id, // This one is the actual Discord snowflake.
-	email: profile.email,
+	email: profile.email, // Used by Auth.js to connect OAuth accounts to users.
 	id: profile.id, // This one just makes a UUID for some reason.
-	name: profile.username, // Used only by Auth.js.
-	username: profile.username // Default the player's username to their Discord username.
+	name: profile.username // Default the player's name to their Discord username.
 });
 
 /**

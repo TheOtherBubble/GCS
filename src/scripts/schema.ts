@@ -49,14 +49,11 @@ export const players = pgTable("players", {
 	// Whether or not this user is an administrator.
 	isAdministator: boolean().notNull().default(false),
 
-	// The user's name. Used by Auth.js, not by this application.
+	// A username. If this isn't defined, the game name of the player's primary Riot account is used instead. If neither is defined, the Discord snowflake is used instead.
 	name: varchar({ length: 0x40 }),
 
 	// The player's Twitch ID.
 	twitchId: varchar({ length: 0x40 }),
-
-	// A username. If this isn't defined, the game name of the player's primary Riot account is used instead. If neither is defined, the Discord snowflake is used instead.
-	username: varchar({ length: 0x20 }),
 
 	// The player's vanity URL ending. Passed through `encodeURIComponent` and then used as a slug to make the player's URL. If this isn't defined, the Discord snowflake is used instead.
 	vanityUrl: varchar({ length: 0x20 }).unique(),
