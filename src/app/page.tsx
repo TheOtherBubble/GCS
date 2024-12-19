@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import auth from "../../auth";
+import auth from "../scripts/auth";
 
 /**
  * The landing page.

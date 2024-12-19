@@ -1,8 +1,9 @@
-import { oauthAccounts, players, sessions } from "./src/db/schema";
+import "./env";
+import { oauthAccounts, players, sessions } from "./schema";
 import Discord from "next-auth/providers/discord";
 import { DrizzleAdapter } from "@auth/drizzle-adapter";
 import NextAuth from "next-auth";
-import db from "./src/db/db";
+import db from "./db";
 
 const clientId = process.env["DISCORD_CLIENT_ID"];
 if (!clientId) {
@@ -26,10 +27,11 @@ const adapter = DrizzleAdapter(db, {
 // eslint-disable-next-line new-cap
 const provider = Discord({ clientId, clientSecret });
 provider.profile = (profile) => ({
-	discordId: profile.id, // This one is the actual Discord snowflake.
-	email: profile.email,
-	id: profile.id, // This one just makes a UUID for some reason.
-	name: profile.display_name
+	discordId: profile.id,
+	email: "", // TODO: Testing!
+	id: "", // TODO: Testing!
+	name: "", // TODO: Testing!
+	username: profile.username
 });
 
 /**

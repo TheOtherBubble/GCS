@@ -1,4 +1,4 @@
-import auth from "../../../../../auth";
+import auth from "../../../../scripts/auth";
 
 // TODO: Custom sign in pages? See https://authjs.dev/getting-started/session-management/custom-pages.
 

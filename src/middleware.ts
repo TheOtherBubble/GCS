@@ -1,4 +1,4 @@
-import auth from "../auth";
+import auth from "./scripts/auth";
 
 /**
  * Middleware to keep the Auth.js (NextAuth.js) session alive.
