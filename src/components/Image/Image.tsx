@@ -14,46 +14,46 @@ export type ImageProps = NextImageProps | JSX.IntrinsicElements["img"];
  * @returns The image.
  * @public
  */
-export default function Image({
-	alt = "",
-	src,
-	width,
-	height,
-	...props
-}: ImageProps) {
-	// Recombine arguments into one object (so that default arguments can be applied).
-	const actualProps: ImageProps = {
-		alt,
-		src: src ?? "",
-		...props
-	};
+export default function Image(props: ImageProps) {
+	const { src, alt, width, height, ...remainingProps } = props;
 
-	// Apply width if present.
+	// Ensure that required properties are present.
+
+	if (!src) {
+		throw new Error("Image source is required.");
+	}
+
+	if (!alt) {
+		throw new Error("Image alternative text is required.");
+	}
+
+	const finalProps: ImageProps = { alt, src, ...remainingProps };
+
+	// Exact optional property types.
+
 	if (typeof width === "number") {
-		actualProps.width = width;
-	} else if (width) {
-		actualProps.width = parseInt(width, 10);
+		finalProps.width = width;
+	} else if (typeof width === "string") {
+		finalProps.width = parseInt(width, 10);
 	}
 
-	// Apply height if present.
 	if (typeof height === "number") {
-		actualProps.height = height;
-	} else if (height) {
-		actualProps.height = parseInt(height, 10);
+		finalProps.height = height;
+	} else if (typeof height === "string") {
+		finalProps.height = parseInt(height, 10);
 	}
 
-	// Apply default placeholder type unless specified.
-	actualProps.placeholder =
-		"placeholder" in props ? (props.placeholder ?? "blur") : "blur";
+	// Default properties.
 
-	// Use the default blur image if the source is a URL unless specified.
-	if (typeof actualProps.src === "string") {
-		actualProps.blurDataURL =
-			"blurDataURL" in props
-				? props.blurDataURL
-				: (defaultBlur.blurDataURL ??
-					"iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mO0EWz9DwADNgHTpjJpDQAAAABJRU5ErkJggg=="); // One pixel of pixie powder (the foreground color). TODO: Update to match new branding.
+	finalProps.placeholder ??= "blur";
+
+	if (typeof finalProps.src === "string") {
+		if (!defaultBlur.blurDataURL) {
+			throw new Error("Default blur data URL is required.");
+		}
+
+		finalProps.blurDataURL ??= defaultBlur.blurDataURL;
 	}
 
-	return <NextImage {...actualProps} />;
+	return <NextImage {...finalProps} />;
 }

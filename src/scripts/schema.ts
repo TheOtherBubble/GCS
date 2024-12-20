@@ -137,6 +137,7 @@ export const accountTier = pgEnum("accountTier", [
 	"SILVER",
 	"GOLD",
 	"PLATINUM",
+	"EMERALD",
 	"DIAMOND",
 	"MASTER",
 	"GRANDMASTER",
@@ -182,7 +183,7 @@ export const accounts = pgTable(
 		// The Player Universally Unique ID (PUUID) of the account. PUUIDs are always 78 characters long.
 		puuid: char({ length: 78 }).primaryKey(),
 
-		// The rank (within a tier) of the account at the last time that the account was cached.
+		// The solo/duo rank (within a tier) of the account at the last time that the account was cached.
 		rankCache: accountRank().notNull(),
 
 		// The account's platform (region) ID (i.e. `"NA1"` for North America).
@@ -194,7 +195,7 @@ export const accounts = pgTable(
 		// The tag line of the account at the last time that the account was cached. The longest allowed tag line is 5 characters.
 		tagLineCache: varchar({ length: 5 }).notNull(),
 
-		// The tier of the account at the last time that the account was cached.
+		// The solo/duo tier of the account at the last time that the account was cached.
 		tierCache: accountTier().notNull()
 	},
 	(self) => [

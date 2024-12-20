@@ -9,7 +9,10 @@ import domain from "../scripts/domain";
  * Equivalent to the props that can be passed to a Next.js link or an anchor element.
  * @public
  */
-export type LinkProps = NextLinkProps | JSX.IntrinsicElements["a"];
+export type LinkProps =
+	| (Omit<NextLinkProps, keyof JSX.IntrinsicElements["a"]> &
+			JSX.IntrinsicElements["a"])
+	| JSX.IntrinsicElements["a"];
 
 /**
  * Create a hyperlink. Uses Next.js-style preloading for internal links and HTML anchor elements for external links.
@@ -17,25 +20,34 @@ export type LinkProps = NextLinkProps | JSX.IntrinsicElements["a"];
  * @returns The link.
  * @public
  */
-export default function Link({
-	href = "",
-	onMouseEnter,
-	onTouchStart,
-	onClick,
-	...props
-}: LinkProps) {
-	const hrefString = typeof href === "string" ? href : (href.href ?? "");
+export default function Link(props: LinkProps) {
+	const { href, onMouseEnter, onTouchStart, onClick, ...remainingProps } =
+		props;
 
-	// Events cannot be passed to client components.
+	// Ensure that required properties are present.
+
+	if (!href) {
+		throw new Error("Link reference is required.");
+	}
+
+	// Ignore disallowed properties.
+
 	void onMouseEnter;
 	void onTouchStart;
 	void onClick;
 
-	return hrefString.startsWith("/") ||
-		hrefString.startsWith(domain) ||
-		hrefString.startsWith("#") ? (
-		<NextLink href={href} {...props} />
-	) : (
-		<a href={hrefString} {...props} target="_blank" rel="noreferrer noopener" />
-	);
+	const finalProps = { href, ...remainingProps };
+
+	// Default properties.
+
+	if (
+		!finalProps.href.startsWith("/") &&
+		!finalProps.href.startsWith("#") &&
+		!finalProps.href.startsWith(domain)
+	) {
+		finalProps.target ??= "_blank";
+		finalProps.rel ??= "noreferrer noopener";
+	}
+
+	return <NextLink {...finalProps} />;
 }
