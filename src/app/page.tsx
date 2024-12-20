@@ -1,14 +1,11 @@
 import type { Metadata } from "next";
-import auth from "../scripts/auth";
 
 /**
  * The landing page.
  * @returns The landing page.
  * @public
  */
-export default async function Page() {
-	const session = await auth.auth();
-
+export default function Page() {
 	return (
 		<>
 			<h1 style={{ textAlign: "center" }}>{"Gauntlet Championship Series"}</h1>
@@ -20,26 +17,23 @@ export default async function Page() {
 				<em>{" and this is italic"}</em>
 				{"!"}
 			</p>
-			{/* TODO: Relocate and clean up sign in/out button. */}
-			{session ? (
-				<form
-					action={async () => {
-						"use server";
-						await auth.signOut();
-					}}
-				>
-					<button type="submit">Sign out</button>
-				</form>
-			) : (
-				<form
-					action={async () => {
-						"use server";
-						await auth.signIn("discord");
-					}}
-				>
-					<button type="submit">Sign in with Discord</button>
-				</form>
-			)}
+			{/* TODO: Move player card mock-up to its own element. */}
+			<h2>{"Player card mock-up:"}</h2>
+			<div
+				style={{
+					aspectRatio: 3 / 1,
+					backgroundColor: "#3c1185",
+					backgroundImage:
+						"url(https://ddragon.leagueoflegends.com/cdn/img/champion/splash/Volibear_0.jpg)",
+					backgroundSize: 600,
+					borderRadius: 25,
+					display: "grid",
+					gridTemplate: "",
+					width: 600
+				}}
+			>
+				{/* TODO: WIP. */}
+			</div>
 		</>
 	);
 }

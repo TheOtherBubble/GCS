@@ -1,0 +1,85 @@
+@use "../../styles/variables";
+@use "../../styles/mixins";
+
+nav.topnav {
+	// Fixed-size bar.
+	background-color: variables.$fg-color;
+	height: 80px;
+
+	// Make text bigger within the navigation bar.
+	font-size: 1.5em;
+
+	// Elements are stored in an unordered list.
+	& > ul {
+		// Remove default unordered list styling.
+		margin: 0px;
+		padding: 0px;
+		list-style-type: none;
+
+		// Take up the entire navigation bar.
+		height: 100%;
+
+		// List elements using flexbox.
+		display: flex;
+
+		// List items take up entire height due to flexbox stretch.
+		& > li {
+			// Remove default list item styling.
+			display: inline-block;
+
+			// Highlight list items on hover.
+			&:hover {
+				background-color: variables.$bg-color;
+			}
+
+			// Allow some elements to be right-aligned.
+			&.right {
+				margin-left: auto;
+			}
+
+			* {
+				// Remove element-specific styling from list item contents (especially anchors and buttons).
+				text-decoration: none;
+				border: none;
+				border-radius: 0px;
+				font-size: 1em;
+
+				// Always use the same colors as the list item so that hovering displays properly.
+				background-color: inherit;
+				color: inherit;
+
+				// Always take up the entire navigation bar height.
+				display: inline-block;
+				height: 100%;
+			}
+
+			// Special case for images - otherwise they'll use their full size.
+			img {
+				width: auto;
+				height: 50%;
+
+				// Outline image so that it's clear against the background.
+				filter: drop-shadow(0px 0px 1px variables.$bold-color);
+				background-color: transparent;
+			}
+
+			// Clearly indicate clickable elements.
+			a,
+			button,
+			input[type="submit"] {
+				cursor: pointer;
+			}
+
+			// Vertically center contents within top-level list item contents.
+			& > * {
+				display: inline-flex;
+				align-items: center;
+
+				& > * {
+					height: auto;
+					padding: 8px 16px;
+				}
+			}
+		}
+	}
+}
