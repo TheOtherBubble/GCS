@@ -128,6 +128,28 @@ export const sessions = pgTable("sessions", {
 });
 
 /**
+ * Tiers that an account can be.
+ * @public
+ */
+export const accountTier = pgEnum("accountTier", [
+	"IRON",
+	"BRONZE",
+	"SILVER",
+	"GOLD",
+	"PLATINUM",
+	"DIAMOND",
+	"MASTER",
+	"GRANDMASTER",
+	"CHALLENGER"
+]);
+
+/**
+ * Ranks that an account can be within a tier.
+ * @public
+ */
+export const accountRank = pgEnum("accountRank", ["I", "II", "III", "IV"]);
+
+/**
  * The table of Riot accounts. Each Riot account is linked to one player. Riot account game names and tag lines are cached to reduce calls to the Riot API.
  * @public
  */
@@ -160,6 +182,9 @@ export const accounts = pgTable(
 		// The Player Universally Unique ID (PUUID) of the account. PUUIDs are always 78 characters long.
 		puuid: char({ length: 78 }).primaryKey(),
 
+		// The rank (within a tier) of the account at the last time that the account was cached.
+		rankCache: accountRank().notNull(),
+
 		// The account's platform (region) ID (i.e. `"NA1"` for North America).
 		region: varchar({ length: 4 }).notNull(),
 
@@ -167,7 +192,10 @@ export const accounts = pgTable(
 		summonerId: varchar({ length: 63 }).notNull(),
 
 		// The tag line of the account at the last time that the account was cached. The longest allowed tag line is 5 characters.
-		tagLineCache: varchar({ length: 5 }).notNull()
+		tagLineCache: varchar({ length: 5 }).notNull(),
+
+		// The tier of the account at the last time that the account was cached.
+		tierCache: accountTier().notNull()
 	},
 	(self) => [
 		unique().on(self.accountId, self.region),
