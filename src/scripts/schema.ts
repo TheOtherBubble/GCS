@@ -134,6 +134,9 @@ export const sessions = pgTable("sessions", {
 export const accounts = pgTable(
 	"accounts",
 	{
+		// The Riot account ID of the account. 56 character maximum length.
+		accountId: varchar({ length: 56 }).notNull(),
+
 		// The date and time that the account was last cached.
 		cacheDate: date().notNull().defaultNow(),
 
@@ -143,18 +146,34 @@ export const accounts = pgTable(
 		// Whether or not this account is the primary account of the associated player. Must be null for non-primary accounts.
 		isPrimary: boolean(),
 
+		// Whether or not the associated player has verified ownership of this account.
+		isVerified: boolean().notNull().default(false),
+
 		// The ID of the player that the account is linked to.
 		playerId: varchar({ length: 36 })
 			.references(() => players.id, { onDelete: "cascade" })
 			.notNull(),
 
+		// The ID of the profile icon that the account must select in order to verify that the associated player owns it. Randomly selected from icons in the starter pack (IDs 0 through 28), which every player owns.
+		profileIconIdToVerify: integer().notNull(),
+
 		// The Player Universally Unique ID (PUUID) of the account. PUUIDs are always 78 characters long.
 		puuid: char({ length: 78 }).primaryKey(),
+
+		// The account's platform (region) ID (i.e. `"NA1"` for North America).
+		region: varchar({ length: 4 }).notNull(),
+
+		// The account's summoner ID. 63 character maximum length.
+		summonerId: varchar({ length: 63 }).notNull(),
 
 		// The tag line of the account at the last time that the account was cached. The longest allowed tag line is 5 characters.
 		tagLineCache: varchar({ length: 5 }).notNull()
 	},
-	(self) => [unique().on(self.isPrimary, self.playerId)]
+	(self) => [
+		unique().on(self.accountId, self.region),
+		unique().on(self.isPrimary, self.playerId),
+		unique().on(self.region, self.summonerId)
+	]
 );
 
 /**
