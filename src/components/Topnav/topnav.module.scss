@@ -76,8 +76,14 @@ nav.topnav {
 				align-items: center;
 
 				& > * {
-					height: auto;
+					height: auto; // Don't take up the entire height so that visible element is centered.
 					padding: 8px 16px;
+				}
+
+				// Special case for forms with buttons - otherwise the clickable part will be smaller than the display area.
+				& > input[type="submit"] {
+					height: 100%;
+					padding: 0px 16px;
 				}
 			}
 		}

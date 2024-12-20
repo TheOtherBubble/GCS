@@ -58,3 +58,6 @@ Other ideas:
 
 Questions for designer/branding person:
 - 32x32 favicon please!
+- Make sure that colors conform to WCAG for SEO.
+- Will we need a separate color scheme for the website? See how it looks.
+- Variable fonts preferable (for SEO) - Google Fonts best.
