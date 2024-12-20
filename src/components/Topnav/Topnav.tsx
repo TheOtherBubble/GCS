@@ -3,7 +3,7 @@ import Image from "../Image/Image";
 import type { JSX } from "react";
 import Link from "../Link";
 import style from "./topnav.module.scss";
-import submark from "./submark.png";
+import submark from "./submark.png"; // TODO: Update submark image with new branding. May be able to remove the filter too.
 
 /**
  * The site-wide top navigation bar.

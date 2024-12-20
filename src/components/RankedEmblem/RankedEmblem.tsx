@@ -53,6 +53,6 @@ export default function RankedEmblem(props: RankedEmblemProps): JSX.Element {
 			return <Image alt="Grandmaster" src={grandmaster} {...props} />;
 		case "CHALLENGER":
 		default: // Prevented by TypeScript.
-			return <Image alt="Challenger" src={challenger} />;
+			return <Image alt="Challenger" src={challenger} {...props} />;
 	}
 }

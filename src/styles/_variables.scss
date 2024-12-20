@@ -1,20 +1,15 @@
 // Standard mobile breakpoint; the width of an iPad in the portrait orientation.
 $mobile-breakpoint: 768px;
 
-// Main color palette.
+// Color palette.
 $black-russian: #140031;
 $blackberry: #41003a;
 $pixie-powder: #3c1185;
 $cardinal-pink: #940253;
-
-// Accent color palette.
 $red-ribbon: #de0442;
 $orange: #ff7120;
 $bright-sun: #fbcd38;
-
-// Font color palette.
-$white: #ffffff; // On Black Russian and Pixie Powder.
-// Black Russian on Bright Sun.
+$white: #ffffff;
 
 // Sass variables for CSS variables.
 $font-title: var(--font-title);

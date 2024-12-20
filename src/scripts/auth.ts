@@ -63,14 +63,22 @@ export interface AppRouteHandlerFnContext {
 }
 
 /**
- * Equivalent to `NextAuthResult["auth"]` from Auth.js.
+ * Equivalent to `Session` from Auth.js, but specifies that the returned user matches the type in the database.
+ * @public
+ */
+export interface PlayerSession extends Session {
+	user?: typeof players.$inferSelect;
+}
+
+/**
+ * Equivalent to `NextAuthResult["auth"]` from Auth.js, but specifies that the returned user matches the type in the database.
  * @public
  */
 export type NextAuthResultAuth = ((
 	...args: [NextApiRequest, NextApiResponse]
-) => Promise<Session | null>) &
-	((...args: []) => Promise<Session | null>) &
-	((...args: [GetServerSidePropsContext]) => Promise<Session | null>) &
+) => Promise<PlayerSession | null>) &
+	((...args: []) => Promise<PlayerSession | null>) &
+	((...args: [GetServerSidePropsContext]) => Promise<PlayerSession | null>) &
 	((
 		...args: [
 			(
