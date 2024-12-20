@@ -1,7 +1,7 @@
+import { auth, signIn, signOut } from "../../scripts/auth";
 import Image from "../Image/Image";
 import type { JSX } from "react";
 import Link from "../Link";
-import auth from "../../scripts/auth";
 import style from "./topnav.module.scss";
 import submark from "./submark.png";
 
@@ -14,7 +14,7 @@ export default async function Topnav({
 	className,
 	...props
 }: JSX.IntrinsicElements["nav"]) {
-	const session = await auth.auth();
+	const session = await auth();
 
 	const topnavClassName = style["topnav"];
 
@@ -43,7 +43,7 @@ export default async function Topnav({
 						<form
 							action={async () => {
 								"use server";
-								await auth.signOut();
+								await signOut();
 							}}
 						>
 							<input type="submit" value="Sign Out" />
@@ -52,7 +52,7 @@ export default async function Topnav({
 						<form
 							action={async () => {
 								"use server";
-								await auth.signIn("discord");
+								await signIn("discord");
 							}}
 						>
 							<input type="submit" value="Sign In" />

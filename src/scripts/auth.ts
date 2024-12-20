@@ -1,7 +1,14 @@
+import type {
+	GetServerSidePropsContext,
+	NextApiRequest,
+	NextApiResponse
+} from "next";
+import NextAuth, { type NextAuthResult, type Session } from "next-auth";
 import { oauthAccounts, players, sessions } from "./schema";
+import type { AppRouteHandlerFn } from "next/dist/server/route-modules/app-route/module";
 import Discord from "next-auth/providers/discord";
 import { DrizzleAdapter } from "@auth/drizzle-adapter";
-import NextAuth from "next-auth";
+import type { NextRequest } from "next/server";
 import db from "./db";
 
 // Can't import `env.ts` here because `process.cwd` is not a function, but environment variables are available anyway. Note that these environment variables must be available during the build process.
@@ -34,6 +41,56 @@ provider.profile = (profile) => ({
 	name: profile.username // Default the player's name to their Discord username.
 });
 
+// eslint-disable-next-line new-cap
+const result = NextAuth({ adapter, providers: [provider] });
+
+// Auth.js doesn't export the types of `NextAuthResult["auth"]` correctly, so we need to manually type the exports.
+
+/**
+ * Equivalent to `NextAuthRequest` from Auth.js.
+ * @public
+ */
+export interface NextAuthRequest extends NextRequest {
+	auth: Session | null;
+}
+
+/**
+ * Equivalent to `AppRouteHandlerFnContext` from Auth.js.
+ * @public
+ */
+export interface AppRouteHandlerFnContext {
+	params?: Record<string, string | string[]>;
+}
+
+/**
+ * Equivalent to `NextAuthResult["auth"]` from Auth.js.
+ * @public
+ */
+export type NextAuthResultAuth = ((
+	...args: [NextApiRequest, NextApiResponse]
+) => Promise<Session | null>) &
+	((...args: []) => Promise<Session | null>) &
+	((...args: [GetServerSidePropsContext]) => Promise<Session | null>) &
+	((
+		...args: [
+			(
+				req: NextAuthRequest,
+				ctx: AppRouteHandlerFnContext
+			) => ReturnType<AppRouteHandlerFn>
+		]
+	) => AppRouteHandlerFn);
+
+/**
+ * Equivalent to `NextAuthResult` from Auth.js
+ * @public
+ */
+export interface NextAuthResultFixed {
+	auth: NextAuthResultAuth;
+	handlers: NextAuthResult["handlers"];
+	signIn: NextAuthResult["signIn"];
+	signOut: NextAuthResult["signOut"];
+}
+
 /**
  * The Auth.js configuration.
  * @see {@link https://authjs.dev/getting-started/installation?framework=Next.js | Installation}
@@ -41,7 +98,5 @@ provider.profile = (profile) => ({
  * @see {@link https://authjs.dev/getting-started/database | Database Adapters}
  * @public
  */
-// eslint-disable-next-line new-cap
-export default NextAuth({ adapter, providers: [provider] });
-
-// TODO: It'd be nice to split up the default export into `{ auth, handlers, signIn, signOut }`, but Auth.js doesn't export the types of `auth` correctly.
+export const { auth, handlers, signIn, signOut } =
+	result as unknown as NextAuthResultFixed;
