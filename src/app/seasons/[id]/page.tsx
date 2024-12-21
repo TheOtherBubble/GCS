@@ -65,6 +65,6 @@ export const generateMetadata = async (
 	return {
 		description: `The schedule for Gauntlet Championship Series ${name}.`,
 		openGraph: { url: `/seasons/${id}` },
-		title: `GCS ${name}`
+		title: name
 	};
 };

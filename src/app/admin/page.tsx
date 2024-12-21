@@ -58,7 +58,7 @@ export default async function Page() {
  * @public
  */
 export const metadata: Metadata = {
-	description: "The home page of the Gauntlet Championship Series.",
-	openGraph: { url: "/" },
-	title: "Gauntlet Championship Series"
+	description: "GCS administrator tools.",
+	openGraph: { url: "/admin" },
+	title: "Admin Tools"
 };

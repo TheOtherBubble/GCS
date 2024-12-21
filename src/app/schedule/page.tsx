@@ -39,6 +39,6 @@ export const generateMetadata = async (): Promise<Metadata> => {
 	return {
 		description: `The schedule for Gauntlet Championship Series ${name}.`,
 		openGraph: { url: "/schedule" },
-		title: `GCS ${name}`
+		title: name
 	};
 };
