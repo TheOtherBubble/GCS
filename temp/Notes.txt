@@ -55,6 +55,8 @@ Other ideas:
 - Rename to Gauntlet Championship Series (GCS) - new branding incoming.
 - Ability to mark other players that you do/don't want to play with? Maybe more information in a sort of "player review?"
 - Custom sign in pages? See https://authjs.dev/getting-started/session-management/custom-pages.
+- Schedule based on lolesports.com.
+- Player pages based on op.gg/u.gg.
 
 Questions for designer/branding person:
 - 32x32 favicon please!
