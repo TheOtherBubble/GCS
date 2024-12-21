@@ -1,0 +1,36 @@
+@use "../../styles/variables";
+
+h1.title {
+	text-align: center;
+}
+
+div.widgets {
+	display: flex;
+
+	// Each widget is a divider.
+	& > div {
+		background-color: variables.$fg-color;
+		padding: 16px;
+		border-radius: 25px;
+
+		& > h2 {
+			text-align: center;
+			margin: 0px;
+		}
+
+		& > form {
+			display: grid;
+			grid-template-columns: 1fr 1fr;
+			column-gap: 10px;
+
+			& > label {
+				text-align: right;
+				grid-column: 1 / 2;
+			}
+
+			& > input {
+				grid-column: 2 / 3;
+			}
+		}
+	}
+}

@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import style from "./page.module.scss";
 
 /**
  * The landing page.
@@ -8,7 +9,7 @@ import type { Metadata } from "next";
 export default function Page() {
 	return (
 		<>
-			<h1 style={{ textAlign: "center" }}>{"Gauntlet Championship Series"}</h1>
+			<h1 className={style["title"]}>{"Gauntlet Championship Series"}</h1>
 			<hr />
 		</>
 	);

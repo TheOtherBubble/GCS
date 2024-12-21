@@ -37,18 +37,38 @@ export default async function Topnav({
 						<span>{"Schedule"}</span>
 					</Link>
 				</li>
-				{/* Sign in/out button, depending on whether the user is currently signed in or not. */}
-				<li className={style["right"]}>
-					{session ? (
-						<form
-							action={async () => {
-								"use server";
-								await signOut();
-							}}
-						>
-							<input type="submit" value="Sign Out" />
-						</form>
-					) : (
+				<li>
+					<Link href="/rulebook">
+						<span>{"Rulebook"}</span>
+					</Link>
+				</li>
+				{session?.user ? (
+					<>
+						<li className={style["right"]}>
+							<Link href={`/players/${encodeURIComponent(session.user.name)}`}>
+								<span>{session.user.name}</span>
+							</Link>
+						</li>
+						{session.user.isAdministator && (
+							<li>
+								<Link href="/admin">
+									<span>{"Admin"}</span>
+								</Link>
+							</li>
+						)}
+						<li>
+							<form
+								action={async () => {
+									"use server";
+									await signOut();
+								}}
+							>
+								<input type="submit" value="Sign Out" />
+							</form>
+						</li>
+					</>
+				) : (
+					<li className={style["right"]}>
 						<form
 							action={async () => {
 								"use server";
@@ -57,8 +77,8 @@ export default async function Topnav({
 						>
 							<input type="submit" value="Sign In" />
 						</form>
-					)}
-				</li>
+					</li>
+				)}
 			</ul>
 		</nav>
 	);
