@@ -26,12 +26,12 @@ export default async function Page() {
 						action={async (formData) => {
 							"use server";
 
-							const season: typeof seasons.$inferInsert = {};
-
 							const name = formData.get("name");
-							if (typeof name === "string" && name !== "") {
-								season.name = name;
+							if (typeof name !== "string" || name === "") {
+								throw new Error("Invalid season name.");
 							}
+
+							const season: typeof seasons.$inferInsert = { name };
 
 							const startDate = formData.get("startDate");
 							if (typeof startDate === "string" && startDate !== "") {
@@ -44,7 +44,7 @@ export default async function Page() {
 						<label htmlFor="startDate">{"Start date:"}</label>
 						<input type="date" id="startDate" name="startDate" />
 						<label htmlFor="name">{"Name:"}</label>
-						<input type="text" id="name" name="name" />
+						<input type="text" id="name" name="name" required />
 						<input type="submit" value="Create" />
 					</form>
 				</div>

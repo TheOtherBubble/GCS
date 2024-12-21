@@ -57,6 +57,7 @@ Other ideas:
 - Custom sign in pages? See https://authjs.dev/getting-started/session-management/custom-pages.
 - Schedule based on lolesports.com.
 - Player pages based on op.gg/u.gg.
+- Add a way to report players. If google docs/forms need to be used for anything, it should be added to the website instead.
 
 Questions for designer/branding person:
 - 32x32 favicon please!

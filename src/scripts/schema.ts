@@ -213,8 +213,8 @@ export const seasons = pgTable("seasons", {
 	// Unique identifier.
 	id: integer().primaryKey().generatedAlwaysAsIdentity(),
 
-	// The season's name. If undefined, the season's ID is used instead.
-	name: varchar({ length: 0x40 }),
+	// The season's name.
+	name: varchar({ length: 0x40 }).notNull().unique(),
 
 	// The season's start date.
 	startDate: date().notNull().defaultNow()

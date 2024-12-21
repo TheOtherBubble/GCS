@@ -21,7 +21,7 @@ div.widgets {
 		& > form {
 			display: grid;
 			grid-template-columns: 1fr 1fr;
-			column-gap: 10px;
+			gap: 5px 10px;
 
 			& > label {
 				text-align: right;

@@ -34,11 +34,10 @@ export default async function Page() {
  */
 export const generateMetadata = async (): Promise<Metadata> => {
 	const season = await getCurrentSeason();
-	const name = season.name ?? `Season ${season.id.toString()}`;
 
 	return {
-		description: `The schedule for Gauntlet Championship Series ${name}.`,
+		description: `The schedule for Gauntlet Championship Series ${season.name}.`,
 		openGraph: { url: "/schedule" },
-		title: name
+		title: season.name
 	};
 };

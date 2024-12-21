@@ -46,9 +46,8 @@ export interface SeasonsPageProps {
  */
 export default async function Page(props: SeasonsPageProps) {
 	const season = await getSeasonById(parseInt((await props.params).id, 10));
-	const name = season.name ?? `Season ${season.id.toString()}`;
 
-	return <h1>{name}</h1>; // TODO
+	return <h1>{season.name}</h1>; // TODO
 }
 
 /**
@@ -60,11 +59,10 @@ export const generateMetadata = async (
 ): Promise<Metadata> => {
 	const { id } = await props.params;
 	const season = await getSeasonById(parseInt(id, 10));
-	const name = season.name ?? `Season ${season.id.toString()}`;
 
 	return {
-		description: `The schedule for Gauntlet Championship Series ${name}.`,
+		description: `The schedule for Gauntlet Championship Series ${season.name}.`,
 		openGraph: { url: `/seasons/${id}` },
-		title: name
+		title: season.name
 	};
 };
