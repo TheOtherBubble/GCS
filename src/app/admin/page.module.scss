@@ -7,6 +7,7 @@ h1.title {
 div.widgets {
 	display: flex;
 	gap: 10px;
+	flex-wrap: wrap;
 
 	// Each widget is a divider.
 	& > div {
