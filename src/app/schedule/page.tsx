@@ -1,33 +1,15 @@
 import type { Metadata } from "next";
-import db from "../../scripts/db";
-import { desc } from "drizzle-orm";
+import getLatestSeason from "../../scripts/getLatestSeason";
 import { redirect } from "next/navigation";
-import { seasonsTable } from "../../scripts/schema";
-
-/**
- * Get the latest season by start date.
- * @returns The season, if any exists.
- * @internal
- */
-const getCurrentSeason = async (): Promise<
-	typeof seasonsTable.$inferSelect | undefined
-> => {
-	const [season] = await db
-		.select()
-		.from(seasonsTable)
-		.orderBy(desc(seasonsTable.startDate))
-		.limit(1);
-	return season;
-};
 
 /**
  * The schedule page. Just redirects to the season page for the latest season.
  * @public
  */
 export default async function Page() {
-	const season = await getCurrentSeason();
+	const season = await getLatestSeason();
 	if (season) {
-		redirect(`/seasons/${encodeURIComponent(season.vanityUrl)}`);
+		redirect(`/seasons/${encodeURIComponent(season.vanityUrlSlug)}`);
 	}
 
 	return <p>{"There are no seasons."}</p>;
@@ -38,7 +20,7 @@ export default async function Page() {
  * @public
  */
 export const generateMetadata = async (): Promise<Metadata> => {
-	const season = await getCurrentSeason();
+	const season = await getLatestSeason();
 	return {
 		description: season
 			? `The schedule for Gauntlet Championship Series ${season.name}.`

@@ -6,7 +6,7 @@ div.content {
 		@if $is-not-mobile {
 			display: grid;
 			grid-template-columns: 1fr 2fr 1fr;
-			gap: 10px;
+			gap: 25px;
 
 			& > div.config {
 				grid-column: 1 / 2;

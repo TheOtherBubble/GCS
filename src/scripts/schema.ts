@@ -219,8 +219,8 @@ export const seasonsTable = pgTable("seasons", {
 	// The season's start date.
 	startDate: date().notNull().defaultNow(),
 
-	// The season's vanity URL ending. Passed through `encodeURIComponent` and then used as a slug to make the season's URL.
-	vanityUrl: varchar({ length: 0x20 }).notNull().unique()
+	// The season's vanity URL slug. Passed through `encodeURIComponent` and then used as a slug to make the season's URL.
+	vanityUrlSlug: varchar({ length: 0x20 }).notNull().unique()
 });
 
 /**
@@ -249,15 +249,15 @@ export const teamsTable = pgTable(
 		name: varchar({ length: 0x40 }).notNull(),
 
 		// The pool that the team belongs to.
-		pool: integer().notNull().default(0),
+		pool: integer().notNull().default(1),
 
 		// The ID of the team's season.
 		seasonId: integer()
 			.references(() => seasonsTable.id, { onDelete: "cascade" })
 			.notNull(),
 
-		// The team's vanity URL ending. Passed through `encodeURIComponent` and then used as a slug to make the team's URL.
-		vanityUrl: varchar({ length: 0x20 }).notNull().unique()
+		// The team's vanity URL slug. Passed through `encodeURIComponent` and then used as a slug to make the team's URL.
+		vanityUrlSlug: varchar({ length: 0x20 }).notNull().unique()
 	},
 	(self) => [
 		unique().on(self.code, self.seasonId),
@@ -296,7 +296,7 @@ export const teamPlayersTable = pgTable(
  * Formats that a match can take.
  * @public
  */
-export const matchFormatTable = pgEnum("matchFormat", [
+export const matchFormatEnum = pgEnum("matchFormat", [
 	"Block of 1",
 	"Block of 3",
 	"Best of 3",
@@ -321,7 +321,7 @@ export const matchesTable = pgTable("matches", {
 		.notNull(),
 
 	// The format of the match.
-	format: matchFormatTable().notNull(),
+	format: matchFormatEnum().notNull(),
 
 	// Unique identifier.
 	id: integer().primaryKey().generatedAlwaysAsIdentity(),
@@ -336,7 +336,7 @@ export const matchesTable = pgTable("matches", {
 		.references(() => seasonsTable.id, { onDelete: "cascade" })
 		.notNull(),
 
-	// The week of its season that the match took place during.
+	// The week of its season that the match will take place.
 	week: integer().notNull(),
 
 	// The team that won the match, if it has concluded.
