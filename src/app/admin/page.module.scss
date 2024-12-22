@@ -17,20 +17,5 @@ div.widgets {
 			text-align: center;
 			margin: 0px;
 		}
-
-		& > form {
-			display: grid;
-			grid-template-columns: 1fr 1fr;
-			gap: 5px 10px;
-
-			& > label {
-				text-align: right;
-				grid-column: 1 / 2;
-			}
-
-			& > input {
-				grid-column: 2 / 3;
-			}
-		}
 	}
 }

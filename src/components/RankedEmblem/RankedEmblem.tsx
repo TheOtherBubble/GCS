@@ -1,6 +1,6 @@
 import Image, { type ImageProps } from "../Image/Image";
 import type { JSX } from "react";
-import type { accountTier } from "../../scripts/schema";
+import type { accountTierEnum } from "../../scripts/schema";
 import bronze from "./bronze.png";
 import challenger from "./challenger.png";
 import diamond from "./diamond.png";
@@ -22,7 +22,8 @@ export type RankedEmblemProps = Omit<
 	ImageProps,
 	"src" | "alt" | "width" | "height"
 > & {
-	tier: (typeof accountTier.enumValues)[number];
+	/** The ranked tier to be represented by the emblem image. */
+	tier: (typeof accountTierEnum.enumValues)[number];
 };
 
 /**

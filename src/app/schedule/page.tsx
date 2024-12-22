@@ -2,21 +2,21 @@ import type { Metadata } from "next";
 import db from "../../scripts/db";
 import { desc } from "drizzle-orm";
 import { redirect } from "next/navigation";
-import { seasons } from "../../scripts/schema";
+import { seasonsTable } from "../../scripts/schema";
 
-const getCurrentSeason = async (): Promise<typeof seasons.$inferSelect> => {
-	// Get the latest season by start date.
+/**
+ * Get the latest season by start date.
+ * @returns The season, if any exists.
+ * @internal
+ */
+const getCurrentSeason = async (): Promise<
+	typeof seasonsTable.$inferSelect | undefined
+> => {
 	const [season] = await db
 		.select()
-		.from(seasons)
-		.orderBy(desc(seasons.startDate))
+		.from(seasonsTable)
+		.orderBy(desc(seasonsTable.startDate))
 		.limit(1);
-
-	// Ensure that the season was returned.
-	if (!season) {
-		throw new Error("There are no seasons!");
-	}
-
 	return season;
 };
 
@@ -25,7 +25,12 @@ const getCurrentSeason = async (): Promise<typeof seasons.$inferSelect> => {
  * @public
  */
 export default async function Page() {
-	redirect(`/seasons/${(await getCurrentSeason()).id.toString()}`);
+	const season = await getCurrentSeason();
+	if (season) {
+		redirect(`/seasons/${encodeURIComponent(season.vanityUrl)}`);
+	}
+
+	return <p>{"There are no seasons."}</p>;
 }
 
 /**
@@ -34,10 +39,11 @@ export default async function Page() {
  */
 export const generateMetadata = async (): Promise<Metadata> => {
 	const season = await getCurrentSeason();
-
 	return {
-		description: `The schedule for Gauntlet Championship Series ${season.name}.`,
+		description: season
+			? `The schedule for Gauntlet Championship Series ${season.name}.`
+			: "The schedule for the latest season of the Gauntlet Championship Series.",
 		openGraph: { url: "/schedule" },
-		title: season.name
+		title: season?.name ?? "Schedule"
 	};
 };

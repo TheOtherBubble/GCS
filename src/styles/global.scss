@@ -12,10 +12,12 @@
 	--bg-color: #{variables.$black-russian};
 	--fg-color: #{variables.$pixie-powder};
 	--text-color: #{variables.$white};
-	--italic-color: #{variables.$bright-sun};
-	--bold-color: #{variables.$orange};
+	--italic-color: #{variables.$orange};
+	--bold-color: #{variables.$bright-sun};
 }
 
+a,
+hr,
 b,
 strong {
 	color: variables.$bold-color;
@@ -27,12 +29,10 @@ h3,
 h4,
 h5,
 h6 {
-	color: variables.$italic-color;
+	color: variables.$bold-color;
 	font-family: variables.$font-title;
 }
 
-a,
-hr,
 caption,
 i,
 em {
@@ -67,4 +67,20 @@ td {
 	border: 1px solid variables.$bold-color;
 	border-collapse: collapse;
 	padding: 5px;
+}
+
+form {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	gap: 5px 10px;
+
+	& > label {
+		text-align: right;
+		grid-column: 1 / 2;
+	}
+
+	& > input,
+	& > select {
+		grid-column: 2 / 3;
+	}
 }

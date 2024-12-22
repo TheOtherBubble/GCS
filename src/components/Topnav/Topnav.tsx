@@ -2,6 +2,7 @@ import { auth, signIn, signOut } from "../../scripts/auth";
 import Image from "../Image/Image";
 import type { JSX } from "react";
 import Link from "../Link";
+import multiclass from "../../scripts/multiclass";
 import style from "./topnav.module.scss";
 import submark from "./submark.png"; // TODO: Update submark image with new branding. May be able to remove the filter too.
 
@@ -15,17 +16,8 @@ export default async function Topnav({
 	...props
 }: JSX.IntrinsicElements["nav"]) {
 	const session = await auth();
-
-	const topnavClassName = style["topnav"];
-
-	const fullClassName = topnavClassName
-		? className
-			? `${topnavClassName} ${className}`
-			: topnavClassName
-		: className;
-
 	return (
-		<nav className={fullClassName} {...props}>
+		<nav className={multiclass(className, style["topnav"])} {...props}>
 			<ul>
 				<li>
 					<Link href="/">
@@ -37,7 +29,7 @@ export default async function Topnav({
 						<span>{"Schedule"}</span>
 					</Link>
 				</li>
-				<li>
+				<li className={style["hide-on-mobile"]}>
 					<Link href="/rulebook">
 						<span>{"Rulebook"}</span>
 					</Link>
@@ -50,13 +42,13 @@ export default async function Topnav({
 							</Link>
 						</li>
 						{session.user.isAdministator && (
-							<li>
+							<li className={style["hide-on-mobile"]}>
 								<Link href="/admin">
 									<span>{"Admin"}</span>
 								</Link>
 							</li>
 						)}
-						<li>
+						<li className={style["hide-on-mobile"]}>
 							<form
 								action={async () => {
 									"use server";

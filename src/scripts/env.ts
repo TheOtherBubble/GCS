@@ -1,4 +1,7 @@
 import { loadEnvConfig } from "@next/env";
 
-// Load environment variables from `.env*` files.
-loadEnvConfig(process.cwd());
+/**
+ * Environment details, as loaded from `.env*` files.
+ * @public
+ */
+export default loadEnvConfig(process.cwd());

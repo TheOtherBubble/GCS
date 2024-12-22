@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import { auth } from "../../scripts/auth";
 import db from "../../scripts/db";
-import { seasons } from "../../scripts/schema";
+import getFormField from "../../scripts/getFormField";
+import { seasonsTable } from "../../scripts/schema";
 import style from "./page.module.scss";
 
 /**
@@ -9,13 +10,8 @@ import style from "./page.module.scss";
  * @public
  */
 export default async function Page() {
-	// Restrict access to administrators.
 	const session = await auth();
-	if (!session?.user?.isAdministator) {
-		return <p>{"You must be an administrator to view this page."}</p>;
-	}
-
-	return (
+	return session ? (
 		<>
 			<h1 className={style["title"]}>{"Administrator Page"}</h1>
 			<hr />
@@ -25,31 +21,26 @@ export default async function Page() {
 					<form
 						action={async (formData) => {
 							"use server";
-
-							const name = formData.get("name");
-							if (typeof name !== "string" || name === "") {
-								throw new Error("Invalid season name.");
-							}
-
-							const season: typeof seasons.$inferInsert = { name };
-
-							const startDate = formData.get("startDate");
-							if (typeof startDate === "string" && startDate !== "") {
-								season.startDate = startDate;
-							}
-
-							await db.insert(seasons).values(season);
+							await db.insert(seasonsTable).values({
+								name: getFormField(formData, "name", true),
+								startDate: getFormField(formData, "startDate"),
+								vanityUrl: getFormField(formData, "vanityUrl", true)
+							});
 						}}
 					>
 						<label htmlFor="startDate">{"Start date:"}</label>
 						<input type="date" id="startDate" name="startDate" />
 						<label htmlFor="name">{"Name:"}</label>
 						<input type="text" id="name" name="name" required />
+						<label htmlFor="vanityUrl">{"Vanity URL:"}</label>
+						<input type="text" id="vanityUrl" name="vanityUrl" required />
 						<input type="submit" value="Create" />
 					</form>
 				</div>
 			</div>
 		</>
+	) : (
+		<p>{"You must be an administrator to view this page."}</p>
 	);
 }
 

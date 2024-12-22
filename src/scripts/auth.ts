@@ -4,7 +4,7 @@ import type {
 	NextApiResponse
 } from "next";
 import NextAuth, { type NextAuthResult, type Session } from "next-auth";
-import { oauthAccounts, players, sessions } from "./schema";
+import { oauthAccountsTable, playersTable, sessionsTable } from "./schema";
 import type { AppRouteHandlerFn } from "next/dist/server/route-modules/app-route/module";
 import Discord from "next-auth/providers/discord";
 import { DrizzleAdapter } from "@auth/drizzle-adapter";
@@ -12,24 +12,11 @@ import type { NextRequest } from "next/server";
 import db from "./db";
 
 // Can't import `env.ts` here because `process.cwd` is not a function, but environment variables are available anyway. Note that these environment variables must be available during the build process.
-
 const clientId = process.env["DISCORD_CLIENT_ID"];
-if (!clientId) {
-	throw new Error("Missing Discord client ID.");
-}
-
 const clientSecret = process.env["DISCORD_CLIENT_SECRET"];
-if (!clientSecret) {
-	throw new Error("Missing Discord client secret.");
+if (!clientId || !clientSecret) {
+	throw new Error("Missing Discord client ID or secret.");
 }
-
-// The adapter that is used to connect the provider (Discord) to the database (PostgreSQL via the Drizzle ORM).
-// eslint-disable-next-line new-cap
-const adapter = DrizzleAdapter(db, {
-	accountsTable: oauthAccounts,
-	sessionsTable: sessions,
-	usersTable: players
-});
 
 // The provider, which allows users to log in via OAuth with a Discord account.
 // eslint-disable-next-line new-cap
@@ -41,17 +28,24 @@ provider.profile = (profile) => ({
 	name: profile.username // Default the player's name to their Discord username.
 });
 
-// eslint-disable-next-line new-cap
-const result = NextAuth({ adapter, providers: [provider] });
-
 // Auth.js doesn't export the types of `NextAuthResult["auth"]` correctly, so we need to manually type the exports.
 
 /**
- * Equivalent to `NextAuthRequest` from Auth.js.
+ * Equivalent to `Session` from Auth.js, but specifies that the session user matches the type in the database.
+ * @public
+ */
+export interface PlayerSession extends Session {
+	/** The logged-in user. */
+	user?: typeof playersTable.$inferSelect;
+}
+
+/**
+ * Equivalent to `NextAuthRequest` from Auth.js, but specifies that the session user matches the type in the database.
  * @public
  */
 export interface NextAuthRequest extends NextRequest {
-	auth: Session | null;
+	/** The current session. */
+	auth: PlayerSession | null;
 }
 
 /**
@@ -59,19 +53,12 @@ export interface NextAuthRequest extends NextRequest {
  * @public
  */
 export interface AppRouteHandlerFnContext {
+	/** The parameters that are passed to the app route handler. */
 	params?: Record<string, string | string[]>;
 }
 
 /**
- * Equivalent to `Session` from Auth.js, but specifies that the returned user matches the type in the database.
- * @public
- */
-export interface PlayerSession extends Session {
-	user?: typeof players.$inferSelect;
-}
-
-/**
- * Equivalent to `NextAuthResult["auth"]` from Auth.js, but specifies that the returned user matches the type in the database.
+ * Equivalent to `NextAuthResult["auth"]` from Auth.js, but specifies that the session user matches the type in the database.
  * @public
  */
 export type NextAuthResultAuth = ((
@@ -93,9 +80,27 @@ export type NextAuthResultAuth = ((
  * @public
  */
 export interface NextAuthResultFixed {
+	/**
+	 * A universal method for interacting with Auth.js. Can be used as middleware or to get the current session.
+	 * @param args - The authentication context.
+	 * @returns The current session, or a route handler function if used as middleware.
+	 */
 	auth: NextAuthResultAuth;
+
+	/** The Auth.js route handler methods. */
 	handlers: NextAuthResult["handlers"];
+
+	/**
+	 * Sign in with a provider.
+	 * @param provider - The provider to sign in with, or `undefined` to redirect the user to the sign-in page.
+	 * @param options - The sign in options.
+	 */
 	signIn: NextAuthResult["signIn"];
+
+	/**
+	 * Sign out the current user.
+	 * @param options - The sign out options.
+	 */
 	signOut: NextAuthResult["signOut"];
 }
 
@@ -106,5 +111,14 @@ export interface NextAuthResultFixed {
  * @see {@link https://authjs.dev/getting-started/database | Database Adapters}
  * @public
  */
-export const { auth, handlers, signIn, signOut } =
-	result as unknown as NextAuthResultFixed;
+// eslint-disable-next-line new-cap
+export const { auth, handlers, signIn, signOut } = NextAuth({
+	// The adapter that is used to connect the provider (Discord) to the database (PostgreSQL via the Drizzle ORM).
+	// eslint-disable-next-line new-cap
+	adapter: DrizzleAdapter(db, {
+		accountsTable: oauthAccountsTable,
+		sessionsTable,
+		usersTable: playersTable
+	}),
+	providers: [provider]
+}) as unknown as NextAuthResultFixed;

@@ -6,5 +6,9 @@ import domain from "../scripts/domain";
  * @public
  */
 export default function sitemap(): MetadataRoute.Sitemap {
-	return [{ url: `${domain}/` }];
+	return [
+		{ url: `${domain}/rulebook` },
+		{ url: `${domain}/schedule` },
+		{ url: `${domain}/` }
+	];
 }

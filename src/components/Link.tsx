@@ -21,25 +21,24 @@ export type LinkProps =
  * @public
  */
 export default function Link(props: LinkProps) {
+	// Destructure properties to access those that require custom logic.
 	const { href, onMouseEnter, onTouchStart, onClick, ...remainingProps } =
 		props;
 
 	// Ensure that required properties are present.
-
 	if (!href) {
 		throw new Error("Link reference is required.");
 	}
 
 	// Ignore disallowed properties.
-
 	void onMouseEnter;
 	void onTouchStart;
 	void onClick;
 
+	// Restructure properties into a final form to pass to Next.js.
 	const finalProps = { href, ...remainingProps };
 
-	// Default properties.
-
+	// Set default properties.
 	if (
 		!finalProps.href.startsWith("/") &&
 		!finalProps.href.startsWith("#") &&

@@ -27,6 +27,15 @@ nav.topnav {
 			// Remove default list item styling.
 			display: inline-block;
 
+			// Don't show marked elements on mobile.
+			@include mixins.is-mobile using ($is-mobile) {
+				@if $is-mobile {
+					&.hide-on-mobile {
+						display: none;
+					}
+				}
+			}
+
 			// Highlight list items on hover.
 			&:hover {
 				background-color: variables.$bg-color;

@@ -1,0 +1,51 @@
+@use "../../../styles/variables";
+@use "../../../styles/mixins";
+
+div.content {
+	@include mixins.is-not-mobile using ($is-not-mobile) {
+		@if $is-not-mobile {
+			display: grid;
+			grid-template-columns: 1fr 2fr 1fr;
+			gap: 10px;
+
+			& > div.config {
+				grid-column: 1 / 2;
+				align-self: start;
+				position: sticky;
+				top: 0px;
+			}
+
+			& > div.schedule {
+				grid-column: 2 / 3;
+			}
+
+			& > div.leaderboards {
+				grid-column: 3 / 4;
+				align-self: start;
+				position: sticky;
+				top: 0px;
+			}
+		}
+	}
+
+	& > div {
+		overflow: auto hidden;
+
+		h1,
+		h2,
+		h3,
+		h4,
+		h5,
+		h6 {
+			text-align: center;
+		}
+
+		& > div,
+		& > form {
+			background-color: variables.$fg-color;
+			border-radius: 25px;
+			padding: 16px;
+			margin: 10px 0px;
+		}
+	}
+}

@@ -15,22 +15,18 @@ export type ImageProps = NextImageProps | JSX.IntrinsicElements["img"];
  * @public
  */
 export default function Image(props: ImageProps) {
+	// Destructure properties to access those that require custom logic.
 	const { src, alt, width, height, ...remainingProps } = props;
 
 	// Ensure that required properties are present.
-
-	if (!src) {
-		throw new Error("Image source is required.");
+	if (!src || !alt) {
+		throw new Error("Image is missing a required property.");
 	}
 
-	if (!alt) {
-		throw new Error("Image alternative text is required.");
-	}
-
+	// Restructure properties into a final form to pass to Next.js.
 	const finalProps: ImageProps = { alt, src, ...remainingProps };
 
-	// Exact optional property types.
-
+	// Set exact optional property types.
 	if (typeof width === "number") {
 		finalProps.width = width;
 	} else if (typeof width === "string") {
@@ -43,10 +39,8 @@ export default function Image(props: ImageProps) {
 		finalProps.height = parseInt(height, 10);
 	}
 
-	// Default properties.
-
+	// Set default properties.
 	finalProps.placeholder ??= "blur";
-
 	if (typeof finalProps.src === "string") {
 		if (!defaultBlur.blurDataURL) {
 			throw new Error("Default blur data URL is required.");
