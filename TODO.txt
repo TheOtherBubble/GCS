@@ -1,0 +1,76 @@
+TODO:
+- Player cards:
+ - Show name, background skin, KDA, seasons played, and rank.
+ - Link to streams if they are live.
+- Team cards:
+ - Show name, color, logo, season, and pool.
+ - Show an indicator if the team won its season.
+ - Link to page.
+- Match cards:
+ - Show both teams' codes, colors, and logos.
+ - Show format.
+ - For completed matches, show score.
+ - Link to page.
+ - For current matches, link to any involved players' streams if they are live.
+- Game cards:
+ - For upcoming games, show the tournament code.
+ - For completed games, show the result and players.
+  - For each player, show the player's name and champion.
+ - Link to page.
+ - For current games, link to any involved players' streams if they are live.
+- Landing page:
+ - Get video and blurb from Nerve; add them.
+ - Links to Discord, Twitch, and YouTube.
+ - Twitch stream embed if live.
+- Rulebook page:
+ - Confirm with Nerve that the rules look complete. Ask about rewriting to be season-agnostic (remove dates).
+- Season page:
+ - Show teams, matches, standings, and leaderboards (KDA and damage).
+ - Show the playoffs bracket once the playoffs stage begins.
+ - Move the create team, create match, and seed season widgets from the admin page.
+  - Generate the first game of each match when seeding the season.
+- Team page:
+ - Show code, color, logo, name, pool, season, captain, players, matches, and stats.
+ - Show an indicator if the team won its season.
+ - Allow administrators and the team's captain to change the code, color, logo, and name.
+ - Allow administrators to change the pool, season, captain, and players.
+ - Allow administrators to delete teams.
+- Match page:
+ - Show season, round, teams, and format.
+ - For completed and ongoing matches, show the match's score and list its games.
+ - For completed matches, show the match's winner.
+ - Allow administrators to update the match's teams, games, format, round, season, and winner.
+ - Allow administrators to delete matches.
+- Riot webhook:
+ - Generate game results when receiving a relevant request.
+  - Generate the next game in the relevant match when necessary.
+- Game page:
+ - For upcoming games, show tournament code to players on teams in the match.
+ - For games in a match, show the match.
+ - For completed games, show the map, mode, name, platform, queue, start date, type, version, result, and teams.
+  - For each team, show the bans and players.
+   - For each player, show their name, champion, items, and stats, and link to their player page if they have one.
+ - For games in a match, allow administrators to remove the game from the match. If necessary, generate a new game in that match when this happens.
+- Player page:
+ - Show background skin, biography, name, Discord account, games, accounts, stats, and seasons played and won. Link to Twitch and YouTube.
+ - Allow the player and administrators to add accounts and to update skin, biography, name, and Twitch and YouTube accounts.
+ - Allow the player to sign up for the upcoming season, if any.
+ - Allow administrators to verify accounts, ban the player, or make the player an administrator.
+ - Link to multi-op.gg or multi-u.gg of all accounts.
+  - Potentially display recent games on-site later.
+- Branding:
+ - Review color palette to ensure that it meets the WCAG AAA standard.
+ - Request a 32x32 favicon and variable Google fonts.
+- Miscellaneous:
+ - Update branding.
+ - Make styling more uniform across the site.
+ - Combine database queries where possible and faster (i.e. with inner joins).
+ - Discord integration.
+ - Light theme.
+ - Mobile support.
+ - Draft page.
+ - Restrict PUUIDs that are allowed to join games.
+ - Inhouse integration.
+ - 404 page.
+ - Player reporting system.
+ - Delete this file.
