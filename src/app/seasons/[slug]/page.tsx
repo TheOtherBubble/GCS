@@ -1,15 +1,22 @@
+import {
+	matchFormatEnum,
+	matchesTable,
+	seasonsTable,
+	teamsTable
+} from "../../../scripts/schema";
 import type { Metadata } from "next";
 import type PageProps from "../../../scripts/PageProps";
 import Submit from "../../../components/Submit";
 import { auth } from "../../../scripts/auth";
 import db from "../../../scripts/db";
+import domain from "../../../scripts/domain";
 import { eq } from "drizzle-orm";
 import getAllSeasons from "../../../scripts/getAllSeasons";
+import getAllTeamsWithSeasonId from "../../../scripts/getAllTeamsWithSeasonId";
 import getFormField from "../../../scripts/getFormField";
 import getSeasonByVanityUrlSlug from "../../../scripts/getSeasonByVanityUrlSlug";
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
-import { seasonsTable } from "../../../scripts/schema";
 import style from "./page.module.scss";
 
 /**
@@ -43,9 +50,9 @@ export default async function Page(props: PageProps<SeasonsPageParams>) {
 				);
 			}}
 		>
-			<label htmlFor="vanity-url-slug">{"Change season"}</label>
+			<label htmlFor="change-season-vanity-url-slug">{"Change season"}</label>
 			<select
-				id="vanity-url-slug"
+				id="change-season-vanity-url-slug"
 				name="vanityUrlSlug"
 				defaultValue={season?.vanityUrlSlug}
 				required
@@ -75,6 +82,32 @@ export default async function Page(props: PageProps<SeasonsPageParams>) {
 
 	const session = await auth();
 
+	const makeMatchFormatsDropdown = (id: string, name: string) => (
+		<>
+			<label htmlFor={id}>{"Format"}</label>
+			<select id={id} name={name} defaultValue={"Best of 3"} required>
+				{matchFormatEnum.enumValues.map((format) => (
+					<option value={format} key={format}>
+						{format}
+					</option>
+				))}
+			</select>
+		</>
+	);
+	const teams = await getAllTeamsWithSeasonId(season.id);
+	const makeTeamIdDropdown = (id: string, name: string, label: string) => (
+		<>
+			<label htmlFor={id}>{label}</label>
+			<select id={id} name={name} required>
+				{teams.map((team) => (
+					<option value={team.id} key={team.id}>
+						{team.name}
+					</option>
+				))}
+			</select>
+		</>
+	);
+
 	return (
 		<div className={style["content"]}>
 			<div className={style["config"]}>
@@ -84,6 +117,7 @@ export default async function Page(props: PageProps<SeasonsPageParams>) {
 				{session?.user?.isAdministator && (
 					<div>
 						<h2>{"Admin Panel"}</h2>
+						<h3>{"Update Season"}</h3>
 						<form
 							action={async (form) => {
 								"use server";
@@ -104,14 +138,25 @@ export default async function Page(props: PageProps<SeasonsPageParams>) {
 								revalidatePath(`/seasons/${slug}`);
 							}}
 						>
-							<label htmlFor="start-date">{"Start date"}</label>
-							<input type="date" id="start-date" name="startDate" />
-							<label htmlFor="name">{"Name"}</label>
-							<input type="text" id="name" name="name" />
-							<label htmlFor="vanity-url-slug">{"Vanity URL slug"}</label>
-							<input type="text" id="vanity-url-slug" name="vanityUrlSlug" />
+							<label htmlFor="update-season-start-date">{"Start date"}</label>
+							<input
+								type="date"
+								id="update-season-start-date"
+								name="startDate"
+							/>
+							<label htmlFor="update-season-name">{"Name"}</label>
+							<input type="text" id="update-season-name" name="name" />
+							<label htmlFor="update-season-vanity-url-slug">
+								{"Vanity URL slug"}
+							</label>
+							<input
+								type="text"
+								id="update-season-vanity-url-slug"
+								name="vanityUrlSlug"
+							/>
 							<Submit value="Update" />
 						</form>
+						<h3>{"Delete Season"}</h3>
 						<form
 							action={async () => {
 								"use server";
@@ -122,6 +167,182 @@ export default async function Page(props: PageProps<SeasonsPageParams>) {
 							}}
 						>
 							<Submit value="Delete" />
+						</form>
+						<h3>{"Create Team"}</h3>
+						<form
+							action={async (form) => {
+								"use server";
+								await db.insert(teamsTable).values({
+									code: getFormField(form, "code", true),
+									color: getFormField(form, "color", true).substring(1), // Cut off pound.
+									logoUrl: getFormField(form, "logoUrl", true),
+									name: getFormField(form, "name", true),
+									pool: parseInt(getFormField(form, "pool", true), 10),
+									seasonId: season.id,
+									vanityUrlSlug: getFormField(form, "vanityUrlSlug", true)
+								});
+							}}
+						>
+							<label htmlFor="create-team-code">{"Code"}</label>
+							<input
+								type="text"
+								id="create-team-code"
+								name="code"
+								maxLength={4}
+								required
+							/>
+							<label htmlFor="create-team-color">{"Color"}</label>
+							<input
+								type="color"
+								id="create-team-color"
+								name="color"
+								required
+							/>
+							<label htmlFor="create-team-logo-url">{"Logo URL"}</label>
+							<input
+								type="url"
+								id="create-team-logo-url"
+								name="logoUrl"
+								maxLength={0x800}
+								defaultValue={`${domain}/default.png`}
+								required
+							/>
+							<label htmlFor="create-team-name">{"Name"}</label>
+							<input
+								type="text"
+								id="create-team-name"
+								name="name"
+								maxLength={0x40}
+								required
+							/>
+							<label htmlFor="create-team-pool">{"Pool"}</label>
+							<input
+								type="number"
+								id="create-team-pool"
+								name="pool"
+								min={1}
+								defaultValue={1}
+							/>
+							<label htmlFor="create-team-vanity-url-slug">
+								{"Vanity URL slug"}
+							</label>
+							<input
+								type="text"
+								id="create-team-vanity-url-slug"
+								name="vanityUrlSlug"
+								maxLength={0x20}
+								required
+							/>
+							<Submit value="Create" />
+						</form>
+						<h3>{"Create Match"}</h3>
+						<form
+							action={async (form) => {
+								"use server";
+								await db.insert(matchesTable).values({
+									blueTeamId: parseInt(
+										getFormField(form, "blueTeamId", true),
+										10
+									),
+									format: getFormField(
+										form,
+										"format",
+										true
+									) as (typeof matchFormatEnum.enumValues)[number],
+									redTeamId: parseInt(
+										getFormField(form, "redTeamId", true),
+										10
+									),
+									round: parseInt(getFormField(form, "round", true), 10),
+									seasonId: season.id
+								});
+							}}
+						>
+							{makeTeamIdDropdown(
+								"create-match-blue-team-id",
+								"blueTeamId",
+								"Blue team"
+							)}
+							{makeMatchFormatsDropdown("create-match-format", "format")}
+							{makeTeamIdDropdown(
+								"create-match-red-team-id",
+								"redTeamId",
+								"Red team"
+							)}
+							<label htmlFor="create-match-round">{"Round"}</label>
+							<input
+								type="number"
+								id="create-match-round"
+								name="round"
+								min={1}
+								defaultValue={1}
+								required
+							/>
+							<Submit value="Create" />
+						</form>
+						<h3>{"Seed Season"}</h3>
+						<form
+							action={async (form) => {
+								"use server";
+
+								// Read form data.
+								const format = getFormField(
+									form,
+									"format",
+									true
+								) as (typeof matchFormatEnum.enumValues)[number];
+
+								// Split season teams into pools.
+								const seasonTeams = await getAllTeamsWithSeasonId(season.id);
+								const pools = new Map<
+									number,
+									(typeof teamsTable.$inferSelect)[]
+								>();
+								for (const team of seasonTeams) {
+									const pool = pools.get(team.pool);
+									if (pool) {
+										pool.push(team);
+										continue;
+									}
+
+									pools.set(team.pool, [team]);
+								}
+
+								// Use the circle method to generate a single round robin regular season.
+								const matches: (typeof matchesTable.$inferInsert)[] = [];
+								for (const pool of pools.values()) {
+									// One round per team, adding a fake "bye" team if there are an odd number of teams.
+									const l = pool.length + (pool.length % 2) - 1;
+									for (let i = 0; i < l; i++) {
+										for (let j = 0; j < (l + 1) / 2; j++) {
+											// Skip the bye team.
+											const blueTeam = pool[j && ((i + j - 1) % l) + 1];
+											if (!blueTeam) {
+												continue;
+											}
+
+											const redTeam =
+												pool[l - j && ((i + (l - j) - 1) % l) + 1];
+											if (!redTeam) {
+												continue;
+											}
+
+											matches.push({
+												blueTeamId: blueTeam.id,
+												format,
+												redTeamId: redTeam.id,
+												round: i + 1, // Round is one-based in the database.
+												seasonId: season.id
+											});
+										}
+									}
+								}
+
+								await db.insert(matchesTable).values(matches);
+							}}
+						>
+							{makeMatchFormatsDropdown("seed-season-format", "format")}
+							<Submit value="Seed" />
 						</form>
 					</div>
 				)}
