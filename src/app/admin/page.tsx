@@ -11,6 +11,7 @@ import db from "../../scripts/db";
 import domain from "../../scripts/domain";
 import getAllSeasons from "../../scripts/getAllSeasons";
 import getAllTeams from "../../scripts/getAllTeams";
+import getAllTeamsWithSeasonId from "../../scripts/getAllTeamsWithSeasonId";
 import getFormField from "../../scripts/getFormField";
 import style from "./page.module.scss";
 
@@ -58,7 +59,7 @@ export default async function Page() {
 	const makeMatchFormatsDropdown = (id: string, name: string) => (
 		<>
 			<label htmlFor={id}>{"Format"}</label>
-			<select id={id} name={name} required>
+			<select id={id} name={name} defaultValue={"Best of 3"} required>
 				{matchFormatEnum.enumValues.map((format) => (
 					<option value={format} key={format}>
 						{format}
@@ -189,8 +190,8 @@ export default async function Page() {
 									true
 								) as (typeof matchFormatEnum.enumValues)[number],
 								redTeamId: parseInt(getFormField(form, "redTeamId", true), 10),
-								seasonId: parseInt(getFormField(form, "seasonId", true), 10),
-								week: parseInt(getFormField(form, "week", true), 10)
+								round: parseInt(getFormField(form, "round", true), 10),
+								seasonId: parseInt(getFormField(form, "seasonId", true), 10)
 							});
 						}}
 					>
@@ -206,16 +207,86 @@ export default async function Page() {
 							"Red team"
 						)}
 						{makeSeasonIdDropdown("create-match-season-id", "seasonId")}
-						<label htmlFor="create-match-week">{"Week"}</label>
+						<label htmlFor="create-match-round">{"Round"}</label>
 						<input
 							type="number"
-							id="create-match-week"
-							name="week"
+							id="create-match-round"
+							name="round"
 							min={1}
 							defaultValue={1}
 							required
 						/>
 						<Submit value="Create" />
+					</form>
+				</div>
+				<div>
+					<h2>{"Seed Season"}</h2>
+					<form
+						action={async (form) => {
+							"use server";
+
+							// Read form data.
+							const format = getFormField(
+								form,
+								"format",
+								true
+							) as (typeof matchFormatEnum.enumValues)[number];
+							const seasonId = parseInt(
+								getFormField(form, "seasonId", true),
+								10
+							);
+
+							// Split season teams into pools.
+							const seasonTeams = await getAllTeamsWithSeasonId(seasonId);
+							const pools = new Map<
+								number,
+								(typeof teamsTable.$inferSelect)[]
+							>();
+							for (const team of seasonTeams) {
+								const pool = pools.get(team.pool);
+								if (pool) {
+									pool.push(team);
+									continue;
+								}
+
+								pools.set(team.pool, [team]);
+							}
+
+							// Use the circle method to generate a single round robin regular season.
+							const matches: (typeof matchesTable.$inferInsert)[] = [];
+							for (const pool of pools.values()) {
+								// One round per team, adding a fake "bye" team if there are an odd number of teams.
+								const l = pool.length + (pool.length % 2) - 1;
+								for (let i = 0; i < l; i++) {
+									for (let j = 0; j < (l + 1) / 2; j++) {
+										// Skip the bye team.
+										const blueTeam = pool[j && ((i + j - 1) % l) + 1];
+										if (!blueTeam) {
+											continue;
+										}
+
+										const redTeam = pool[l - j && ((i + (l - j) - 1) % l) + 1];
+										if (!redTeam) {
+											continue;
+										}
+
+										matches.push({
+											blueTeamId: blueTeam.id,
+											format,
+											redTeamId: redTeam.id,
+											round: i + 1, // Round is one-based in the database.
+											seasonId
+										});
+									}
+								}
+							}
+
+							await db.insert(matchesTable).values(matches);
+						}}
+					>
+						{makeMatchFormatsDropdown("seed-season-format", "format")}
+						{makeSeasonIdDropdown("seed-season-season-id", "seasonId")}
+						<Submit value="Seed" />
 					</form>
 				</div>
 			</div>

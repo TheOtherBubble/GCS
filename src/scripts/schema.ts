@@ -331,13 +331,13 @@ export const matchesTable = pgTable("matches", {
 		.references(() => teamsTable.id, { onDelete: "cascade" })
 		.notNull(),
 
+	// The one-based round of its season that the match will take place. There are two rounds per week.
+	round: integer().notNull(),
+
 	// The ID of the match's season.
 	seasonId: integer()
 		.references(() => seasonsTable.id, { onDelete: "cascade" })
 		.notNull(),
-
-	// The week of its season that the match will take place.
-	week: integer().notNull(),
 
 	// The team that won the match, if it has concluded.
 	winner: matchTeamEnum()
