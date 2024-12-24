@@ -19,7 +19,7 @@ export interface SeasonsPageParams {
 
 /**
  * A page that displays information about a season.
- * @param params - The dynamic route parameters, including the ID of the season.
+ * @param props - The properties that are passed to the page.
  * @returns The season page.
  */
 export default async function Page(props: PageProps<SeasonsPageParams>) {

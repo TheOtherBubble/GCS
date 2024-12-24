@@ -10,6 +10,8 @@ export default function Page() {
 		<>
 			<h1>{"Gauntlet Championship Series"}</h1>
 			<hr />
+			<p>{"Coming soon..."}</p>
+			{/* TODO */}
 		</>
 	);
 }
