@@ -23,7 +23,7 @@ TODO:
  - Links to Discord, Twitch, and YouTube.
  - Twitch stream embed if live.
 - Rulebook page:
- - Confirm with Nerve that the rules look complete. Ask about rewriting to be season-agnostic (remove dates).
+ - Confirm with Nerve that the rules look complete.
 - Season page:
  - Show teams, matches, standings, and leaderboards (KDA and damage).
  - Show the playoffs bracket once the playoffs stage begins.
@@ -58,13 +58,13 @@ TODO:
  - Link to multi-op.gg or multi-u.gg of all accounts.
   - Potentially display recent games on-site later.
 - Branding:
+ - Light theme.
  - Review color palette to ensure that it meets the WCAG AAA standard.
  - Request a 32x32 favicon and variable Google fonts.
+ - Update site to match new branding.
 - Miscellaneous:
- - Update branding.
  - Combine database queries where possible and faster (i.e. with inner joins).
  - Discord integration.
- - Light theme.
  - Mobile support.
  - Draft page.
  - Restrict PUUIDs that are allowed to join games.

@@ -1,4 +1,5 @@
 {
+	"name": "@lakuna/gcs",
 	"private": true,
 	"type": "module",
 	"scripts": {

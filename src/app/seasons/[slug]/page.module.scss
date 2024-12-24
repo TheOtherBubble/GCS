@@ -10,9 +10,15 @@ div.content {
 
 			& > div.config {
 				grid-column: 1 / 2;
+
+				// Don't scroll with screen.
 				align-self: start;
 				position: sticky;
 				top: 0px;
+
+				// Ensure that all content can still be accessed.
+				overflow: auto;
+				max-height: 100vh;
 			}
 
 			& > div.schedule {
@@ -21,20 +27,15 @@ div.content {
 
 			& > div.leaderboards {
 				grid-column: 3 / 4;
+
+				// Don't scroll with screen.
 				align-self: start;
 				position: sticky;
 				top: 0px;
-			}
-		}
-	}
 
-	& > div {
-		overflow: auto;
-		max-height: 100vh;
-
-		& > div.admin {
-			& > form {
-				margin: 10px 0px;
+				// Ensure that all content can still be accessed.
+				overflow: auto;
+				max-height: 100vh;
 			}
 		}
 	}
