@@ -14,31 +14,26 @@ export default function Page() {
 			<h2>{"Eligibility"}</h2>
 			<p>
 				{
-					"Players who have played at least 30 games of ranked solo/duo throughout season 2024 split 3 are eligible for the tournament, regardless of their rank."
+					"Players who have played at least 30 games of ranked solo/duo throughout the previous split are eligible for the tournament, regardless of their rank. Accounts that are deemed likely to be smurfing will be disqualified."
 				}
 			</p>
 			<p>
-				{
-					'All accounts will be reviewed for accurate skill expression. Accounts that are deemed likely to be smurfing will be disqualified. "Smurfing" in this context refers to intentionally hiding a player\'s rank or skill with an alternate account.'
-				}
-			</p>
-			<p>
-				{
-					"Discord is required for the tournament. You must be within the GCS official Discord server throughout the duration of the tournament, or you will be disqualified. You can join the server "
-				}
+				{"You must be a member of "}
 				{/* TODO: Discord server invite link will likely need to be updated. */}
-				<Link href="https://discord.com/invite/vlnleague">{"here"}</Link>
-				{"."}
+				<Link href="https://discord.com/invite/vlnleague">
+					{"the GCS Discord server"}
+				</Link>
+				{" throughout the tournament, or you will be disqualified."}
 			</p>
 			<h2>{"Scheduling"}</h2>
 			<p>
 				{
-					"The sign up period begins on January 4th and ends on January 12th. The draft will take place on January 18th at 12:00 PM CST."
+					"The sign up period lasts for one week. The draft will take place on the following Saturday at noon CST."
 				}
 			</p>
 			<p>{"Each team will play two best-of-three matches each weekend."}</p>
 			<ul>
-				<li>{"One match will be played at 12:00 PM CST each Saturday."}</li>
+				<li>{"One match will be played at noon CST each Saturday."}</li>
 				<li>{"One match will be played at 2:00 PM CST each Sunday."}</li>
 			</ul>
 			<p>
@@ -61,7 +56,7 @@ export default function Page() {
 			</ul>
 			<p>
 				{
-					"Matches cannot be rescheduled. If a team cannot field a roster, it will be disqualified. If a team is late to a match, they will be penalized depending on how late they are."
+					"Matches cannot be rescheduled. If a team cannot field a roster, they will be disqualified. If a team is late to a match, they will be penalized depending on how late they are."
 				}
 			</p>
 			<ul>
@@ -70,7 +65,7 @@ export default function Page() {
 				</li>
 				<li>
 					{
-						"Teams that are between 11 and 20 minutes late will lose one ban in the first match."
+						"Teams that are between 11 and 20 minutes late will lose one ban in the first game."
 					}
 				</li>
 				<li>
@@ -92,11 +87,11 @@ export default function Page() {
 			</ul>
 			<p>
 				{
-					"Players must join their team's voice channel no less than 10 minutes prior to the start of games in which they play. Teams must use the voice channel that is assigned to them in the official Discord server."
+					"Players must join their team's voice channel no less than 10 minutes prior to the start of games in which they play. Teams must use the voice channel that is assigned to them in the GCS Discord server."
 				}
 			</p>
 			<p>
-				{"Player trades are allowed between January 18th and January 26th."}
+				{"Player trades are allowed within the first week following the draft."}
 			</p>
 			<ul>
 				<li>{"All trades must be approved by a tournament moderator."}</li>
@@ -109,34 +104,12 @@ export default function Page() {
 			<h2>{"Format"}</h2>
 			<p>
 				{
-					"The tournament is played between 20 teams consisting of 8 players each. Teams will compete in a best-of-three single round robin regular season."
-				}
-			</p>
-			<ul>
-				<li>
-					{
-						"This results in a minimum possible game total of 38 and a maximum possible game total of 57 per team."
-					}
-				</li>
-			</ul>
-			<p>
-				{
-					"The 8 teams with the highest match scores at the end of the regular season will advance to the playoff stage. Tiebreakers are determined by head-to-head score, then by game score, then by average game time."
-				}
-			</p>
-			<p>
-				{
-					"The playoffs stage will consist of a best-of-five single elimination bracket."
-				}
-			</p>
-			<p>
-				{
 					"Team captains will participate in a snake draft to select their players. Draft order will be determined by allowing lower-ranked captains to choose their draft position before higher-ranked captains."
 				}
 			</p>
 			<p>
 				{
-					"Players will be assigned to tiers that are based on a combination of quantifiable (i.e. peak rank and current rank) and unquantifiable (i.e. past performance and behavior) factors. Captains will be allowed to draft a set number of players from each tier. These numbers are subject to change depending on the composition of the draft class."
+					"Players will be assigned to tiers that are based on a combination of quantifiable and unquantifiable factors, including current rank, peak rank, past season performances, and behavior. Captains will be allowed to draft a set number of players from each tier. These numbers are subject to change depending on the composition of the draft class."
 				}
 			</p>
 			<ul>
@@ -147,7 +120,7 @@ export default function Page() {
 			</ul>
 			<p>
 				{
-					"During the regular season, each player must meet the following conditions:"
+					"The tournament is played between 20 teams consisting of 8 players each. Teams will compete in a best-of-three single round robin regular season. During the regular season, each player must meet the following conditions:"
 				}
 			</p>
 			<ul>
@@ -156,7 +129,7 @@ export default function Page() {
 			</ul>
 			<p>
 				{
-					"During the playoffs stage, each team must meet the following conditions:"
+					"The 8 teams with the highest match scores at the end of the regular season will advance to the playoff stage. Tiebreakers are determined by head-to-head score, then by game score, then by average game time. The playoffs stage will consist of a best-of-five single elimination bracket. During the playoffs stage, each team must meet the following conditions:"
 				}
 			</p>
 			<ul>
@@ -165,10 +138,8 @@ export default function Page() {
 						"Each team must play at least 2 players in each game that did not play in the previous game."
 					}
 				</li>
-				<li>{"Each player must play at least one game by the third game."}</li>
-				<li>
-					{"Each player must play at least three games by the fifth game."}
-				</li>
+				<li>{"Each player must play at least 1 game by the third game."}</li>
+				<li>{"Each player must play at least 3 games by the fifth game."}</li>
 			</ul>
 			<h2>{"Captains"}</h2>
 			<p>
@@ -206,7 +177,7 @@ export default function Page() {
 			</p>
 			<p>
 				{
-					"Players that are participating in a champion select or a game may not utilize any application that would allow them to view another perspective of that champion select or game without delay."
+					"Players that are participating in a champion select or a game may not stream snipe."
 				}
 			</p>
 			<h3>{"In-Game"}</h3>
