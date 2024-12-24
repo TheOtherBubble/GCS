@@ -1,0 +1,50 @@
+@use "../../styles/variables";
+
+a.container {
+	// Replace default link styling.
+	color: variables.$text-color;
+	text-decoration: none;
+
+	// Make prettier to display.
+	font-size: 1.5em;
+	overflow: hidden;
+	display: inline-block;
+
+	// Shape.
+	$padding: variables.$normal-pad;
+	$width: min(600px, 100%);
+	aspect-ratio: 3 / 1;
+	width: $width;
+	border-radius: variables.$normal-radius;
+	padding: $padding;
+
+	// Background.
+	background-color: variables.$fg-color; // Goes behind the background image, which is set from JavaScript.
+	background-size: calc($width + 2 * $padding);
+
+	h1,
+	h2,
+	h3,
+	h4,
+	h5,
+	h6,
+	p {
+		margin: 0px;
+		text-align: left;
+	}
+
+	& > div {
+		display: inline-block;
+		border-radius: variables.$normal-radius;
+		padding: variables.$normal-pad;
+		background-color: #00000080;
+
+		& > h3 > img {
+			display: inline-block;
+			vertical-align: top;
+			width: auto;
+			height: 1.5em;
+			padding-left: variables.$normal-pad;
+		}
+	}
+}

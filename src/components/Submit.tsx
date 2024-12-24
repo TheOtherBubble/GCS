@@ -6,6 +6,7 @@ import { useFormStatus } from "react-dom";
 /**
  * Properties that can be passed to a submit button.
  * @public
+ * @public
  */
 export type SubmitProps = Omit<
 	JSX.IntrinsicElements["input"],

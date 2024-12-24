@@ -87,7 +87,7 @@ nav.topnav {
 
 				& > * {
 					height: auto; // Don't take up the entire height so that visible element is centered.
-					padding: 16px;
+					padding: variables.$normal-pad;
 				}
 
 				// Special case for forms with buttons - otherwise the clickable part will be smaller than the display area.

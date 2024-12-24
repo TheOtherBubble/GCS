@@ -13,6 +13,7 @@ export interface GamesPageParams {
  * A page that displays information about a game.
  * @param props - The properties that are passed to the page.
  * @returns The game page.
+ * @public
  */
 export default function Page() {
 	// TODO

@@ -13,6 +13,7 @@ export interface TeamsPageParams {
  * A page that displays information about a team.
  * @param props - The properties that are passed to the page.
  * @returns The team page.
+ * @public
  */
 export default function Page() {
 	// TODO

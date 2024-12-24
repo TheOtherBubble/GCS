@@ -13,6 +13,7 @@ export interface MatchesPageParams {
  * A page that displays information about a match.
  * @param props - The properties that are passed to the page.
  * @returns The match page.
+ * @public
  */
 export default function Page() {
 	// TODO

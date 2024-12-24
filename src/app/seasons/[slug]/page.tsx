@@ -1,7 +1,7 @@
 import AdminPanel from "./AdminPanel";
 import ChangeSeasonForm from "./ChangeSeasonForm";
 import type { Metadata } from "next";
-import type PageProps from "scripts/PageProps";
+import type PageProps from "types/PageProps";
 import { auth } from "scripts/auth";
 import getAllSeasons from "scripts/getAllSeasons";
 import getAllTeamsWithSeasonId from "scripts/getAllTeamsWithSeasonId";
@@ -21,6 +21,7 @@ export interface SeasonsPageParams {
  * A page that displays information about a season.
  * @param props - The properties that are passed to the page.
  * @returns The season page.
+ * @public
  */
 export default async function Page(props: PageProps<SeasonsPageParams>) {
 	const seasons = await getAllSeasons();

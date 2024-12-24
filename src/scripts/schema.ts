@@ -20,8 +20,8 @@ export const playersTable = pgTable("players", {
 	// A player-selected champion to use as a background on player cards, stored as a champion ID.
 	backgroundChampionId: varchar({ length: 0x20 }),
 
-	// A player-selected champion skin to use as a background on player cards, stored as a skin ID.
-	backgroundSkinId: varchar({ length: 0x20 }),
+	// A player-selected champion skin to use as a background on player cards, stored as a skin number.
+	backgroundSkinNumber: integer(),
 
 	// The date that the user is banned until.
 	bannedUntilDate: date(),
@@ -432,8 +432,8 @@ export const teamGameResultsTable = pgTable(
 export const teamGameResultBansTable = pgTable(
 	"teamGameResultBans",
 	{
-		// The ID of the champion that was banned.
-		championId: varchar({ length: 0x20 }).notNull(),
+		// The key of the champion that was banned. Referred to as the champion's ID in the Riot API.
+		championKey: varchar({ length: 0x20 }).notNull(),
 
 		// The order in which this ban occurred.
 		order: integer().notNull(),
@@ -444,7 +444,7 @@ export const teamGameResultBansTable = pgTable(
 			.notNull()
 	},
 	(self) => [
-		unique().on(self.championId, self.teamGameResultId),
+		unique().on(self.championKey, self.teamGameResultId),
 		unique().on(self.order, self.teamGameResultId)
 	]
 );
@@ -468,8 +468,8 @@ export const playerGameResultsTable = pgTable(
 		// The amount of damage that the player dealt to champions.
 		championDamage: integer().notNull(),
 
-		// The ID of the champion that the player played.
-		championId: varchar({ length: 0x20 }).notNull(),
+		// The key of the champion that the player played. Referred to as the champion's ID in the Riot API.
+		championKey: varchar({ length: 0x20 }).notNull(),
 
 		// The player's creep score from killing monsters in the enemy jungle.
 		counterJungleCreepScore: integer().notNull(),

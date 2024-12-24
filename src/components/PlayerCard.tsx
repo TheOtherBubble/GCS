@@ -1,46 +1,81 @@
-/*
-// TODO
-<div
-	style={{
-		aspectRatio: 3 / 1,
-		backgroundColor: "#3c1185",
-		backgroundImage:
-			"url(https://ddragon.leagueoflegends.com/cdn/img/champion/splash/Volibear_0.jpg)",
-		backgroundSize: 620, // `width + 2 * padding`
-		borderRadius: 25,
-		display: "grid",
-		gap: 0,
-		grid: "1fr 2fr 1fr / 1fr 1fr 2fr",
-		justifyItems: "center",
-		padding: 10,
-		width: 600
-	}}
->
-	<div
-		style={{ backgroundColor: "rgba(0, 0, 0, 0.8)", borderRadius: 10 }}
-	>
-		<h2
+import type {
+	accountsTable,
+	playerGameResultsTable,
+	playersTable,
+	teamsTable
+} from "scripts/schema";
+import type { JSX } from "react";
+import RankedEmblem from "./RankedEmblem";
+import getAverageKda from "scripts/getAverageKda";
+import getBackgroundImageUrl from "scripts/getBackgroundImageUrl";
+import getHighestRankedAccount from "scripts/getHighestRankedAccount";
+import multiclass from "scripts/multiclass";
+import style from "./styles/player-card.module.scss";
+
+/**
+ * Properties that can be passed to a player card.
+ * @public
+ */
+export interface PlayerCardProps
+	extends Omit<JSX.IntrinsicElements["a"], "children" | "style" | "href"> {
+	/** The player that is represented by the card. */
+	player: typeof playersTable.$inferSelect;
+
+	/** The player's accounts. */
+	accounts?: (typeof accountsTable.$inferSelect)[];
+
+	/** The player's game results. */
+	games?: (typeof playerGameResultsTable.$inferSelect)[];
+
+	/** The player's teams. */
+	teams?: (typeof teamsTable.$inferSelect)[];
+}
+
+/**
+ * A card that displays information about a player.
+ * @param props - The properties to pass to the player card.
+ * @returns The player card.
+ * @public
+ */
+export default function PlayerCard({
+	player,
+	accounts,
+	games,
+	teams,
+	className,
+	...props
+}: PlayerCardProps) {
+	const highestRankedAccount = accounts
+		? getHighestRankedAccount(accounts)
+		: void 0;
+	const backgroundImageUrl = getBackgroundImageUrl(player);
+
+	return (
+		<a
+			className={multiclass(className, style["container"])}
 			style={{
-				gridArea: "1 / 1 / 2 / 2",
-				margin: 0,
-				padding: 10
+				backgroundImage: backgroundImageUrl
+					? `url(${backgroundImageUrl})`
+					: void 0
 			}}
+			href={`/players/${encodeURIComponent(player.name)}`}
+			{...props}
 		>
-			{"Lakuna"}
-		</h2>
-	</div>
-	<RankedEmblem
-		tier="DIAMOND"
-		style={{
-			backgroundColor: "rgba(0, 0, 0, 0.8)",
-			borderRadius: 10,
-			gridArea: "2 / 3 / 3 / 4",
-			height: "auto",
-			maxHeight: "100%",
-			maxWidth: "100%",
-			padding: 10,
-			width: "auto"
-		}}
-	/>
-</div>
-*/
+			<div>
+				<h3>
+					{player.name}
+					{highestRankedAccount && (
+						<>
+							<RankedEmblem
+								tier={highestRankedAccount.tierCache}
+								className={style["rank"]}
+							/>
+						</>
+					)}
+				</h3>
+				{games && <p>{`KDA: ${getAverageKda(games).toFixed(2)}`}</p>}
+				{teams && <p>{`Seasons: ${teams.length.toString()}`}</p>}
+			</div>
+		</a>
+	);
+}

@@ -13,6 +13,7 @@ export interface PlayersPageParams {
  * A page that displays information about a player.
  * @param props - The properties that are passed to the page.
  * @returns The player page.
+ * @public
  */
 export default function Page() {
 	// TODO

@@ -1,4 +1,4 @@
-import type { InferUpdate } from "./InferUpdate";
+import type { InferUpdate } from "types/InferUpdate";
 import db from "./db";
 import { eq } from "drizzle-orm";
 import { seasonsTable } from "./schema";

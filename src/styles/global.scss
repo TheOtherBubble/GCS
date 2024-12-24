@@ -36,16 +36,16 @@ body {
 }
 
 main {
-	margin: 10px;
+	margin: variables.$normal-gap;
 }
 
 form {
 	background-color: variables.$fg-color;
-	padding: 16px;
-	border-radius: 25px;
+	padding: variables.$normal-pad;
+	border-radius: variables.$normal-radius;
 	display: grid;
 	grid-template-columns: 1fr 1fr;
-	gap: 10px;
+	gap: variables.$normal-gap;
 
 	& > label {
 		text-align: right;
