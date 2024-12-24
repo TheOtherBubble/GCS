@@ -67,7 +67,7 @@ nav.topnav {
 				width: auto;
 				height: 50%;
 
-				// Outline image so that it's clear against the background.
+				// Outline image so that it's clear against the background. TODO: Should be deleted after rebranding.
 				filter: drop-shadow(0px 0px 1px variables.$bold-color);
 				background-color: transparent;
 			}
@@ -83,16 +83,16 @@ nav.topnav {
 			& > * {
 				display: inline-flex;
 				align-items: center;
+				padding: 0px;
 
 				& > * {
 					height: auto; // Don't take up the entire height so that visible element is centered.
-					padding: 8px 16px;
+					padding: 16px;
 				}
 
 				// Special case for forms with buttons - otherwise the clickable part will be smaller than the display area.
 				& > input[type="submit"] {
 					height: 100%;
-					padding: 0px 16px;
 				}
 			}
 		}

@@ -6,7 +6,7 @@ div.content {
 		@if $is-not-mobile {
 			display: grid;
 			grid-template-columns: 1fr 2fr 1fr;
-			gap: 25px;
+			gap: 10px;
 
 			& > div.config {
 				grid-column: 1 / 2;
@@ -29,23 +29,13 @@ div.content {
 	}
 
 	& > div {
-		overflow: auto hidden;
+		overflow: auto;
+		max-height: 100vh;
 
-		h1,
-		h2,
-		h3,
-		h4,
-		h5,
-		h6 {
-			text-align: center;
-		}
-
-		& > div,
-		& > form {
-			background-color: variables.$fg-color;
-			border-radius: 25px;
-			padding: 16px;
-			margin: 10px 0px;
+		& > div.admin {
+			& > form {
+				margin: 10px 0px;
+			}
 		}
 	}
 }

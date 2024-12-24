@@ -115,9 +115,8 @@ export default async function Page(props: PageProps<SeasonsPageParams>) {
 				<hr />
 				{changeSeasonForm}
 				{session?.user?.isAdministator && (
-					<div>
+					<div className={style["admin"]}>
 						<h2>{"Admin Panel"}</h2>
-						<h3>{"Update Season"}</h3>
 						<form
 							action={async (form) => {
 								"use server";
@@ -138,6 +137,9 @@ export default async function Page(props: PageProps<SeasonsPageParams>) {
 								revalidatePath(`/seasons/${slug}`);
 							}}
 						>
+							<header>
+								<h3>{"Update Season"}</h3>
+							</header>
 							<label htmlFor="update-season-start-date">{"Start date"}</label>
 							<input
 								type="date"
@@ -156,19 +158,33 @@ export default async function Page(props: PageProps<SeasonsPageParams>) {
 							/>
 							<Submit value="Update" />
 						</form>
-						<h3>{"Delete Season"}</h3>
 						<form
-							action={async () => {
+							action={async (form) => {
 								"use server";
+
+								// Prevent the user from accidentally doing something dangerous.
+								if (getFormField(form, "safeguard") !== "CONFIRM") {
+									return;
+								}
+
 								await db
 									.delete(seasonsTable)
 									.where(eq(seasonsTable.id, season.id));
 								revalidatePath(`/seasons/${slug}`);
 							}}
 						>
+							<header>
+								<h3>{"Delete Season"}</h3>
+							</header>
+							<label htmlFor="delete-season-safeguard">{"Safeguard"}</label>
+							<input
+								type="text"
+								id="delete-season-safeguard"
+								name="safeguard"
+								placeholder="CONFIRM"
+							/>
 							<Submit value="Delete" />
 						</form>
-						<h3>{"Create Team"}</h3>
 						<form
 							action={async (form) => {
 								"use server";
@@ -183,6 +199,9 @@ export default async function Page(props: PageProps<SeasonsPageParams>) {
 								});
 							}}
 						>
+							<header>
+								<h3>{"Create Team"}</h3>
+							</header>
 							<label htmlFor="create-team-code">{"Code"}</label>
 							<input
 								type="text"
@@ -235,7 +254,6 @@ export default async function Page(props: PageProps<SeasonsPageParams>) {
 							/>
 							<Submit value="Create" />
 						</form>
-						<h3>{"Create Match"}</h3>
 						<form
 							action={async (form) => {
 								"use server";
@@ -258,6 +276,9 @@ export default async function Page(props: PageProps<SeasonsPageParams>) {
 								});
 							}}
 						>
+							<header>
+								<h3>{"Create Match"}</h3>
+							</header>
 							{makeTeamIdDropdown(
 								"create-match-blue-team-id",
 								"blueTeamId",
@@ -280,7 +301,6 @@ export default async function Page(props: PageProps<SeasonsPageParams>) {
 							/>
 							<Submit value="Create" />
 						</form>
-						<h3>{"Seed Season"}</h3>
 						<form
 							action={async (form) => {
 								"use server";
@@ -341,6 +361,9 @@ export default async function Page(props: PageProps<SeasonsPageParams>) {
 								await db.insert(matchesTable).values(matches);
 							}}
 						>
+							<header>
+								<h3>{"Seed Season"}</h3>
+							</header>
 							{makeMatchFormatsDropdown("seed-season-format", "format")}
 							<Submit value="Seed" />
 						</form>

@@ -16,15 +16,6 @@ article.content {
 			& > hr {
 				width: 100%;
 			}
-
-			& > pre,
-			& > img,
-			& > iframe {
-				grid-column: 1 / 4;
-				width: 100%;
-				max-width: min(80ch, 100%);
-				margin: 0px auto;
-			}
 		}
 	}
 }

@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import style from "./page.module.scss";
 
 /**
  * The landing page.
@@ -9,7 +8,7 @@ import style from "./page.module.scss";
 export default function Page() {
 	return (
 		<>
-			<h1 className={style["title"]}>{"Gauntlet Championship Series"}</h1>
+			<h1>{"Gauntlet Championship Series"}</h1>
 			<hr />
 		</>
 	);

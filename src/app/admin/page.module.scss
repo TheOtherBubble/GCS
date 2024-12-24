@@ -1,23 +1,7 @@
 @use "../../styles/variables";
 
-h1.title {
-	text-align: center;
-}
-
 div.widgets {
 	display: flex;
-	gap: 10px;
 	flex-wrap: wrap;
-
-	// Each widget is a divider.
-	& > div {
-		background-color: variables.$fg-color;
-		padding: 16px;
-		border-radius: 25px;
-
-		& > h2 {
-			text-align: center;
-			margin: 0px;
-		}
-	}
+	gap: 10px;
 }

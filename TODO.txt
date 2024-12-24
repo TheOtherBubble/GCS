@@ -27,8 +27,7 @@ TODO:
 - Season page:
  - Show teams, matches, standings, and leaderboards (KDA and damage).
  - Show the playoffs bracket once the playoffs stage begins.
- - Move the create team, create match, and seed season widgets from the admin page.
-  - Generate the first game of each match when seeding the season.
+ - Generate the first game of each match when creating the match (including seeding the season).
 - Team page:
  - Show code, color, logo, name, pool, season, captain, players, matches, and stats.
  - Show an indicator if the team won its season.
@@ -63,7 +62,6 @@ TODO:
  - Request a 32x32 favicon and variable Google fonts.
 - Miscellaneous:
  - Update branding.
- - Make styling more uniform across the site.
  - Combine database queries where possible and faster (i.e. with inner joins).
  - Discord integration.
  - Light theme.
