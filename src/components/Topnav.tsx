@@ -1,11 +1,11 @@
-import { auth, signIn, signOut } from "../../scripts/auth";
-import Image from "../Image/Image";
+import { auth, signIn, signOut } from "scripts/auth";
+import Image from "components/Image";
 import type { JSX } from "react";
-import Link from "../Link";
-import Submit from "../Submit";
-import multiclass from "../../scripts/multiclass";
-import style from "./topnav.module.scss";
-import submark from "./submark.png"; // TODO: Update submark image with new branding. May be able to remove the filter too.
+import Link from "components/Link";
+import Submit from "components/Submit";
+import multiclass from "scripts/multiclass";
+import style from "./styles/topnav.module.scss";
+import submark from "./assets/submark.png"; // TODO: Update submark image with new branding. May be able to remove the filter too.
 
 /**
  * The site-wide top navigation bar.

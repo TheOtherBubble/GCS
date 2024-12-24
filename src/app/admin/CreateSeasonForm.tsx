@@ -1,7 +1,7 @@
 import { type JSX, useId } from "react";
-import Submit from "../../components/Submit";
-import createSeason from "../../scripts/createSeason";
-import getFormField from "../../scripts/getFormField";
+import Submit from "components/Submit";
+import createSeason from "scripts/createSeason";
+import getFormField from "scripts/getFormField";
 
 /**
  * Properties that can be passed to a create season form.

@@ -1,11 +1,11 @@
-import AdminPanel from "./AdminPanel/AdminPanel";
+import AdminPanel from "./AdminPanel";
 import ChangeSeasonForm from "./ChangeSeasonForm";
 import type { Metadata } from "next";
-import type PageProps from "../../../scripts/PageProps";
-import { auth } from "../../../scripts/auth";
-import getAllSeasons from "../../../scripts/getAllSeasons";
-import getAllTeamsWithSeasonId from "../../../scripts/getAllTeamsWithSeasonId";
-import getSeasonByVanityUrlSlug from "../../../scripts/getSeasonByVanityUrlSlug";
+import type PageProps from "scripts/PageProps";
+import { auth } from "scripts/auth";
+import getAllSeasons from "scripts/getAllSeasons";
+import getAllTeamsWithSeasonId from "scripts/getAllTeamsWithSeasonId";
+import getSeasonByVanityUrlSlug from "scripts/getSeasonByVanityUrlSlug";
 import style from "./page.module.scss";
 
 /**

@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import getLatestSeason from "../../scripts/getLatestSeason";
+import getLatestSeason from "scripts/getLatestSeason";
 import { redirect } from "next/navigation";
 
 /**

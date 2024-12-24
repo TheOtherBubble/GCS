@@ -1,12 +1,12 @@
-import type { seasonsTable, teamsTable } from "../../../../scripts/schema";
-import CreateMatchForm from "./CreateMatchForm";
-import CreateTeamForm from "./CreateTeamForm";
-import DeleteSeasonForm from "./DeleteSeasonForm";
+import type { seasonsTable, teamsTable } from "scripts/schema";
+import CreateMatchForm from "./admin/CreateMatchForm";
+import CreateTeamForm from "./admin/CreateTeamForm";
+import DeleteSeasonForm from "./admin/DeleteSeasonForm";
 import { type JSX } from "react";
-import SeedSeasonForm from "./SeedSeasonForm";
-import UpdateSeasonForm from "./UpdateSeasonForm";
-import multiclass from "../../../../scripts/multiclass";
-import style from "./admin-panel.module.scss";
+import SeedSeasonForm from "./admin/SeedSeasonForm";
+import UpdateSeasonForm from "./admin/UpdateSeasonForm";
+import multiclass from "scripts/multiclass";
+import style from "./admin/admin-panel.module.scss";
 
 /**
  * Properties that can be passed to an admin panel.

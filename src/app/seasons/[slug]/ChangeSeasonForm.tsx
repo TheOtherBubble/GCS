@@ -1,8 +1,8 @@
 import { type JSX, useId } from "react";
-import Submit from "../../../components/Submit";
-import getFormField from "../../../scripts/getFormField";
+import Submit from "components/Submit";
+import getFormField from "scripts/getFormField";
 import { redirect } from "next/navigation";
-import type { seasonsTable } from "../../../scripts/schema";
+import type { seasonsTable } from "scripts/schema";
 
 /**
  * Properties that can be passed to a change season form.

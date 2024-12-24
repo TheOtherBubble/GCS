@@ -1,4 +1,4 @@
-import Link from "../../components/Link";
+import Link from "components/Link";
 import type { Metadata } from "next";
 import style from "./page.module.scss";
 

@@ -1,6 +1,6 @@
 import CreateSeasonForm from "./CreateSeasonForm";
 import type { Metadata } from "next";
-import { auth } from "../../scripts/auth";
+import { auth } from "scripts/auth";
 import style from "./page.module.scss";
 
 /**

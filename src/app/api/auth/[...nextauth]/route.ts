@@ -1,4 +1,4 @@
-import { handlers } from "../../../../scripts/auth";
+import { handlers } from "scripts/auth";
 
 /**
  * The HTTP request handlers. Necessary for NextAuth.js to work.

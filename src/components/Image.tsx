@@ -1,6 +1,6 @@
 import NextImage, { type ImageProps as NextImageProps } from "next/image";
 import type { JSX } from "react";
-import defaultBlur from "./default-blur.png"; // TODO: Update default blur to match new branding. Scale down to 10 pixels.
+import defaultBlur from "./assets/default-blur.png"; // TODO: Update default blur to match new branding. Scale down to 10 pixels.
 
 /**
  * Equivalent to the props that can be passed to a Next.js image or an image element.

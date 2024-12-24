@@ -1,16 +1,16 @@
-import Image, { type ImageProps } from "../Image/Image";
+import Image, { type ImageProps } from "components/Image";
 import type { JSX } from "react";
-import type { accountTierEnum } from "../../scripts/schema";
-import bronze from "./bronze.png";
-import challenger from "./challenger.png";
-import diamond from "./diamond.png";
-import emerald from "./emerald.png";
-import gold from "./gold.png";
-import grandmaster from "./grandmaster.png";
-import iron from "./iron.png";
-import master from "./master.png";
-import platinum from "./platinum.png";
-import silver from "./silver.png";
+import type { accountTierEnum } from "scripts/schema";
+import bronze from "./assets/bronze.png";
+import challenger from "./assets/challenger.png";
+import diamond from "./assets/diamond.png";
+import emerald from "./assets/emerald.png";
+import gold from "./assets/gold.png";
+import grandmaster from "./assets/grandmaster.png";
+import iron from "./assets/iron.png";
+import master from "./assets/master.png";
+import platinum from "./assets/platinum.png";
+import silver from "./assets/silver.png";
 
 // The newest ranked emblem assets can be downloaded from https://static.developer.riotgames.com/docs/lol/ranked-emblems-latest.zip.
 

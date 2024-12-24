@@ -3,10 +3,10 @@ import {
 	matchFormatEnum,
 	type seasonsTable,
 	type teamsTable
-} from "../../../../scripts/schema";
-import Submit from "../../../../components/Submit";
-import createMatch from "../../../../scripts/createMatch";
-import getFormField from "../../../../scripts/getFormField";
+} from "scripts/schema";
+import Submit from "components/Submit";
+import createMatch from "scripts/createMatch";
+import getFormField from "scripts/getFormField";
 
 /**
  * Properties that can be passed to a create match form.

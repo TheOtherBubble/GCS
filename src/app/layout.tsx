@@ -1,8 +1,8 @@
-import "../styles/global.scss";
+import "styles/global.scss";
 import type { Metadata, Viewport } from "next";
-import type LayoutProps from "../scripts/LayoutProps";
-import Topnav from "../components/Topnav/Topnav";
-import domain from "../scripts/domain";
+import type LayoutProps from "scripts/LayoutProps";
+import Topnav from "components/Topnav";
+import domain from "scripts/domain";
 import style from "./layout.module.scss";
 
 /**
