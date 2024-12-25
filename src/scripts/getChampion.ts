@@ -1,5 +1,5 @@
-import type DataDragonResponse from "types/DataDragonResponse";
-import type FullChampionData from "types/FullChampionData";
+import type DataDragonResponse from "types/riot/DataDragonResponse";
+import type FullChampionData from "types/riot/FullChampionData";
 import getDataDragonVersion from "./getDataDragonVersion";
 
 /**

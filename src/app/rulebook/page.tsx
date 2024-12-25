@@ -4,6 +4,7 @@ import style from "./page.module.scss";
 
 /**
  * A page that displays the rulebook.
+ * @returns The rulebook page.
  * @public
  */
 export default function Page() {

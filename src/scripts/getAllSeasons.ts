@@ -6,8 +6,6 @@ import { seasonsTable } from "./schema";
  * @returns A list of every season.
  * @public
  */
-export default async function getAllSeasons(): Promise<
-	(typeof seasonsTable.$inferSelect)[]
-> {
+export default async function getAllSeasons() {
 	return await db.select().from(seasonsTable);
 }

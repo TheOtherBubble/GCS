@@ -5,6 +5,7 @@ import { redirect } from "next/navigation";
 
 /**
  * The schedule page. Just redirects to the season page for the latest season.
+ * @returns The schedule page.
  * @public
  */
 export default async function Page() {
@@ -18,6 +19,7 @@ export default async function Page() {
 
 /**
  * The schedule page's metadata. Designed to read as if it were the page being redirected to.
+ * @returns The metadata.
  * @public
  */
 export const generateMetadata = async (): Promise<Metadata> => {

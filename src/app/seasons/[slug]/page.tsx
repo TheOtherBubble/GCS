@@ -1,3 +1,4 @@
+import getSeasonUrl, { getSeasonUrlByEncodedSlug } from "scripts/getSeasonUrl";
 import AdminPanel from "./AdminPanel";
 import ChangeSeasonForm from "./ChangeSeasonForm";
 import type { Metadata } from "next";
@@ -5,8 +6,7 @@ import type PageProps from "types/PageProps";
 import { auth } from "scripts/auth";
 import getAllSeasons from "scripts/getAllSeasons";
 import getAllTeamsWithSeasonId from "scripts/getAllTeamsWithSeasonId";
-import getSeasonByVanityUrlSlug from "scripts/getSeasonByVanityUrlSlug";
-import getSeasonUrl from "scripts/getSeasonUrl";
+import getSeasonByDecodedSlug from "scripts/getSeasonByDecodedSlug";
 import style from "./page.module.scss";
 
 /**
@@ -72,13 +72,15 @@ export default async function Page(props: PageProps<SeasonsPageParams>) {
 
 /**
  * The season page's metadata.
+ * @param props - The properties that are passed to the page.
+ * @returns The metadata.
  * @public
  */
 export const generateMetadata = async (
 	props: PageProps<SeasonsPageParams>
 ): Promise<Metadata> => {
 	const { slug } = await props.params;
-	const season = await getSeasonByVanityUrlSlug(decodeURIComponent(slug));
+	const season = await getSeasonByDecodedSlug(decodeURIComponent(slug));
 
 	return season
 		? {
@@ -88,9 +90,7 @@ export const generateMetadata = async (
 			}
 		: {
 				description: "An unknown season of the Gauntlet Championship Series.",
-				openGraph: {
-					url: getSeasonUrl(encodeURIComponent(slug))
-				},
+				openGraph: { url: getSeasonUrlByEncodedSlug(slug) },
 				title: "Unknown Season"
 			};
 };

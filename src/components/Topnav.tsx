@@ -9,6 +9,7 @@ import submark from "./assets/submark.png"; // TODO: Update submark image with n
 
 /**
  * The site-wide top navigation bar.
+ * @param props - The properties to pass to the navigation bar.
  * @returns The navigation bar.
  * @public
  */
@@ -39,7 +40,7 @@ export default async function Topnav({
 					<>
 						<li className={style["right"]}>
 							<Link href={`/players/${encodeURIComponent(session.user.name)}`}>
-								<span>{session.user.name}</span>
+								<span>{session.user.displayName ?? session.user.name}</span>
 							</Link>
 						</li>
 						{session.user.isAdministator && (

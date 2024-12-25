@@ -38,7 +38,7 @@ export default function getFormField(
 	formData: FormData,
 	name: string,
 	required = false
-): string | undefined {
+) {
 	const data = formData.get(name);
 	if (required && (!data || data === "")) {
 		throw new Error(`The value of ${name} was invalid.`);

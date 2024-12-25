@@ -1,4 +1,4 @@
-import type PageProps from "types/PageProps";
+import type PageProps from "./PageProps";
 import type { ReactNode } from "react";
 
 /**

@@ -5,6 +5,7 @@ import style from "./page.module.scss";
 
 /**
  * An administrator-only page for configuring database objects.
+ * @returns The admin page.
  * @public
  */
 export default async function Page() {

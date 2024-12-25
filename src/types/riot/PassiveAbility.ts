@@ -1,4 +1,4 @@
-import type Sprite from "types/Sprite";
+import type Sprite from "./Sprite";
 
 /**
  * A champion's passive ability.

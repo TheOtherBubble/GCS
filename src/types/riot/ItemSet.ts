@@ -1,4 +1,4 @@
-import type ItemSetBlock from "types/ItemSetBlock";
+import type ItemSetBlock from "./ItemSetBlock";
 
 /**
  * A champion's recommended item set.

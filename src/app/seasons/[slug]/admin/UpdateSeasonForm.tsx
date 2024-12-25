@@ -1,7 +1,7 @@
 import { type JSX, useId } from "react";
+import getSeasonUrl, { getSeasonUrlByDecodedSlug } from "scripts/getSeasonUrl";
 import Submit from "components/Submit";
 import getFormField from "scripts/getFormField";
-import getSeasonUrl from "scripts/getSeasonUrl";
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import type { seasonsTable } from "scripts/schema";
@@ -42,7 +42,7 @@ export default function UpdateSeasonForm({
 					vanityUrlSlug
 				});
 				if (vanityUrlSlug) {
-					redirect(getSeasonUrl(vanityUrlSlug));
+					redirect(getSeasonUrlByDecodedSlug(vanityUrlSlug));
 				}
 
 				// If the vanity URL didn't change, just reload the page instead.

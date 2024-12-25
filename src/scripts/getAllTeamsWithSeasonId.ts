@@ -8,9 +8,7 @@ import { teamsTable } from "./schema";
  * @returns A list of every team in the given season.
  * @public
  */
-export default async function getAllTeamsWithSeasonId(
-	seasonId: number
-): Promise<(typeof teamsTable.$inferSelect)[]> {
+export default async function getAllTeamsWithSeasonId(seasonId: number) {
 	return await db
 		.select()
 		.from(teamsTable)

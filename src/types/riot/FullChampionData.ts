@@ -1,8 +1,8 @@
-import type ChampionData from "types/ChampionData";
-import type ChampionSkin from "types/ChampionSkin";
-import type ItemSet from "types/ItemSet";
-import type PassiveAbility from "types/PassiveAbility";
-import type Spell from "types/Spell";
+import type ChampionData from "./ChampionData";
+import type ChampionSkin from "./ChampionSkin";
+import type ItemSet from "./ItemSet";
+import type PassiveAbility from "./PassiveAbility";
+import type Spell from "./Spell";
 
 /**
  * A champion's data.

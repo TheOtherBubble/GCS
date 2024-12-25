@@ -1,4 +1,4 @@
-import type ItemRecommendation from "types/ItemRecommendation";
+import type ItemRecommendation from "./ItemRecommendation";
 
 /**
  * A block in an item set.

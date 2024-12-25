@@ -4,7 +4,7 @@
  * @returns A combined class name string.
  * @public
  */
-export default function multiclass(...classNames: unknown[]): string {
+export default function multiclass(...classNames: unknown[]) {
 	return classNames
 		.filter((className) => typeof className === "string")
 		.join(" ");

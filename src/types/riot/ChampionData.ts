@@ -1,6 +1,6 @@
-import type ChampionInfo from "types/ChampionInfo";
-import type ChampionStats from "types/ChampionStats";
-import type Sprite from "types/Sprite";
+import type ChampionInfo from "./ChampionInfo";
+import type ChampionStats from "./ChampionStats";
+import type Sprite from "./Sprite";
 
 /**
  * A champion's data, as it appears in the list of champions.

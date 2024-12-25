@@ -6,8 +6,6 @@ import { teamsTable } from "./schema";
  * @returns A list of every team.
  * @public
  */
-export default async function getAllTeams(): Promise<
-	(typeof teamsTable.$inferSelect)[]
-> {
+export default async function getAllTeams() {
 	return await db.select().from(teamsTable);
 }

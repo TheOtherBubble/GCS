@@ -1,5 +1,5 @@
-import type ChampionData from "types/ChampionData";
-import type DataDragonResponse from "types/DataDragonResponse";
+import type ChampionData from "types/riot/ChampionData";
+import type DataDragonResponse from "types/riot/DataDragonResponse";
 import getDataDragonVersion from "./getDataDragonVersion";
 
 /**

@@ -1,7 +1,7 @@
 import { type JSX, useId } from "react";
 import Submit from "components/Submit";
 import getFormField from "scripts/getFormField";
-import getSeasonUrl from "scripts/getSeasonUrl";
+import { getSeasonUrlByDecodedSlug } from "scripts/getSeasonUrl";
 import { redirect } from "next/navigation";
 import type { seasonsTable } from "scripts/schema";
 
@@ -37,7 +37,9 @@ export default function ChangeSeasonForm({
 			// eslint-disable-next-line @typescript-eslint/require-await
 			action={async (form) => {
 				"use server";
-				redirect(getSeasonUrl(getFormField(form, "vanityUrlSlug", true)));
+				redirect(
+					getSeasonUrlByDecodedSlug(getFormField(form, "vanityUrlSlug", true))
+				);
 			}}
 			{...props}
 		>

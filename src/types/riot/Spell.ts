@@ -1,6 +1,6 @@
-import type DataDragonTemplateVariable from "types/DataDragonTemplateVariable";
-import type LevelTooltip from "types/LevelTooltip";
-import type Sprite from "types/Sprite";
+import type DataDragonTemplateVariable from "./DataDragonTemplateVariable";
+import type LevelTooltip from "./LevelTooltip";
+import type Sprite from "./Sprite";
 
 /**
  * Information about a champion's spell.

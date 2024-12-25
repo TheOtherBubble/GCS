@@ -1,6 +1,6 @@
 import { eq, or } from "drizzle-orm";
-import db from "scripts/db";
-import { playersTable } from "scripts/schema";
+import db from "./db";
+import { playersTable } from "./schema";
 
 /**
  * Get a player from a slug.
@@ -20,18 +20,9 @@ export default async function getPlayerFromSlug(slug: string) {
 				eq(playersTable.id, decoded)
 			)
 		);
-
-	const displayNamePlayer = players.find(
-		(player) => player.displayName === decoded
+	return (
+		players.find((player) => player.displayName === decoded) ??
+		players.find((player) => player.name === decoded) ??
+		players.find((player) => player.id === decoded)
 	);
-	if (displayNamePlayer) {
-		return displayNamePlayer;
-	}
-
-	const namePlayer = players.find((player) => player.name === decoded);
-	if (namePlayer) {
-		return namePlayer;
-	}
-
-	return players.find((player) => player.id === decoded);
 }

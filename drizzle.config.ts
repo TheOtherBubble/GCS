@@ -1,4 +1,4 @@
-import "./src/scripts/env";
+import "scripts/env";
 import { defineConfig } from "drizzle-kit";
 
 const url = process.env["POSTGRES_URL"];

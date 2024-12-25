@@ -22,6 +22,8 @@ export default function Page() {
 
 /**
  * The player page's metadata.
+ * @param props - The properties that are passed to the page.
+ * @returns The metadata.
  * @public
  */
 export const generateMetadata = (): Metadata => {
