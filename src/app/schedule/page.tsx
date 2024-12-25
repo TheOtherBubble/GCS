@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import getLatestSeason from "scripts/getLatestSeason";
+import getSeasonUrl from "scripts/getSeasonUrl";
 import { redirect } from "next/navigation";
 
 /**
@@ -9,7 +10,7 @@ import { redirect } from "next/navigation";
 export default async function Page() {
 	const season = await getLatestSeason();
 	if (season) {
-		redirect(`/seasons/${encodeURIComponent(season.vanityUrlSlug)}`);
+		redirect(getSeasonUrl(season));
 	}
 
 	return <p>{"There are no seasons."}</p>;

@@ -2,6 +2,7 @@ import { type JSX, useId } from "react";
 import Submit from "components/Submit";
 import deleteSeason from "scripts/deleteSeason";
 import getFormField from "scripts/getFormField";
+import getSeasonUrl from "scripts/getSeasonUrl";
 import { revalidatePath } from "next/cache";
 import type { seasonsTable } from "scripts/schema";
 
@@ -38,7 +39,7 @@ export default function DeleteSeasonForm({
 				}
 
 				await deleteSeason(season.id);
-				revalidatePath(`/seasons/${encodeURIComponent(season.vanityUrlSlug)}`);
+				revalidatePath(getSeasonUrl(season));
 			}}
 			{...props}
 		>

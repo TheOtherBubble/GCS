@@ -5,8 +5,8 @@ import type { Metadata } from "next";
  * @public
  */
 export interface PlayersPageParams {
-	/** The player's encoded name. */
-	name: string;
+	/** The player's encoded display name or Discord name or ID. */
+	slug: string;
 }
 
 /**

@@ -6,6 +6,7 @@ import { auth } from "scripts/auth";
 import getAllSeasons from "scripts/getAllSeasons";
 import getAllTeamsWithSeasonId from "scripts/getAllTeamsWithSeasonId";
 import getSeasonByVanityUrlSlug from "scripts/getSeasonByVanityUrlSlug";
+import getSeasonUrl from "scripts/getSeasonUrl";
 import style from "./page.module.scss";
 
 /**
@@ -79,11 +80,17 @@ export const generateMetadata = async (
 	const { slug } = await props.params;
 	const season = await getSeasonByVanityUrlSlug(decodeURIComponent(slug));
 
-	return {
-		description: season
-			? `The schedule for Gauntlet Championship Series ${season.name}.`
-			: "An unknown season of the Gauntlet Championship Series.",
-		openGraph: { url: `/seasons/${slug}` },
-		title: season?.name ?? "Unknown Season"
-	};
+	return season
+		? {
+				description: `The schedule for Gauntlet Championship Series ${season.name}.`,
+				openGraph: { url: getSeasonUrl(season) },
+				title: season.name
+			}
+		: {
+				description: "An unknown season of the Gauntlet Championship Series.",
+				openGraph: {
+					url: getSeasonUrl(encodeURIComponent(slug))
+				},
+				title: "Unknown Season"
+			};
 };

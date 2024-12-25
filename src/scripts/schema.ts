@@ -32,6 +32,9 @@ export const playersTable = pgTable("players", {
 	// A Discord snowflake (64-bit integer) stored as a string.
 	discordId: varchar({ length: 0x40 }).notNull(),
 
+	// The player's display name. Passed through `encodeURIComponent` and then used as a slug to make the player's URL. If not set, the player's Discord name is used instead. If neither the display name nor the Discord name is set, the player's ID is used instead.
+	displayName: varchar({ length: 0x20 }).unique(),
+
 	// The user's email address. Used by Auth.js to link OAuth accounts to users.
 	email: varchar({ length: 0x40 }),
 
@@ -49,7 +52,7 @@ export const playersTable = pgTable("players", {
 	// Whether or not this user is an administrator.
 	isAdministator: boolean().notNull().default(false),
 
-	// The player's display name. Passed through `encodeURIComponent` and then used as a slug to make the player's URL.
+	// The player's Discord name at the time when the account was created.
 	name: varchar({ length: 0x20 }).notNull(),
 
 	// The player's Twitch ID.
