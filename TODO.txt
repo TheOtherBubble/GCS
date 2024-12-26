@@ -1,13 +1,12 @@
 TODO:
 - Player cards:
- - Link to streams if they are live.
+ - Indicator if they are live.
 - Team cards:
- - Show an indicator if the team won its season.
+ - Indicator if the team won its season.
 - Match cards:
  - Show format.
- - For current matches, link to any involved players' streams if they are live.
+ - For current matches, indicator if any involved players' streams are live.
 - Game cards:
- - For upcoming games, show the tournament code.
  - For completed games, show the result and players.
   - For each player, show the player's name and champion.
  - Link to page.
@@ -19,10 +18,11 @@ TODO:
 - Rulebook page:
  - Confirm with Nerve that the rules look complete.
 - Season page:
- - Show teams, matches, standings, and leaderboards (KDA and damage).
+ - Show leaderboards (KDA and damage).
  - Show the playoffs bracket once the playoffs stage begins.
  - Generate the first game of each match when creating the match (including seeding the season).
  - Add an admin tool for generating the playoffs bracket from the current top 8 teams. Maybe do this automatically after the last regular season game ends.
+ - Scroll to the next unplayed round when opening the page.
 - Team page:
  - Show code, color, logo, name, pool, season, captain, players, matches, and stats.
  - Show an indicator if the team won its season.
@@ -30,6 +30,7 @@ TODO:
  - Allow administrators to change the pool, season, captain, and players.
  - Allow administrators to delete teams.
 - Match page:
+ - For upcoming and ongoing matches, show the tournament code of the next game to players on teams in the match.
  - Show season, round, teams, and format.
  - For completed and ongoing matches, show the match's score and list its games.
  - For completed matches, show the match's winner.

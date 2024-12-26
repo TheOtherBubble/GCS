@@ -2,14 +2,15 @@ import getSeasonUrl, { getSeasonUrlByEncodedSlug } from "utility/getSeasonUrl";
 import { matchTable, teamGameResultTable, teamTable } from "db/schema";
 import AdminPanel from "./AdminPanel";
 import ChangeSeasonForm from "./ChangeSeasonForm";
+import Link from "components/Link";
 import MatchCard from "components/MatchCard";
 import type { Metadata } from "next";
 import type PageProps from "types/PageProps";
 import { auth } from "db/auth";
 import getAllSeasons from "db/getAllSeasons";
-import getAllTeamsWithSeasonId from "db/getAllTeamsWithSeasonId";
 import getSeasonByEncodedSlug from "db/getSeasonByEncodedSlug";
 import getTeamGameResultsBySeason from "db/getTeamGameResultsBySeason";
+import getTeamUrl from "utility/getTeamUrl";
 import multiclass from "utility/multiclass";
 import style from "./page.module.scss";
 
@@ -47,7 +48,10 @@ export default async function Page(props: PageProps<SeasonsPageParams>) {
 		);
 	}
 
+	// Get relevant match, game, and team data.
 	const rows = await getTeamGameResultsBySeason(season);
+
+	// Split matches into rounds for displaying.
 	const rounds = new Map<
 		number,
 		{
@@ -57,11 +61,15 @@ export default async function Page(props: PageProps<SeasonsPageParams>) {
 		}[]
 	>(); // Round numbers to match IDs in that round.
 	for (const row of rows) {
+		if (!row.match) {
+			continue;
+		}
+
 		// Add a match to an existing round.
 		const round = rounds.get(row.match.round);
 		if (round) {
 			// Add data to an existing match.
-			const match = round.find((value) => value.match.id === row.match.id);
+			const match = round.find((value) => value.match.id === row.match?.id);
 			if (match) {
 				if (
 					row.teamGameResult &&
@@ -72,7 +80,7 @@ export default async function Page(props: PageProps<SeasonsPageParams>) {
 					match.teamGameResults.push(row.teamGameResult);
 				}
 
-				if (row.team && !match.teams.some((team) => team.id === row.team?.id)) {
+				if (!match.teams.some((team) => team.id === row.team.id)) {
 					match.teams.push(row.team);
 				}
 
@@ -83,7 +91,7 @@ export default async function Page(props: PageProps<SeasonsPageParams>) {
 			round.push({
 				match: row.match,
 				teamGameResults: row.teamGameResult ? [row.teamGameResult] : [],
-				teams: row.team ? [row.team] : []
+				teams: [row.team]
 			});
 			continue;
 		}
@@ -93,9 +101,46 @@ export default async function Page(props: PageProps<SeasonsPageParams>) {
 			{
 				match: row.match,
 				teamGameResults: row.teamGameResult ? [row.teamGameResult] : [],
-				teams: row.team ? [row.team] : []
+				teams: [row.team]
 			}
 		]);
+	}
+
+	// Sort teams by score for the leaderboard.
+	const teamScores: {
+		team: typeof teamTable.$inferSelect;
+		wins: number;
+		losses: number;
+	}[] = [];
+	for (const row of rows) {
+		const teamScore = teamScores.find((value) => value.team.id === row.team.id);
+
+		// If there's no game result, just create a team record with no games if the team doesn't have a record yet.
+		if (!row.teamGameResult) {
+			if (!teamScore) {
+				teamScores.push({ losses: 0, team: row.team, wins: 0 });
+			}
+
+			continue;
+		}
+
+		// Increment wins or losses counter for existing team.
+		if (teamScore) {
+			if (row.teamGameResult.isWinner) {
+				teamScore.wins++;
+			} else {
+				teamScore.losses++;
+			}
+
+			continue;
+		}
+
+		// Otherwise, create a new team record.
+		teamScores.push({
+			losses: row.teamGameResult.isWinner ? 0 : 1,
+			team: row.team,
+			wins: row.teamGameResult.isWinner ? 1 : 0
+		});
 	}
 
 	return (
@@ -109,7 +154,7 @@ export default async function Page(props: PageProps<SeasonsPageParams>) {
 						<AdminPanel
 							className={style["hide-on-mobile"]}
 							season={season}
-							teams={await getAllTeamsWithSeasonId(season.id)} // TODO: Join.
+							teams={teamScores.map((teamScore) => teamScore.team)}
 						/>
 					)}
 				</div>
@@ -134,14 +179,22 @@ export default async function Page(props: PageProps<SeasonsPageParams>) {
 							))}
 						</div>
 					))}
-				{/* TODO */}
 			</div>
 			<div
 				className={multiclass(style["leaderboards"], style["hide-on-mobile"])}
 			>
 				<h2>{"Leaderboards"}</h2>
-				<p>{"Coming soon..."}</p>
-				{/* TODO */}
+				<h3>{"Standings"}</h3>
+				<ol>
+					{teamScores
+						.sort((a, b) => a.wins - b.wins || b.losses - a.losses)
+						.map(({ team, wins, losses }) => (
+							<li key={team.id}>
+								<Link href={getTeamUrl(team)}>{team.name}</Link>
+								{` ${wins.toString()}-${losses.toString()}`}
+							</li>
+						))}
+				</ol>
 			</div>
 		</div>
 	);

@@ -3,6 +3,7 @@ import Image from "components/Image";
 import type { JSX } from "react";
 import Link from "components/Link";
 import Submit from "components/Submit";
+import getPlayerUrl from "utility/getPlayerUrl";
 import multiclass from "utility/multiclass";
 import style from "./styles/topnav.module.scss";
 import submark from "./assets/submark.png"; // TODO: Update submark image with new branding. May be able to remove the filter too.
@@ -39,7 +40,7 @@ export default async function Topnav({
 				{session?.user ? (
 					<>
 						<li className={style["right"]}>
-							<Link href={`/players/${encodeURIComponent(session.user.name)}`}>
+							<Link href={getPlayerUrl(session.user)}>
 								<span>{session.user.displayName ?? session.user.name}</span>
 							</Link>
 						</li>

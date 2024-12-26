@@ -1,4 +1,4 @@
-import { eq, or } from "drizzle-orm";
+import { and, eq, or } from "drizzle-orm";
 import {
 	gameResultTable,
 	gameTable,
@@ -20,19 +20,22 @@ export default async function getTeamGameResultsBySeason(
 ) {
 	return await db
 		.select()
-		.from(matchTable)
+		.from(teamTable)
 		.leftJoin(
-			teamTable,
+			matchTable,
 			or(
-				eq(matchTable.blueTeamId, teamTable.id),
-				eq(matchTable.redTeamId, teamTable.id)
+				eq(teamTable.id, matchTable.blueTeamId),
+				eq(teamTable.id, matchTable.redTeamId)
 			)
 		)
 		.leftJoin(gameTable, eq(matchTable.id, gameTable.matchId))
 		.leftJoin(gameResultTable, eq(gameTable.id, gameResultTable.gameId))
 		.leftJoin(
 			teamGameResultTable,
-			eq(gameResultTable.id, teamGameResultTable.gameResultId)
+			and(
+				eq(gameResultTable.id, teamGameResultTable.gameResultId),
+				eq(teamTable.id, teamGameResultTable.teamId)
+			)
 		)
-		.where(eq(matchTable.seasonId, season.id));
+		.where(eq(teamTable.seasonId, season.id));
 }

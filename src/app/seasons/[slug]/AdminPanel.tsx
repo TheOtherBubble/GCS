@@ -2,8 +2,8 @@ import type { seasonTable, teamTable } from "db/schema";
 import CreateMatchForm from "./admin/CreateMatchForm";
 import CreateTeamForm from "./admin/CreateTeamForm";
 import DeleteSeasonForm from "./admin/DeleteSeasonForm";
+import GenerateRegularSeasonForm from "./admin/GenerateRegularSeasonForm";
 import { type JSX } from "react";
-import SeedSeasonForm from "./admin/SeedSeasonForm";
 import UpdateSeasonForm from "./admin/UpdateSeasonForm";
 import multiclass from "utility/multiclass";
 import style from "./admin/admin-panel.module.scss";
@@ -39,7 +39,7 @@ export default function AdminPanel({
 			<DeleteSeasonForm season={season} />
 			<CreateTeamForm season={season} />
 			<CreateMatchForm season={season} teams={teams} />
-			<SeedSeasonForm season={season} teams={teams} />
+			<GenerateRegularSeasonForm season={season} teams={teams} />
 		</div>
 	);
 }

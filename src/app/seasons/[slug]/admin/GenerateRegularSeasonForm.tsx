@@ -25,12 +25,12 @@ export interface SeedSeasonFormProps
 }
 
 /**
- * A form for seeding a season.
+ * A form for generating a regular season.
  * @param props - Properties to pass to the form.
  * @returns The form.
  * @public
  */
-export default function SeedSeasonForm({
+export default function GenerateRegularSeasonForm({
 	season,
 	teams,
 	...props
@@ -96,8 +96,7 @@ export default function SeedSeasonForm({
 			{...props}
 		>
 			<header>
-				<h3>{"Seed Season"}</h3>
-				<p>{"Create a single round robin regular season."}</p>
+				<h3>{"Generate Regular Season"}</h3>
 			</header>
 			<label htmlFor={formatId}>{"Format"}</label>
 			<select id={formatId} name={"format"} defaultValue={"Best of 3"} required>
@@ -107,7 +106,7 @@ export default function SeedSeasonForm({
 					</option>
 				))}
 			</select>
-			<Submit value="Seed" />
+			<Submit value="Generate" />
 		</form>
 	);
 }
