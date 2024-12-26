@@ -1,6 +1,7 @@
+import MatchCard from "components/MatchCard";
 import type { Metadata } from "next";
 import type PageProps from "types/PageProps";
-import { getMatchBySlug } from "db/getMatchById";
+import { getTeamsByMatchSlug } from "db/getTeamsByMatch";
 
 /**
  * Parameters that are passed to a match page.
@@ -19,13 +20,14 @@ export interface MatchesPageParams {
  */
 export default async function Page(props: PageProps<MatchesPageParams>) {
 	const { slug } = await props.params;
-	const match = await getMatchBySlug(slug);
+	const teams = await getTeamsByMatchSlug(slug);
+	const match = teams[0]?.matches;
 	if (!match) {
 		return <p>{"Unknown match."}</p>;
 	}
 
 	// TODO
-	return <p>{"Coming soon..."}</p>;
+	return <MatchCard match={match} teams={teams.map((team) => team.teams)} />;
 }
 
 /**

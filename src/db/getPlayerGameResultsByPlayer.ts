@@ -9,12 +9,12 @@ import db from "./db";
 import { eq } from "drizzle-orm";
 
 /**
- * Get all of a player's completed games.
+ * Get all of a player's game results.
  * @param player - The player.
- * @returns The player's completed games. Includes the game, game results, team game results, and player game results.
+ * @returns The player's completed games. Includes the game, game result, team game result, and player game result.
  * @public
  */
-export default async function getGamesByPlayer(
+export default async function getPlayerGameResultsByPlayer(
 	player: typeof playersTable.$inferSelect
 ) {
 	return await db

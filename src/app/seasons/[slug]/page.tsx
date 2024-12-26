@@ -1,12 +1,15 @@
 import getSeasonUrl, { getSeasonUrlByEncodedSlug } from "utility/getSeasonUrl";
+import { matchesTable, teamGameResultsTable, teamsTable } from "db/schema";
 import AdminPanel from "./AdminPanel";
 import ChangeSeasonForm from "./ChangeSeasonForm";
+import MatchCard from "components/MatchCard";
 import type { Metadata } from "next";
 import type PageProps from "types/PageProps";
 import { auth } from "db/auth";
 import getAllSeasons from "db/getAllSeasons";
 import getAllTeamsWithSeasonId from "db/getAllTeamsWithSeasonId";
 import getSeasonByEncodedSlug from "db/getSeasonByEncodedSlug";
+import getTeamGameResultsBySeason from "db/getTeamGameResultsBySeason";
 import multiclass from "utility/multiclass";
 import style from "./page.module.scss";
 
@@ -44,6 +47,60 @@ export default async function Page(props: PageProps<SeasonsPageParams>) {
 		);
 	}
 
+	const rows = await getTeamGameResultsBySeason(season);
+	const rounds = new Map<
+		number,
+		{
+			match: typeof matchesTable.$inferSelect;
+			teamGameResults: (typeof teamGameResultsTable.$inferSelect)[];
+			teams: (typeof teamsTable.$inferSelect)[];
+		}[]
+	>(); // Round numbers to match IDs in that round.
+	for (const row of rows) {
+		// Add a match to an existing round.
+		const round = rounds.get(row.matches.round);
+		if (round) {
+			// Add data to an existing match.
+			const match = round.find((value) => value.match.id === row.matches.id);
+			if (match) {
+				if (
+					row.teamGameResults &&
+					!match.teamGameResults.some(
+						(teamGameResult) => teamGameResult.id === row.teamGameResults?.id
+					)
+				) {
+					match.teamGameResults.push(row.teamGameResults);
+				}
+
+				if (
+					row.teams &&
+					!match.teams.some((team) => team.id === row.teams?.id)
+				) {
+					match.teams.push(row.teams);
+				}
+
+				continue;
+			}
+
+			// Insert a new match.
+			round.push({
+				match: row.matches,
+				teamGameResults: row.teamGameResults ? [row.teamGameResults] : [],
+				teams: row.teams ? [row.teams] : []
+			});
+			continue;
+		}
+
+		// Insert match as the first in its round.
+		rounds.set(row.matches.round, [
+			{
+				match: row.matches,
+				teamGameResults: row.teamGameResults ? [row.teamGameResults] : [],
+				teams: row.teams ? [row.teams] : []
+			}
+		]);
+	}
+
 	return (
 		<div className={style["content"]}>
 			<div className={style["config"]}>
@@ -55,97 +112,31 @@ export default async function Page(props: PageProps<SeasonsPageParams>) {
 						<AdminPanel
 							className={style["hide-on-mobile"]}
 							season={season}
-							teams={await getAllTeamsWithSeasonId(season.id)}
+							teams={await getAllTeamsWithSeasonId(season.id)} // TODO: Join.
 						/>
 					)}
 				</div>
 			</div>
 			<div className={style["schedule"]}>
 				<h2>{"Schedule"}</h2>
-				<p>{"Coming soon..."}</p>
-				<p>{"Coming soon..."}</p>
-				<p>{"Coming soon..."}</p>
-				<p>{"Coming soon..."}</p>
-				<p>{"Coming soon..."}</p>
-				<p>{"Coming soon..."}</p>
-				<p>{"Coming soon..."}</p>
-				<p>{"Coming soon..."}</p>
-				<p>{"Coming soon..."}</p>
-				<p>{"Coming soon..."}</p>
-				<p>{"Coming soon..."}</p>
-				<p>{"Coming soon..."}</p>
-				<p>{"Coming soon..."}</p>
-				<p>{"Coming soon..."}</p>
-				<p>{"Coming soon..."}</p>
-				<p>{"Coming soon..."}</p>
-				<p>{"Coming soon..."}</p>
-				<p>{"Coming soon..."}</p>
-				<p>{"Coming soon..."}</p>
-				<p>{"Coming soon..."}</p>
-				<p>{"Coming soon..."}</p>
-				<p>{"Coming soon..."}</p>
-				<p>{"Coming soon..."}</p>
-				<p>{"Coming soon..."}</p>
-				<p>{"Coming soon..."}</p>
-				<p>{"Coming soon..."}</p>
-				<p>{"Coming soon..."}</p>
-				<p>{"Coming soon..."}</p>
-				<p>{"Coming soon..."}</p>
-				<p>{"Coming soon..."}</p>
-				<p>{"Coming soon..."}</p>
-				<p>{"Coming soon..."}</p>
-				<p>{"Coming soon..."}</p>
-				<p>{"Coming soon..."}</p>
-				<p>{"Coming soon..."}</p>
-				<p>{"Coming soon..."}</p>
-				<p>{"Coming soon..."}</p>
-				<p>{"Coming soon..."}</p>
-				<p>{"Coming soon..."}</p>
-				<p>{"Coming soon..."}</p>
-				<p>{"Coming soon..."}</p>
-				<p>{"Coming soon..."}</p>
-				<p>{"Coming soon..."}</p>
-				<p>{"Coming soon..."}</p>
-				<p>{"Coming soon..."}</p>
-				<p>{"Coming soon..."}</p>
-				<p>{"Coming soon..."}</p>
-				<p>{"Coming soon..."}</p>
-				<p>{"Coming soon..."}</p>
-				<p>{"Coming soon..."}</p>
-				<p>{"Coming soon..."}</p>
-				<p>{"Coming soon..."}</p>
-				<p>{"Coming soon..."}</p>
-				<p>{"Coming soon..."}</p>
-				<p>{"Coming soon..."}</p>
-				<p>{"Coming soon..."}</p>
-				<p>{"Coming soon..."}</p>
-				<p>{"Coming soon..."}</p>
-				<p>{"Coming soon..."}</p>
-				<p>{"Coming soon..."}</p>
-				<p>{"Coming soon..."}</p>
-				<p>{"Coming soon..."}</p>
-				<p>{"Coming soon..."}</p>
-				<p>{"Coming soon..."}</p>
-				<p>{"Coming soon..."}</p>
-				<p>{"Coming soon..."}</p>
-				<p>{"Coming soon..."}</p>
-				<p>{"Coming soon..."}</p>
-				<p>{"Coming soon..."}</p>
-				<p>{"Coming soon..."}</p>
-				<p>{"Coming soon..."}</p>
-				<p>{"Coming soon..."}</p>
-				<p>{"Coming soon..."}</p>
-				<p>{"Coming soon..."}</p>
-				<p>{"Coming soon..."}</p>
-				<p>{"Coming soon..."}</p>
-				<p>{"Coming soon..."}</p>
-				<p>{"Coming soon..."}</p>
-				<p>{"Coming soon..."}</p>
-				<p>{"Coming soon..."}</p>
-				<p>{"Coming soon..."}</p>
-				<p>{"Coming soon..."}</p>
-				<p>{"Coming soon..."}</p>
-				<p>{"Coming soon..."}</p>
+				{Array.from(rounds)
+					.sort(([a], [b]) => a - b)
+					.map(([round, matches]) => (
+						<div key={round} className={style["round"]}>
+							<h3>
+								{"Round "}
+								{round}
+							</h3>
+							{matches.map((match) => (
+								<MatchCard
+									key={match.match.id}
+									match={match.match}
+									teamGameResults={match.teamGameResults}
+									teams={match.teams}
+								/>
+							))}
+						</div>
+					))}
 				{/* TODO */}
 			</div>
 			<div

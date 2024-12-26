@@ -4,10 +4,7 @@ TODO:
 - Team cards:
  - Show an indicator if the team won its season.
 - Match cards:
- - Show both teams' codes, colors, and logos.
  - Show format.
- - For completed matches, show score.
- - Link to page.
  - For current matches, link to any involved players' streams if they are live.
 - Game cards:
  - For upcoming games, show the tournament code.
@@ -25,6 +22,7 @@ TODO:
  - Show teams, matches, standings, and leaderboards (KDA and damage).
  - Show the playoffs bracket once the playoffs stage begins.
  - Generate the first game of each match when creating the match (including seeding the season).
+ - Add an admin tool for generating the playoffs bracket from the current top 8 teams. Maybe do this automatically after the last regular season game ends.
 - Team page:
  - Show code, color, logo, name, pool, season, captain, players, matches, and stats.
  - Show an indicator if the team won its season.
@@ -69,3 +67,6 @@ TODO:
  - 404 page.
  - Player reporting system.
  - Delete this file.
+ - Metadata (including OGP images) on every page.
+ - Set match (and potentially season) winners if necessary when creating game results.
+ - Un-pluralize relation names.

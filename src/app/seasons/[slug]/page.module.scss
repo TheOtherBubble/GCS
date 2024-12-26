@@ -12,6 +12,12 @@ div.content {
 		}
 	}
 
+	div.round > a {
+		// Horizontal margin already applied by columns.
+		margin: variables.$normal-gap 0px;
+		width: calc(100% - variables.$normal-pad * 2);
+	}
+
 	@include mixins.is-not-mobile using ($is-not-mobile) {
 		@if $is-not-mobile {
 			display: grid;

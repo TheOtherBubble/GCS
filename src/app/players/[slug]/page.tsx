@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import type PageProps from "types/PageProps";
 import PlayerCard from "components/PlayerCard";
 import getAccountsByPlayer from "db/getAccountsByPlayer";
-import getGamesByPlayer from "db/getGamesByPlayer";
 import getPlayerBySlug from "db/getPlayerBySlug";
+import getPlayerGameResultsByPlayer from "db/getPlayerGameResultsByPlayer";
 import getTeamsByPlayer from "db/getTeamsByPlayer";
 
 /**
@@ -29,7 +29,7 @@ export default async function Page(props: PageProps<PlayersPageParams>) {
 	}
 
 	const accounts = await getAccountsByPlayer(player);
-	const games = await getGamesByPlayer(player);
+	const games = await getPlayerGameResultsByPlayer(player);
 	const teams = await getTeamsByPlayer(player);
 
 	return (

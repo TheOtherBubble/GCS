@@ -26,6 +26,7 @@ export default async function Page(props: PageProps<TeamsPageParams>) {
 		return <p>{"Unknown team."}</p>;
 	}
 
+	// TODO: Join.
 	const season = await getSeasonById(team.seasonId);
 
 	// TODO

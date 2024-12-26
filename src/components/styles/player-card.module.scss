@@ -22,6 +22,10 @@ a.container {
 	background-color: variables.$fg-color; // Goes behind the background image, which is set from JavaScript.
 	background-size: calc($width + 2 * $padding);
 
+	* {
+		margin: 0px;
+	}
+
 	h1,
 	h2,
 	h3,
@@ -29,7 +33,6 @@ a.container {
 	h5,
 	h6,
 	p {
-		margin: 0px;
 		text-align: left;
 	}
 
