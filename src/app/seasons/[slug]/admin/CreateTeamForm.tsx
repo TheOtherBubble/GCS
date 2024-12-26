@@ -3,6 +3,8 @@ import Submit from "components/Submit";
 import createTeam from "db/createTeam";
 import domain from "utility/domain";
 import getFormField from "utility/getFormField";
+import getSeasonUrl from "utility/getSeasonUrl";
+import { revalidatePath } from "next/cache";
 import type { seasonTable } from "db/schema";
 
 /**
@@ -45,6 +47,7 @@ export default function CreateTeamForm({
 					seasonId: season.id,
 					vanityUrlSlug: getFormField(form, "vanityUrlSlug", true)
 				});
+				revalidatePath(getSeasonUrl(season));
 			}}
 			{...props}
 		>
@@ -61,7 +64,7 @@ export default function CreateTeamForm({
 				id={logoUrlId}
 				name="logoUrl"
 				maxLength={0x800}
-				defaultValue={`${domain}/default.png`}
+				defaultValue={new URL("/default.png", domain).href}
 				required
 			/>
 			<label htmlFor={nameId}>{"Name"}</label>

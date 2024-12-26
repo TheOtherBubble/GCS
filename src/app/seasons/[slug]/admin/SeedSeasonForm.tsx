@@ -8,6 +8,8 @@ import {
 import Submit from "components/Submit";
 import createMatches from "db/createMatches";
 import getFormField from "utility/getFormField";
+import getSeasonUrl from "utility/getSeasonUrl";
+import { revalidatePath } from "next/cache";
 
 /**
  * Properties that can be passed to a seed season form.
@@ -89,6 +91,7 @@ export default function SeedSeasonForm({
 				}
 
 				await createMatches(matches);
+				revalidatePath(getSeasonUrl(season));
 			}}
 			{...props}
 		>

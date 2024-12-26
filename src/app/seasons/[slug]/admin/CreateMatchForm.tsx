@@ -3,6 +3,8 @@ import { matchFormatEnum, type seasonTable, type teamTable } from "db/schema";
 import Submit from "components/Submit";
 import createMatch from "db/createMatch";
 import getFormField from "utility/getFormField";
+import getSeasonUrl from "utility/getSeasonUrl";
+import { revalidatePath } from "next/cache";
 
 /**
  * Properties that can be passed to a create match form.
@@ -48,6 +50,7 @@ export default function CreateMatchForm({
 					round: parseInt(getFormField(form, "round", true), 10),
 					seasonId: season.id
 				});
+				revalidatePath(getSeasonUrl(season));
 			}}
 			{...props}
 		>
