@@ -1,5 +1,5 @@
 import type { MetadataRoute } from "next";
-import domain from "scripts/domain";
+import domain from "utility/domain";
 
 /**
  * The website's sitemap.

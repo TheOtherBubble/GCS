@@ -1,4 +1,8 @@
-import type { accountRankEnum, accountTierEnum, accountsTable } from "./schema";
+import type {
+	accountRankEnum,
+	accountTierEnum,
+	accountsTable
+} from "db/schema";
 
 /**
  * Convert a tier string to a number that represents its order compared to other tiers (lower is worse).

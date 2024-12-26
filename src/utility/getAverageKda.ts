@@ -1,4 +1,4 @@
-import type { playerGameResultsTable } from "./schema";
+import type { playerGameResultsTable } from "db/schema";
 
 /**
  * Get a player's average kills plus assists per death ("KDA ratio" or "KDA").

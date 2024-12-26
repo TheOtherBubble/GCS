@@ -1,11 +1,11 @@
 import { type JSX, useId } from "react";
-import getSeasonUrl, { getSeasonUrlByDecodedSlug } from "scripts/getSeasonUrl";
+import getSeasonUrl, { getSeasonUrlByDecodedSlug } from "utility/getSeasonUrl";
 import Submit from "components/Submit";
-import getFormField from "scripts/getFormField";
+import getFormField from "utility/getFormField";
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
-import type { seasonsTable } from "scripts/schema";
-import updateSeason from "scripts/updateSeason";
+import type { seasonsTable } from "db/schema";
+import updateSeason from "db/updateSeason";
 
 /**
  * Properties that can be passed to an update season form.

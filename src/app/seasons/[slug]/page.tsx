@@ -1,12 +1,13 @@
-import getSeasonUrl, { getSeasonUrlByEncodedSlug } from "scripts/getSeasonUrl";
+import getSeasonUrl, { getSeasonUrlByEncodedSlug } from "utility/getSeasonUrl";
 import AdminPanel from "./AdminPanel";
 import ChangeSeasonForm from "./ChangeSeasonForm";
 import type { Metadata } from "next";
 import type PageProps from "types/PageProps";
-import { auth } from "scripts/auth";
-import getAllSeasons from "scripts/getAllSeasons";
-import getAllTeamsWithSeasonId from "scripts/getAllTeamsWithSeasonId";
-import getSeasonByDecodedSlug from "scripts/getSeasonByDecodedSlug";
+import { auth } from "db/auth";
+import getAllSeasons from "db/getAllSeasons";
+import getAllTeamsWithSeasonId from "db/getAllTeamsWithSeasonId";
+import getSeasonByEncodedSlug from "db/getSeasonByEncodedSlug";
+import multiclass from "utility/multiclass";
 import style from "./page.module.scss";
 
 /**
@@ -48,13 +49,16 @@ export default async function Page(props: PageProps<SeasonsPageParams>) {
 			<div className={style["config"]}>
 				<h1>{season.name}</h1>
 				<hr />
-				<ChangeSeasonForm season={season} seasons={seasons} />
-				{(await auth())?.user?.isAdministator && (
-					<AdminPanel
-						season={season}
-						teams={await getAllTeamsWithSeasonId(season.id)}
-					/>
-				)}
+				<div className={style["hide-on-mobile"]}>
+					<ChangeSeasonForm season={season} seasons={seasons} />
+					{(await auth())?.user?.isAdministator && (
+						<AdminPanel
+							className={style["hide-on-mobile"]}
+							season={season}
+							teams={await getAllTeamsWithSeasonId(season.id)}
+						/>
+					)}
+				</div>
 			</div>
 			<div className={style["schedule"]}>
 				<h2>{"Schedule"}</h2>
@@ -144,7 +148,9 @@ export default async function Page(props: PageProps<SeasonsPageParams>) {
 				<p>{"Coming soon..."}</p>
 				{/* TODO */}
 			</div>
-			<div className={style["leaderboards"]}>
+			<div
+				className={multiclass(style["leaderboards"], style["hide-on-mobile"])}
+			>
 				<h2>{"Leaderboards"}</h2>
 				<p>{"Coming soon..."}</p>
 				{/* TODO */}
@@ -163,7 +169,7 @@ export const generateMetadata = async (
 	props: PageProps<SeasonsPageParams>
 ): Promise<Metadata> => {
 	const { slug } = await props.params;
-	const season = await getSeasonByDecodedSlug(decodeURIComponent(slug));
+	const season = await getSeasonByEncodedSlug(slug);
 
 	return season
 		? {

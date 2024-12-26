@@ -3,13 +3,14 @@ import type {
 	playerGameResultsTable,
 	playersTable,
 	teamsTable
-} from "scripts/schema";
+} from "db/schema";
 import type { JSX } from "react";
 import RankedEmblem from "./RankedEmblem";
-import getAverageKda from "scripts/getAverageKda";
-import getBackgroundImageUrl from "scripts/getBackgroundImageUrl";
-import getHighestRankedAccount from "scripts/getHighestRankedAccount";
-import multiclass from "scripts/multiclass";
+import getAverageKda from "utility/getAverageKda";
+import getBackgroundImageUrl from "utility/getBackgroundImageUrl";
+import getHighestRankedAccount from "utility/getHighestRankedAccount";
+import getPlayerUrl from "utility/getPlayerUrl";
+import multiclass from "utility/multiclass";
 import style from "./styles/player-card.module.scss";
 
 /**
@@ -58,12 +59,12 @@ export default function PlayerCard({
 					? `url(${backgroundImageUrl})`
 					: void 0
 			}}
-			href={`/players/${encodeURIComponent(player.name)}`}
+			href={getPlayerUrl(player)}
 			{...props}
 		>
 			<div>
 				<h3>
-					{player.name}
+					{player.displayName ?? player.name}
 					{highestRankedAccount && (
 						<>
 							<RankedEmblem

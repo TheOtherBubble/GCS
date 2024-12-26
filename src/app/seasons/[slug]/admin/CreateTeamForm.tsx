@@ -1,9 +1,9 @@
 import { type JSX, useId } from "react";
 import Submit from "components/Submit";
-import createTeam from "scripts/createTeam";
-import domain from "scripts/domain";
-import getFormField from "scripts/getFormField";
-import type { seasonsTable } from "scripts/schema";
+import createTeam from "db/createTeam";
+import domain from "utility/domain";
+import getFormField from "utility/getFormField";
+import type { seasonsTable } from "db/schema";
 
 /**
  * Properties that can be passed to a create team form.

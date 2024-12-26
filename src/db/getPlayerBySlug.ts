@@ -8,7 +8,7 @@ import { playersTable } from "./schema";
  * @returns The player.
  * @public
  */
-export default async function getPlayerFromSlug(slug: string) {
+export default async function getPlayerBySlug(slug: string) {
 	const decoded = decodeURIComponent(slug);
 	const players = await db
 		.select()

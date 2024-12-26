@@ -1,12 +1,14 @@
 import type { Metadata } from "next";
+import type PageProps from "types/PageProps";
+import { getMatchBySlug } from "db/getMatchById";
 
 /**
  * Parameters that are passed to a match page.
  * @public
  */
 export interface MatchesPageParams {
-	/** The match's ID. */
-	id: string;
+	/** The match's ID (stringified). */
+	slug: string;
 }
 
 /**
@@ -15,7 +17,13 @@ export interface MatchesPageParams {
  * @returns The match page.
  * @public
  */
-export default function Page() {
+export default async function Page(props: PageProps<MatchesPageParams>) {
+	const { slug } = await props.params;
+	const match = await getMatchBySlug(slug);
+	if (!match) {
+		return <p>{"Unknown match."}</p>;
+	}
+
 	// TODO
 	return <p>{"Coming soon..."}</p>;
 }

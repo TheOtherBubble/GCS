@@ -1,4 +1,10 @@
 import type { Metadata } from "next";
+import type PageProps from "types/PageProps";
+import PlayerCard from "components/PlayerCard";
+import getAccountsByPlayer from "db/getAccountsByPlayer";
+import getGamesByPlayer from "db/getGamesByPlayer";
+import getPlayerBySlug from "db/getPlayerBySlug";
+import getTeamsByPlayer from "db/getTeamsByPlayer";
 
 /**
  * Parameters that are passed to a player page.
@@ -15,9 +21,25 @@ export interface PlayersPageParams {
  * @returns The player page.
  * @public
  */
-export default function Page() {
-	// TODO
-	return <p>{"Coming soon..."}</p>;
+export default async function Page(props: PageProps<PlayersPageParams>) {
+	const { slug } = await props.params;
+	const player = await getPlayerBySlug(slug);
+	if (!player) {
+		return <p>{"Unknown player."}</p>;
+	}
+
+	const accounts = await getAccountsByPlayer(player);
+	const games = await getGamesByPlayer(player);
+	const teams = await getTeamsByPlayer(player);
+
+	return (
+		<PlayerCard
+			player={player}
+			accounts={accounts}
+			games={games.map((game) => game.playerGameResults)}
+			teams={teams.map((team) => team.teams)}
+		/>
+	);
 }
 
 /**

@@ -1,6 +1,6 @@
 import Image, { type ImageProps } from "components/Image";
 import type { JSX } from "react";
-import type { accountTierEnum } from "scripts/schema";
+import type { accountTierEnum } from "db/schema";
 import bronze from "./assets/bronze.png";
 import challenger from "./assets/challenger.png";
 import diamond from "./assets/diamond.png";

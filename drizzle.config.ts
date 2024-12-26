@@ -1,4 +1,4 @@
-import "scripts/env";
+import "utility/env";
 import { defineConfig } from "drizzle-kit";
 
 const url = process.env["POSTGRES_URL"];
@@ -14,5 +14,5 @@ export default defineConfig({
 	dbCredentials: { url },
 	dialect: "postgresql",
 	out: "./drizzle",
-	schema: "./src/scripts/schema.ts"
+	schema: "./src/db/schema.ts"
 });

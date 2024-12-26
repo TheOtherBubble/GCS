@@ -2,9 +2,7 @@ TODO:
 - Player cards:
  - Link to streams if they are live.
 - Team cards:
- - Show name, color, logo, season, and pool.
  - Show an indicator if the team won its season.
- - Link to page.
 - Match cards:
  - Show both teams' codes, colors, and logos.
  - Show format.

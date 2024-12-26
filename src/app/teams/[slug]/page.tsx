@@ -1,4 +1,8 @@
 import type { Metadata } from "next";
+import type PageProps from "types/PageProps";
+import TeamCard from "components/TeamCard";
+import getSeasonById from "db/getSeasonById";
+import getTeamByEncodedSlug from "db/getTeamByEncodedSlug";
 
 /**
  * Parameters that are passed to a team page.
@@ -15,9 +19,17 @@ export interface TeamsPageParams {
  * @returns The team page.
  * @public
  */
-export default function Page() {
+export default async function Page(props: PageProps<TeamsPageParams>) {
+	const { slug } = await props.params;
+	const team = await getTeamByEncodedSlug(slug);
+	if (!team) {
+		return <p>{"Unknown team."}</p>;
+	}
+
+	const season = await getSeasonById(team.seasonId);
+
 	// TODO
-	return <p>{"Coming soon..."}</p>;
+	return <TeamCard team={team} season={season} />;
 }
 
 /**

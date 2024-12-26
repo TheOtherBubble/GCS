@@ -1,4 +1,4 @@
-import { auth as middleware } from "./scripts/auth";
+import { auth as middleware } from "db/auth";
 
 // Import is renamed so that IDEs auto-import `auth` from `auth.ts` rather than here.
 

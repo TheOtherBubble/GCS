@@ -1,11 +1,11 @@
-import type { seasonsTable, teamsTable } from "scripts/schema";
+import type { seasonsTable, teamsTable } from "db/schema";
 import CreateMatchForm from "./admin/CreateMatchForm";
 import CreateTeamForm from "./admin/CreateTeamForm";
 import DeleteSeasonForm from "./admin/DeleteSeasonForm";
 import { type JSX } from "react";
 import SeedSeasonForm from "./admin/SeedSeasonForm";
 import UpdateSeasonForm from "./admin/UpdateSeasonForm";
-import multiclass from "scripts/multiclass";
+import multiclass from "utility/multiclass";
 import style from "./admin/admin-panel.module.scss";
 
 /**

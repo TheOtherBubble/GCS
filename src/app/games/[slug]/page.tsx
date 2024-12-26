@@ -1,12 +1,14 @@
 import type { Metadata } from "next";
+import type PageProps from "types/PageProps";
+import { getGameBySlug } from "db/getGameById";
 
 /**
  * Parameters that are passed to a game page.
  * @public
  */
 export interface GamesPageParams {
-	/** The match's ID. */
-	id: string;
+	/** The match's ID (stringified). */
+	slug: string;
 }
 
 /**
@@ -15,7 +17,13 @@ export interface GamesPageParams {
  * @returns The game page.
  * @public
  */
-export default function Page() {
+export default async function Page(props: PageProps<GamesPageParams>) {
+	const { slug } = await props.params;
+	const game = await getGameBySlug(slug);
+	if (!game) {
+		return <p>{"Unknown game."}</p>;
+	}
+
 	// TODO
 	return <p>{"Coming soon..."}</p>;
 }

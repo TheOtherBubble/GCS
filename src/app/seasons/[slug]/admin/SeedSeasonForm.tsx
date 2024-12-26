@@ -4,10 +4,10 @@ import {
 	type matchesTable,
 	type seasonsTable,
 	type teamsTable
-} from "scripts/schema";
+} from "db/schema";
 import Submit from "components/Submit";
-import createMatches from "scripts/createMatches";
-import getFormField from "scripts/getFormField";
+import createMatches from "db/createMatches";
+import getFormField from "utility/getFormField";
 
 /**
  * Properties that can be passed to a seed season form.

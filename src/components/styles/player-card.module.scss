@@ -12,7 +12,7 @@ a.container {
 
 	// Shape.
 	$padding: variables.$normal-pad;
-	$width: min(600px, 100%);
+	$width: min(600px, calc(100% - variables.$normal-pad * 2));
 	aspect-ratio: 3 / 1;
 	width: $width;
 	border-radius: variables.$normal-radius;

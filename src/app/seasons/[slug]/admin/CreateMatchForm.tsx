@@ -1,12 +1,8 @@
 import { type JSX, useId } from "react";
-import {
-	matchFormatEnum,
-	type seasonsTable,
-	type teamsTable
-} from "scripts/schema";
+import { matchFormatEnum, type seasonsTable, type teamsTable } from "db/schema";
 import Submit from "components/Submit";
-import createMatch from "scripts/createMatch";
-import getFormField from "scripts/getFormField";
+import createMatch from "db/createMatch";
+import getFormField from "utility/getFormField";
 
 /**
  * Properties that can be passed to a create match form.

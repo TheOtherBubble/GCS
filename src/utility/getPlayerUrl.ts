@@ -1,4 +1,4 @@
-import type { playersTable } from "./schema";
+import type { playersTable } from "db/schema";
 
 /**
  * Get the URL of the given player.

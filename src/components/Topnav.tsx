@@ -1,9 +1,9 @@
-import { auth, signIn, signOut } from "scripts/auth";
+import { auth, signIn, signOut } from "db/auth";
 import Image from "components/Image";
 import type { JSX } from "react";
 import Link from "components/Link";
 import Submit from "components/Submit";
-import multiclass from "scripts/multiclass";
+import multiclass from "utility/multiclass";
 import style from "./styles/topnav.module.scss";
 import submark from "./assets/submark.png"; // TODO: Update submark image with new branding. May be able to remove the filter too.
 

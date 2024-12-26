@@ -1,10 +1,10 @@
 import { type JSX, useId } from "react";
 import Submit from "components/Submit";
-import deleteSeason from "scripts/deleteSeason";
-import getFormField from "scripts/getFormField";
-import getSeasonUrl from "scripts/getSeasonUrl";
+import deleteSeason from "db/deleteSeason";
+import getFormField from "utility/getFormField";
+import getSeasonUrl from "utility/getSeasonUrl";
 import { revalidatePath } from "next/cache";
-import type { seasonsTable } from "scripts/schema";
+import type { seasonsTable } from "db/schema";
 
 /**
  * Properties that can be passed to a delete season form.

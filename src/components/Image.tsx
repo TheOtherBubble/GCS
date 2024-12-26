@@ -6,7 +6,13 @@ import defaultBlur from "./assets/default-blur.png"; // TODO: Update default blu
  * Equivalent to the props that can be passed to a Next.js image or an image element.
  * @public
  */
-export type ImageProps = NextImageProps | JSX.IntrinsicElements["img"];
+export type ImageProps = (NextImageProps | JSX.IntrinsicElements["img"]) & {
+	/**
+	 * Whether or not the image is trusted. Untrusted images don't use the Next.js image optimization API, so their `src` doesn't need to be a `trustedDomain`.
+	 * @see {@link https://nextjs.org/docs/messages/next-image-unconfigured-host | Un-configured host}
+	 */
+	untrusted?: boolean;
+};
 
 /**
  * Create an image. Automatically applies default styling and configuration.
@@ -16,7 +22,7 @@ export type ImageProps = NextImageProps | JSX.IntrinsicElements["img"];
  */
 export default function Image(props: ImageProps) {
 	// Destructure properties to access those that require custom logic.
-	const { src, alt, width, height, ...remainingProps } = props;
+	const { src, alt, width, height, untrusted, ...remainingProps } = props;
 
 	// Ensure that required properties are present.
 	if (!src || !alt) {
@@ -37,6 +43,21 @@ export default function Image(props: ImageProps) {
 		finalProps.height = height;
 	} else if (typeof height === "string") {
 		finalProps.height = parseInt(height, 10);
+	}
+
+	// Untrusted images must use a string `src` value.
+	if (untrusted) {
+		if (typeof finalProps.src !== "string") {
+			throw new Error("Untrusted image must use a string source.");
+		}
+
+		// Type safety.
+		if (!finalProps.alt) {
+			throw new Error("Something impossible happened.");
+		}
+
+		// eslint-disable-next-line @next/next/no-img-element
+		return <img {...finalProps} alt={finalProps.alt} src={finalProps.src} />;
 	}
 
 	// Set default properties.
