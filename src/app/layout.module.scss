@@ -6,6 +6,11 @@ body.spacer {
 	flex-direction: column;
 	justify-content: flex-start;
 
+	& > header {
+		position: sticky;
+		top: 0px;
+	}
+
 	& > footer {
 		margin-top: auto;
 		background-color: variables.$fg-color;

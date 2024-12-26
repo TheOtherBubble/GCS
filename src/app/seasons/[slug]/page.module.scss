@@ -1,5 +1,6 @@
 @use "../../../styles/variables";
 @use "../../../styles/mixins";
+@use "../../../components/styles/topnav.module.scss" as topnav;
 
 div.content {
 	@include mixins.is-not-mobile using ($is-not-mobile) {
@@ -14,11 +15,11 @@ div.content {
 				// Don't scroll with screen.
 				align-self: start;
 				position: sticky;
-				top: 0px;
+				top: topnav.$height + variables.$normal-gap;
 
 				// Ensure that all content can still be accessed.
 				overflow: auto;
-				max-height: 100vh;
+				max-height: calc(100vh - topnav.$height - variables.$normal-gap * 2);
 			}
 
 			& > div.schedule {
@@ -31,11 +32,11 @@ div.content {
 				// Don't scroll with screen.
 				align-self: start;
 				position: sticky;
-				top: 0px;
+				top: topnav.$height + variables.$normal-gap;
 
 				// Ensure that all content can still be accessed.
 				overflow: auto;
-				max-height: 100vh;
+				max-height: calc(100vh - topnav.$height - variables.$normal-gap * 2);
 			}
 		}
 	}

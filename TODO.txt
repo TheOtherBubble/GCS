@@ -1,6 +1,5 @@
 TODO:
 - Player cards:
- - Show name, background skin, KDA, seasons played, and rank.
  - Link to streams if they are live.
 - Team cards:
  - Show name, color, logo, season, and pool.
