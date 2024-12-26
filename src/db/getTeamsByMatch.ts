@@ -1,5 +1,5 @@
 import { eq, or } from "drizzle-orm";
-import { matchesTable, teamsTable } from "./schema";
+import { matchTable, teamTable } from "./schema";
 import db from "./db";
 
 /**
@@ -11,15 +11,15 @@ import db from "./db";
 export const getTeamsByMatchId = async (id: number) =>
 	await db
 		.select()
-		.from(teamsTable)
+		.from(teamTable)
 		.innerJoin(
-			matchesTable,
+			matchTable,
 			or(
-				eq(teamsTable.id, matchesTable.blueTeamId),
-				eq(teamsTable.id, matchesTable.redTeamId)
+				eq(teamTable.id, matchTable.blueTeamId),
+				eq(teamTable.id, matchTable.redTeamId)
 			)
 		)
-		.where(eq(matchesTable.id, id));
+		.where(eq(matchTable.id, id));
 
 /**
  * Get all of a match's teams.
@@ -37,7 +37,7 @@ export const getTeamsByMatchSlug = async (slug: string) =>
  * @public
  */
 export default async function getTeamsByMatch(
-	match: typeof matchesTable.$inferSelect
+	match: typeof matchTable.$inferSelect
 ) {
 	return await getTeamsByMatchId(match.id);
 }

@@ -1,6 +1,6 @@
 import db from "./db";
 import { eq } from "drizzle-orm";
-import { seasonsTable } from "./schema";
+import { seasonTable } from "./schema";
 
 /**
  * Get a season by its ID.
@@ -10,6 +10,6 @@ import { seasonsTable } from "./schema";
  */
 export default async function getSeasonById(id: number) {
 	return (
-		await db.select().from(seasonsTable).where(eq(seasonsTable.id, id)).limit(1)
+		await db.select().from(seasonTable).where(eq(seasonTable.id, id)).limit(1)
 	)[0];
 }

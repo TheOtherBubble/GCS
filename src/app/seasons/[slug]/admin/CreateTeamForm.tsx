@@ -3,7 +3,7 @@ import Submit from "components/Submit";
 import createTeam from "db/createTeam";
 import domain from "utility/domain";
 import getFormField from "utility/getFormField";
-import type { seasonsTable } from "db/schema";
+import type { seasonTable } from "db/schema";
 
 /**
  * Properties that can be passed to a create team form.
@@ -12,7 +12,7 @@ import type { seasonsTable } from "db/schema";
 export interface CreateTeamFormProps
 	extends Omit<JSX.IntrinsicElements["form"], "action"> {
 	/** The current season. */
-	season: typeof seasonsTable.$inferSelect;
+	season: typeof seasonTable.$inferSelect;
 }
 
 /**

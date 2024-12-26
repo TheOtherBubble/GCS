@@ -1,4 +1,4 @@
-import type { seasonsTable } from "db/schema";
+import type { seasonTable } from "db/schema";
 
 /**
  * Get the URL of a season from an encoded vanity URL slug.
@@ -23,6 +23,6 @@ export const getSeasonUrlByDecodedSlug = (slug: string) =>
  * @returns The URL.
  * @public
  */
-export default function getSeasonUrl(season: typeof seasonsTable.$inferSelect) {
+export default function getSeasonUrl(season: typeof seasonTable.$inferSelect) {
 	return getSeasonUrlByDecodedSlug(season.vanityUrlSlug);
 }

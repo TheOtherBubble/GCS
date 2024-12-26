@@ -1,6 +1,6 @@
 import db from "./db";
 import { eq } from "drizzle-orm";
-import { seasonsTable } from "./schema";
+import { seasonTable } from "./schema";
 
 /**
  * Delete a season.
@@ -8,5 +8,5 @@ import { seasonsTable } from "./schema";
  * @returns When finished.
  */
 export default async function deleteSeason(id: number) {
-	return await db.delete(seasonsTable).where(eq(seasonsTable.id, id));
+	return await db.delete(seasonTable).where(eq(seasonTable.id, id));
 }

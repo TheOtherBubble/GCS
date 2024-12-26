@@ -1,4 +1,4 @@
-import type { seasonsTable, teamsTable } from "db/schema";
+import type { seasonTable, teamTable } from "db/schema";
 import CreateMatchForm from "./admin/CreateMatchForm";
 import CreateTeamForm from "./admin/CreateTeamForm";
 import DeleteSeasonForm from "./admin/DeleteSeasonForm";
@@ -14,10 +14,10 @@ import style from "./admin/admin-panel.module.scss";
  */
 export type AdminPanelProps = JSX.IntrinsicElements["div"] & {
 	/** The current season. */
-	season: typeof seasonsTable.$inferSelect;
+	season: typeof seasonTable.$inferSelect;
 
 	/** A list of all teams in the current season. */
-	teams: (typeof teamsTable.$inferSelect)[];
+	teams: (typeof teamTable.$inferSelect)[];
 };
 
 /**

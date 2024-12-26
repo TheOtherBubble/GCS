@@ -1,6 +1,6 @@
 import db from "./db";
 import { eq } from "drizzle-orm";
-import { teamsTable } from "./schema";
+import { teamTable } from "./schema";
 
 /**
  * Get a team by its vanity URL slug.
@@ -12,8 +12,8 @@ export const getTeamByDecodedSlug = async (slug: string) => {
 	return (
 		await db
 			.select()
-			.from(teamsTable)
-			.where(eq(teamsTable.vanityUrlSlug, slug))
+			.from(teamTable)
+			.where(eq(teamTable.vanityUrlSlug, slug))
 			.limit(1)
 	)[0];
 };

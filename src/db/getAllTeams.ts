@@ -1,5 +1,5 @@
 import db from "./db";
-import { teamsTable } from "./schema";
+import { teamTable } from "./schema";
 
 /**
  * Get a list of every team.
@@ -7,5 +7,5 @@ import { teamsTable } from "./schema";
  * @public
  */
 export default async function getAllTeams() {
-	return await db.select().from(teamsTable);
+	return await db.select().from(teamTable);
 }

@@ -1,6 +1,6 @@
 import db from "./db";
 import { eq } from "drizzle-orm";
-import { teamsTable } from "./schema";
+import { teamTable } from "./schema";
 
 /**
  * Get a list of every team in a season.
@@ -11,6 +11,6 @@ import { teamsTable } from "./schema";
 export default async function getAllTeamsWithSeasonId(seasonId: number) {
 	return await db
 		.select()
-		.from(teamsTable)
-		.where(eq(teamsTable.seasonId, seasonId));
+		.from(teamTable)
+		.where(eq(teamTable.seasonId, seasonId));
 }

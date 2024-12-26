@@ -1,5 +1,5 @@
 import getSeasonUrl, { getSeasonUrlByEncodedSlug } from "utility/getSeasonUrl";
-import { matchesTable, teamGameResultsTable, teamsTable } from "db/schema";
+import { matchTable, teamGameResultTable, teamTable } from "db/schema";
 import AdminPanel from "./AdminPanel";
 import ChangeSeasonForm from "./ChangeSeasonForm";
 import MatchCard from "components/MatchCard";
@@ -51,32 +51,29 @@ export default async function Page(props: PageProps<SeasonsPageParams>) {
 	const rounds = new Map<
 		number,
 		{
-			match: typeof matchesTable.$inferSelect;
-			teamGameResults: (typeof teamGameResultsTable.$inferSelect)[];
-			teams: (typeof teamsTable.$inferSelect)[];
+			match: typeof matchTable.$inferSelect;
+			teamGameResults: (typeof teamGameResultTable.$inferSelect)[];
+			teams: (typeof teamTable.$inferSelect)[];
 		}[]
 	>(); // Round numbers to match IDs in that round.
 	for (const row of rows) {
 		// Add a match to an existing round.
-		const round = rounds.get(row.matches.round);
+		const round = rounds.get(row.match.round);
 		if (round) {
 			// Add data to an existing match.
-			const match = round.find((value) => value.match.id === row.matches.id);
+			const match = round.find((value) => value.match.id === row.match.id);
 			if (match) {
 				if (
-					row.teamGameResults &&
+					row.teamGameResult &&
 					!match.teamGameResults.some(
-						(teamGameResult) => teamGameResult.id === row.teamGameResults?.id
+						(teamGameResult) => teamGameResult.id === row.teamGameResult?.id
 					)
 				) {
-					match.teamGameResults.push(row.teamGameResults);
+					match.teamGameResults.push(row.teamGameResult);
 				}
 
-				if (
-					row.teams &&
-					!match.teams.some((team) => team.id === row.teams?.id)
-				) {
-					match.teams.push(row.teams);
+				if (row.team && !match.teams.some((team) => team.id === row.team?.id)) {
+					match.teams.push(row.team);
 				}
 
 				continue;
@@ -84,19 +81,19 @@ export default async function Page(props: PageProps<SeasonsPageParams>) {
 
 			// Insert a new match.
 			round.push({
-				match: row.matches,
-				teamGameResults: row.teamGameResults ? [row.teamGameResults] : [],
-				teams: row.teams ? [row.teams] : []
+				match: row.match,
+				teamGameResults: row.teamGameResult ? [row.teamGameResult] : [],
+				teams: row.team ? [row.team] : []
 			});
 			continue;
 		}
 
 		// Insert match as the first in its round.
-		rounds.set(row.matches.round, [
+		rounds.set(row.match.round, [
 			{
-				match: row.matches,
-				teamGameResults: row.teamGameResults ? [row.teamGameResults] : [],
-				teams: row.teams ? [row.teams] : []
+				match: row.match,
+				teamGameResults: row.teamGameResult ? [row.teamGameResult] : [],
+				teams: row.team ? [row.team] : []
 			}
 		]);
 	}

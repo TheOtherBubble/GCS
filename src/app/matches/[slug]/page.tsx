@@ -20,14 +20,14 @@ export interface MatchesPageParams {
  */
 export default async function Page(props: PageProps<MatchesPageParams>) {
 	const { slug } = await props.params;
-	const teams = await getTeamsByMatchSlug(slug);
-	const match = teams[0]?.matches;
+	const rows = await getTeamsByMatchSlug(slug);
+	const match = rows[0]?.match;
 	if (!match) {
 		return <p>{"Unknown match."}</p>;
 	}
 
 	// TODO
-	return <MatchCard match={match} teams={teams.map((team) => team.teams)} />;
+	return <MatchCard match={match} teams={rows.map((row) => row.team)} />;
 }
 
 /**

@@ -1,4 +1,4 @@
-import { type playersTable, teamPlayersTable, teamsTable } from "./schema";
+import { type playerTable, teamPlayerTable, teamTable } from "./schema";
 import db from "./db";
 import { eq } from "drizzle-orm";
 
@@ -9,11 +9,11 @@ import { eq } from "drizzle-orm";
  * @public
  */
 export default async function getTeamsByPlayer(
-	player: typeof playersTable.$inferSelect
+	player: typeof playerTable.$inferSelect
 ) {
 	return await db
 		.select()
-		.from(teamsTable)
-		.innerJoin(teamPlayersTable, eq(teamsTable.id, teamPlayersTable.teamId))
-		.where(eq(teamPlayersTable.playerId, player.id));
+		.from(teamTable)
+		.innerJoin(teamPlayerTable, eq(teamTable.id, teamPlayerTable.teamId))
+		.where(eq(teamPlayerTable.playerId, player.id));
 }

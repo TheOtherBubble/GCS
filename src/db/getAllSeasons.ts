@@ -1,5 +1,5 @@
 import db from "./db";
-import { seasonsTable } from "./schema";
+import { seasonTable } from "./schema";
 
 /**
  * Get a list of every season.
@@ -7,5 +7,5 @@ import { seasonsTable } from "./schema";
  * @public
  */
 export default async function getAllSeasons() {
-	return await db.select().from(seasonsTable);
+	return await db.select().from(seasonTable);
 }

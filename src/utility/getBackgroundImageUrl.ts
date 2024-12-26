@@ -1,4 +1,4 @@
-import type { playersTable } from "db/schema";
+import type { playerTable } from "db/schema";
 
 /**
  * Get the URL of the image of the player's selected background skin.
@@ -7,7 +7,7 @@ import type { playersTable } from "db/schema";
  * @public
  */
 export default function getBackgroundImageUrl(
-	player: typeof playersTable.$inferSelect
+	player: typeof playerTable.$inferSelect
 ) {
 	return player.backgroundChampionId &&
 		typeof player.backgroundSkinNumber === "number"

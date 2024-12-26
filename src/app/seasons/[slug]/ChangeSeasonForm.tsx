@@ -3,7 +3,7 @@ import Submit from "components/Submit";
 import getFormField from "utility/getFormField";
 import { getSeasonUrlByDecodedSlug } from "utility/getSeasonUrl";
 import { redirect } from "next/navigation";
-import type { seasonsTable } from "db/schema";
+import type { seasonTable } from "db/schema";
 
 /**
  * Properties that can be passed to a change season form.
@@ -12,10 +12,10 @@ import type { seasonsTable } from "db/schema";
 export interface ChangeSeasonFormProps
 	extends Omit<JSX.IntrinsicElements["form"], "action"> {
 	/** The current season. */
-	season: typeof seasonsTable.$inferSelect | undefined;
+	season: typeof seasonTable.$inferSelect | undefined;
 
 	/** A list of all seasons. */
-	seasons: (typeof seasonsTable.$inferSelect)[];
+	seasons: (typeof seasonTable.$inferSelect)[];
 }
 
 /**

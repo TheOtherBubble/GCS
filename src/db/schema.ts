@@ -16,7 +16,7 @@ import type { AdapterAccountType } from "next-auth/adapters";
  * The table of players. Players are linked to one Discord account and any number of Riot accounts, and may participate in any number of seasons on any number of teams.
  * @public
  */
-export const playersTable = pgTable("players", {
+export const playerTable = pgTable("player", {
 	// A player-selected champion to use as a background on player cards, stored as a champion ID.
 	backgroundChampionId: varchar({ length: 0x20 }),
 
@@ -66,8 +66,8 @@ export const playersTable = pgTable("players", {
  * The table of OAuth accounts. Used by Auth.js.
  * @public
  */
-export const oauthAccountsTable = pgTable(
-	"oauthAccounts",
+export const oauthTable = pgTable(
+	"oauth",
 	{
 		// The access token.
 		// eslint-disable-next-line camelcase
@@ -108,7 +108,7 @@ export const oauthAccountsTable = pgTable(
 		// The ID of the associated player.
 		userId: varchar({ length: 36 })
 			.notNull()
-			.references(() => playersTable.id, { onDelete: "cascade" })
+			.references(() => playerTable.id, { onDelete: "cascade" })
 	},
 	(self) => [primaryKey({ columns: [self.provider, self.providerAccountId] })]
 );
@@ -117,7 +117,7 @@ export const oauthAccountsTable = pgTable(
  * An OAuth session for a player.
  * @public
  */
-export const sessionsTable = pgTable("sessions", {
+export const sessionTable = pgTable("session", {
 	// The timestamp that the session expires at.
 	expires: timestamp().notNull(),
 
@@ -127,7 +127,7 @@ export const sessionsTable = pgTable("sessions", {
 	// The player that the session belongs to.
 	userId: varchar({ length: 36 })
 		.notNull()
-		.references(() => playersTable.id, { onDelete: "cascade" })
+		.references(() => playerTable.id, { onDelete: "cascade" })
 });
 
 /**
@@ -157,8 +157,8 @@ export const accountRankEnum = pgEnum("accountRank", ["I", "II", "III", "IV"]);
  * The table of Riot accounts. Each Riot account is linked to one player. Riot account game names and tag lines are cached to reduce calls to the Riot API.
  * @public
  */
-export const accountsTable = pgTable(
-	"accounts",
+export const accountTable = pgTable(
+	"account",
 	{
 		// The Riot account ID of the account. 56 character maximum length.
 		accountId: varchar({ length: 56 }).notNull(),
@@ -177,7 +177,7 @@ export const accountsTable = pgTable(
 
 		// The ID of the player that the account is linked to.
 		playerId: varchar({ length: 36 })
-			.references(() => playersTable.id, { onDelete: "cascade" })
+			.references(() => playerTable.id, { onDelete: "cascade" })
 			.notNull(),
 
 		// The ID of the profile icon that the account must select in order to verify that the associated player owns it. Randomly selected from icons in the starter pack (IDs 0 through 28), which every player owns.
@@ -212,7 +212,7 @@ export const accountsTable = pgTable(
  * The table of seasons. Seasons may consist of any number of matches between any number of teams split up into any number of pools.
  * @public
  */
-export const seasonsTable = pgTable("seasons", {
+export const seasonTable = pgTable("season", {
 	// Unique identifier.
 	id: integer().primaryKey().generatedAlwaysAsIdentity(),
 
@@ -230,8 +230,8 @@ export const seasonsTable = pgTable("seasons", {
  * The table of teams. Each team participates in one pool of one season, and has one captain out of any number of players.
  * @public
  */
-export const teamsTable = pgTable(
-	"teams",
+export const teamTable = pgTable(
+	"team",
 	{
 		// The team's code.
 		code: varchar({ length: 4 }).notNull(),
@@ -256,7 +256,7 @@ export const teamsTable = pgTable(
 
 		// The ID of the team's season.
 		seasonId: integer()
-			.references(() => seasonsTable.id, { onDelete: "cascade" })
+			.references(() => seasonTable.id, { onDelete: "cascade" })
 			.notNull(),
 
 		// The team's vanity URL slug. Passed through `encodeURIComponent` and then used as a slug to make the team's URL.
@@ -273,20 +273,20 @@ export const teamsTable = pgTable(
  * The relation between teams and players, indicating which teams a player belongs to and which players compose a team. One player per team may be the team's captain.
  * @public
  */
-export const teamPlayersTable = pgTable(
-	"teamPlayers",
+export const teamPlayerTable = pgTable(
+	"teamPlayer",
 	{
 		// Whether or not the player is the captain of the team. Must be null for non-captains.
 		isCaptain: boolean(),
 
 		// The ID of the player.
 		playerId: varchar({ length: 36 })
-			.references(() => playersTable.id, { onDelete: "cascade" })
+			.references(() => playerTable.id, { onDelete: "cascade" })
 			.notNull(),
 
 		// The ID of the team.
 		teamId: integer()
-			.references(() => teamsTable.id, { onDelete: "cascade" })
+			.references(() => teamTable.id, { onDelete: "cascade" })
 			.notNull()
 	},
 	(self) => [
@@ -317,10 +317,10 @@ export const matchTeamEnum = pgEnum("matchTeam", ["Red", "Blue"]);
  * The table of matches. Each match belongs to a week of a season, is played between two teams, and may be composed of any number of games (depending on the match's format).
  * @public
  */
-export const matchesTable = pgTable("matches", {
+export const matchTable = pgTable("match", {
 	// The ID of the red team.
 	blueTeamId: integer()
-		.references(() => teamsTable.id, { onDelete: "cascade" })
+		.references(() => teamTable.id, { onDelete: "cascade" })
 		.notNull(),
 
 	// The format of the match.
@@ -331,7 +331,7 @@ export const matchesTable = pgTable("matches", {
 
 	// The ID of the red team.
 	redTeamId: integer()
-		.references(() => teamsTable.id, { onDelete: "cascade" })
+		.references(() => teamTable.id, { onDelete: "cascade" })
 		.notNull(),
 
 	// The one-based round of its season that the match will take place. There are two rounds per week.
@@ -339,7 +339,7 @@ export const matchesTable = pgTable("matches", {
 
 	// The ID of the match's season.
 	seasonId: integer()
-		.references(() => seasonsTable.id, { onDelete: "cascade" })
+		.references(() => seasonTable.id, { onDelete: "cascade" })
 		.notNull(),
 
 	// The team that won the match, if it has concluded.
@@ -350,12 +350,12 @@ export const matchesTable = pgTable("matches", {
  * The table of games, regardless of whether they are upcoming, in progress, or completed. Games may (in the case of stage games) or may not be (in the case of inhouses) be part of a match.
  * @public
  */
-export const gamesTable = pgTable("games", {
+export const gameTable = pgTable("game", {
 	// Unique identifier.
 	id: integer().primaryKey().generatedAlwaysAsIdentity(),
 
 	// The ID of the match that the game is part of.
-	matchId: integer().references(() => matchesTable.id, {
+	matchId: integer().references(() => matchTable.id, {
 		onDelete: "set null"
 	}),
 
@@ -367,13 +367,13 @@ export const gamesTable = pgTable("games", {
  * The table of game results, which represent the players and statistics in a completed game. A game result may not correspond to a game if the game result isn't part of a tournament or inhouse (such as games that are just pulled from the Riot API to collect statistics).
  * @public
  */
-export const gameResultsTable = pgTable("gameResults", {
+export const gameResultTable = pgTable("gameResult", {
 	// The duration of the game in seconds.
 	duration: integer().notNull(),
 
 	// The ID of the game that these results correspond to, if any. May be null if the game result isn't part of a tournament or inhouse (such as games that are just pulled from the Riot API to collect statistics).
 	gameId: integer()
-		.references(() => gamesTable.id, { onDelete: "set null" })
+		.references(() => gameTable.id, { onDelete: "set null" })
 		.unique(),
 
 	// The game/match ID of the game in the Riot API.
@@ -408,12 +408,12 @@ export const gameResultsTable = pgTable("gameResults", {
  * A team in a game result. This is just cached data from the Riot API. Always corresponds to a game result, but may not always correspond to a team (such as for game results that are just pulled from the Riot API to collect statistics).
  * @public
  */
-export const teamGameResultsTable = pgTable(
-	"teamGameResults",
+export const teamGameResultTable = pgTable(
+	"teamGameResult",
 	{
 		// The ID of the game result that these results correspond to.
 		gameResultId: integer()
-			.references(() => gameResultsTable.id, { onDelete: "cascade" })
+			.references(() => gameResultTable.id, { onDelete: "cascade" })
 			.notNull(),
 
 		// Unique identifier.
@@ -423,7 +423,7 @@ export const teamGameResultsTable = pgTable(
 		isWinner: boolean().notNull(),
 
 		// The ID of the team, if any. May be null if the game result isn't part of a tournament or inhouse (such as games that are just pulled from the Riot API to collect statistics).
-		teamId: integer().references(() => teamsTable.id, { onDelete: "set null" })
+		teamId: integer().references(() => teamTable.id, { onDelete: "set null" })
 	},
 	(self) => [unique().on(self.gameResultId, self.isWinner)]
 );
@@ -432,8 +432,8 @@ export const teamGameResultsTable = pgTable(
  * A ban in a team game result. This is just cached data from the Riot API. Always corresponds to a team game result.
  * @public
  */
-export const teamGameResultBansTable = pgTable(
-	"teamGameResultBans",
+export const teamGameResultBanTable = pgTable(
+	"teamGameResultBan",
 	{
 		// The key of the champion that was banned. Referred to as the champion's ID in the Riot API.
 		championKey: varchar({ length: 0x20 }).notNull(),
@@ -443,7 +443,7 @@ export const teamGameResultBansTable = pgTable(
 
 		// The ID of the team game result that this ban correspond to.
 		teamGameResultId: integer()
-			.references(() => teamGameResultsTable.id, { onDelete: "cascade" })
+			.references(() => teamGameResultTable.id, { onDelete: "cascade" })
 			.notNull()
 	},
 	(self) => [
@@ -456,8 +456,8 @@ export const teamGameResultBansTable = pgTable(
  * A player in a team game result. This is just cached data from the Riot API. Always corresponds to a team game result, but may not always correspond to a player (such as for game results that are just pulled from the Riot API to collect statistics).
  * @public
  */
-export const playerGameResultsTable = pgTable(
-	"playerGameResults",
+export const playerGameResultTable = pgTable(
+	"playerGameResult",
 	{
 		// The amount of life that the player healed on their allies, excluding regeneration.
 		allyHealing: integer().notNull(),
@@ -562,7 +562,7 @@ export const playerGameResultsTable = pgTable(
 		pentaKills: integer().notNull(),
 
 		// The ID of the player, if any. May be null if the game result isn't part of a tournament or inhouse (such as games that are just pulled from the Riot API to collect statistics).
-		playerId: varchar({ length: 36 }).references(() => playersTable.id, {
+		playerId: varchar({ length: 36 }).references(() => playerTable.id, {
 			onDelete: "set null"
 		}),
 
@@ -583,7 +583,7 @@ export const playerGameResultsTable = pgTable(
 
 		// The ID of the team game result that these results correspond to.
 		teamGameResultId: integer()
-			.references(() => teamGameResultsTable.id, { onDelete: "cascade" })
+			.references(() => teamGameResultTable.id, { onDelete: "cascade" })
 			.notNull(),
 
 		// The amount of damage that the player dealt to towers.

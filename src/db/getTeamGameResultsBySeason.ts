@@ -1,11 +1,11 @@
 import { eq, or } from "drizzle-orm";
 import {
-	gameResultsTable,
-	gamesTable,
-	matchesTable,
-	seasonsTable,
-	teamGameResultsTable,
-	teamsTable
+	gameResultTable,
+	gameTable,
+	matchTable,
+	seasonTable,
+	teamGameResultTable,
+	teamTable
 } from "./schema";
 import db from "./db";
 
@@ -16,23 +16,23 @@ import db from "./db";
  * @public
  */
 export default async function getTeamGameResultsBySeason(
-	season: typeof seasonsTable.$inferSelect
+	season: typeof seasonTable.$inferSelect
 ) {
 	return await db
 		.select()
-		.from(matchesTable)
+		.from(matchTable)
 		.leftJoin(
-			teamsTable,
+			teamTable,
 			or(
-				eq(matchesTable.blueTeamId, teamsTable.id),
-				eq(matchesTable.redTeamId, teamsTable.id)
+				eq(matchTable.blueTeamId, teamTable.id),
+				eq(matchTable.redTeamId, teamTable.id)
 			)
 		)
-		.leftJoin(gamesTable, eq(matchesTable.id, gamesTable.matchId))
-		.leftJoin(gameResultsTable, eq(gamesTable.id, gameResultsTable.gameId))
+		.leftJoin(gameTable, eq(matchTable.id, gameTable.matchId))
+		.leftJoin(gameResultTable, eq(gameTable.id, gameResultTable.gameId))
 		.leftJoin(
-			teamGameResultsTable,
-			eq(gameResultsTable.id, teamGameResultsTable.gameResultId)
+			teamGameResultTable,
+			eq(gameResultTable.id, teamGameResultTable.gameResultId)
 		)
-		.where(eq(matchesTable.seasonId, season.id));
+		.where(eq(matchTable.seasonId, season.id));
 }

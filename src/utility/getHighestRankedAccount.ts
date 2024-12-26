@@ -1,8 +1,4 @@
-import type {
-	accountRankEnum,
-	accountTierEnum,
-	accountsTable
-} from "db/schema";
+import type { accountRankEnum, accountTable, accountTierEnum } from "db/schema";
 
 /**
  * Convert a tier string to a number that represents its order compared to other tiers (lower is worse).
@@ -39,7 +35,7 @@ const rankToNumber = (tier: (typeof accountRankEnum.enumValues)[number]) =>
  * @public
  */
 export default function getHighestRankedAccount(
-	accounts: (typeof accountsTable.$inferSelect)[]
+	accounts: (typeof accountTable.$inferSelect)[]
 ) {
 	return accounts.sort(
 		(a, b) =>

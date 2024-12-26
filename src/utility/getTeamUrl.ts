@@ -1,4 +1,4 @@
-import type { teamsTable } from "db/schema";
+import type { teamTable } from "db/schema";
 
 /**
  * Get the URL of a team from an encoded vanity URL slug.
@@ -23,6 +23,6 @@ export const getTeamUrlByDecodedSlug = (slug: string) =>
  * @returns The URL.
  * @public
  */
-export default function getTeamUrl(team: typeof teamsTable.$inferSelect) {
+export default function getTeamUrl(team: typeof teamTable.$inferSelect) {
 	return getTeamUrlByDecodedSlug(team.vanityUrlSlug);
 }

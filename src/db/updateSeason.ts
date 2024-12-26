@@ -1,7 +1,7 @@
 import type { InferUpdate } from "types/InferUpdate";
 import db from "./db";
 import { eq } from "drizzle-orm";
-import { seasonsTable } from "./schema";
+import { seasonTable } from "./schema";
 
 /**
  * Update a season.
@@ -11,7 +11,7 @@ import { seasonsTable } from "./schema";
  */
 export default async function updateSeason(
 	id: number,
-	season: InferUpdate<typeof seasonsTable.$inferInsert>
+	season: InferUpdate<typeof seasonTable.$inferInsert>
 ) {
-	await db.update(seasonsTable).set(season).where(eq(seasonsTable.id, id));
+	await db.update(seasonTable).set(season).where(eq(seasonTable.id, id));
 }

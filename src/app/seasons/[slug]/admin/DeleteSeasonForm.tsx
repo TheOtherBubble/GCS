@@ -4,7 +4,7 @@ import deleteSeason from "db/deleteSeason";
 import getFormField from "utility/getFormField";
 import getSeasonUrl from "utility/getSeasonUrl";
 import { revalidatePath } from "next/cache";
-import type { seasonsTable } from "db/schema";
+import type { seasonTable } from "db/schema";
 
 /**
  * Properties that can be passed to a delete season form.
@@ -13,7 +13,7 @@ import type { seasonsTable } from "db/schema";
 export interface DeleteSeasonFormProps
 	extends Omit<JSX.IntrinsicElements["form"], "action"> {
 	/** The current season. */
-	season: typeof seasonsTable.$inferSelect;
+	season: typeof seasonTable.$inferSelect;
 }
 
 /**

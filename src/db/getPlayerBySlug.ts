@@ -1,6 +1,6 @@
 import { eq, or } from "drizzle-orm";
 import db from "./db";
-import { playersTable } from "./schema";
+import { playerTable } from "./schema";
 
 /**
  * Get a player from a slug.
@@ -12,12 +12,12 @@ export default async function getPlayerBySlug(slug: string) {
 	const decoded = decodeURIComponent(slug);
 	const players = await db
 		.select()
-		.from(playersTable)
+		.from(playerTable)
 		.where(
 			or(
-				eq(playersTable.displayName, decoded),
-				eq(playersTable.name, decoded),
-				eq(playersTable.id, decoded)
+				eq(playerTable.displayName, decoded),
+				eq(playerTable.name, decoded),
+				eq(playerTable.id, decoded)
 			)
 		);
 	return (

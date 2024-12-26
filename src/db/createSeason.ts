@@ -1,5 +1,5 @@
 import db from "./db";
-import { seasonsTable } from "./schema";
+import { seasonTable } from "./schema";
 
 /**
  * Create a season.
@@ -7,7 +7,7 @@ import { seasonsTable } from "./schema";
  * @returns When finished.
  */
 export default async function createSeason(
-	season: typeof seasonsTable.$inferInsert
+	season: typeof seasonTable.$inferInsert
 ) {
-	return await db.insert(seasonsTable).values(season);
+	return await db.insert(seasonTable).values(season);
 }

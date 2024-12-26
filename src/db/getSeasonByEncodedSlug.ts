@@ -1,6 +1,6 @@
 import db from "./db";
 import { eq } from "drizzle-orm";
-import { seasonsTable } from "./schema";
+import { seasonTable } from "./schema";
 
 /**
  * Get a season by its vanity URL slug.
@@ -12,8 +12,8 @@ export const getSeasonByDecodedSlug = async (slug: string) => {
 	return (
 		await db
 			.select()
-			.from(seasonsTable)
-			.where(eq(seasonsTable.vanityUrlSlug, slug))
+			.from(seasonTable)
+			.where(eq(seasonTable.vanityUrlSlug, slug))
 			.limit(1)
 	)[0];
 };

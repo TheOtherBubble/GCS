@@ -1,6 +1,6 @@
 import db from "./db";
 import { eq } from "drizzle-orm";
-import { gamesTable } from "./schema";
+import { gameTable } from "./schema";
 
 /**
  * Get a game by its ID.
@@ -10,7 +10,7 @@ import { gamesTable } from "./schema";
  */
 export default async function getGameById(id: number) {
 	return (
-		await db.select().from(gamesTable).where(eq(gamesTable.id, id)).limit(1)
+		await db.select().from(gameTable).where(eq(gameTable.id, id)).limit(1)
 	)[0];
 }
 

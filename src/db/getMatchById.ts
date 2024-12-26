@@ -1,6 +1,6 @@
 import db from "./db";
 import { eq } from "drizzle-orm";
-import { matchesTable } from "./schema";
+import { matchTable } from "./schema";
 
 /**
  * Get a match by its ID.
@@ -10,7 +10,7 @@ import { matchesTable } from "./schema";
  */
 export default async function getMatchById(id: number) {
 	return (
-		await db.select().from(matchesTable).where(eq(matchesTable.id, id)).limit(1)
+		await db.select().from(matchTable).where(eq(matchTable.id, id)).limit(1)
 	)[0];
 }
 

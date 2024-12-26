@@ -1,9 +1,9 @@
 import { type JSX, useId } from "react";
 import {
 	matchFormatEnum,
-	type matchesTable,
-	type seasonsTable,
-	type teamsTable
+	type matchTable,
+	type seasonTable,
+	type teamTable
 } from "db/schema";
 import Submit from "components/Submit";
 import createMatches from "db/createMatches";
@@ -16,10 +16,10 @@ import getFormField from "utility/getFormField";
 export interface SeedSeasonFormProps
 	extends Omit<JSX.IntrinsicElements["form"], "action"> {
 	/** The current season. */
-	season: typeof seasonsTable.$inferSelect;
+	season: typeof seasonTable.$inferSelect;
 
 	/** The teams in the current season. */
-	teams: (typeof teamsTable.$inferSelect)[];
+	teams: (typeof teamTable.$inferSelect)[];
 }
 
 /**
@@ -48,7 +48,7 @@ export default function SeedSeasonForm({
 				) as (typeof matchFormatEnum.enumValues)[number];
 
 				// Split season teams into pools.
-				const pools = new Map<number, (typeof teamsTable.$inferSelect)[]>();
+				const pools = new Map<number, (typeof teamTable.$inferSelect)[]>();
 				for (const team of teams) {
 					const pool = pools.get(team.pool);
 					if (pool) {
@@ -60,7 +60,7 @@ export default function SeedSeasonForm({
 				}
 
 				// Use the circle method to generate a single round robin regular season.
-				const matches: (typeof matchesTable.$inferInsert)[] = [];
+				const matches: (typeof matchTable.$inferInsert)[] = [];
 				for (const pool of pools.values()) {
 					// One round per team, adding a fake "bye" team if there are an odd number of teams.
 					const l = pool.length + (pool.length % 2) - 1;

@@ -1,5 +1,5 @@
 import { type JSX, useId } from "react";
-import { matchFormatEnum, type seasonsTable, type teamsTable } from "db/schema";
+import { matchFormatEnum, type seasonTable, type teamTable } from "db/schema";
 import Submit from "components/Submit";
 import createMatch from "db/createMatch";
 import getFormField from "utility/getFormField";
@@ -11,10 +11,10 @@ import getFormField from "utility/getFormField";
 export interface CreateMatchFormProps
 	extends Omit<JSX.IntrinsicElements["form"], "action"> {
 	/** The current season. */
-	season: typeof seasonsTable.$inferSelect;
+	season: typeof seasonTable.$inferSelect;
 
 	/** The teams in the current season. */
-	teams: (typeof teamsTable.$inferSelect)[];
+	teams: (typeof teamTable.$inferSelect)[];
 }
 
 /**

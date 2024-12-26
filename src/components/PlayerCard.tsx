@@ -1,8 +1,8 @@
 import type {
-	accountsTable,
-	playerGameResultsTable,
-	playersTable,
-	teamsTable
+	accountTable,
+	playerGameResultTable,
+	playerTable,
+	teamTable
 } from "db/schema";
 import type { JSX } from "react";
 import RankedEmblem from "./RankedEmblem";
@@ -20,16 +20,16 @@ import style from "./styles/player-card.module.scss";
 export interface PlayerCardProps
 	extends Omit<JSX.IntrinsicElements["a"], "children" | "style" | "href"> {
 	/** The player that is represented by the card. */
-	player: typeof playersTable.$inferSelect;
+	player: typeof playerTable.$inferSelect;
 
 	/** The player's accounts. */
-	accounts?: (typeof accountsTable.$inferSelect)[];
+	accounts?: (typeof accountTable.$inferSelect)[];
 
 	/** The player's game results. */
-	games?: (typeof playerGameResultsTable.$inferSelect)[];
+	games?: (typeof playerGameResultTable.$inferSelect)[];
 
 	/** The player's teams. */
-	teams?: (typeof teamsTable.$inferSelect)[];
+	teams?: (typeof teamTable.$inferSelect)[];
 }
 
 /**

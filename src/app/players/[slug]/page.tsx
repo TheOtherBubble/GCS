@@ -36,8 +36,8 @@ export default async function Page(props: PageProps<PlayersPageParams>) {
 		<PlayerCard
 			player={player}
 			accounts={accounts}
-			games={games.map((game) => game.playerGameResults)}
-			teams={teams.map((team) => team.teams)}
+			games={games.map((game) => game.playerGameResult)}
+			teams={teams.map((team) => team.team)}
 		/>
 	);
 }

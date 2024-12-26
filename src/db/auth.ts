@@ -4,7 +4,7 @@ import type {
 	NextApiResponse
 } from "next";
 import NextAuth, { type NextAuthResult, type Session } from "next-auth";
-import { oauthAccountsTable, playersTable, sessionsTable } from "./schema";
+import { oauthTable, playerTable, sessionTable } from "./schema";
 import type { AppRouteHandlerFn } from "next/dist/server/route-modules/app-route/module";
 import Discord from "next-auth/providers/discord";
 import { DrizzleAdapter } from "@auth/drizzle-adapter";
@@ -36,7 +36,7 @@ provider.profile = (profile) => ({
  */
 export interface PlayerSession extends Session {
 	/** The logged-in user. */
-	user?: typeof playersTable.$inferSelect;
+	user?: typeof playerTable.$inferSelect;
 }
 
 /**
@@ -116,9 +116,9 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
 	// The adapter that is used to connect the provider (Discord) to the database (PostgreSQL via the Drizzle ORM).
 	// eslint-disable-next-line new-cap
 	adapter: DrizzleAdapter(db, {
-		accountsTable: oauthAccountsTable,
-		sessionsTable,
-		usersTable: playersTable
+		accountsTable: oauthTable,
+		sessionsTable: sessionTable,
+		usersTable: playerTable
 	}),
 	providers: [provider]
 }) as unknown as NextAuthResultFixed;

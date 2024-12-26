@@ -4,7 +4,7 @@ import Submit from "components/Submit";
 import getFormField from "utility/getFormField";
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
-import type { seasonsTable } from "db/schema";
+import type { seasonTable } from "db/schema";
 import updateSeason from "db/updateSeason";
 
 /**
@@ -14,7 +14,7 @@ import updateSeason from "db/updateSeason";
 export interface UpdateSeasonFormProps
 	extends Omit<JSX.IntrinsicElements["form"], "action"> {
 	/** The current season. */
-	season: typeof seasonsTable.$inferSelect;
+	season: typeof seasonTable.$inferSelect;
 }
 
 /**

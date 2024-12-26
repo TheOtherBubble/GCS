@@ -69,4 +69,3 @@ TODO:
  - Delete this file.
  - Metadata (including OGP images) on every page.
  - Set match (and potentially season) winners if necessary when creating game results.
- - Un-pluralize relation names.

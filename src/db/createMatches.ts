@@ -1,5 +1,5 @@
 import db from "./db";
-import { matchesTable } from "./schema";
+import { matchTable } from "./schema";
 
 /**
  * Create matches.
@@ -7,8 +7,8 @@ import { matchesTable } from "./schema";
  * @returns When finished.
  */
 export default async function createMatches(
-	matches: (typeof matchesTable.$inferInsert)[]
+	matches: (typeof matchTable.$inferInsert)[]
 ) {
-	return await db.insert(matchesTable).values(matches);
+	return await db.insert(matchTable).values(matches);
 	// TODO: Create the first game in each match.
 }

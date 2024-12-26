@@ -1,4 +1,4 @@
-import type { playersTable } from "db/schema";
+import type { playerTable } from "db/schema";
 
 /**
  * Get the URL of the given player.
@@ -6,6 +6,6 @@ import type { playersTable } from "db/schema";
  * @returns The URL.
  * @public
  */
-export default function getPlayerUrl(player: typeof playersTable.$inferSelect) {
+export default function getPlayerUrl(player: typeof playerTable.$inferSelect) {
 	return `/players/${player.displayName ? encodeURIComponent(player.displayName) : player.name ? encodeURIComponent(player.name) : encodeURIComponent(player.id)}`;
 }
