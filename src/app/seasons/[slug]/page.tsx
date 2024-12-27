@@ -1,5 +1,5 @@
 import getSeasonUrl, { getSeasonUrlByEncodedSlug } from "utility/getSeasonUrl";
-import { matchTable, teamGameResultTable, teamTable } from "db/schema";
+import type { matchTable, teamGameResultTable } from "db/schema";
 import AdminPanel from "./AdminPanel";
 import ChangeSeasonForm from "./ChangeSeasonForm";
 import Link from "components/Link";
@@ -8,8 +8,9 @@ import type { Metadata } from "next";
 import type PageProps from "types/PageProps";
 import { auth } from "db/auth";
 import getAllSeasons from "db/getAllSeasons";
+import getAllTeamsWithSeasonId from "db/getAllTeamsWithSeasonId";
 import getSeasonByEncodedSlug from "db/getSeasonByEncodedSlug";
-import getTeamGameResultsBySeason from "db/getTeamGameResultsBySeason";
+import getTeamGameResultsBySeason from "db/getMatchesBySeason";
 import getTeamUrl from "utility/getTeamUrl";
 import multiclass from "utility/multiclass";
 import style from "./page.module.scss";
@@ -36,6 +37,7 @@ export default async function Page(props: PageProps<SeasonsPageParams>) {
 		(value) => value.vanityUrlSlug === decodeURIComponent(slug)
 	);
 
+	// Prompt the user to select another season if none is found.
 	if (!season) {
 		return (
 			<div className={style["content"]}>
@@ -48,99 +50,63 @@ export default async function Page(props: PageProps<SeasonsPageParams>) {
 		);
 	}
 
-	// Get relevant match, game, and team data.
-	const rows = await getTeamGameResultsBySeason(season);
+	// Sort teams by score for the leaderboard.
+	const teams = await getAllTeamsWithSeasonId(season.id);
+	const teamScores = teams.map((team) => ({ losses: 0, team, wins: 0 }));
 
 	// Split matches into rounds for displaying.
+	const rows = await getTeamGameResultsBySeason(season);
 	const rounds = new Map<
 		number,
 		{
 			match: typeof matchTable.$inferSelect;
 			teamGameResults: (typeof teamGameResultTable.$inferSelect)[];
-			teams: (typeof teamTable.$inferSelect)[];
 		}[]
 	>(); // Round numbers to match IDs in that round.
 	for (const row of rows) {
-		if (!row.match) {
+		// Add wins/losses to team scores.
+		if (row.teamGameResult) {
+			const teamScore = teamScores.find(
+				(value) => value.team.id === row.teamGameResult?.teamId
+			);
+			if (teamScore) {
+				if (row.teamGameResult.isWinner) {
+					teamScore.wins++;
+				} else {
+					teamScore.losses++;
+				}
+			}
+		}
+
+		// Insert match as the first in its round.
+		const round = rounds.get(row.match.round);
+		if (!round) {
+			rounds.set(row.match.round, [
+				{
+					match: row.match,
+					teamGameResults: row.teamGameResult ? [row.teamGameResult] : []
+				}
+			]);
 			continue;
 		}
 
-		// Add a match to an existing round.
-		const round = rounds.get(row.match.round);
-		if (round) {
-			// Add data to an existing match.
-			const match = round.find((value) => value.match.id === row.match?.id);
-			if (match) {
-				if (
-					row.teamGameResult &&
-					!match.teamGameResults.some(
-						(teamGameResult) => teamGameResult.id === row.teamGameResult?.id
-					)
-				) {
-					match.teamGameResults.push(row.teamGameResult);
-				}
-
-				if (!match.teams.some((team) => team.id === row.team.id)) {
-					match.teams.push(row.team);
-				}
-
-				continue;
-			}
-
-			// Insert a new match.
+		// Insert a new match.
+		const match = round.find((value) => value.match.id === row.match.id);
+		if (!match) {
 			round.push({
 				match: row.match,
-				teamGameResults: row.teamGameResult ? [row.teamGameResult] : [],
-				teams: [row.team]
+				teamGameResults: row.teamGameResult ? [row.teamGameResult] : []
 			});
 			continue;
 		}
 
-		// Insert match as the first in its round.
-		rounds.set(row.match.round, [
-			{
-				match: row.match,
-				teamGameResults: row.teamGameResult ? [row.teamGameResult] : [],
-				teams: [row.team]
-			}
-		]);
-	}
-
-	// Sort teams by score for the leaderboard.
-	const teamScores: {
-		team: typeof teamTable.$inferSelect;
-		wins: number;
-		losses: number;
-	}[] = [];
-	for (const row of rows) {
-		const teamScore = teamScores.find((value) => value.team.id === row.team.id);
-
-		// If there's no game result, just create a team record with no games if the team doesn't have a record yet.
+		// Nothing more to add if there's no team game result.
 		if (!row.teamGameResult) {
-			if (!teamScore) {
-				teamScores.push({ losses: 0, team: row.team, wins: 0 });
-			}
-
 			continue;
 		}
 
-		// Increment wins or losses counter for existing team.
-		if (teamScore) {
-			if (row.teamGameResult.isWinner) {
-				teamScore.wins++;
-			} else {
-				teamScore.losses++;
-			}
-
-			continue;
-		}
-
-		// Otherwise, create a new team record.
-		teamScores.push({
-			losses: row.teamGameResult.isWinner ? 0 : 1,
-			team: row.team,
-			wins: row.teamGameResult.isWinner ? 1 : 0
-		});
+		// Add data to an existing match.
+		match.teamGameResults.push(row.teamGameResult);
 	}
 
 	return (
@@ -154,7 +120,7 @@ export default async function Page(props: PageProps<SeasonsPageParams>) {
 						<AdminPanel
 							className={style["hide-on-mobile"]}
 							season={season}
-							teams={teamScores.map((teamScore) => teamScore.team)}
+							teams={teams}
 						/>
 					)}
 				</div>
@@ -174,7 +140,7 @@ export default async function Page(props: PageProps<SeasonsPageParams>) {
 									key={match.match.id}
 									match={match.match}
 									teamGameResults={match.teamGameResults}
-									teams={match.teams}
+									teams={teams}
 								/>
 							))}
 						</div>
