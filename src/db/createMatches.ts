@@ -7,31 +7,41 @@ import makeTournamentCodes from "riot/makeTournamentCodes";
 /**
  * Create matches.
  * @param matches - The matches.
+ * @param codes - The tournament codes to use for the first games in the matches, or `undefined` to generate the correct number of codes.
  * @param params - The parameters to use to generate tournament codes.
  * @param cluster - The cluster to execute the request to make tournament codes against.
  * @param key - The Riot API key, or `undefined` to pull one from the environment variables.
  * @returns When finished.
+ * @throws `Error` if the response has a bad status or if the Riot API key is missing.
  */
 export default async function createMatches(
 	matches: (typeof matchTable.$inferInsert)[],
+	codes?: [],
 	params?: TournamentCodeParameters,
 	cluster?: Cluster,
 	key?: string
 ) {
+	// Ensure that tournament codes are accessible before creating anything.
+	const tournamentCodes =
+		codes ??
+		(await makeTournamentCodes(
+			params,
+			matches.length,
+			matches[0]?.seasonId,
+			cluster,
+			key
+		));
+	if (tournamentCodes.length < matches.length) {
+		throw new Error("Not enough tournament codes!");
+	}
+
 	// Create the matches.
 	const createdMatches = await db
 		.insert(matchTable)
 		.values(matches)
 		.returning();
 
-	// Create the first game in each match.
-	const tournamentCodes = await makeTournamentCodes(
-		params,
-		createdMatches.length,
-		createdMatches[0]?.seasonId,
-		cluster,
-		key
-	);
+	// Build the games.
 	const games = [];
 	for (const match of createdMatches) {
 		const tournamentCode = tournamentCodes.pop();
@@ -42,6 +52,6 @@ export default async function createMatches(
 		games.push({ matchId: match.id, tournamentCode });
 	}
 
-	// Store the games in the database.
+	// Create the games.
 	return await db.insert(gameTable).values(games);
 }
