@@ -29,7 +29,9 @@
 
 // An implementation of `media-query-boolean` specifically for checking if the viewport is not mobile-sized. This is recommended over `is-mobile` for mobile-first design.
 @mixin is-not-mobile {
-	@include media-query-boolean("(min-width: #{variables.$mobile-breakpoint})")
+	@include media-query-boolean(
+			"(min-width: #{variables.$mobile-breakpoint + 1px})"
+		)
 		using ($is-not-mobile) {
 		@content ($is-not-mobile);
 	}
