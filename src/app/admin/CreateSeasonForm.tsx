@@ -2,6 +2,7 @@ import { type JSX, useId } from "react";
 import Submit from "components/Submit";
 import createSeason from "db/createSeason";
 import getFormField from "utility/getFormField";
+import makeTournament from "riot/makeTournament";
 
 /**
  * Properties that can be passed to a create season form.
@@ -27,8 +28,10 @@ export default function CreateSeasonForm(props: CreateSeasonFormProps) {
 		<form
 			action={async (form) => {
 				"use server";
+				const name = getFormField(form, "name", true);
 				await createSeason({
-					name: getFormField(form, "name", true),
+					id: await makeTournament(name),
+					name,
 					startDate: getFormField(form, "startDate"),
 					vanityUrlSlug: getFormField(form, "vanityUrlSlug", true)
 				});

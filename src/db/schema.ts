@@ -209,12 +209,21 @@ export const accountTable = pgTable(
 );
 
 /**
+ * The table of Riot Games API tournament providers.
+ * @public
+ */
+export const tournamentProviderTable = pgTable("tournamentProvider", {
+	// The Riot Games tournament provider ID. Returned by the Riot Games tournament API.
+	id: integer().primaryKey()
+});
+
+/**
  * The table of seasons. Seasons may consist of any number of matches between any number of teams split up into any number of pools.
  * @public
  */
 export const seasonTable = pgTable("season", {
-	// Unique identifier.
-	id: integer().primaryKey().generatedAlwaysAsIdentity(),
+	// The Riot Games tournament ID. Returned by the Riot Games tournament API.
+	id: integer().primaryKey(),
 
 	// The season's name.
 	name: varchar({ length: 0x40 }).notNull().unique(),
