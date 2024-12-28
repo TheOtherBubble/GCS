@@ -1,0 +1,33 @@
+@use "../../styles/variables";
+
+a.container {
+	// Replace default link styling.
+	color: variables.$text-color;
+	text-decoration: none;
+
+	// Make prettier to display.
+	font-size: 1.5em;
+	overflow: hidden;
+	display: inline-grid;
+	grid-template-columns: 1fr 1fr;
+	gap: variables.$normal-gap;
+
+	// Shape.
+	aspect-ratio: 5 / 1;
+	width: min(600px, calc(100% - variables.$normal-pad * 2));
+	border-radius: variables.$normal-radius;
+	padding: variables.$normal-pad;
+	place-items: center;
+
+	// Background.
+	background-color: variables.$fg-color;
+
+	* {
+		margin: 0px;
+	}
+
+	& > .center {
+		grid-column: 1 / 3;
+		text-align: center;
+	}
+}

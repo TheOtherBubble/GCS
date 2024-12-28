@@ -12,7 +12,9 @@ div.content {
 		}
 	}
 
-	div.round > a {
+	div.blue-team > a,
+	div.red-team > a,
+	div.games > a {
 		// Horizontal margin already applied by columns.
 		margin: variables.$normal-gap 0px;
 		width: calc(100% - variables.$normal-pad * 2);
@@ -21,11 +23,15 @@ div.content {
 	@include mixins.is-not-mobile using ($is-not-mobile) {
 		@if $is-not-mobile {
 			display: grid;
-			grid-template-columns: 1fr 2fr 1fr;
+			grid-template-columns: 2fr 3fr 2fr;
 			gap: variables.$normal-gap;
 
-			& > div.config,
-			& > div.leaderboards {
+			.hide-on-desktop {
+				display: none;
+			}
+
+			& > div.blue-team,
+			& > div.red-team {
 				// Don't scroll with screen.
 				align-self: start;
 				position: sticky;
@@ -34,11 +40,6 @@ div.content {
 				// Ensure that all content can still be accessed.
 				overflow: auto;
 				max-height: calc(100vh - topnav.$height - variables.$normal-gap * 2);
-
-				// Increase font size within leaderboards.
-				& > ol {
-					font-size: 1.5em;
-				}
 			}
 		}
 	}
