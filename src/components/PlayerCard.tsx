@@ -52,11 +52,14 @@ export default function PlayerCard({
 	return (
 		<a
 			className={multiclass(className, style["container"])}
-			style={{
-				backgroundImage: backgroundImageUrl
-					? `url(${backgroundImageUrl})`
+			style={
+				backgroundImageUrl
+					? {
+							aspectRatio: 3, // Reduce aspect ratio if there is a background image so that more is displayed.
+							backgroundImage: `url(${backgroundImageUrl})`
+						}
 					: void 0
-			}}
+			}
 			href={getPlayerUrl(player)}
 			{...props}
 		>
