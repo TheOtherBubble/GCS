@@ -1,4 +1,4 @@
-import type { matchTable } from "db/schema";
+import type { Match } from "types/db/Match";
 
 /**
  * Get the URL of the given match.
@@ -6,6 +6,6 @@ import type { matchTable } from "db/schema";
  * @returns The URL.
  * @public
  */
-export default function getMatchUrl(match: typeof matchTable.$inferSelect) {
+export default function getMatchUrl(match: Match) {
 	return `/matches/${match.id.toString()}`;
 }

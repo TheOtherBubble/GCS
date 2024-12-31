@@ -1,11 +1,12 @@
 import getSeasonUrl, { getSeasonUrlByEncodedSlug } from "util/getSeasonUrl";
-import type { matchTable, teamGameResultTable } from "db/schema";
 import AdminPanel from "./AdminPanel";
 import ChangeSeasonForm from "./ChangeSeasonForm";
 import Link from "components/Link";
+import type { Match } from "types/db/Match";
 import MatchCard from "components/MatchCard";
 import type { Metadata } from "next";
 import type PageProps from "types/PageProps";
+import type { TeamGameResult } from "types/db/TeamGameResult";
 import { auth } from "db/auth";
 import getAllSeasons from "db/getAllSeasons";
 import getAllTeamsWithSeasonId from "db/getAllTeamsWithSeasonId";
@@ -59,8 +60,8 @@ export default async function Page(props: PageProps<SeasonsPageParams>) {
 	const rounds = new Map<
 		number,
 		{
-			match: typeof matchTable.$inferSelect;
-			teamGameResults: (typeof teamGameResultTable.$inferSelect)[];
+			match: Match;
+			teamGameResults: TeamGameResult[];
 		}[]
 	>(); // Round numbers to match IDs in that round.
 	for (const row of rows) {

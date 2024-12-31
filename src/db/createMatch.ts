@@ -1,5 +1,6 @@
 import { gameTable, matchTable } from "./schema";
 import type Cluster from "types/riot/Cluster";
+import type { InsertMatch } from "types/db/Match";
 import type TournamentCodeParameters from "types/riot/TournamentCodeParameters";
 import db from "./db";
 import makeTournamentCodes from "riot/makeTournamentCodes";
@@ -15,7 +16,7 @@ import makeTournamentCodes from "riot/makeTournamentCodes";
  * @throws `Error` if the response has a bad status or if the Riot API key is missing.
  */
 export default async function createMatch(
-	match: typeof matchTable.$inferInsert,
+	match: InsertMatch,
 	code?: string,
 	params?: TournamentCodeParameters,
 	cluster?: Cluster,

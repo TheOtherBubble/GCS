@@ -1,10 +1,8 @@
-import type {
-	gameResultTable,
-	gameTable,
-	playerGameResultTable,
-	teamGameResultTable
-} from "db/schema";
+import type { Game } from "types/db/Game";
+import type { GameResult } from "types/db/GameResult";
 import type { JSX } from "react";
+import type { PlayerGameResult } from "types/db/PlayerGameResult";
+import type { TeamGameResult } from "types/db/TeamGameResult";
 import getGameUrl from "util/getGameUrl";
 import multiclass from "util/multiclass";
 import style from "./styles/game-card.module.scss";
@@ -16,16 +14,16 @@ import style from "./styles/game-card.module.scss";
 export interface GameCardProps
 	extends Omit<JSX.IntrinsicElements["a"], "children" | "style" | "href"> {
 	/** The game that is represented by the card. */
-	game: typeof gameTable.$inferSelect;
+	game: Game;
 
 	/** The result of the game that is represented by the card. */
-	gameResult?: typeof gameResultTable.$inferSelect | undefined;
+	gameResult?: GameResult | undefined;
 
 	/** The team game results. */
-	teamGameResults?: (typeof teamGameResultTable.$inferSelect)[];
+	teamGameResults?: TeamGameResult[];
 
 	/** The player game results. */
-	playerGameResults?: (typeof playerGameResultTable.$inferSelect)[];
+	playerGameResults?: PlayerGameResult[];
 }
 
 /**

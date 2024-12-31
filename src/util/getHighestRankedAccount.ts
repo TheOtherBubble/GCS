@@ -1,4 +1,6 @@
-import type { accountRankEnum, accountTable, accountTierEnum } from "db/schema";
+import type { Account } from "types/db/Account";
+import type { AccountRank } from "types/db/AccountRank";
+import type { AccountTier } from "types/db/AccountTier";
 
 /**
  * Convert a tier string to a number that represents its order compared to other tiers (lower is worse).
@@ -6,7 +8,7 @@ import type { accountRankEnum, accountTable, accountTierEnum } from "db/schema";
  * @returns The tier number.
  * @internal
  */
-const tierToNumber = (tier: (typeof accountTierEnum.enumValues)[number]) =>
+const tierToNumber = (tier: AccountTier) =>
 	[
 		"IRON",
 		"BRONZE",
@@ -21,12 +23,12 @@ const tierToNumber = (tier: (typeof accountTierEnum.enumValues)[number]) =>
 
 /**
  * Convert a rank string to a number that represents its order compared to other ranks (lower is worse).
- * @param tier - The rank string.
+ * @param rank - The rank string.
  * @returns The rank number.
  * @internal
  */
-const rankToNumber = (tier: (typeof accountRankEnum.enumValues)[number]) =>
-	["IV", "III", "II", "I"].indexOf(tier);
+const rankToNumber = (rank: AccountRank) =>
+	["IV", "III", "II", "I"].indexOf(rank);
 
 /**
  * Return the highest-ranked account from the given list of accounts.
@@ -34,9 +36,7 @@ const rankToNumber = (tier: (typeof accountRankEnum.enumValues)[number]) =>
  * @returns The highest-ranked account.
  * @public
  */
-export default function getHighestRankedAccount(
-	accounts: (typeof accountTable.$inferSelect)[]
-) {
+export default function getHighestRankedAccount(accounts: Account[]) {
 	return accounts.sort(
 		(a, b) =>
 			tierToNumber(b.tierCache) - tierToNumber(a.tierCache) ||

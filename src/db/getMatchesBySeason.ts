@@ -2,9 +2,9 @@ import {
 	gameResultTable,
 	gameTable,
 	matchTable,
-	type seasonTable,
 	teamGameResultTable
 } from "./schema";
+import type { Season } from "types/db/Season";
 import db from "./db";
 import { eq } from "drizzle-orm";
 
@@ -14,9 +14,7 @@ import { eq } from "drizzle-orm";
  * @returns The season's matches. Includes the matches, games, game results, and team game results.
  * @public
  */
-export default async function getMatchesBySeason(
-	season: typeof seasonTable.$inferSelect
-) {
+export default async function getMatchesBySeason(season: Season) {
 	return await db
 		.select()
 		.from(matchTable)

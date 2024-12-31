@@ -2,9 +2,9 @@ import {
 	gameResultTable,
 	gameTable,
 	playerGameResultTable,
-	type playerTable,
 	teamGameResultTable
 } from "./schema";
+import type { Player } from "types/db/Player";
 import db from "./db";
 import { eq } from "drizzle-orm";
 
@@ -14,9 +14,7 @@ import { eq } from "drizzle-orm";
  * @returns The player's completed games. Includes the game, game result, team game result, and player game result.
  * @public
  */
-export default async function getPlayerGameResultsByPlayer(
-	player: typeof playerTable.$inferSelect
-) {
+export default async function getPlayerGameResultsByPlayer(player: Player) {
 	return await db
 		.select()
 		.from(gameTable)

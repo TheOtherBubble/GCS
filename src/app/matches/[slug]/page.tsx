@@ -1,14 +1,12 @@
-import type {
-	gameResultTable,
-	gameTable,
-	playerGameResultTable,
-	teamGameResultTable
-} from "db/schema";
+import type { Game } from "types/db/Game";
 import GameCard from "components/GameCard";
+import type { GameResult } from "types/db/GameResult";
 import type { Metadata } from "next";
 import type PageProps from "types/PageProps";
 import PlayerCard from "components/PlayerCard";
+import type { PlayerGameResult } from "types/db/PlayerGameResult";
 import TeamCard from "components/TeamCard";
+import type { TeamGameResult } from "types/db/TeamGameResult";
 import getGamesByMatch from "db/getGamesByMatch";
 import getPlayersByTeam from "db/getPlayersByTeam";
 import getSeasonById from "db/getSeasonById";
@@ -52,10 +50,10 @@ export default async function Page(props: PageProps<MatchesPageParams>) {
 	// Organize game data.
 	const gameRows = await getGamesByMatch(match);
 	const games: {
-		game: typeof gameTable.$inferSelect;
-		result: typeof gameResultTable.$inferSelect | undefined;
-		teamResults: (typeof teamGameResultTable.$inferSelect)[];
-		playerResults: (typeof playerGameResultTable.$inferSelect)[];
+		game: Game;
+		result: GameResult | undefined;
+		teamResults: TeamGameResult[];
+		playerResults: PlayerGameResult[];
 	}[] = [];
 	for (const row of gameRows) {
 		// Insert new game.

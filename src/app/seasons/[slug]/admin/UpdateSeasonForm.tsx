@@ -1,11 +1,11 @@
 import { type JSX, useId } from "react";
 import getSeasonUrl, { getSeasonUrlByDecodedSlug } from "util/getSeasonUrl";
 import Form from "next/form";
+import type { Season } from "types/db/Season";
 import Submit from "components/Submit";
 import getFormField from "util/getFormField";
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
-import type { seasonTable } from "db/schema";
 import updateSeason from "db/updateSeason";
 
 /**
@@ -15,7 +15,7 @@ import updateSeason from "db/updateSeason";
 export interface UpdateSeasonFormProps
 	extends Omit<JSX.IntrinsicElements["form"], "action"> {
 	/** The current season. */
-	season: typeof seasonTable.$inferSelect;
+	season: Season;
 }
 
 /**

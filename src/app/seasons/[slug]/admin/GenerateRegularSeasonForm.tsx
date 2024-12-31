@@ -1,15 +1,14 @@
 import { type JSX, useId } from "react";
-import {
-	matchFormatEnum,
-	type matchTable,
-	type seasonTable,
-	type teamTable
-} from "db/schema";
 import Form from "next/form";
+import type { InsertMatch } from "types/db/Match";
+import type { MatchFormat } from "types/db/MatchFormat";
+import type { Season } from "types/db/Season";
 import Submit from "components/Submit";
+import type { Team } from "types/db/Team";
 import createMatches from "db/createMatches";
 import getFormField from "util/getFormField";
 import getSeasonUrl from "util/getSeasonUrl";
+import { matchFormatEnum } from "db/schema";
 import { revalidatePath } from "next/cache";
 
 /**
@@ -19,10 +18,10 @@ import { revalidatePath } from "next/cache";
 export interface SeedSeasonFormProps
 	extends Omit<JSX.IntrinsicElements["form"], "action"> {
 	/** The current season. */
-	season: typeof seasonTable.$inferSelect;
+	season: Season;
 
 	/** The teams in the current season. */
-	teams: (typeof teamTable.$inferSelect)[];
+	teams: Team[];
 }
 
 /**
@@ -44,14 +43,10 @@ export default function GenerateRegularSeasonForm({
 				"use server";
 
 				// Read form data.
-				const format = getFormField(
-					form,
-					"format",
-					true
-				) as (typeof matchFormatEnum.enumValues)[number];
+				const format = getFormField(form, "format", true) as MatchFormat;
 
 				// Split season teams into pools.
-				const pools = new Map<number, (typeof teamTable.$inferSelect)[]>();
+				const pools = new Map<number, Team[]>();
 				for (const team of teams) {
 					const pool = pools.get(team.pool);
 					if (pool) {
@@ -63,7 +58,7 @@ export default function GenerateRegularSeasonForm({
 				}
 
 				// Use the circle method to generate a single round robin regular season.
-				const matches: (typeof matchTable.$inferInsert)[] = [];
+				const matches: InsertMatch[] = [];
 				for (const pool of pools.values()) {
 					// One round per team, adding a fake "bye" team if there are an odd number of teams.
 					const l = pool.length + (pool.length % 2) - 1;

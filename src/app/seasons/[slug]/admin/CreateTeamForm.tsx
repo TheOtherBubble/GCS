@@ -1,12 +1,12 @@
 import { type JSX, useId } from "react";
 import Form from "next/form";
+import type { Season } from "types/db/Season";
 import Submit from "components/Submit";
 import createTeam from "db/createTeam";
 import domain from "util/domain";
 import getFormField from "util/getFormField";
 import getSeasonUrl from "util/getSeasonUrl";
 import { revalidatePath } from "next/cache";
-import type { seasonTable } from "db/schema";
 
 /**
  * Properties that can be passed to a create team form.
@@ -15,7 +15,7 @@ import type { seasonTable } from "db/schema";
 export interface CreateTeamFormProps
 	extends Omit<JSX.IntrinsicElements["form"], "action"> {
 	/** The current season. */
-	season: typeof seasonTable.$inferSelect;
+	season: Season;
 }
 
 /**

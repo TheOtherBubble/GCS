@@ -1,5 +1,5 @@
 import Image, { type ImageProps } from "components/Image";
-import type { accountTierEnum } from "db/schema";
+import type { AccountTier } from "types/db/AccountTier";
 import bronze from "./assets/bronze.png";
 import challenger from "./assets/challenger.png";
 import diamond from "./assets/diamond.png";
@@ -22,7 +22,7 @@ export type RankedEmblemProps = Omit<
 	"src" | "alt" | "width" | "height"
 > & {
 	/** The ranked tier to be represented by the emblem image. */
-	tier: (typeof accountTierEnum.enumValues)[number];
+	tier: AccountTier;
 };
 
 /**

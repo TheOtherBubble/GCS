@@ -1,4 +1,4 @@
-import type { gameTable } from "db/schema";
+import type { Game } from "types/db/Game";
 
 /**
  * Get the URL of the given game.
@@ -6,6 +6,6 @@ import type { gameTable } from "db/schema";
  * @returns The URL.
  * @public
  */
-export default function getGameUrl(game: typeof gameTable.$inferSelect) {
+export default function getGameUrl(game: Game) {
 	return `/games/${game.id.toString()}`;
 }

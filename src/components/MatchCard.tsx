@@ -1,6 +1,8 @@
-import type { matchTable, teamGameResultTable, teamTable } from "db/schema";
 import Image from "./Image";
 import type { JSX } from "react";
+import type { Match } from "types/db/Match";
+import type { Team } from "types/db/Team";
+import type { TeamGameResult } from "types/db/TeamGameResult";
 import getMatchUrl from "util/getMatchUrl";
 import multiclass from "util/multiclass";
 import style from "./styles/match-card.module.scss";
@@ -12,13 +14,13 @@ import style from "./styles/match-card.module.scss";
 export interface MatchCardProps
 	extends Omit<JSX.IntrinsicElements["a"], "children" | "style" | "href"> {
 	/** The match that is represented by the card. */
-	match: typeof matchTable.$inferSelect;
+	match: Match;
 
 	/** The teams in the match. */
-	teams?: (typeof teamTable.$inferSelect)[];
+	teams?: Team[];
 
 	/** The game results in the match. */
-	teamGameResults?: (typeof teamGameResultTable.$inferSelect)[];
+	teamGameResults?: TeamGameResult[];
 }
 
 /**

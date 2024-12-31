@@ -1,4 +1,5 @@
-import { accountTable, type playerTable } from "./schema";
+import type { Player } from "types/db/Player";
+import { accountTable } from "./schema";
 import db from "./db";
 import { eq } from "drizzle-orm";
 
@@ -8,9 +9,7 @@ import { eq } from "drizzle-orm";
  * @returns The player's accounts.
  * @public
  */
-export default async function getAccountsByPlayer(
-	player: typeof playerTable.$inferSelect
-) {
+export default async function getAccountsByPlayer(player: Player) {
 	return await db
 		.select()
 		.from(accountTable)

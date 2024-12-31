@@ -1,5 +1,6 @@
 import { eq, or } from "drizzle-orm";
 import { matchTable, teamTable } from "./schema";
+import type { Match } from "types/db/Match";
 import db from "./db";
 
 /**
@@ -36,8 +37,6 @@ export const getTeamsByMatchSlug = async (slug: string) =>
  * @returns The match's teams. Includes the match and the teams.
  * @public
  */
-export default async function getTeamsByMatch(
-	match: typeof matchTable.$inferSelect
-) {
+export default async function getTeamsByMatch(match: Match) {
 	return await getTeamsByMatchId(match.id);
 }

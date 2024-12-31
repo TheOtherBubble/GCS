@@ -1,6 +1,7 @@
-import { type playerTable, teamPlayerTable } from "./schema";
+import type { Player } from "types/db/Player";
 import db from "./db";
 import { eq } from "drizzle-orm";
+import { teamPlayerTable } from "./schema";
 
 /**
  * Get all of a player's teams.
@@ -8,9 +9,7 @@ import { eq } from "drizzle-orm";
  * @returns The player's teams.
  * @public
  */
-export default async function getTeamPlayersByPlayer(
-	player: typeof playerTable.$inferSelect
-) {
+export default async function getTeamPlayersByPlayer(player: Player) {
 	return await db
 		.select()
 		.from(teamPlayerTable)

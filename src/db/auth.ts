@@ -9,6 +9,7 @@ import type { AppRouteHandlerFn } from "next/dist/server/route-modules/app-route
 import Discord from "next-auth/providers/discord";
 import { DrizzleAdapter } from "@auth/drizzle-adapter";
 import type { NextRequest } from "next/server";
+import type { Player } from "types/db/Player";
 import db from "./db";
 
 // Can't import `env.ts` here because `process.cwd` is not a function, but environment variables are available anyway. Note that these environment variables must be available during the build process.
@@ -36,7 +37,7 @@ provider.profile = (profile) => ({
  */
 export interface PlayerSession extends Session {
 	/** The logged-in user. */
-	user?: typeof playerTable.$inferSelect;
+	user?: Player;
 }
 
 /**

@@ -1,10 +1,13 @@
 import { type JSX, useId } from "react";
-import { matchFormatEnum, type seasonTable, type teamTable } from "db/schema";
 import Form from "next/form";
+import type { MatchFormat } from "types/db/MatchFormat";
+import type { Season } from "types/db/Season";
 import Submit from "components/Submit";
+import type { Team } from "types/db/Team";
 import createMatch from "db/createMatch";
 import getFormField from "util/getFormField";
 import getSeasonUrl from "util/getSeasonUrl";
+import { matchFormatEnum } from "db/schema";
 import { revalidatePath } from "next/cache";
 
 /**
@@ -14,10 +17,10 @@ import { revalidatePath } from "next/cache";
 export interface CreateMatchFormProps
 	extends Omit<JSX.IntrinsicElements["form"], "action"> {
 	/** The current season. */
-	season: typeof seasonTable.$inferSelect;
+	season: Season;
 
 	/** The teams in the current season. */
-	teams: (typeof teamTable.$inferSelect)[];
+	teams: Team[];
 }
 
 /**
@@ -42,11 +45,7 @@ export default function CreateMatchForm({
 				"use server";
 				await createMatch({
 					blueTeamId: parseInt(getFormField(form, "blueTeamId", true), 10),
-					format: getFormField(
-						form,
-						"format",
-						true
-					) as (typeof matchFormatEnum.enumValues)[number],
+					format: getFormField(form, "format", true) as MatchFormat,
 					redTeamId: parseInt(getFormField(form, "redTeamId", true), 10),
 					round: parseInt(getFormField(form, "round", true), 10),
 					seasonId: season.id

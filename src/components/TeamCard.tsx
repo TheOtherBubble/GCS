@@ -1,6 +1,7 @@
-import type { seasonTable, teamTable } from "db/schema";
 import Image from "./Image";
 import type { JSX } from "react";
+import type { Season } from "types/db/Season";
+import type { Team } from "types/db/Team";
 import getTeamUrl from "util/getTeamUrl";
 import multiclass from "util/multiclass";
 import style from "./styles/team-card.module.scss";
@@ -12,10 +13,10 @@ import style from "./styles/team-card.module.scss";
 export interface TeamCardProps
 	extends Omit<JSX.IntrinsicElements["a"], "children" | "style" | "href"> {
 	/** The team that is represented by the card. */
-	team: typeof teamTable.$inferSelect;
+	team: Team;
 
 	/** The season that the team participated in. */
-	season?: typeof seasonTable.$inferSelect | undefined;
+	season?: Season | undefined;
 }
 
 /**
