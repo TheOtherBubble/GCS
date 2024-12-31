@@ -1,8 +1,8 @@
 import type { matchTable, teamGameResultTable, teamTable } from "db/schema";
 import Image from "./Image";
 import type { JSX } from "react";
-import getMatchUrl from "utility/getMatchUrl";
-import multiclass from "utility/multiclass";
+import getMatchUrl from "util/getMatchUrl";
+import multiclass from "util/multiclass";
 import style from "./styles/match-card.module.scss";
 
 /**

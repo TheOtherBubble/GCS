@@ -5,8 +5,8 @@ import type {
 	teamGameResultTable
 } from "db/schema";
 import type { JSX } from "react";
-import getGameUrl from "utility/getGameUrl";
-import multiclass from "utility/multiclass";
+import getGameUrl from "util/getGameUrl";
+import multiclass from "util/multiclass";
 import style from "./styles/game-card.module.scss";
 
 /**

@@ -75,3 +75,4 @@ TODO:
   - Forms.
   - "Blobs."
   - "Blob" sections.
+ - Type aliases for database types?

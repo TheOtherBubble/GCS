@@ -1,8 +1,8 @@
 import { type JSX, useId } from "react";
 import Form from "next/form";
 import Submit from "components/Submit";
-import getFormField from "utility/getFormField";
-import { getSeasonUrlByDecodedSlug } from "utility/getSeasonUrl";
+import getFormField from "util/getFormField";
+import { getSeasonUrlByDecodedSlug } from "util/getSeasonUrl";
 import { redirect } from "next/navigation";
 import type { seasonTable } from "db/schema";
 

@@ -1,8 +1,8 @@
 import type { seasonTable, teamTable } from "db/schema";
 import Image from "./Image";
 import type { JSX } from "react";
-import getTeamUrl from "utility/getTeamUrl";
-import multiclass from "utility/multiclass";
+import getTeamUrl from "util/getTeamUrl";
+import multiclass from "util/multiclass";
 import style from "./styles/team-card.module.scss";
 
 /**

@@ -5,7 +5,7 @@ import DeleteSeasonForm from "./admin/DeleteSeasonForm";
 import GenerateRegularSeasonForm from "./admin/GenerateRegularSeasonForm";
 import { type JSX } from "react";
 import UpdateSeasonForm from "./admin/UpdateSeasonForm";
-import multiclass from "utility/multiclass";
+import multiclass from "util/multiclass";
 import style from "./admin/admin-panel.module.scss";
 
 /**

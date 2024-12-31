@@ -13,7 +13,7 @@ import getGamesByMatch from "db/getGamesByMatch";
 import getPlayersByTeam from "db/getPlayersByTeam";
 import getSeasonById from "db/getSeasonById";
 import { getTeamsByMatchSlug } from "db/getTeamsByMatch";
-import multiclass from "utility/multiclass";
+import multiclass from "util/multiclass";
 import style from "./page.module.scss";
 
 /**

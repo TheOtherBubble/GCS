@@ -1,3 +1,5 @@
+import "util/env";
+
 /**
  * Makes a request to a Riot API endpoint. Automatically applies the Riot API key to the `X-Riot-Token` header.
  * @param input - The request input.

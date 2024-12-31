@@ -2,7 +2,7 @@ import "styles/global.scss";
 import type { Metadata, Viewport } from "next";
 import type LayoutProps from "types/LayoutProps";
 import Topnav from "components/Topnav";
-import domain from "utility/domain";
+import domain from "util/domain";
 import style from "./layout.module.scss";
 
 /**

@@ -4,8 +4,8 @@ import Image from "components/Image";
 import type { JSX } from "react";
 import Link from "components/Link";
 import Submit from "components/Submit";
-import getPlayerUrl from "utility/getPlayerUrl";
-import multiclass from "utility/multiclass";
+import getPlayerUrl from "util/getPlayerUrl";
+import multiclass from "util/multiclass";
 import style from "./styles/topnav.module.scss";
 import submark from "./assets/submark.png"; // TODO: Update submark image with new branding. May be able to remove the filter too.
 

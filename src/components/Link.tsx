@@ -3,7 +3,7 @@ import {
 	type LinkProps as NextLinkProps
 } from "next/link";
 import type { JSX } from "react";
-import domain from "utility/domain";
+import domain from "util/domain";
 
 /**
  * Equivalent to the props that can be passed to a Next.js link or an anchor element.

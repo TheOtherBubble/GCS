@@ -3,8 +3,8 @@ import { matchFormatEnum, type seasonTable, type teamTable } from "db/schema";
 import Form from "next/form";
 import Submit from "components/Submit";
 import createMatch from "db/createMatch";
-import getFormField from "utility/getFormField";
-import getSeasonUrl from "utility/getSeasonUrl";
+import getFormField from "util/getFormField";
+import getSeasonUrl from "util/getSeasonUrl";
 import { revalidatePath } from "next/cache";
 
 /**

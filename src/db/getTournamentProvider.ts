@@ -1,6 +1,6 @@
 import Region from "types/riot/Region";
 import db from "./db";
-import domain from "utility/domain";
+import domain from "util/domain";
 import makeTournamentProvider from "riot/makeTournamentProvider";
 import { tournamentProviderTable } from "./schema";
 

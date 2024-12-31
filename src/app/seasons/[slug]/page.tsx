@@ -1,4 +1,4 @@
-import getSeasonUrl, { getSeasonUrlByEncodedSlug } from "utility/getSeasonUrl";
+import getSeasonUrl, { getSeasonUrlByEncodedSlug } from "util/getSeasonUrl";
 import type { matchTable, teamGameResultTable } from "db/schema";
 import AdminPanel from "./AdminPanel";
 import ChangeSeasonForm from "./ChangeSeasonForm";
@@ -11,8 +11,8 @@ import getAllSeasons from "db/getAllSeasons";
 import getAllTeamsWithSeasonId from "db/getAllTeamsWithSeasonId";
 import getSeasonByEncodedSlug from "db/getSeasonByEncodedSlug";
 import getTeamGameResultsBySeason from "db/getMatchesBySeason";
-import getTeamUrl from "utility/getTeamUrl";
-import multiclass from "utility/multiclass";
+import getTeamUrl from "util/getTeamUrl";
+import multiclass from "util/multiclass";
 import style from "./page.module.scss";
 
 /**

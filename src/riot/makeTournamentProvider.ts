@@ -1,4 +1,3 @@
-import "utility/env";
 import type Cluster from "types/riot/Cluster";
 import type ProviderRegistrationParameters from "types/riot/ProviderRegistrationParameters";
 import getRiotApiBaseUrl from "./getRiotApiBaseUrl";

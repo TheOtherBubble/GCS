@@ -5,7 +5,10 @@ import eslint from "@eslint/js";
 import { fileURLToPath } from "node:url";
 import prettier from "eslint-plugin-prettier/recommended";
 
-/** ESLint configuration options. */
+/**
+ * ESLint configuration options.
+ * @internal
+ */
 export default config(
 	// Next.js ESLint rules.
 	...new FlatCompat({

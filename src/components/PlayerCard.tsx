@@ -6,11 +6,11 @@ import type {
 } from "db/schema";
 import type { JSX } from "react";
 import RankedEmblem from "./RankedEmblem";
-import getAverageKda from "utility/getAverageKda";
-import getBackgroundImageUrl from "utility/getBackgroundImageUrl";
-import getHighestRankedAccount from "utility/getHighestRankedAccount";
-import getPlayerUrl from "utility/getPlayerUrl";
-import multiclass from "utility/multiclass";
+import getAverageKda from "util/getAverageKda";
+import getBackgroundImageUrl from "util/getBackgroundImageUrl";
+import getHighestRankedAccount from "util/getHighestRankedAccount";
+import getPlayerUrl from "util/getPlayerUrl";
+import multiclass from "util/multiclass";
 import style from "./styles/player-card.module.scss";
 
 /**

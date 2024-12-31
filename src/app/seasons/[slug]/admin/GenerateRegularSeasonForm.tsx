@@ -8,8 +8,8 @@ import {
 import Form from "next/form";
 import Submit from "components/Submit";
 import createMatches from "db/createMatches";
-import getFormField from "utility/getFormField";
-import getSeasonUrl from "utility/getSeasonUrl";
+import getFormField from "util/getFormField";
+import getSeasonUrl from "util/getSeasonUrl";
 import { revalidatePath } from "next/cache";
 
 /**

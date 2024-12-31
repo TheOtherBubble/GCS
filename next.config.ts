@@ -2,7 +2,7 @@ import type { NextConfig } from "next";
 
 /**
  * Next.js configuration options.
- * @public
+ * @internal
  */
 export default {
 	images: { remotePatterns: [{ hostname: "ddragon.leagueoflegends.com" }] },

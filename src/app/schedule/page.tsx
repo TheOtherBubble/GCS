@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import getLatestSeason from "db/getLatestSeason";
-import getSeasonUrl from "utility/getSeasonUrl";
+import getSeasonUrl from "util/getSeasonUrl";
 import { redirect } from "next/navigation";
 
 /**

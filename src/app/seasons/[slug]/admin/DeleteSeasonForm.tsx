@@ -2,8 +2,8 @@ import { type JSX, useId } from "react";
 import Form from "next/form";
 import Submit from "components/Submit";
 import deleteSeason from "db/deleteSeason";
-import getFormField from "utility/getFormField";
-import getSeasonUrl from "utility/getSeasonUrl";
+import getFormField from "util/getFormField";
+import getSeasonUrl from "util/getSeasonUrl";
 import { revalidatePath } from "next/cache";
 import type { seasonTable } from "db/schema";
 
