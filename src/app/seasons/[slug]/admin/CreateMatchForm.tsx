@@ -1,5 +1,5 @@
 import { type JSX, useId } from "react";
-import Form from "next/form";
+import Form from "components/Form";
 import type { MatchFormat } from "types/db/MatchFormat";
 import type { Season } from "types/db/Season";
 import Submit from "components/Submit";

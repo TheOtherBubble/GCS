@@ -1,5 +1,5 @@
 import { type JSX, useId } from "react";
-import Form from "next/form";
+import Form from "components/Form";
 import Submit from "components/Submit";
 import createSeason from "db/createSeason";
 import getFormField from "util/getFormField";

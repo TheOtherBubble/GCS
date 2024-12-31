@@ -1,5 +1,5 @@
 import { auth, signIn, signOut } from "db/auth";
-import Form from "next/form";
+import Form from "components/Form";
 import Image from "components/Image";
 import type { JSX } from "react";
 import Link from "components/Link";

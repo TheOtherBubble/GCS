@@ -43,31 +43,4 @@ form {
 	background-color: variables.$fg-color;
 	padding: variables.$normal-pad;
 	border-radius: variables.$normal-radius;
-	display: grid;
-	grid-template-columns: 1fr 1fr;
-	gap: variables.$normal-gap;
-
-	& > label {
-		text-align: right;
-		grid-column: 1 / 2;
-	}
-
-	& > input,
-	& > select {
-		grid-column: 2 / 3;
-	}
-
-	& > header {
-		grid-column: 1 / 3;
-
-		h1,
-		h2,
-		h3,
-		h4,
-		h5,
-		h6,
-		p {
-			margin: 0px;
-		}
-	}
 }

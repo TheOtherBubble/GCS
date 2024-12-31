@@ -1,6 +1,6 @@
 import { type JSX, useId } from "react";
 import getSeasonUrl, { getSeasonUrlByDecodedSlug } from "util/getSeasonUrl";
-import Form from "next/form";
+import Form from "components/Form";
 import type { Season } from "types/db/Season";
 import Submit from "components/Submit";
 import getFormField from "util/getFormField";

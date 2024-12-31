@@ -74,7 +74,6 @@ TODO:
  - Display form error messages instead of crashing (`useActionState`).
  - Allow some forms to be submitted on change.
  - Wrap similar UI elements into more shared components.
-  - Forms.
   - "Blobs."
   - "Blob" sections.
   - More Sass code sharing via Sass' `@extend`.
