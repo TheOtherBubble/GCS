@@ -1,4 +1,5 @@
 import { type JSX, useId } from "react";
+import Form from "next/form";
 import Submit from "components/Submit";
 import getFormField from "utility/getFormField";
 import { getSeasonUrlByDecodedSlug } from "utility/getSeasonUrl";
@@ -32,7 +33,7 @@ export default function ChangeSeasonForm({
 	const vanityUrlSlugId = useId();
 
 	return (
-		<form
+		<Form
 			// Server actions must be asynchronous.
 			// eslint-disable-next-line @typescript-eslint/require-await
 			action={async (form) => {
@@ -58,6 +59,6 @@ export default function ChangeSeasonForm({
 				))}
 			</select>
 			<Submit value="Go" />
-		</form>
+		</Form>
 	);
 }

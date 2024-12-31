@@ -1,4 +1,5 @@
 import { type JSX, useId } from "react";
+import Form from "next/form";
 import Submit from "components/Submit";
 import createSeason from "db/createSeason";
 import getFormField from "utility/getFormField";
@@ -25,7 +26,7 @@ export default function CreateSeasonForm(props: CreateSeasonFormProps) {
 	const vanityUrlSlugId = useId();
 
 	return (
-		<form
+		<Form
 			action={async (form) => {
 				"use server";
 				const name = getFormField(form, "name", true);
@@ -54,6 +55,6 @@ export default function CreateSeasonForm(props: CreateSeasonFormProps) {
 				required
 			/>
 			<Submit value="Create" />
-		</form>
+		</Form>
 	);
 }

@@ -1,4 +1,5 @@
 import { type JSX, useId } from "react";
+import Form from "next/form";
 import Submit from "components/Submit";
 import deleteSeason from "db/deleteSeason";
 import getFormField from "utility/getFormField";
@@ -29,7 +30,7 @@ export default function DeleteSeasonForm({
 	const safeguardId = useId();
 
 	return (
-		<form
+		<Form
 			action={async (form) => {
 				"use server";
 
@@ -54,6 +55,6 @@ export default function DeleteSeasonForm({
 				placeholder="CONFIRM"
 			/>
 			<Submit value="Delete" />
-		</form>
+		</Form>
 	);
 }

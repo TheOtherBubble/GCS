@@ -1,5 +1,6 @@
 import { type JSX, useId } from "react";
 import getSeasonUrl, { getSeasonUrlByDecodedSlug } from "utility/getSeasonUrl";
+import Form from "next/form";
 import Submit from "components/Submit";
 import getFormField from "utility/getFormField";
 import { redirect } from "next/navigation";
@@ -32,7 +33,7 @@ export default function UpdateSeasonForm({
 	const vanityUrlSlugId = useId();
 
 	return (
-		<form
+		<Form
 			action={async (form) => {
 				"use server";
 				const vanityUrlSlug = getFormField(form, "vanityUrlSlug");
@@ -60,6 +61,6 @@ export default function UpdateSeasonForm({
 			<label htmlFor={vanityUrlSlugId}>{"Vanity URL slug"}</label>
 			<input type="text" id={vanityUrlSlugId} name="vanityUrlSlug" />
 			<Submit value="Update" />
-		</form>
+		</Form>
 	);
 }

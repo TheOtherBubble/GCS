@@ -1,4 +1,5 @@
 import { auth, signIn, signOut } from "db/auth";
+import Form from "next/form";
 import Image from "components/Image";
 import type { JSX } from "react";
 import Link from "components/Link";
@@ -52,26 +53,26 @@ export default async function Topnav({
 							</li>
 						)}
 						<li className={style["hide-on-mobile"]}>
-							<form
+							<Form
 								action={async () => {
 									"use server";
 									await signOut();
 								}}
 							>
 								<Submit value="Sign Out" />
-							</form>
+							</Form>
 						</li>
 					</>
 				) : (
 					<li className={style["right"]}>
-						<form
+						<Form
 							action={async () => {
 								"use server";
 								await signIn("discord");
 							}}
 						>
 							<Submit value="Sign In" />
-						</form>
+						</Form>
 					</li>
 				)}
 			</ul>

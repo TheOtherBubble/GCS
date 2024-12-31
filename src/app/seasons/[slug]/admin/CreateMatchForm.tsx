@@ -1,5 +1,6 @@
 import { type JSX, useId } from "react";
 import { matchFormatEnum, type seasonTable, type teamTable } from "db/schema";
+import Form from "next/form";
 import Submit from "components/Submit";
 import createMatch from "db/createMatch";
 import getFormField from "utility/getFormField";
@@ -36,7 +37,7 @@ export default function CreateMatchForm({
 	const roundId = useId();
 
 	return (
-		<form
+		<Form
 			action={async (form) => {
 				"use server";
 				await createMatch({
@@ -91,6 +92,6 @@ export default function CreateMatchForm({
 				required
 			/>
 			<Submit value="Create" />
-		</form>
+		</Form>
 	);
 }

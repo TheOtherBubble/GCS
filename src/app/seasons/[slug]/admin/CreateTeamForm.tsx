@@ -1,4 +1,5 @@
 import { type JSX, useId } from "react";
+import Form from "next/form";
 import Submit from "components/Submit";
 import createTeam from "db/createTeam";
 import domain from "utility/domain";
@@ -35,7 +36,7 @@ export default function CreateTeamForm({
 	const vanityUrlSlugId = useId();
 
 	return (
-		<form
+		<Form
 			action={async (form) => {
 				"use server";
 				await createTeam({
@@ -80,6 +81,6 @@ export default function CreateTeamForm({
 				required
 			/>
 			<Submit value="Create" />
-		</form>
+		</Form>
 	);
 }

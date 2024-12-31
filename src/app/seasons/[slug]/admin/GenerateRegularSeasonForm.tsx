@@ -5,6 +5,7 @@ import {
 	type seasonTable,
 	type teamTable
 } from "db/schema";
+import Form from "next/form";
 import Submit from "components/Submit";
 import createMatches from "db/createMatches";
 import getFormField from "utility/getFormField";
@@ -38,7 +39,7 @@ export default function GenerateRegularSeasonForm({
 	const formatId = useId();
 
 	return (
-		<form
+		<Form
 			action={async (form) => {
 				"use server";
 
@@ -107,6 +108,6 @@ export default function GenerateRegularSeasonForm({
 				))}
 			</select>
 			<Submit value="Generate" />
-		</form>
+		</Form>
 	);
 }

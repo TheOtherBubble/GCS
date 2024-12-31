@@ -1,5 +1,4 @@
 import Image, { type ImageProps } from "components/Image";
-import type { JSX } from "react";
 import type { accountTierEnum } from "db/schema";
 import bronze from "./assets/bronze.png";
 import challenger from "./assets/challenger.png";
@@ -32,7 +31,7 @@ export type RankedEmblemProps = Omit<
  * @returns The ranked emblem.
  * @public
  */
-export default function RankedEmblem(props: RankedEmblemProps): JSX.Element {
+export default function RankedEmblem(props: RankedEmblemProps) {
 	switch (props.tier) {
 		case "IRON":
 			return <Image alt="Iron" src={iron} {...props} />;
@@ -53,7 +52,8 @@ export default function RankedEmblem(props: RankedEmblemProps): JSX.Element {
 		case "GRANDMASTER":
 			return <Image alt="Grandmaster" src={grandmaster} {...props} />;
 		case "CHALLENGER":
-		default: // Prevented by TypeScript.
 			return <Image alt="Challenger" src={challenger} {...props} />;
+		default: // Unranked.
+			return void 0;
 	}
 }

@@ -69,3 +69,9 @@ TODO:
  - Delete this file.
  - Metadata (including OGP images) on every page.
  - Set match (and potentially season) winners if necessary when creating game results.
+ - Display form error messages instead of crashing (`useActionState`).
+ - Allow some forms to be submitted on change.
+ - Wrap similar UI elements into more shared components.
+  - Forms.
+  - "Blobs."
+  - "Blob" sections.
