@@ -8,5 +8,5 @@ import { seasonTable } from "./schema";
  * @returns When finished.
  */
 export default async function createSeason(season: InsertSeason) {
-	return await db.insert(seasonTable).values(season);
+	await db.insert(seasonTable).values(season);
 }

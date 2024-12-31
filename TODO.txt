@@ -57,6 +57,8 @@ TODO:
  - Review color palette to ensure that it meets the WCAG AAA standard.
  - Request a 32x32 favicon and variable Google fonts.
  - Update site to match new branding.
+  - Update topnav submark image.
+  - Update default image blur data.
 - Miscellaneous:
  - Combine database queries where possible and faster (i.e. with inner joins).
  - Discord integration.
@@ -75,3 +77,4 @@ TODO:
   - Forms.
   - "Blobs."
   - "Blob" sections.
+ - Update to use the tournament API instead of the tournament stub API.

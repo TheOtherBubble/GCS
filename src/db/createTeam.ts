@@ -8,5 +8,5 @@ import { teamTable } from "./schema";
  * @returns When finished.
  */
 export default async function createTeam(team: InsertTeam) {
-	return await db.insert(teamTable).values(team);
+	await db.insert(teamTable).values(team);
 }

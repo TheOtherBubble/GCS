@@ -32,8 +32,8 @@ export interface SeasonsPageParams {
  * @public
  */
 export default async function Page(props: PageProps<SeasonsPageParams>) {
-	const seasons = await getAllSeasons();
 	const { slug } = await props.params;
+	const seasons = await getAllSeasons();
 	const season = seasons.find(
 		(value) => value.vanityUrlSlug === decodeURIComponent(slug)
 	);
@@ -173,21 +173,20 @@ export default async function Page(props: PageProps<SeasonsPageParams>) {
  * @returns The metadata.
  * @public
  */
-export const generateMetadata = async (
-	props: PageProps<SeasonsPageParams>
-): Promise<Metadata> => {
+export const generateMetadata = async (props: PageProps<SeasonsPageParams>) => {
 	const { slug } = await props.params;
 	const season = await getSeasonByEncodedSlug(slug);
-
-	return season
-		? {
-				description: `The schedule for Gauntlet Championship Series ${season.name}.`,
-				openGraph: { url: getSeasonUrl(season) },
-				title: season.name
-			}
-		: {
-				description: "An unknown season of the Gauntlet Championship Series.",
-				openGraph: { url: getSeasonUrlByEncodedSlug(slug) },
-				title: "Unknown Season"
-			};
+	return (
+		season
+			? {
+					description: `The schedule for Gauntlet Championship Series ${season.name}.`,
+					openGraph: { url: getSeasonUrl(season) },
+					title: season.name
+				}
+			: {
+					description: "An unknown season of the Gauntlet Championship Series.",
+					openGraph: { url: getSeasonUrlByEncodedSlug(slug) },
+					title: "Unknown Season"
+				}
+	) satisfies Metadata;
 };

@@ -11,7 +11,6 @@ export default function Page() {
 			<h1>{"Gauntlet Championship Series"}</h1>
 			<hr />
 			<p>{"Coming soon..."}</p>
-			{/* TODO */}
 		</>
 	);
 }
@@ -20,10 +19,8 @@ export default function Page() {
  * The metadata of the landing page.
  * @public
  */
-export const metadata: Metadata = {
+export const metadata = {
 	description: "The home page of the Gauntlet Championship Series.",
 	openGraph: { url: "/" },
 	title: "Gauntlet Championship Series"
-};
-
-// TODO: `metadataBase` property in `metadata` export is not set? See https://nextjs.org/docs/app/api-reference/functions/generate-metadata#metadatabase.
+} satisfies Metadata;

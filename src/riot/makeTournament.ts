@@ -4,8 +4,6 @@ import getRiotApiBaseUrl from "./getRiotApiBaseUrl";
 import getTournamentProvider from "db/getTournamentProvider";
 import riotFetch from "./riotFetch";
 
-// TODO: Use tournament instead of tournament stub.
-
 /**
  * Get the URL of the Riot API endpoint for making tournaments.
  * @param cluster - The cluster to use to make the request.

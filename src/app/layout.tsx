@@ -29,16 +29,16 @@ export default function Layout({ children }: LayoutProps) {
  * The viewport of the website.
  * @public
  */
-export const viewport: Viewport = {
+export const viewport = {
 	colorScheme: "dark",
 	themeColor: "#140031"
-};
+} satisfies Viewport;
 
 /**
  * The base metadata of the website.
  * @public
  */
-export const metadata: Metadata = {
+export const metadata = {
 	authors: [{ name: "Travis Martin", url: "https://www.lakuna.pw" }],
 	creator: "Travis Martin",
 	metadataBase: new URL(domain),
@@ -51,4 +51,4 @@ export const metadata: Metadata = {
 		default: "Page",
 		template: "%s | GCS"
 	}
-};
+} satisfies Metadata;

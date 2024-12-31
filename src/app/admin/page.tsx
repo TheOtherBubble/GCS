@@ -29,8 +29,8 @@ export default async function Page() {
  * The metadata of the administrator page.
  * @public
  */
-export const metadata: Metadata = {
+export const metadata = {
 	description: "GCS administrator tools.",
 	openGraph: { url: "/admin" },
 	title: "Admin Tools"
-};
+} satisfies Metadata;

@@ -8,6 +8,7 @@ import type { PlayerGameResult } from "types/db/PlayerGameResult";
 import TeamCard from "components/TeamCard";
 import type { TeamGameResult } from "types/db/TeamGameResult";
 import getGamesByMatch from "db/getGamesByMatch";
+import { getMatchUrlBySlug } from "util/getMatchUrl";
 import getPlayersByTeam from "db/getPlayersByTeam";
 import getSeasonById from "db/getSeasonById";
 import { getTeamsByMatchSlug } from "db/getTeamsByMatch";
@@ -132,7 +133,11 @@ export default async function Page(props: PageProps<MatchesPageParams>) {
  * @returns The metadata.
  * @public
  */
-export const generateMetadata = (): Metadata => {
-	// TODO
-	return {};
+export const generateMetadata = async (props: PageProps<MatchesPageParams>) => {
+	const { slug } = await props.params;
+	return {
+		description: `Gauntlet Championship Series match #${slug}`,
+		openGraph: { url: getMatchUrlBySlug(slug) },
+		title: `Match #${slug}`
+	} satisfies Metadata;
 };

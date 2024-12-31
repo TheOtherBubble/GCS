@@ -68,7 +68,6 @@ export default function GameCard({
 		);
 	}
 
-	// TODO
 	if (!playerGameResults) {
 		<a
 			className={multiclass(className, style["container"])}
@@ -79,7 +78,6 @@ export default function GameCard({
 		</a>;
 	}
 
-	// TODO
 	return (
 		<a
 			className={multiclass(className, style["container"])}

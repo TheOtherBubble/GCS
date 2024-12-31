@@ -1,3 +1,4 @@
+import getPlayerUrl, { getPlayerUrlBySlug } from "util/getPlayerUrl";
 import type { Metadata } from "next";
 import type PageProps from "types/PageProps";
 import PlayerCard from "components/PlayerCard";
@@ -48,7 +49,20 @@ export default async function Page(props: PageProps<PlayersPageParams>) {
  * @returns The metadata.
  * @public
  */
-export const generateMetadata = (): Metadata => {
-	// TODO
-	return {};
+export const generateMetadata = async (props: PageProps<PlayersPageParams>) => {
+	const { slug } = await props.params;
+	const player = await getPlayerBySlug(slug);
+	return (
+		player
+			? {
+					description: `Gauntlet Championship Series player "${player.displayName ?? player.name}."`,
+					openGraph: { url: getPlayerUrl(player) },
+					title: player.displayName ?? player.name
+				}
+			: {
+					description: "An unknown player in the Gauntlet Championship Series.",
+					openGraph: { url: getPlayerUrlBySlug(slug) },
+					title: "Unknown Player"
+				}
+	) satisfies Metadata;
 };

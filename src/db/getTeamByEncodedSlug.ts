@@ -8,15 +8,14 @@ import { teamTable } from "./schema";
  * @returns The team, if any matches.
  * @public
  */
-export const getTeamByDecodedSlug = async (slug: string) => {
-	return (
+export const getTeamByDecodedSlug = async (slug: string) =>
+	(
 		await db
 			.select()
 			.from(teamTable)
 			.where(eq(teamTable.vanityUrlSlug, slug))
 			.limit(1)
 	)[0];
-};
 
 /**
  * Get a team by its vanity URL slug.

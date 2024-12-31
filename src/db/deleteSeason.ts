@@ -8,5 +8,5 @@ import { seasonTable } from "./schema";
  * @returns When finished.
  */
 export default async function deleteSeason(id: number) {
-	return await db.delete(seasonTable).where(eq(seasonTable.id, id));
+	await db.delete(seasonTable).where(eq(seasonTable.id, id));
 }

@@ -6,10 +6,10 @@ import domain from "util/domain";
  * @returns The sitemap.
  * @public
  */
-export default function sitemap(): MetadataRoute.Sitemap {
+export default function sitemap() {
 	return [
 		{ url: `${domain}/rulebook` },
 		{ url: `${domain}/schedule` },
 		{ url: `${domain}/` }
-	];
+	] satisfies MetadataRoute.Sitemap;
 }

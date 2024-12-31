@@ -38,6 +38,7 @@ export default function MatchCard({
 }: MatchCardProps) {
 	const blueTeam = teams?.find((team) => team.id === match.blueTeamId);
 	const redTeam = teams?.find((team) => team.id === match.redTeamId);
+
 	return (
 		<a
 			className={multiclass(className, style["container"])}

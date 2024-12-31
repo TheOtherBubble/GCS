@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import type PageProps from "types/PageProps";
 import { auth } from "db/auth";
 import { getGameBySlug } from "db/getGameById";
+import { getGameUrlBySlug } from "util/getGameUrl";
 import getMatchById from "db/getMatchById";
 import getTeamPlayersByPlayer from "db/getTeamPlayersByPlayer";
 
@@ -41,7 +42,6 @@ export default async function Page(props: PageProps<GamesPageParams>) {
 					playerTeam.teamId === match.redTeamId
 			));
 
-	// TODO
 	return canViewTournamentCode ? (
 		<CopyToClipboardButton text={game.tournamentCode}>
 			{"Copy tournament code to clipboard."}
@@ -57,7 +57,11 @@ export default async function Page(props: PageProps<GamesPageParams>) {
  * @returns The metadata.
  * @public
  */
-export const generateMetadata = (): Metadata => {
-	// TODO
-	return {};
+export const generateMetadata = async (props: PageProps<GamesPageParams>) => {
+	const { slug } = await props.params;
+	return {
+		description: `Gauntlet Championship Series game #${slug}`,
+		openGraph: { url: getGameUrlBySlug(slug) },
+		title: `Game #${slug}`
+	} satisfies Metadata;
 };

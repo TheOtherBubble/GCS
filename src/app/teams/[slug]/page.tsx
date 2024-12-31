@@ -1,3 +1,4 @@
+import getTeamUrl, { getTeamUrlByEncodedSlug } from "util/getTeamUrl";
 import type { Metadata } from "next";
 import type PageProps from "types/PageProps";
 import TeamCard from "components/TeamCard";
@@ -28,7 +29,6 @@ export default async function Page(props: PageProps<TeamsPageParams>) {
 
 	const season = await getSeasonById(team.seasonId);
 
-	// TODO
 	return <TeamCard team={team} season={season} />;
 }
 
@@ -38,7 +38,20 @@ export default async function Page(props: PageProps<TeamsPageParams>) {
  * @returns The metadata.
  * @public
  */
-export const generateMetadata = (): Metadata => {
-	// TODO
-	return {};
+export const generateMetadata = async (props: PageProps<TeamsPageParams>) => {
+	const { slug } = await props.params;
+	const team = await getTeamByEncodedSlug(slug);
+	return (
+		team
+			? {
+					description: `Gauntlet Championship Series team "${team.name}."`,
+					openGraph: { url: getTeamUrl(team) },
+					title: team.name
+				}
+			: {
+					description: "An unknown team in the Gauntlet Championship Series.",
+					openGraph: { url: getTeamUrlByEncodedSlug(slug) },
+					title: "Unknown Team"
+				}
+	) satisfies Metadata;
 };

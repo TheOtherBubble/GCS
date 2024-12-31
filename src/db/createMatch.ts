@@ -34,5 +34,5 @@ export default async function createMatch(
 	await db.insert(matchTable).values(match);
 
 	// Create the first game in the match.
-	return await db.insert(gameTable).values({ tournamentCode });
+	await db.insert(gameTable).values({ tournamentCode });
 }

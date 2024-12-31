@@ -6,12 +6,12 @@ import domain from "util/domain";
  * @returns The robots file.
  * @public
  */
-export default function robots(): MetadataRoute.Robots {
+export default function robots() {
 	return {
 		rules: {
 			allow: "/",
 			userAgent: "*"
 		},
 		sitemap: `${domain}/sitemap.xml`
-	};
+	} satisfies MetadataRoute.Robots;
 }

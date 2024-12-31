@@ -105,13 +105,6 @@ export interface NextAuthResultFixed {
 	signOut: NextAuthResult["signOut"];
 }
 
-/**
- * The Auth.js configuration.
- * @see {@link https://authjs.dev/getting-started/installation?framework=Next.js | Installation}
- * @see {@link https://authjs.dev/getting-started/authentication/oauth | OAuth}
- * @see {@link https://authjs.dev/getting-started/database | Database Adapters}
- * @public
- */
 // eslint-disable-next-line new-cap
 export const { auth, handlers, signIn, signOut } = NextAuth({
 	// The adapter that is used to connect the provider (Discord) to the database (PostgreSQL via the Drizzle ORM).

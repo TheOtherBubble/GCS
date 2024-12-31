@@ -50,7 +50,6 @@ export default function ChangeSeasonForm({
 				name="vanityUrlSlug"
 				defaultValue={season?.vanityUrlSlug}
 				required
-				// TODO: Submit on change? Remove submit button if possible.
 			>
 				{seasons.map((value) => (
 					<option value={value.vanityUrlSlug} key={value.id}>

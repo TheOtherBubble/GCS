@@ -8,15 +8,14 @@ import { seasonTable } from "./schema";
  * @returns The season, if any matches.
  * @public
  */
-export const getSeasonByDecodedSlug = async (slug: string) => {
-	return (
+export const getSeasonByDecodedSlug = async (slug: string) =>
+	(
 		await db
 			.select()
 			.from(seasonTable)
 			.where(eq(seasonTable.vanityUrlSlug, slug))
 			.limit(1)
 	)[0];
-};
 
 /**
  * Decode a season's vanity URL slug.

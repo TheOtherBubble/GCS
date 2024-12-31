@@ -20,8 +20,6 @@ export default async function getTournamentProvider() {
 		region: Region.NORTH_AMERICA,
 		url: new URL("/api/riot", domain).href
 	});
-
-	// Store the new tournament provider in the database before returning.
 	await db.insert(tournamentProviderTable).values({ id });
 	return id;
 }

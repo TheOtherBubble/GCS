@@ -68,10 +68,6 @@ nav.topnav {
 			img {
 				width: auto;
 				height: 50%;
-
-				// Outline image so that it's clear against the background. TODO: Should be deleted after rebranding.
-				filter: drop-shadow(0px 0px 1px variables.$bold-color);
-				background-color: transparent;
 			}
 
 			// Clearly indicate clickable elements.

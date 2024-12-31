@@ -6,8 +6,6 @@ import type TournamentCodeParameters from "types/riot/TournamentCodeParameters";
 import getRiotApiBaseUrl from "./getRiotApiBaseUrl";
 import riotFetch from "./riotFetch";
 
-// TODO: Use tournament instead of tournament stub.
-
 /**
  * Get the URL of the Riot API endpoint for making tournament codes.
  * @param count - The number of tournament codes to make, or `undefined` for one.

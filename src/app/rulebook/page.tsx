@@ -20,7 +20,6 @@ export default function Page() {
 			</p>
 			<p>
 				{"You must be a member of "}
-				{/* TODO: Discord server invite link will likely need to be updated. */}
 				<Link href="https://discord.com/invite/vlnleague">
 					{"the GCS Discord server"}
 				</Link>
@@ -228,8 +227,8 @@ export default function Page() {
  * The metadata of the rulebook page.
  * @public
  */
-export const metadata: Metadata = {
+export const metadata = {
 	description: "The current rulebook of the Gauntlet Championship Series.",
 	openGraph: { url: "/rulebook" },
 	title: "Rulebook"
-};
+} satisfies Metadata;

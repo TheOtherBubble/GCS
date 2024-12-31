@@ -54,5 +54,5 @@ export default async function createMatches(
 	}
 
 	// Create the games.
-	return await db.insert(gameTable).values(games);
+	await db.insert(gameTable).values(games);
 }

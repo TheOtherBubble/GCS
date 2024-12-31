@@ -22,13 +22,9 @@ export default async function Page() {
  * @returns The metadata.
  * @public
  */
-export const generateMetadata = async (): Promise<Metadata> => {
-	const season = await getLatestSeason();
-	return {
-		description: season
-			? `The schedule for Gauntlet Championship Series ${season.name}.`
-			: "The schedule for the latest season of the Gauntlet Championship Series.",
-		openGraph: { url: "/schedule" },
-		title: season?.name ?? "Schedule"
-	};
-};
+export const metadata = {
+	description:
+		"The schedule for the latest season of the Gauntlet Championship Series.",
+	openGraph: { url: "/schedule" },
+	title: "Schedule"
+} satisfies Metadata;
