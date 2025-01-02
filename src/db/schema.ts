@@ -13,6 +13,18 @@ import {
 import type { AdapterAccountType } from "next-auth/adapters";
 
 /**
+ * Roles that a player can play.
+ * @public
+ */
+export const playerRoleEnum = pgEnum("playerRole", [
+	"Top",
+	"Jungle",
+	"Middle",
+	"Bottom",
+	"Support"
+]);
+
+/**
  * The table of players. Players are linked to one Discord account and any number of Riot accounts, and may participate in any number of seasons on any number of teams.
  * @public
  */
@@ -54,6 +66,12 @@ export const playerTable = pgTable("player", {
 
 	// The player's Discord name at the time when the account was created.
 	name: varchar({ length: 0x20 }).notNull(),
+
+	// The player's primary role. Must be set for the player to be able to sign up for a season.
+	primaryRole: playerRoleEnum(),
+
+	// The player's secondary role. Must be set and not equal to the player's primary role for the player to be able to sign up for a season.
+	secondaryRole: playerRoleEnum(),
 
 	// The player's Twitch ID.
 	twitchId: varchar({ length: 0x40 }),
