@@ -33,7 +33,7 @@ export default function Layout({ children }: LayoutProps) {
  */
 export const viewport = {
 	colorScheme: "dark",
-	themeColor: "#140031"
+	themeColor: "#e5b451"
 } satisfies Viewport;
 
 /**
