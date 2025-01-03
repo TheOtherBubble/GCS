@@ -21,7 +21,6 @@ TODO:
  - Show the playoffs bracket once the playoffs stage begins.
  - Add an admin tool for generating the playoffs bracket from the current top 8 teams. Maybe do this automatically after the last regular season game ends.
  - Scroll to the next unfinished round when opening the page.
- - Expand the "generate regular season" admin tool to support multiple rounds of round robin.
 - Team page:
  - Show code, color, logo, name, pool, season, captain, players, matches, and stats.
  - Show an indicator if the team won its season.

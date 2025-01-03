@@ -36,6 +36,7 @@ export default function GenerateRegularSeasonForm({
 	...props
 }: SeedSeasonFormProps) {
 	const formatId = useId();
+	const roundsId = useId();
 
 	return (
 		<Form
@@ -44,6 +45,7 @@ export default function GenerateRegularSeasonForm({
 
 				// Read form data.
 				const format = getFormField(form, "format", true) as MatchFormat;
+				const rounds = parseInt(getFormField(form, "rounds", true), 10);
 
 				// Split season teams into pools.
 				const pools = new Map<number, Team[]>();
@@ -59,29 +61,29 @@ export default function GenerateRegularSeasonForm({
 
 				// Use the circle method to generate a single round robin regular season.
 				const matches: InsertMatch[] = [];
-				for (const pool of pools.values()) {
-					// One round per team, adding a fake "bye" team if there are an odd number of teams.
-					const l = pool.length + (pool.length % 2) - 1;
-					for (let i = 0; i < l; i++) {
-						for (let j = 0; j < (l + 1) / 2; j++) {
-							// Skip the bye team.
-							const blueTeam = pool[j && ((i + j - 1) % l) + 1];
-							if (!blueTeam) {
-								continue;
-							}
+				// Use the given number of round robin rounds.
+				for (let i = 0; i < rounds; i++) {
+					for (const pool of pools.values()) {
+						// One round per team, adding a fake "bye" team if there are an odd number of teams.
+						const l = pool.length + (pool.length % 2) - 1;
+						for (let j = 0; j < l; j++) {
+							for (let k = 0; k < (l + 1) / 2; k++) {
+								const blueTeam = pool[k && ((j + k - 1) % l) + 1];
+								const redTeam = pool[l - k && ((j + (l - k) - 1) % l) + 1];
 
-							const redTeam = pool[l - j && ((i + (l - j) - 1) % l) + 1];
-							if (!redTeam) {
-								continue;
-							}
+								// Skip the bye team.
+								if (!blueTeam || !redTeam) {
+									continue;
+								}
 
-							matches.push({
-								blueTeamId: blueTeam.id,
-								format,
-								redTeamId: redTeam.id,
-								round: i + 1, // Round is one-based in the database.
-								seasonId: season.id
-							});
+								matches.push({
+									blueTeamId: blueTeam.id,
+									format,
+									redTeamId: redTeam.id,
+									round: i * l + j + 1,
+									seasonId: season.id
+								});
+							}
 						}
 					}
 				}
@@ -102,6 +104,14 @@ export default function GenerateRegularSeasonForm({
 					</option>
 				))}
 			</select>
+			<label htmlFor={roundsId}>{"Rounds"}</label>
+			<input
+				type="number"
+				id={roundsId}
+				name="rounds"
+				min={1}
+				defaultValue={2}
+			/>
 			<Submit value="Generate" />
 		</Form>
 	);
