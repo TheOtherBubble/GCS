@@ -406,23 +406,23 @@ export const gameResultTable = pgTable("gameResult", {
 	// The game/match ID of the game in the Riot API.
 	id: integer().primaryKey(),
 
-	// The game map.
-	map: varchar({ length: 0x40 }).notNull(),
+	// The ID of the map that the game was played on.
+	mapId: integer().notNull(),
 
-	// The game mode.
+	// The game's mode.
 	mode: varchar({ length: 0x20 }).notNull(),
 
-	// The game name.
+	// The game's name.
 	name: varchar({ length: 0x40 }).notNull(),
 
-	// The platform that the game was played on.
-	platform: varchar({ length: 0x40 }).notNull(),
+	// The ID of the platform that the game was played on.
+	platformId: varchar({ length: 0x40 }).notNull(),
 
-	// The queue that the game was in.
-	queue: varchar({ length: 0x40 }).notNull(),
+	// The ID of the queue that the game was in.
+	queueId: integer().notNull(),
 
-	// The date that the game was started on the game server.
-	startDate: date().notNull(),
+	// The Unix timestamp of the date that the game was started on the game server.
+	startTimestamp: integer().notNull(),
 
 	// The game type.
 	type: varchar({ length: 0x40 }).notNull(),

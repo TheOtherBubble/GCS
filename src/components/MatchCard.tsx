@@ -41,7 +41,7 @@ export default function MatchCard({
 
 	return (
 		<a
-			className={multiclass(className, style["container"])}
+			className={multiclass(className, style["match-card"])}
 			href={getMatchUrl(match)}
 			{...props}
 		>

@@ -1,46 +1,77 @@
 @use "variables";
+@use "mixins";
 
+// Set up CSS variables.
 :root {
-	font-family: variables.$font-body;
+	font: 1rem variables.$font-body;
 	color: variables.$text-color;
 	background-color: variables.$bg-color;
 
 	// Theme colors. Set up with CSS variables to support the addition of a light theme later on.
-	--font-body: Arial, sans-serif;
-	--font-title: "Berlin Sans FB Demi", sans-serif; // Berlin Sans FB Demi Bold is available by default only on Windows.
-	--bg-color: #{variables.$black-russian};
-	--fg-color: #{variables.$pixie-powder};
+	--bg-color: #{variables.$black};
+	--mg-color: #{variables.$cod-gray};
+	--mg2-color: #{variables.$light-cod-gray};
+	--fg-color: #{variables.$eerie-black};
+	--hl-color: #{variables.$quick-silver};
+	--hl2-color: #{variables.$dark-eerie-black};
+	--theme-color: #{variables.$anzac};
 	--text-color: #{variables.$white};
-	--italic-color: #{variables.$orange};
-	--bold-color: #{variables.$bright-sun};
+
+	// Hide some sections on mobile devices.
+	@include mixins.is-mobile using ($is-mobile) {
+		@if $is-mobile {
+			.hide-on-mobile {
+				display: none;
+			}
+		}
+	}
+
+	// Hide some sections on desktop devices.
+	@include mixins.is-not-mobile using ($is-not-mobile) {
+		@if $is-not-mobile {
+			.hide-on-desktop {
+				display: none;
+			}
+		}
+	}
 }
 
-a,
+// Apply theming to links.
+a {
+	color: variables.$theme-color;
+}
+
+// Apply theming to horizontal rules.
 hr {
-	color: variables.$bold-color;
+	// Changes color on Firefox.
+	color: variables.$theme-color;
+
+	// Changes color on other browsers.
+	$border-width: 1px;
+	border: $border-width solid variables.$theme-color;
+
+	// Necessary in case the height of the horizontal rule is modified.
+	background-color: variables.$theme-color;
+
+	// Horizontal rules should take up the entire width of their container, even when used in a grid.
+	width: calc(100% - $border-width * 2);
 }
 
+// Apply theming to and center titles.
 h1,
 h2,
 h3,
 h4,
 h5,
 h6 {
-	color: variables.$bold-color;
+	color: variables.$theme-color;
 	font-family: variables.$font-title;
 	text-align: center;
 }
 
-body {
-	margin: 0px;
-}
-
-main {
-	margin: variables.$normal-gap;
-}
-
-form {
-	background-color: variables.$fg-color;
-	padding: variables.$normal-pad;
-	border-radius: variables.$normal-radius;
+// Inherit fonts in forms. This is not done by default in most browsers.
+input,
+textarea,
+select {
+	font: inherit;
 }

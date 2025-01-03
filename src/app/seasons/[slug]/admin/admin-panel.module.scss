@@ -1,7 +1,0 @@
-@use "../../../../styles/variables";
-
-div.admin {
-	& > form {
-		margin: variables.$normal-gap 0px; // Horizontal gap is supplied by columns.
-	}
-}

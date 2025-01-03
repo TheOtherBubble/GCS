@@ -33,7 +33,7 @@ export default function TeamCard({
 }: TeamCardProps) {
 	return (
 		<a
-			className={multiclass(className, style["container"])}
+			className={multiclass(className, style["team-card"])}
 			href={getTeamUrl(team)}
 			{...props}
 		>
@@ -43,18 +43,11 @@ export default function TeamCard({
 				untrusted
 				width={512}
 				height={512}
-				className={style["logo"]}
 				style={{ border: `1px solid #${team.color}` }}
 			/>
-			<div className={style["text"]}>
+			<div>
 				<h3>{team.name}</h3>
-				{season && (
-					<p>
-						{season.name}
-						{", Pool "}
-						{team.pool}
-					</p>
-				)}
+				{season && <p>{`${season.name}, Pool ${team.pool.toString()}`}</p>}
 			</div>
 		</a>
 	);

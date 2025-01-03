@@ -1,0 +1,69 @@
+@use "variables";
+
+// Elements that should display as a block with the foreground color and rounded edges.
+.blob {
+	display: block;
+	background-color: variables.$fg-color;
+	border-radius: 25px;
+	padding: 16px;
+}
+
+// For form blobs, use a special grid layout.
+form.blob {
+	@extend .blob;
+
+	// Create a grid with labels on the left and input elements on the right.
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	gap: 5px;
+
+	// Position labels on the left.
+	& > label {
+		text-align: right;
+		grid-column: 1;
+	}
+
+	// Position input elements on the right.
+	& > input,
+	& > select {
+		grid-column: 2;
+
+		// Add back the default padding on input elements that was removed above.
+		padding: revert;
+	}
+
+	// Allow the header and footer to span the entire form.
+	& > header,
+	& > footer {
+		grid-column: 1 / 3;
+
+		// Remove margins from header and footer content.
+		* {
+			margin: 0px;
+		}
+	}
+}
+
+// Elements that contain a vertical list of elements.
+.list {
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+}
+
+// Elements that should contain blobs. Are themselves blobs, but with a toned-down color.
+.blob-section {
+	@extend .blob;
+
+	// List blobs vertically.
+	@extend .list;
+
+	// Apply a darker background color to differentiate from the blobs this section contains.
+	background-color: variables.$mg-color;
+
+	// Make header and footer content take up less space.
+	& > header *,
+	& > footer * {
+		margin: 0px;
+	}
+}

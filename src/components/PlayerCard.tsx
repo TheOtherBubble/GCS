@@ -51,7 +51,7 @@ export default function PlayerCard({
 
 	return (
 		<a
-			className={multiclass(className, style["container"])}
+			className={multiclass(className, style["player-card"])}
 			style={
 				backgroundImageUrl
 					? {
@@ -67,12 +67,7 @@ export default function PlayerCard({
 				<h3>
 					{player.displayName ?? player.name}
 					{highestRankedAccount && (
-						<>
-							<RankedEmblem
-								tier={highestRankedAccount.tierCache}
-								className={style["rank"]}
-							/>
-						</>
+						<RankedEmblem tier={highestRankedAccount.tierCache} />
 					)}
 				</h3>
 				{games && <p>{`KDA: ${getAverageKda(games).toFixed(2)}`}</p>}

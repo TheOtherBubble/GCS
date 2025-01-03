@@ -94,34 +94,38 @@ export default async function Page(props: PageProps<MatchesPageParams>) {
 
 	return (
 		<div className={style["content"]}>
-			<div className={multiclass(style["blue-team"], style["hide-on-mobile"])}>
+			<div className={multiclass(style["team"], "hide-on-mobile")}>
 				<TeamCard team={blueTeam} season={season} />
 				<hr />
-				{blueTeamPlayers.map(({ player }) => (
-					<PlayerCard key={player.id} player={player} />
-				))}
+				<div>
+					{blueTeamPlayers.map(({ player }) => (
+						<PlayerCard key={player.id} player={player} />
+					))}
+				</div>
 			</div>
 			<div className={style["games"]}>
-				<h1
-					className={style["hide-on-desktop"]}
-				>{`${blueTeam.name} vs ${redTeam.name}`}</h1>
+				<h1 className="hide-on-desktop">{`${blueTeam.name} vs ${redTeam.name}`}</h1>
 				<h2>{"Games"}</h2>
-				{games.map(({ game, result, teamResults, playerResults }) => (
-					<GameCard
-						key={game.id}
-						game={game}
-						gameResult={result}
-						teamGameResults={teamResults}
-						playerGameResults={playerResults}
-					/>
-				))}
+				<div>
+					{games.map(({ game, result, teamResults, playerResults }) => (
+						<GameCard
+							key={game.id}
+							game={game}
+							gameResult={result}
+							teamGameResults={teamResults}
+							playerGameResults={playerResults}
+						/>
+					))}
+				</div>
 			</div>
-			<div className={multiclass(style["red-team"], style["hide-on-mobile"])}>
+			<div className={multiclass(style["team"], "hide-on-mobile")}>
 				<TeamCard team={redTeam} season={season} />
 				<hr />
-				{redTeamPlayers.map(({ player }) => (
-					<PlayerCard key={player.id} player={player} />
-				))}
+				<div>
+					{redTeamPlayers.map(({ player }) => (
+						<PlayerCard key={player.id} player={player} />
+					))}
+				</div>
 			</div>
 		</div>
 	);

@@ -38,13 +38,13 @@ export default function Form({
 	return (
 		<NextForm
 			action={typeof action === "function" ? dispatch : action}
-			className={multiclass(className, style["form"])}
+			className={multiclass(className, style["grid-form"])}
 			{...props}
 		>
 			{children}
 			{state && (
 				<footer>
-					<p className={style["state"]}>{state}</p>
+					<p>{state}</p>
 				</footer>
 			)}
 		</NextForm>

@@ -1,13 +1,12 @@
 import { auth, signIn, signOut } from "db/auth";
-import Form from "components/Form";
-import Image from "components/Image";
+import Form from "./Form";
 import type { JSX } from "react";
-import Link from "components/Link";
-import Submit from "components/Submit";
+import Link from "./Link";
+import Logo from "./assets/logo.svg";
+import Submit from "./Submit";
 import getPlayerUrl from "util/getPlayerUrl";
 import multiclass from "util/multiclass";
 import style from "./styles/topnav.module.scss";
-import submark from "./assets/submark.png";
 
 /**
  * The site-wide top navigation bar.
@@ -25,7 +24,7 @@ export default async function Topnav({
 			<ul>
 				<li>
 					<Link href="/">
-						<Image alt="Index" src={submark} />
+						<Logo />
 					</Link>
 				</li>
 				<li>
@@ -33,7 +32,7 @@ export default async function Topnav({
 						<span>{"Schedule"}</span>
 					</Link>
 				</li>
-				<li className={style["hide-on-mobile"]}>
+				<li className="hide-on-mobile">
 					<Link href="/rulebook">
 						<span>{"Rulebook"}</span>
 					</Link>
@@ -46,13 +45,13 @@ export default async function Topnav({
 							</Link>
 						</li>
 						{session.user.isAdministator && (
-							<li className={style["hide-on-mobile"]}>
+							<li className="hide-on-mobile">
 								<Link href="/admin">
 									<span>{"Admin"}</span>
 								</Link>
 							</li>
 						)}
-						<li className={style["hide-on-mobile"]}>
+						<li className="hide-on-mobile">
 							<Form
 								action={async () => {
 									"use server";

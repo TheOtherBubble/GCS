@@ -1,18 +1,32 @@
 @use "../styles/variables";
 
+$margin: 8px;
+
 body.spacer {
+	// Space out header, main content, and footer so that the footer is always at the bottom of the window (even when the page doesn't have enough content to put it there).
 	display: flex;
 	min-height: 100vh;
 	flex-direction: column;
 	justify-content: flex-start;
 
+	// Apply margin to main instead of body so that header and footer are flush with window edge.
+	margin: 0px;
+
+	// Make the header always visible so that the navigation bar is easy to access.
 	& > header {
 		position: sticky;
 		top: 0px;
+		background-color: variables.$mg2-color;
 	}
 
+	// Apply margin to main instead of body so that the header and footer are flush with the window edge.
+	& > main {
+		margin: $margin;
+	}
+
+	// Space out the footer so that it is always at the bottom of the window (even when the page doesn't have enough content to put it there).
 	& > footer {
 		margin-top: auto;
-		background-color: variables.$fg-color;
+		background-color: variables.$mg2-color;
 	}
 }

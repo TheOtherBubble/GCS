@@ -2,25 +2,23 @@
 $mobile-breakpoint: 768px;
 
 // Color palette.
-$black-russian: #140031;
-$blackberry: #41003a;
-$pixie-powder: #3c1185;
-$cardinal-pink: #940253;
-$red-ribbon: #de0442;
-$orange: #ff7120;
-$bright-sun: #fbcd38;
-$white: #ffffff;
+$black: #050505; // Dark background.
+$cod-gray: #0e0e0e; // Medium background.
+$light-cod-gray: #111111; // Alternative medium background (header and footer color).
+$eerie-black: #262626; // Light background.
+$quick-silver: #9a9a9a; // Highlight color (borders).
+$dark-eerie-black: #1a1a1a; // Alternative highlight color.
+$anzac: #e5b451; // Theme color.
+$white: #ffffff; // Text color.
 
 // Sass variables for CSS variables.
 $font-title: var(--font-title);
 $font-body: var(--font-body);
 $bg-color: var(--bg-color);
+$mg-color: var(--mg-color);
+$mg2-color: var(--mg2-color);
 $fg-color: var(--fg-color);
+$hl-color: var(--hl-color);
+$hl2-color: var(--hl2-color);
+$theme-color: var(--theme-color);
 $text-color: var(--text-color);
-$italic-color: var(--italic-color);
-$bold-color: var(--bold-color);
-
-// Uniform spacing information.
-$normal-gap: 10px;
-$normal-pad: 16px;
-$normal-radius: 25px;

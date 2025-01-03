@@ -1,0 +1,24 @@
+@use "../../styles/variables";
+@use "../../styles/blob.module.scss";
+
+// Shared styling for all cards.
+a.card {
+	@extend .blob;
+
+	// Replace default link styling.
+	color: variables.$text-color;
+	text-decoration: none;
+
+	// Use a fixed size for cards so that they look nice in lists.
+	aspect-ratio: 5 / 1;
+	overflow: hidden; // Hide overflow to maintain card size.
+
+	// Increase font size within cards for ease of use.
+	font-size: 2em;
+
+	// Remove default margins and padding from elements within cards.
+	* {
+		margin: 0px;
+		padding: 0px;
+	}
+}

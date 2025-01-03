@@ -42,7 +42,7 @@ export default async function Page(props: PageProps<SeasonsPageParams>) {
 	if (!season) {
 		return (
 			<div className={style["content"]}>
-				<div className={style["config"]}>
+				<div className={style["info"]}>
 					<h1>{"Unknown Season"}</h1>
 					<hr />
 					<ChangeSeasonForm season={season} seasons={seasons} />
@@ -112,14 +112,14 @@ export default async function Page(props: PageProps<SeasonsPageParams>) {
 
 	return (
 		<div className={style["content"]}>
-			<div className={style["config"]}>
+			<div className={style["info"]}>
 				<h1>{season.name}</h1>
 				<hr />
-				<div className={style["hide-on-mobile"]}>
+				<div>
 					<ChangeSeasonForm season={season} seasons={seasons} />
 					{(await auth())?.user?.isAdministator && (
 						<AdminPanel
-							className={style["hide-on-mobile"]}
+							className="hide-on-mobile"
 							season={season}
 							teams={teams}
 						/>
@@ -131,11 +131,10 @@ export default async function Page(props: PageProps<SeasonsPageParams>) {
 				{Array.from(rounds)
 					.sort(([a], [b]) => a - b)
 					.map(([round, matches]) => (
-						<div key={round} className={style["round"]}>
-							<h3>
-								{"Round "}
-								{round}
-							</h3>
+						<div key={round}>
+							<header>
+								<h3>{`Round ${round.toString()}`}</h3>
+							</header>
 							{matches.map((match) => (
 								<MatchCard
 									key={match.match.id}
@@ -147,9 +146,7 @@ export default async function Page(props: PageProps<SeasonsPageParams>) {
 						</div>
 					))}
 			</div>
-			<div
-				className={multiclass(style["leaderboards"], style["hide-on-mobile"])}
-			>
+			<div className={multiclass(style["leaderboards"], "hide-on-mobile")}>
 				<h2>{"Leaderboards"}</h2>
 				<h3>{"Standings"}</h3>
 				<ol>

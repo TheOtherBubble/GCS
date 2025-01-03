@@ -1,7 +1,13 @@
-@use "../../styles/variables";
+@use "../../styles/blob.module.scss";
 
 div.widgets {
+	// List widgets with flexbox.
 	display: flex;
 	flex-wrap: wrap;
-	gap: variables.$normal-gap;
+	gap: 10px;
+
+	// Display forms as blobs.
+	& > form {
+		@extend .blob;
+	}
 }

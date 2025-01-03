@@ -5,23 +5,23 @@ TODO:
  - Indicator if the team won its season.
 - Match cards:
  - Show format.
- - For current matches, indicator if any involved players' streams are live.
+ - For current matches, indicate if any involved players' streams are live.
 - Game cards:
  - For completed games, show the result and players.
   - For each player, show the player's name and champion.
- - Link to page.
- - For current games, link to any involved players' streams if they are live.
+ - For current games, indicate if any involved players' streams are live.
 - Landing page:
  - Get video and blurb from Nerve; add them.
  - Links to Discord, Twitch, and YouTube.
  - Twitch stream embed if live.
 - Rulebook page:
- - Confirm with Nerve that the rules look complete.
+ - Update to match the new rulebook.
 - Season page:
  - Show leaderboards (KDA and damage).
  - Show the playoffs bracket once the playoffs stage begins.
  - Add an admin tool for generating the playoffs bracket from the current top 8 teams. Maybe do this automatically after the last regular season game ends.
  - Scroll to the next unfinished round when opening the page.
+ - Expand the "generate regular season" admin tool to support multiple rounds of round robin.
 - Team page:
  - Show code, color, logo, name, pool, season, captain, players, matches, and stats.
  - Show an indicator if the team won its season.
@@ -30,8 +30,7 @@ TODO:
  - Allow administrators to delete teams.
 - Match page:
  - For upcoming and ongoing matches, show the tournament code of the next game to players on teams in the match.
- - Show season, round, teams, and format.
- - For completed and ongoing matches, show the match's score and list its games.
+ - Show season, round, and format.
  - For completed matches, show the match's winner.
  - Allow administrators to update the match's teams, games, format, round, season, and winner.
  - Allow administrators to delete matches.
@@ -51,31 +50,17 @@ TODO:
  - Allow the player to sign up for the upcoming season, if any.
  - Allow administrators to verify accounts, ban the player, or make the player an administrator.
  - Link to multi-op.gg or multi-u.gg of all accounts.
-  - Potentially display recent games on-site later.
-- Branding:
- - Light theme.
- - Review color palette to ensure that it meets the WCAG AAA standard.
- - Request a 32x32 favicon and variable Google fonts.
- - Update site to match new branding.
-  - Update topnav submark image.
-  - Update default image blur data.
+  - Potentially display recent (non-GCS) games on-site later.
 - Miscellaneous:
- - Combine database queries where possible and faster (i.e. with inner joins).
  - Discord integration.
- - Mobile support.
  - Draft page.
  - Restrict PUUIDs that are allowed to join games.
  - Inhouse integration.
  - 404 page.
  - Player reporting system.
  - Delete this file.
- - Metadata (including OGP images) on every page.
  - Set match (and potentially season) winners if necessary when creating game results.
- - Display form error messages instead of crashing (`useActionState`).
  - Allow some forms to be submitted on change.
- - Wrap similar UI elements into more shared components.
-  - "Blobs."
-  - "Blob" sections.
-  - More Sass code sharing via Sass' `@extend`.
  - Update to use the tournament API instead of the tournament stub API.
  - Automatically mark first-added account as primary.
+ - Light theme.

@@ -5,7 +5,6 @@ $height: 80px;
 
 nav.topnav {
 	// Fixed-size bar.
-	background-color: variables.$fg-color;
 	height: $height;
 
 	// Make text bigger within the navigation bar.
@@ -18,7 +17,7 @@ nav.topnav {
 		padding: 0px;
 		list-style-type: none;
 
-		// Take up the entire navigation bar.
+		// Take up the entire height of the navigation bar.
 		height: 100%;
 
 		// List elements using flexbox.
@@ -27,20 +26,29 @@ nav.topnav {
 		// List items take up entire height due to flexbox stretch.
 		& > li {
 			// Remove default list item styling.
-			display: inline-block;
+			display: block;
 
-			// Don't show marked elements on mobile.
-			@include mixins.is-mobile using ($is-mobile) {
-				@if $is-mobile {
-					&.hide-on-mobile {
-						display: none;
-					}
-				}
-			}
+			// Take up the entire height of the navigation bar.
+			height: 100%;
 
 			// Highlight list items on hover.
 			&:hover {
-				background-color: variables.$bg-color;
+				background-color: variables.$fg-color;
+			}
+
+			// Uniform padding for children.
+			$padding: 0px 16px;
+
+			& > * {
+				// Ensure that all children take up the entire height of the navigation bar.
+				height: 100%;
+
+				// Apply horizontal padding to all children.
+				padding: $padding;
+
+				// Center content vertically within children.
+				display: flex;
+				align-items: center;
 			}
 
 			// Allow some elements to be right-aligned.
@@ -48,49 +56,33 @@ nav.topnav {
 				margin-left: auto;
 			}
 
-			* {
-				// Remove element-specific styling from list item contents (especially anchors and buttons).
+			// Remove element-specific styling from anchors.
+			& > a {
 				text-decoration: none;
-				border: none;
-				border-radius: 0px;
-				font-size: 1em;
+				color: variables.$text-color;
 
-				// Always use the same colors as the list item so that hovering displays properly.
-				background-color: inherit;
-				color: inherit;
-
-				// Always take up the entire navigation bar height.
-				display: inline-block;
-				height: 100%;
+				// Apply a size to SVG elements (the logo).
+				& > svg {
+					height: 80%;
+				}
 			}
 
-			// Special case for images - otherwise they'll use their full size.
-			img {
-				width: auto;
-				height: 50%;
-			}
-
-			// Clearly indicate clickable elements.
-			a,
-			button,
-			input[type="submit"] {
-				cursor: pointer;
-			}
-
-			// Vertically center contents within top-level list item contents.
-			& > * {
-				display: inline-flex;
-				align-items: center;
+			// For forms (the ones that contain the sign in and sign out buttons), ensure that the submit button takes up the entire form.
+			& > form {
+				// Remove the padding so that it can be applied to the submit button instead.
 				padding: 0px;
 
-				& > * {
-					height: auto; // Don't take up the entire height so that visible element is centered.
-					padding: variables.$normal-pad;
-				}
-
-				// Special case for forms with buttons - otherwise the clickable part will be smaller than the display area.
 				& > input[type="submit"] {
+					// Ensure that the submit button takes up the entire height of the navigation bar.
 					height: 100%;
+
+					// Apply the padding to the submit button instead.
+					padding: $padding;
+
+					// Remove element-specific styling from submit buttons.
+					border: none;
+					background-color: inherit;
+					cursor: pointer;
 				}
 			}
 		}

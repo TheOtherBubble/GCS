@@ -1,53 +1,29 @@
-@use "../../styles/variables";
+@use "card.module.scss";
+@use "../../styles/blob.module.scss";
 
-a.container {
-	// Replace default link styling.
-	color: variables.$text-color;
-	text-decoration: none;
+a.player-card {
+	@extend .card;
 
-	// Make prettier to display.
-	font-size: 1.5em;
-	overflow: hidden;
-	display: inline-block;
+	// Cover the entire background with the player's selected champion skin splash art.
+	background-size: cover;
 
-	// Shape.
-	$padding: variables.$normal-pad;
-	$width: min(600px, calc(100% - variables.$normal-pad * 2));
-	aspect-ratio: 5 / 1; // Aspect ratio will be reduced if a background image is loaded.
-	width: $width;
-	border-radius: variables.$normal-radius;
-	padding: $padding;
-
-	// Background.
-	background-color: variables.$fg-color; // Goes behind the background image, which is set from JavaScript.
-	background-size: calc($width + 2 * $padding);
-
-	* {
-		margin: 0px;
-	}
-
-	h1,
-	h2,
-	h3,
-	h4,
-	h5,
-	h6,
-	p {
-		text-align: left;
-	}
-
+	// Place the content in a transparent blob
 	& > div {
+		@extend .blob;
+
+		// Make the blob be only as large as it needs to be to contain its content.
 		display: inline-block;
-		border-radius: variables.$normal-radius;
-		padding: variables.$normal-pad;
+
+		// Make the blob transparent.
 		background-color: #00000080;
 
+		// Align the ranked emblem with the player's name.
 		& > h3 > img {
 			display: inline-block;
 			vertical-align: top;
 			width: auto;
 			height: 1.5em;
-			padding-left: variables.$normal-pad;
+			padding-left: 16px;
 		}
 	}
 }

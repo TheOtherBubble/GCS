@@ -1,38 +1,4 @@
-form.form {
-	// Create a grid with labels on the left and input elements on the right.
-	display: grid;
-	grid-template-columns: 1fr 1fr;
-	gap: 5px;
-
-	// Ensure that most elements within the form have no additional margin or padding.
-	* {
-		margin: 0px;
-		padding: 0px;
-	}
-
-	// Position labels on the left.
-	& > label {
-		text-align: right;
-		grid-column: 1;
-	}
-
-	// Position input elements on the right.
-	& > input,
-	& > select {
-		grid-column: 2;
-
-		// Add back the default padding on input elements that was removed above.
-		padding: revert;
-	}
-
-	// Allow the header and footer to span the entire form.
-	& > header,
-	& > footer {
-		grid-column: 1 / 3;
-
-		// Display the error message in red.
-		& > p.state {
-			color: red;
-		}
-	}
+// Display the error message in red.
+form.grid-form > footer > p {
+	color: red;
 }

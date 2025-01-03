@@ -1,44 +1,52 @@
-@use "../../../styles/variables";
+@use "../../layout.module.scss" as layout;
 @use "../../../styles/mixins";
+@use "../../../styles/blob.module.scss";
 @use "../../../components/styles/topnav.module.scss" as topnav;
 
 div.content {
-	// Hide some sections on mobile devices.
-	@include mixins.is-mobile using ($is-mobile) {
-		@if $is-mobile {
-			.hide-on-mobile {
-				display: none;
-			}
+	// List configuration panels vertically.
+	& > div.info > div {
+		@extend .list;
+
+		// Display configuration forms as blobs.
+		form {
+			@extend .blob;
 		}
 	}
 
-	div.round > a {
-		// Horizontal margin already applied by columns.
-		margin: variables.$normal-gap 0px;
-		width: calc(100% - variables.$normal-pad * 2);
+	// List rounds vertically.
+	& > div.schedule {
+		@extend .list;
+
+		// List match cards within rounds vertically.
+		& > div {
+			@extend .blob-section;
+		}
 	}
 
+	// On desktop devices, use a three-column format to display the information, schedule, and leaderboards.
 	@include mixins.is-not-mobile using ($is-not-mobile) {
 		@if $is-not-mobile {
+			// Make the schedule column larger than the others.
 			display: grid;
 			grid-template-columns: 1fr 2fr 1fr;
-			gap: variables.$normal-gap;
+			gap: 10px;
 
-			& > div.config,
+			// Make the information and leaderboards columns sticky so that only the schedule scrolls with the page.
+			& > div.info,
 			& > div.leaderboards {
-				// Don't scroll with screen.
-				align-self: start;
+				// Don't scroll with the page.
 				position: sticky;
-				top: topnav.$height + variables.$normal-gap;
+				top: topnav.$height + layout.$margin;
 
 				// Ensure that all content can still be accessed.
 				overflow: auto;
-				max-height: calc(100vh - topnav.$height - variables.$normal-gap * 2);
+				max-height: calc(100vh - topnav.$height - layout.$margin * 2);
+			}
 
-				// Increase font size within leaderboards.
-				& > ol {
-					font-size: 1.5em;
-				}
+			// Increase font size within leaderboards.
+			& > div.leaderboards > ol {
+				font-size: 2em;
 			}
 		}
 	}

@@ -43,47 +43,34 @@ export default function GameCard({
 	if (!gameResult) {
 		return (
 			<a
-				className={multiclass(className, style["container"])}
+				className={multiclass(className, style["not-done"])}
 				href={getGameUrl(game)}
 				{...props}
 			>
-				<h2 className={style["center"]}>{`Game #${game.id.toString()}`}</h2>
+				<h2>{`Game #${game.id.toString()}`}</h2>
 			</a>
 		);
 	}
 
-	if (!teamGameResults) {
+	if (!teamGameResults || !playerGameResults) {
 		return (
 			<a
-				className={multiclass(className, style["container"])}
+				className={multiclass(className, style["not-done"])}
 				href={getGameUrl(game)}
 				{...props}
 			>
-				<div className={style["center"]}>
-					<h2>{gameResult.name}</h2>
-					<p>{`${gameResult.map} - ${gameResult.mode} - ${gameResult.type}`}</p>
-					<p>{`Patch ${gameResult.version}`}</p>
-				</div>
+				<h2>{gameResult.name}</h2>
 			</a>
 		);
-	}
-
-	if (!playerGameResults) {
-		<a
-			className={multiclass(className, style["container"])}
-			href={getGameUrl(game)}
-			{...props}
-		>
-			<p>{"Coming soon..."}</p>
-		</a>;
 	}
 
 	return (
 		<a
-			className={multiclass(className, style["container"])}
+			className={multiclass(className, style["done"])}
 			href={getGameUrl(game)}
 			{...props}
 		>
+			<p>{"Coming soon..."}</p>
 			<p>{"Coming soon..."}</p>
 		</a>
 	);
