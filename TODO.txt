@@ -47,7 +47,7 @@ TODO:
  - For games in a match, allow administrators to remove the game from the match. If necessary, generate a new game in that match when this happens.
 - Player page:
  - Show Discord account, stats, and seasons played and won. Link to Twitch and YouTube.
- - Allow the player and administrators to update background, biography, name, and Twitch and YouTube accounts.
+ - Allow the player and administrators to update Twitch and YouTube accounts.
  - Allow the player to sign up for the upcoming season, if any.
  - Allow administrators to ban the player or make the player an administrator.
  - Link to multi-op.gg or multi-u.gg of all accounts.

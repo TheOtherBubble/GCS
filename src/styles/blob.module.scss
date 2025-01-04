@@ -25,7 +25,8 @@ form.blob {
 
 	// Position input elements on the right.
 	& > input,
-	& > select {
+	& > select,
+	& > textarea {
 		grid-column: 2;
 
 		// Add back the default padding on input elements that was removed above.

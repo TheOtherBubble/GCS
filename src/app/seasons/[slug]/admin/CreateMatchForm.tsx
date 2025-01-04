@@ -58,7 +58,7 @@ export default function CreateMatchForm({
 				<h3>{"Create Match"}</h3>
 			</header>
 			<label htmlFor={blueTeamIdId}>{"Blue team"}</label>
-			<select id={blueTeamIdId} name={"blueTeamId"} required>
+			<select id={blueTeamIdId} name="blueTeamId" required>
 				{teams.map((team) => (
 					<option value={team.id} key={team.id}>
 						{team.name}
@@ -66,7 +66,7 @@ export default function CreateMatchForm({
 				))}
 			</select>
 			<label htmlFor={formatId}>{"Format"}</label>
-			<select id={formatId} name={"format"} defaultValue={"Best of 3"} required>
+			<select id={formatId} name="format" defaultValue="Best of 3" required>
 				{matchFormatEnum.enumValues.map((format) => (
 					<option value={format} key={format}>
 						{format}

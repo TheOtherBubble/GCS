@@ -99,6 +99,8 @@ export default function AddAccountForm({
 				id={gameNameAndTagLineId}
 				name="gameNameAndTagLine"
 				placeholder="Lakuna#TAU3"
+				maxLength={16 + 1 + 5}
+				required
 			/>
 			<Submit value="Add" />
 		</Form>

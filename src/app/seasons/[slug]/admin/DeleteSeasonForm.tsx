@@ -53,6 +53,7 @@ export default function DeleteSeasonForm({
 				id={safeguardId}
 				name="safeguard"
 				placeholder="CONFIRM"
+				required
 			/>
 			<Submit value="Delete" />
 		</Form>

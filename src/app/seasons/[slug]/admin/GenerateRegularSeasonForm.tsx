@@ -97,7 +97,7 @@ export default function GenerateRegularSeasonForm({
 				<h3>{"Generate Regular Season"}</h3>
 			</header>
 			<label htmlFor={formatId}>{"Format"}</label>
-			<select id={formatId} name={"format"} defaultValue={"Best of 3"} required>
+			<select id={formatId} name="format" defaultValue="Best of 3" required>
 				{matchFormatEnum.enumValues.map((format) => (
 					<option value={format} key={format}>
 						{format}
@@ -111,6 +111,7 @@ export default function GenerateRegularSeasonForm({
 				name="rounds"
 				min={1}
 				defaultValue={2}
+				required
 			/>
 			<Submit value="Generate" />
 		</Form>

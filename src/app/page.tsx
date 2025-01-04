@@ -16,6 +16,12 @@ export default function Page() {
 					"The Gauntlet Championship Series isn't endorsed by Riot Games and doesn't reflect the views or opinions of Riot Games or anyone officially involved in producing or managing Riot Games properties. Riot Games, and all associated properties are trademarks or registered trademarks of Riot Games, Inc."
 				}
 			</p>
+			<p>
+				{
+					// This notice must be included in a clear and conspicuous manner on the competition website. See https://developer.riotgames.com/policies/na-tournaments.
+					"This competition is not affiliated with or sponsored by Riot Games, Inc. or League of Legends Esports."
+				}
+			</p>
 		</>
 	);
 }

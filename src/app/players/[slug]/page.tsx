@@ -7,6 +7,8 @@ import Image from "components/Image";
 import type { Metadata } from "next";
 import type PageProps from "types/PageProps";
 import UpdateAccountsForm from "./UpdateAccountsForm";
+import UpdatePlayerForm from "./UpdatePlayerForm";
+import UpdateSkinForm from "./UpdateSkinForm";
 import { auth } from "db/auth";
 import getAccountsByPlayer from "db/getAccountsByPlayer";
 import getBackgroundImageUrl from "util/getBackgroundImageUrl";
@@ -64,10 +66,21 @@ export default async function Page(props: PageProps<PlayersPageParams>) {
 						<AccountCard key={account.accountId} account={account} />
 					))}
 					<UpdateAccountsForm player={player} />
+					{isOwner && (
+						<>
+							<AddAccountForm player={player} />
+							<UpdatePlayerForm player={player} />
+							{player.backgroundChampionId && (
+								<UpdateSkinForm
+									player={player}
+									backgroundChampionId={player.backgroundChampionId}
+								/>
+							)}
+						</>
+					)}
 					{session?.user?.isAdministator && (
 						<ForceVerifyAccountsForm player={player} />
 					)}
-					{isOwner && <AddAccountForm player={player} />}
 				</div>
 				<div>
 					<header>
