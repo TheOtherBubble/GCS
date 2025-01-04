@@ -1,5 +1,5 @@
 import Image from "./Image";
-import type { JSX } from "react";
+import type { LinkProps } from "./Link";
 import type { Match } from "types/db/Match";
 import type { Team } from "types/db/Team";
 import type { TeamGameResult } from "types/db/TeamGameResult";
@@ -11,8 +11,7 @@ import style from "./styles/match-card.module.scss";
  * Properties that can be passed to a match card.
  * @public
  */
-export interface MatchCardProps
-	extends Omit<JSX.IntrinsicElements["a"], "children" | "href"> {
+export interface MatchCardProps extends Omit<LinkProps, "children" | "href"> {
 	/** The match that is represented by the card. */
 	match: Match;
 

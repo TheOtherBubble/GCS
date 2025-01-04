@@ -1,5 +1,5 @@
 import type { Account } from "types/db/Account";
-import type { JSX } from "react";
+import type { LinkProps } from "./Link";
 import type { Player } from "types/db/Player";
 import type { PlayerGameResult } from "types/db/PlayerGameResult";
 import RankedEmblem from "./RankedEmblem";
@@ -15,8 +15,7 @@ import styles from "./styles/player-card.module.scss";
  * Properties that can be passed to a player card.
  * @public
  */
-export interface PlayerCardProps
-	extends Omit<JSX.IntrinsicElements["a"], "children" | "href"> {
+export interface PlayerCardProps extends Omit<LinkProps, "children" | "href"> {
 	/** The player that is represented by the card. */
 	player: Player;
 

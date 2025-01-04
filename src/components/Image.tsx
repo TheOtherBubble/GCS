@@ -32,11 +32,11 @@ export default function Image({ untrusted, ...props }: ImageProps) {
 
 	// Set default properties.
 	props.placeholder ??= "blur";
-	if (props.placeholder === "blur") {
-		if (!defaultBlur.blurDataURL) {
-			throw new Error("Default blur data URL is required.");
-		}
-
+	if (
+		props.placeholder === "blur" &&
+		typeof props.src === "string" &&
+		defaultBlur.blurDataURL
+	) {
 		props.blurDataURL ??= defaultBlur.blurDataURL;
 	}
 

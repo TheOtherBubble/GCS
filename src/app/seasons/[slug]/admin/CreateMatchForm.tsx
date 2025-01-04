@@ -1,5 +1,5 @@
-import { type JSX, useId } from "react";
 import Form from "components/Form";
+import type { FormProps } from "next/form";
 import type { MatchFormat } from "types/db/MatchFormat";
 import type { Season } from "types/db/Season";
 import Submit from "components/Submit";
@@ -9,13 +9,13 @@ import getFormField from "util/getFormField";
 import getSeasonUrl from "util/getSeasonUrl";
 import { matchFormatEnum } from "db/schema";
 import { revalidatePath } from "next/cache";
+import { useId } from "react";
 
 /**
  * Properties that can be passed to a create match form.
  * @public
  */
-export interface CreateMatchFormProps
-	extends Omit<JSX.IntrinsicElements["form"], "action"> {
+export interface CreateMatchFormProps extends Omit<FormProps, "action"> {
 	/** The current season. */
 	season: Season;
 

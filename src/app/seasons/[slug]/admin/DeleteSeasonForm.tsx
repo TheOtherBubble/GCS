@@ -1,18 +1,18 @@
-import { type JSX, useId } from "react";
 import Form from "components/Form";
+import type { FormProps } from "next/form";
 import type { Season } from "types/db/Season";
 import Submit from "components/Submit";
 import deleteSeason from "db/deleteSeason";
 import getFormField from "util/getFormField";
 import getSeasonUrl from "util/getSeasonUrl";
 import { revalidatePath } from "next/cache";
+import { useId } from "react";
 
 /**
  * Properties that can be passed to a delete season form.
  * @public
  */
-export interface DeleteSeasonFormProps
-	extends Omit<JSX.IntrinsicElements["form"], "action"> {
+export interface DeleteSeasonFormProps extends Omit<FormProps, "action"> {
 	/** The current season. */
 	season: Season;
 }

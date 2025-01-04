@@ -1,5 +1,5 @@
 import Image from "./Image";
-import type { JSX } from "react";
+import type { LinkProps } from "./Link";
 import type { Season } from "types/db/Season";
 import type { Team } from "types/db/Team";
 import getTeamUrl from "util/getTeamUrl";
@@ -10,8 +10,7 @@ import style from "./styles/team-card.module.scss";
  * Properties that can be passed to a team card.
  * @public
  */
-export interface TeamCardProps
-	extends Omit<JSX.IntrinsicElements["a"], "children" | "href"> {
+export interface TeamCardProps extends Omit<LinkProps, "children" | "href"> {
 	/** The team that is represented by the card. */
 	team: Team;
 

@@ -1,19 +1,19 @@
-import { type JSX, useId } from "react";
 import getSeasonUrl, { getSeasonUrlByDecodedSlug } from "util/getSeasonUrl";
 import Form from "components/Form";
+import type { FormProps } from "next/form";
 import type { Season } from "types/db/Season";
 import Submit from "components/Submit";
 import getFormField from "util/getFormField";
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import updateSeason from "db/updateSeason";
+import { useId } from "react";
 
 /**
  * Properties that can be passed to an update season form.
  * @public
  */
-export interface UpdateSeasonFormProps
-	extends Omit<JSX.IntrinsicElements["form"], "action"> {
+export interface UpdateSeasonFormProps extends Omit<FormProps, "action"> {
 	/** The current season. */
 	season: Season;
 }

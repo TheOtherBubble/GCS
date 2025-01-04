@@ -1,18 +1,17 @@
 import Form from "components/Form";
-import { type JSX } from "react";
+import type { FormProps } from "next/form";
 import type { Player } from "types/db/Player";
 import Submit from "components/Submit";
-import getAccountsByPlayer from "db/getAccountsByPlayer";
 import getPlayerUrl from "util/getPlayerUrl";
 import { revalidatePath } from "next/cache";
-import updateAccount from "db/updateAccount";
+import updateAccountsByPlayer from "db/updateAccountsByPlayer";
 
 /**
  * Properties that can be passed to a force verify accounts form.
  * @public
  */
 export interface ForceVerifyAccountsFormProps
-	extends Omit<JSX.IntrinsicElements["form"], "action"> {
+	extends Omit<FormProps, "action"> {
 	/** The player to verify the accounts of. */
 	player: Player;
 }
@@ -32,11 +31,7 @@ export default function ForceVerifyAccountsForm({
 			action={async () => {
 				"use server";
 
-				const accounts = await getAccountsByPlayer(player);
-				for (const account of accounts) {
-					// eslint-disable-next-line no-await-in-loop
-					await updateAccount(account.puuid, { isVerified: true });
-				}
+				await updateAccountsByPlayer(player, { isVerified: true });
 				revalidatePath(getPlayerUrl(player));
 			}}
 			{...props}

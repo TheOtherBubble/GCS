@@ -323,6 +323,26 @@ export const teamPlayerTable = pgTable(
 );
 
 /**
+ * The relation between seasons and players, indicating that a player may be drafted in a season. Not all players in this relation are actually participants in the corresponding season.
+ * @public
+ */
+export const draftPlayerTable = pgTable(
+	"draftPlayer",
+	{
+		// The ID of the player.
+		playerId: varchar({ length: 36 })
+			.references(() => playerTable.id, { onDelete: "cascade" })
+			.notNull(),
+
+		// The ID of the season.
+		seasonId: integer()
+			.references(() => seasonTable.id, { onDelete: "cascade" })
+			.notNull()
+	},
+	(self) => [unique().on(self.playerId, self.seasonId)]
+);
+
+/**
  * Formats that a match can take.
  * @public
  */

@@ -1,18 +1,16 @@
-import { type JSX, useId } from "react";
 import Form from "components/Form";
+import type { FormProps } from "next/form";
 import Submit from "components/Submit";
 import createSeason from "db/createSeason";
 import getFormField from "util/getFormField";
 import makeTournament from "riot/makeTournament";
+import { useId } from "react";
 
 /**
  * Properties that can be passed to a create season form.
  * @public
  */
-export type CreateSeasonFormProps = Omit<
-	JSX.IntrinsicElements["form"],
-	"action"
->;
+export type CreateSeasonFormProps = Omit<FormProps, "action">;
 
 /**
  * A form for creating a season.

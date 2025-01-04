@@ -1,19 +1,24 @@
 import getPlayerUrl, { getPlayerUrlBySlug } from "util/getPlayerUrl";
 import AccountCard from "components/AccountCard";
 import AddAccountForm from "./AddAccountForm";
+import BanPlayerForm from "./BanPlayerForm";
 import ForceVerifyAccountsForm from "./ForceVerifyAccountsForm";
 import GameCard from "components/GameCard";
 import Image from "components/Image";
+import MakeAdminForm from "./MakeAdminForm";
 import type { Metadata } from "next";
 import type PageProps from "types/PageProps";
+import SignUpForm from "./SignUpForm";
 import UpdateAccountsForm from "./UpdateAccountsForm";
 import UpdatePlayerForm from "./UpdatePlayerForm";
 import UpdateSkinForm from "./UpdateSkinForm";
 import { auth } from "db/auth";
 import getAccountsByPlayer from "db/getAccountsByPlayer";
 import getBackgroundImageUrl from "util/getBackgroundImageUrl";
+import getLatestSeason from "db/getLatestSeason";
 import getPlayerBySlug from "db/getPlayerBySlug";
 import getPlayerGameResultsByPlayer from "db/getPlayerGameResultsByPlayer";
+import isDraftPlayerForSeason from "db/isDraftPlayerForSeason";
 import style from "./page.module.scss";
 
 /**
@@ -38,15 +43,14 @@ export default async function Page(props: PageProps<PlayersPageParams>) {
 		return <p>{"Unknown player."}</p>;
 	}
 
-	// Some elements only show to the player who owns the page or to administrators.
 	const session = await auth();
-	const isOwner =
-		session?.user &&
-		(session.user.isAdministator || session.user.id === player.id);
-
 	const accounts = await getAccountsByPlayer(player);
 	const games = await getPlayerGameResultsByPlayer(player);
 	const backgroundImageUrl = getBackgroundImageUrl(player);
+	const latestSeason = await getLatestSeason();
+	const isDraftPlayerForLatestSeason = latestSeason
+		? await isDraftPlayerForSeason(player, latestSeason)
+		: false;
 
 	return (
 		<div className={style["content"]}>
@@ -65,10 +69,12 @@ export default async function Page(props: PageProps<PlayersPageParams>) {
 					{accounts.map((account) => (
 						<AccountCard key={account.accountId} account={account} />
 					))}
-					<UpdateAccountsForm player={player} />
-					{isOwner && (
+					<UpdateAccountsForm player={player} accounts={accounts} />
+					{/* eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing */}
+					{(session?.user?.isAdministator ||
+						session?.user?.id === player.id) && (
 						<>
-							<AddAccountForm player={player} />
+							<AddAccountForm player={player} accounts={accounts} />
 							<UpdatePlayerForm player={player} />
 							{player.backgroundChampionId && (
 								<UpdateSkinForm
@@ -76,10 +82,21 @@ export default async function Page(props: PageProps<PlayersPageParams>) {
 									backgroundChampionId={player.backgroundChampionId}
 								/>
 							)}
+							{!isDraftPlayerForLatestSeason && latestSeason && (
+								<SignUpForm
+									player={player}
+									season={latestSeason}
+									accounts={accounts}
+								/>
+							)}
 						</>
 					)}
 					{session?.user?.isAdministator && (
-						<ForceVerifyAccountsForm player={player} />
+						<>
+							<ForceVerifyAccountsForm player={player} />
+							<BanPlayerForm player={player} />
+							{!player.isAdministator && <MakeAdminForm player={player} />}
+						</>
 					)}
 				</div>
 				<div>

@@ -1,7 +1,6 @@
+import Link, { type LinkProps } from "./Link";
 import type { Account } from "types/db/Account";
 import Image from "./Image";
-import type { JSX } from "react";
-import Link from "./Link";
 import RankedEmblem from "./RankedEmblem";
 import getProfileIconUrl from "riot/getProfileIconUrl";
 import multiclass from "util/multiclass";
@@ -11,8 +10,7 @@ import style from "./styles/account-card.module.scss";
  * Properties that can be passed to an account card.
  * @public
  */
-export interface AccountCardProps
-	extends Omit<JSX.IntrinsicElements["a"], "children" | "href"> {
+export interface AccountCardProps extends Omit<LinkProps, "children" | "href"> {
 	/** The account that is represented by the card. */
 	account: Account;
 }

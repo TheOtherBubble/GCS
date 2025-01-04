@@ -1,5 +1,5 @@
-import { type JSX, useId } from "react";
 import Form from "components/Form";
+import type { FormProps } from "next/form";
 import type { Season } from "types/db/Season";
 import Submit from "components/Submit";
 import createTeam from "db/createTeam";
@@ -7,13 +7,13 @@ import domain from "util/domain";
 import getFormField from "util/getFormField";
 import getSeasonUrl from "util/getSeasonUrl";
 import { revalidatePath } from "next/cache";
+import { useId } from "react";
 
 /**
  * Properties that can be passed to a create team form.
  * @public
  */
-export interface CreateTeamFormProps
-	extends Omit<JSX.IntrinsicElements["form"], "action"> {
+export interface CreateTeamFormProps extends Omit<FormProps, "action"> {
 	/** The current season. */
 	season: Season;
 }

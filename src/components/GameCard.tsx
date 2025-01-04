@@ -1,6 +1,6 @@
 import type { Game } from "types/db/Game";
 import type { GameResult } from "types/db/GameResult";
-import type { JSX } from "react";
+import type { LinkProps } from "./Link";
 import type { PlayerGameResult } from "types/db/PlayerGameResult";
 import type { TeamGameResult } from "types/db/TeamGameResult";
 import getGameUrl from "util/getGameUrl";
@@ -11,8 +11,7 @@ import style from "./styles/game-card.module.scss";
  * Properties that can be passed to a game card.
  * @public
  */
-export interface GameCardProps
-	extends Omit<JSX.IntrinsicElements["a"], "children" | "href"> {
+export interface GameCardProps extends Omit<LinkProps, "children" | "href"> {
 	/** The game that is represented by the card. */
 	game: Game;
 

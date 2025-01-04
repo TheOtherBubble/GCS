@@ -19,6 +19,7 @@ TODO:
  - Update to match the new rulebook.
 - Season page:
  - Show leaderboards (KDA and damage).
+ - Split up standings by pool.
  - Show the playoffs bracket once the playoffs stage begins.
  - Add an admin tool for generating the playoffs bracket from the current top 8 teams. Maybe do this automatically after the last regular season game ends.
  - Scroll to the next unfinished round when opening the page.
@@ -48,18 +49,17 @@ TODO:
 - Player page:
  - Show Discord account, stats, and seasons played and won. Link to Twitch and YouTube.
  - Allow the player and administrators to update Twitch and YouTube accounts.
- - Allow the player to sign up for the upcoming season, if any.
- - Allow administrators to ban the player or make the player an administrator.
+ - Allow administrators to merge players in case a Discord account needs to be changed.
+ - Allow the player and administrators to remove accounts.
  - Link to multi-op.gg or multi-u.gg of all accounts.
   - Potentially display recent (non-GCS) games on-site later.
 - Miscellaneous:
  - Discord integration.
- - Draft page.
+ - Draft page (refresh/revalidate every few seconds with `useEffect`).
  - Restrict PUUIDs that are allowed to join games.
  - Inhouse integration.
  - 404 page.
  - Player reporting system.
- - Delete this file.
  - Set match (and potentially season) winners if necessary when creating game results.
  - Allow some forms to be submitted on change.
  - Update to use the tournament API instead of the tournament stub API.

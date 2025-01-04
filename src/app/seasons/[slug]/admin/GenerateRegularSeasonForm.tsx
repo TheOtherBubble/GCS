@@ -1,5 +1,5 @@
-import { type JSX, useId } from "react";
 import Form from "components/Form";
+import type { FormProps } from "next/form";
 import type { InsertMatch } from "types/db/Match";
 import type { MatchFormat } from "types/db/MatchFormat";
 import type { Season } from "types/db/Season";
@@ -10,13 +10,13 @@ import getFormField from "util/getFormField";
 import getSeasonUrl from "util/getSeasonUrl";
 import { matchFormatEnum } from "db/schema";
 import { revalidatePath } from "next/cache";
+import { useId } from "react";
 
 /**
  * Properties that can be passed to a seed season form.
  * @public
  */
-export interface SeedSeasonFormProps
-	extends Omit<JSX.IntrinsicElements["form"], "action"> {
+export interface SeedSeasonFormProps extends Omit<FormProps, "action"> {
 	/** The current season. */
 	season: Season;
 

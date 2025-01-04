@@ -1,25 +1,28 @@
-import { type JSX, useId } from "react";
+import type { Account } from "types/db/Account";
 import Form from "components/Form";
+import type { FormProps } from "next/form";
 import type { Player } from "types/db/Player";
 import QueueType from "types/riot/QueueType";
 import Submit from "components/Submit";
 import createAccount from "db/createAccount";
 import getAccountByGameName from "riot/getAccountByGameName";
-import getAccountsByPlayer from "db/getAccountsByPlayer";
 import getFormField from "util/getFormField";
 import getLeagueEntriesBySummonerId from "riot/getLeagueEntriesBySummonerId";
 import getPlayerUrl from "util/getPlayerUrl";
 import getSummonerByPuuid from "riot/getSummonerByPuuid";
 import { revalidatePath } from "next/cache";
+import { useId } from "react";
 
 /**
  * Properties that can be passed to an add account form.
  * @public
  */
-export interface AddAccountFormProps
-	extends Omit<JSX.IntrinsicElements["form"], "action"> {
+export interface AddAccountFormProps extends Omit<FormProps, "action"> {
 	/** The player to add the account to. */
 	player: Player;
+
+	/** The player's existing accounts. */
+	accounts: Account[];
 }
 
 /**
@@ -30,6 +33,7 @@ export interface AddAccountFormProps
  */
 export default function AddAccountForm({
 	player,
+	accounts,
 	...props
 }: AddAccountFormProps) {
 	const gameNameAndTagLineId = useId();
@@ -38,12 +42,12 @@ export default function AddAccountForm({
 		<Form
 			action={async (form) => {
 				"use server";
-				const gameNameAndTagLine = getFormField(
+
+				const [gameName, tagLine] = getFormField(
 					form,
 					"gameNameAndTagLine",
 					true
-				);
-				const [gameName, tagLine] = gameNameAndTagLine.split("#");
+				).split("#");
 				if (!gameName || !tagLine) {
 					throw new Error("Malformed game name and/or tag line.");
 				}
@@ -60,8 +64,6 @@ export default function AddAccountForm({
 				if (!soloLeagueEntry) {
 					throw new Error("Failed to retrieve ranked solo 5v5 league entry.");
 				}
-
-				const accounts = await getAccountsByPlayer(player);
 
 				// Ensure that the profile icon ID to verify the account is not the summoner's current profile icon ID.
 				const starterPackMaxId = 28;

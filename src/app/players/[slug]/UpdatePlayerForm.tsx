@@ -1,7 +1,7 @@
-import { type JSX, useId } from "react";
 import getPlayerUrl, { getPlayerUrlBySlug } from "util/getPlayerUrl";
 import ChampionList from "./ChampionList";
 import Form from "components/Form";
+import type { FormProps } from "next/form";
 import type { Player } from "types/db/Player";
 import type { PlayerRole } from "types/db/PlayerRole";
 import Submit from "components/Submit";
@@ -10,13 +10,13 @@ import { playerRoleEnum } from "db/schema";
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import updatePlayer from "db/updatePlayer";
+import { useId } from "react";
 
 /**
  * Properties that can be passed to an update player form.
  * @public
  */
-export interface UpdatePlayerFormProps
-	extends Omit<JSX.IntrinsicElements["form"], "action"> {
+export interface UpdatePlayerFormProps extends Omit<FormProps, "action"> {
 	/** The current player. */
 	player: Player;
 }
@@ -41,21 +41,20 @@ export default function UpdatePlayerForm({
 		<Form
 			action={async (form) => {
 				"use server";
+
 				const displayName = getFormField(form, "displayName");
-				const biography = getFormField(form, "biography");
-				const primaryRole = getFormField(form, "primaryRole") as
-					| PlayerRole
-					| undefined;
-				const secondaryRole = getFormField(form, "secondaryRole") as
-					| PlayerRole
-					| undefined;
 				const backgroundChampionId = getFormField(form, "backgroundChampionId");
 				await updatePlayer(player.id, {
 					backgroundChampionId,
-					biography,
+					backgroundSkinNumber: backgroundChampionId ? 0 : void 0,
+					biography: getFormField(form, "biography"),
 					displayName,
-					primaryRole,
-					secondaryRole
+					primaryRole: getFormField(form, "primaryRole") as
+						| PlayerRole
+						| undefined,
+					secondaryRole: getFormField(form, "secondaryRole") as
+						| PlayerRole
+						| undefined
 				});
 				if (displayName) {
 					redirect(getPlayerUrlBySlug(displayName));
@@ -107,12 +106,6 @@ export default function UpdatePlayerForm({
 				id={backgroundChampionIdId}
 				name="backgroundChampionId"
 				defaultValue={player.backgroundChampionId ?? void 0}
-			/>
-			<input
-				type="text"
-				id={backgroundChampionIdId}
-				name="backgroundChampionId"
-				maxLength={0x20}
 			/>
 			<Submit value="Update" />
 		</Form>
