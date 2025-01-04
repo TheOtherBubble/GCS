@@ -1,4 +1,7 @@
+import { BsDiscord, BsTwitch, BsYoutube } from "react-icons/bs";
+import Link from "components/Link";
 import type { Metadata } from "next";
+import style from "./page.module.scss";
 
 /**
  * The landing page.
@@ -7,8 +10,47 @@ import type { Metadata } from "next";
  */
 export default function Page() {
 	return (
-		<>
+		<article className={style["content"]}>
 			<h1>{"Gauntlet Championship Series"}</h1>
+			<p className={style["center"]}>{"Promotional video coming soon!"}</p>
+			<div>
+				<Link href="https://discord.gg/gcsleague">
+					<BsDiscord />
+					{"Discord"}
+				</Link>
+				<Link href="https://www.twitch.tv/gcsleague">
+					<BsTwitch />
+					{"Twitch"}
+				</Link>
+				<Link href="https://www.youtube.com/@GauntletChampionshipSeries">
+					<BsYoutube />
+					{"YouTube"}
+				</Link>
+			</div>
+			<h2>{"Welcome to the Gauntlet Championship Series"}</h2>
+			<p>
+				{
+					"The Gauntlet Championship Series (GCS) is a League of Legends tournament and online community that puts an emphasis on uniting like-minded players of all skill levels together in a competitive environment. It is through this process that we are able to not only ensure that you will make friends in our community, but also improve as you play with us."
+				}
+			</p>
+			<h2>{"What is GCS?"}</h2>
+			<p>
+				{
+					"GCS is an organization that hosts draft tournaments for League of Legends. Our emphasis is on ensuring that, as you compete, you become united with your team, playing the game at the highest level of team play possible. Our approach to this is twofold:"
+				}
+			</p>
+			<ul>
+				<li>
+					{
+						"Ensure that teams get enough time in the regular season to come together and form a team identity."
+					}
+				</li>
+				<li>
+					{
+						"Ensure that enough teams make it to playoffs that all have a chance at victory, regardless of how rocky the season starts may be."
+					}
+				</li>
+			</ul>
 			<hr />
 			<p>
 				{
@@ -22,7 +64,7 @@ export default function Page() {
 					"This competition is not affiliated with or sponsored by Riot Games, Inc. or League of Legends Esports."
 				}
 			</p>
-		</>
+		</article>
 	);
 }
 
