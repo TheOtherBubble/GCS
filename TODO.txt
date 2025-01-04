@@ -12,8 +12,7 @@ TODO:
  - For current games, indicate if any involved players' streams are live.
  - Add the ability to display just one player's stats really big (similar to u.gg or op.gg) for use on player match histories.
 - Landing page:
- - Get video and blurb from Nerve; add them.
- - Links to Discord, Twitch, and YouTube.
+ - Get video from Nerve and add it.
  - Twitch stream embed if live.
 - Rulebook page:
  - Update to match the new rulebook.

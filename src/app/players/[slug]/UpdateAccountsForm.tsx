@@ -38,15 +38,19 @@ export default async function UpdateAccountsForm({
 	const accountDatas = await Promise.all(
 		accounts.map(async (account) => {
 			const platform = "NA1";
-			const summonerDto = await getSummonerByPuuid(account.puuid, platform);
-			const soloQueueDto = (
-				await getLeagueEntriesBySummonerId(summonerDto.id, platform)
-			).find((leagueEntry) => leagueEntry.queueType === QueueType.SOLO);
-			if (!soloQueueDto) {
-				throw new Error("Failed to retrieve ranked solo 5v5 league entry.");
-			}
+			try {
+				const summonerDto = await getSummonerByPuuid(account.puuid, platform);
+				const soloQueueDto = (
+					await getLeagueEntriesBySummonerId(summonerDto.id, platform)
+				).find((leagueEntry) => leagueEntry.queueType === QueueType.SOLO);
+				if (!soloQueueDto) {
+					throw new Error("Failed to retrieve ranked solo 5v5 league entry.");
+				}
 
-			return { account, platform, soloQueueDto, summonerDto };
+				return { account, platform, soloQueueDto, summonerDto };
+			} catch {
+				return void 0;
+			}
 		})
 	);
 
@@ -55,12 +59,13 @@ export default async function UpdateAccountsForm({
 			action={async () => {
 				"use server";
 
-				for (const {
-					account,
-					platform,
-					soloQueueDto,
-					summonerDto
-				} of accountDatas) {
+				for (const accountData of accountDatas) {
+					if (!accountData) {
+						continue;
+					}
+
+					const { account, platform, soloQueueDto, summonerDto } = accountData;
+
 					// eslint-disable-next-line no-await-in-loop
 					await updateAccount(account.puuid, {
 						cacheDate: new Date().toISOString().substring(0, 10),
