@@ -1,0 +1,32 @@
+@use "card.module.scss";
+
+a.account-card {
+	@extend .card;
+
+	// Reduce font size from card default.
+	font-size: 1.5em;
+
+	// Create columns for the team logo and details.
+	display: grid;
+	grid-template-columns: 1fr 2fr;
+	gap: 10px;
+	align-items: center;
+
+	// Ensure that the team logo is sized properly.
+	& > img {
+		max-width: 100%;
+		max-height: 80%;
+
+		// Maintain the logo's aspect ratio.
+		width: auto;
+		height: auto;
+
+		// Align the logo towards the center (to the right).
+		justify-self: end;
+	}
+
+	// Align the team details towards the center (to the left).
+	& > div {
+		justify-self: start;
+	}
+}

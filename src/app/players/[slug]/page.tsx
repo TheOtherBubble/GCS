@@ -1,11 +1,18 @@
 import getPlayerUrl, { getPlayerUrlBySlug } from "util/getPlayerUrl";
+import AccountCard from "components/AccountCard";
+import AddAccountForm from "./AddAccountForm";
+import ForceVerifyAccountsForm from "./ForceVerifyAccountsForm";
+import GameCard from "components/GameCard";
+import Image from "components/Image";
 import type { Metadata } from "next";
 import type PageProps from "types/PageProps";
-import PlayerCard from "components/PlayerCard";
+import UpdateAccountsForm from "./UpdateAccountsForm";
+import { auth } from "db/auth";
 import getAccountsByPlayer from "db/getAccountsByPlayer";
+import getBackgroundImageUrl from "util/getBackgroundImageUrl";
 import getPlayerBySlug from "db/getPlayerBySlug";
 import getPlayerGameResultsByPlayer from "db/getPlayerGameResultsByPlayer";
-import getTeamsByPlayer from "db/getTeamsByPlayer";
+import style from "./page.module.scss";
 
 /**
  * Parameters that are passed to a player page.
@@ -29,17 +36,57 @@ export default async function Page(props: PageProps<PlayersPageParams>) {
 		return <p>{"Unknown player."}</p>;
 	}
 
+	// Some elements only show to the player who owns the page or to administrators.
+	const session = await auth();
+	const isOwner =
+		session?.user &&
+		(session.user.isAdministator || session.user.id === player.id);
+
 	const accounts = await getAccountsByPlayer(player);
 	const games = await getPlayerGameResultsByPlayer(player);
-	const teams = await getTeamsByPlayer(player);
+	const backgroundImageUrl = getBackgroundImageUrl(player);
 
 	return (
-		<PlayerCard
-			player={player}
-			accounts={accounts}
-			games={games.map((game) => game.playerGameResult)}
-			teams={teams}
-		/>
+		<div className={style["content"]}>
+			{backgroundImageUrl && (
+				<Image alt="" src={backgroundImageUrl} width={1215} height={717} />
+			)}
+			<header>
+				<h1>{player.displayName ?? player.name}</h1>
+				{player.biography && <p>{player.biography}</p>}
+			</header>
+			<div>
+				<div>
+					<header>
+						<h2>{"Accounts"}</h2>
+					</header>
+					{accounts.map((account) => (
+						<AccountCard key={account.accountId} account={account} />
+					))}
+					<UpdateAccountsForm player={player} />
+					{session?.user?.isAdministator && (
+						<ForceVerifyAccountsForm player={player} />
+					)}
+					{isOwner && <AddAccountForm player={player} />}
+				</div>
+				<div>
+					<header>
+						<h2>{"Match History"}</h2>
+					</header>
+					{games.map(
+						({ game, gameResult, teamGameResult, playerGameResult }) => (
+							<GameCard
+								key={game.id}
+								game={game}
+								gameResult={gameResult}
+								teamGameResults={[teamGameResult]}
+								playerGameResults={[playerGameResult]}
+							/>
+						)
+					)}
+				</div>
+			</div>
+		</div>
 	);
 }
 

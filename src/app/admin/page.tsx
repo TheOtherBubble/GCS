@@ -16,7 +16,7 @@ export default async function Page() {
 
 	return (
 		<>
-			<h1>{"Administrator Page"}</h1>
+			<h1>{"Administrator Tools"}</h1>
 			<hr />
 			<div className={style["widgets"]}>
 				<CreateSeasonForm />

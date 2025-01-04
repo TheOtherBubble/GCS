@@ -12,7 +12,7 @@ import style from "./styles/game-card.module.scss";
  * @public
  */
 export interface GameCardProps
-	extends Omit<JSX.IntrinsicElements["a"], "children" | "style" | "href"> {
+	extends Omit<JSX.IntrinsicElements["a"], "children" | "href"> {
 	/** The game that is represented by the card. */
 	game: Game;
 

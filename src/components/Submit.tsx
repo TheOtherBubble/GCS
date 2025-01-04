@@ -7,10 +7,7 @@ import { useFormStatus } from "react-dom";
  * Properties that can be passed to a submit button.
  * @public
  */
-export type SubmitProps = Omit<
-	JSX.IntrinsicElements["input"],
-	"type" | "disabled"
->;
+export type SubmitProps = Omit<JSX.IntrinsicElements["input"], "type">;
 
 /**
  * A button for submitting a form. Automatically disables while the form is pending.
@@ -18,7 +15,9 @@ export type SubmitProps = Omit<
  * @returns The button.
  * @public
  */
-export default function Submit(props: SubmitProps) {
+export default function Submit({ disabled, ...props }: SubmitProps) {
 	const status = useFormStatus();
-	return <input type="submit" disabled={status.pending} {...props} />;
+	return (
+		<input type="submit" disabled={disabled ?? status.pending} {...props} />
+	);
 }

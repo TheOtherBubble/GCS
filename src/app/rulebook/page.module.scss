@@ -2,7 +2,7 @@
 
 article.content {
 	// Increase the font size in the rulebook for ease of reading.
-	font-size: 1.5em;
+	font-size: 1.2em;
 
 	// On desktop devices, limit the rulebook width to 65 characters (ideal for reading).
 	@include mixins.is-not-mobile using ($is-not-mobile) {

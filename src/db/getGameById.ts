@@ -20,7 +20,7 @@ export default async function getGameById(id: number) {
  * @returns The game, if any matches.
  * @public
  */
-export const getGameBySlug = async (slug: string) => {
-	const id = parseInt(slug, 10);
+export const getGameBySlug = async (slug: number | `${number}`) => {
+	const id = typeof slug === "number" ? slug : parseInt(slug, 10);
 	return isNaN(id) ? void 0 : getGameById(id);
 };

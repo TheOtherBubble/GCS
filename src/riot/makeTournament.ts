@@ -1,4 +1,4 @@
-import type Cluster from "types/riot/Cluster";
+import Cluster from "types/riot/Cluster";
 import type TournamentRegistrationParameters from "types/riot/TournamentRegistrationParameters";
 import getRiotApiBaseUrl from "./getRiotApiBaseUrl";
 import getTournamentProvider from "db/getTournamentProvider";
@@ -9,7 +9,7 @@ import riotFetch from "./riotFetch";
  * @param cluster - The cluster to use to make the request.
  * @returns The URL.
  */
-export const getMakeTournamentUrl = (cluster?: Cluster) =>
+export const getMakeTournamentUrl = (cluster = Cluster.AMERICAS) =>
 	new URL("/lol/tournament-stub/v5/tournaments", getRiotApiBaseUrl(cluster))
 		.href;
 

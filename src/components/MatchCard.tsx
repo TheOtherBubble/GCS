@@ -12,7 +12,7 @@ import style from "./styles/match-card.module.scss";
  * @public
  */
 export interface MatchCardProps
-	extends Omit<JSX.IntrinsicElements["a"], "children" | "style" | "href"> {
+	extends Omit<JSX.IntrinsicElements["a"], "children" | "href"> {
 	/** The match that is represented by the card. */
 	match: Match;
 

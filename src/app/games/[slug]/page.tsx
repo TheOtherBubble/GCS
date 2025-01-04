@@ -13,7 +13,7 @@ import getTeamPlayersByPlayer from "db/getTeamPlayersByPlayer";
  */
 export interface GamesPageParams {
 	/** The match's ID (stringified). */
-	slug: string;
+	slug: `${number}`;
 }
 
 /**

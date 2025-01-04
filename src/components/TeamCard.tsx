@@ -11,7 +11,7 @@ import style from "./styles/team-card.module.scss";
  * @public
  */
 export interface TeamCardProps
-	extends Omit<JSX.IntrinsicElements["a"], "children" | "style" | "href"> {
+	extends Omit<JSX.IntrinsicElements["a"], "children" | "href"> {
 	/** The team that is represented by the card. */
 	team: Team;
 

@@ -9,14 +9,14 @@ import getBackgroundImageUrl from "util/getBackgroundImageUrl";
 import getHighestRankedAccount from "util/getHighestRankedAccount";
 import getPlayerUrl from "util/getPlayerUrl";
 import multiclass from "util/multiclass";
-import style from "./styles/player-card.module.scss";
+import styles from "./styles/player-card.module.scss";
 
 /**
  * Properties that can be passed to a player card.
  * @public
  */
 export interface PlayerCardProps
-	extends Omit<JSX.IntrinsicElements["a"], "children" | "style" | "href"> {
+	extends Omit<JSX.IntrinsicElements["a"], "children" | "href"> {
 	/** The player that is represented by the card. */
 	player: Player;
 
@@ -42,24 +42,24 @@ export default function PlayerCard({
 	games,
 	teams,
 	className,
+	style,
 	...props
 }: PlayerCardProps) {
 	const highestRankedAccount = accounts
 		? getHighestRankedAccount(accounts)
 		: void 0;
 	const backgroundImageUrl = getBackgroundImageUrl(player);
+	let finalStyle = style;
+	if (backgroundImageUrl) {
+		finalStyle ??= {};
+		finalStyle.aspectRatio = 3; // Reduce aspect ratio if there is a background image so that more is displayed.
+		finalStyle.backgroundImage = `url(${backgroundImageUrl})`;
+	}
 
 	return (
 		<a
-			className={multiclass(className, style["player-card"])}
-			style={
-				backgroundImageUrl
-					? {
-							aspectRatio: 3, // Reduce aspect ratio if there is a background image so that more is displayed.
-							backgroundImage: `url(${backgroundImageUrl})`
-						}
-					: void 0
-			}
+			className={multiclass(className, styles["player-card"])}
+			style={finalStyle}
 			href={getPlayerUrl(player)}
 			{...props}
 		>

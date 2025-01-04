@@ -391,6 +391,29 @@ export const gameTable = pgTable("game", {
 });
 
 /**
+ * League of Legends platforms.
+ * @public
+ */
+export const platformEnum = pgEnum("platform", [
+	"BR1",
+	"EUN1",
+	"EUW1",
+	"JP1",
+	"KR",
+	"LA1",
+	"LA2",
+	"NA1",
+	"OC1",
+	"TR1",
+	"RU",
+	"PH2",
+	"SG2",
+	"TH2",
+	"TW2",
+	"VN2"
+]);
+
+/**
  * The table of game results, which represent the players and statistics in a completed game. A game result may not correspond to a game if the game result isn't part of a tournament or inhouse (such as games that are just pulled from the Riot API to collect statistics).
  * @public
  */
@@ -416,7 +439,7 @@ export const gameResultTable = pgTable("gameResult", {
 	name: varchar({ length: 0x40 }).notNull(),
 
 	// The ID of the platform that the game was played on.
-	platformId: varchar({ length: 0x40 }).notNull(),
+	platformId: platformEnum().notNull(),
 
 	// The ID of the queue that the game was in.
 	queueId: integer().notNull(),

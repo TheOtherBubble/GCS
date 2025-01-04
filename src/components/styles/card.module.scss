@@ -2,7 +2,7 @@
 @use "../../styles/blob.module.scss";
 
 // Shared styling for all cards.
-a.card {
+.card {
 	@extend .blob;
 
 	// Replace default link styling.

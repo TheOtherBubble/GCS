@@ -1,4 +1,4 @@
-import type Cluster from "types/riot/Cluster";
+import Cluster from "types/riot/Cluster";
 import MapType from "types/riot/MapType";
 import PickType from "types/riot/PickType";
 import SpectatorType from "types/riot/SpectatorType";
@@ -16,7 +16,7 @@ import riotFetch from "./riotFetch";
 export const getMakeTournamentCodesUrl = (
 	count?: number,
 	tournamentId?: number,
-	cluster?: Cluster
+	cluster = Cluster.AMERICAS
 ) => {
 	const url = new URL(
 		"/lol/tournament-stub/v5/codes",

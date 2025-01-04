@@ -28,8 +28,8 @@ export const getTeamsByMatchId = async (id: number) =>
  * @returns The match's teams. Includes the match and the teams.
  * @public
  */
-export const getTeamsByMatchSlug = async (slug: string) =>
-	getTeamsByMatchId(parseInt(slug, 10));
+export const getTeamsByMatchSlug = async (slug: number | `${number}`) =>
+	getTeamsByMatchId(typeof slug === "number" ? slug : parseInt(slug, 10));
 
 /**
  * Get all of a match's teams.

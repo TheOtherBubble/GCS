@@ -1,0 +1,52 @@
+@use "../../../styles/blob.module.scss";
+
+div.content {
+	// List header above accounts/games grid.
+	@extend .list;
+
+	// Place the background image behind other elements.
+	& > img {
+		// Prevent the image from taking up space on the page.
+		position: absolute;
+		z-index: -1;
+		max-width: 100%;
+		max-height: 100%;
+
+		// Maintain aspect ratio.
+		width: auto;
+		height: auto;
+
+		// Center the image.
+		left: 50%;
+		transform: translate(-50%);
+
+		// Fade around the edges.
+		mask:
+			linear-gradient(to bottom, transparent, white, transparent 80%) intersect,
+			linear-gradient(to right, transparent 5%, white, transparent 95%);
+	}
+
+	// Center all text in the header.
+	& > header {
+		text-align: center;
+	}
+
+	// Create a grid with accounts on the left and games on the right.
+	& > div {
+		// Make the games column larger than the accounts column.
+		display: grid;
+		grid-template-columns: 1fr 2fr;
+		gap: 10px;
+		align-items: start;
+
+		// List both accounts and games in blob sections.
+		& > div {
+			@extend .blob-section;
+
+			// Display any forms added to the lists as blobs.
+			& > form {
+				@extend .blob;
+			}
+		}
+	}
+}

@@ -39,6 +39,7 @@ export default function Link({
 	if (
 		!href.startsWith("/") &&
 		!href.startsWith("#") &&
+		!href.startsWith(".") &&
 		!href.startsWith(domain)
 	) {
 		props.target ??= "_blank";

@@ -21,7 +21,7 @@ import style from "./page.module.scss";
  */
 export interface MatchesPageParams {
 	/** The match's ID (stringified). */
-	slug: string;
+	slug: `${number}`;
 }
 
 /**

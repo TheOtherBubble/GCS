@@ -20,7 +20,7 @@ export default async function getMatchById(id: number) {
  * @returns The match, if any matches.
  * @public
  */
-export const getMatchBySlug = async (slug: string) => {
-	const id = parseInt(slug, 10);
+export const getMatchBySlug = async (slug: number | `${number}`) => {
+	const id = typeof slug === "number" ? slug : parseInt(slug, 10);
 	return isNaN(id) ? void 0 : getMatchById(id);
 };

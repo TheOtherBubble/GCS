@@ -10,7 +10,12 @@ export default function Page() {
 		<>
 			<h1>{"Gauntlet Championship Series"}</h1>
 			<hr />
-			<p>{"Coming soon..."}</p>
+			<p>
+				{
+					// This legal boilerplate must be posted in a location that's readily visible to players. See https://developer.riotgames.com/policies/general.
+					"The Gauntlet Championship Series isn't endorsed by Riot Games and doesn't reflect the views or opinions of Riot Games or anyone officially involved in producing or managing Riot Games properties. Riot Games, and all associated properties are trademarks or registered trademarks of Riot Games, Inc."
+				}
+			</p>
 		</>
 	);
 }
