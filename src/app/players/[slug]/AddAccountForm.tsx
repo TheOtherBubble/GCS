@@ -5,11 +5,13 @@ import QueueType from "types/riot/QueueType";
 import Submit from "components/Submit";
 import createAccount from "db/createAccount";
 import getAccountByGameName from "riot/getAccountByGameName";
+import getAccountById from "db/getAccountById";
 import getFormField from "util/getFormField";
 import getLeagueEntriesBySummonerId from "riot/getLeagueEntriesBySummonerId";
 import getPlayerUrl from "util/getPlayerUrl";
 import getSummonerByPuuid from "riot/getSummonerByPuuid";
 import { revalidatePath } from "next/cache";
+import updateAccount from "db/updateAccount";
 import { useId } from "react";
 
 /**
@@ -50,7 +52,29 @@ export default function AddAccountForm({
 					return "Malformed game name and/or tag line.";
 				}
 
+				// Get account details from Riot.
 				const accountDto = await getAccountByGameName(gameName, tagLine);
+
+				// Check if the account is already in the database.
+				const existingAccount = await getAccountById(accountDto.puuid);
+				if (existingAccount) {
+					// Check if this player already has this account.
+					if (existingAccount.playerId === player.id) {
+						return void 0;
+					}
+
+					// Check if this account is already somebody else's.
+					if (existingAccount.isVerified) {
+						return "That's somebody else's account!";
+					}
+
+					// Otherwise, move the account over to this player.
+					await updateAccount(accountDto.puuid, { playerId: player.id });
+					revalidatePath(getPlayerUrl(player));
+					return void 0;
+				}
+
+				// Get summoner details from Riot.
 				const platform = "NA1";
 				const summonerDto = await getSummonerByPuuid(
 					accountDto.puuid,

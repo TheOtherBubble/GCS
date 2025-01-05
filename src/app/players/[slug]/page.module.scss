@@ -1,3 +1,4 @@
+@use "../../../styles/mixins";
 @use "../../../styles/blob.module.scss";
 
 div.content {
@@ -31,11 +32,9 @@ div.content {
 		text-align: center;
 	}
 
-	// Create a grid with accounts on the left and games on the right.
+	// List accounts and games in separate sections.
 	& > div {
-		// Make the games column larger than the accounts column.
 		display: grid;
-		grid-template-columns: 1fr 2fr;
 		gap: 10px;
 		align-items: start;
 
@@ -46,6 +45,16 @@ div.content {
 			// Display any forms added to the lists as blobs.
 			& > form {
 				@extend .blob;
+			}
+		}
+	}
+
+	// On desktop, create a grid with accounts on the left and games on the right.
+	@include mixins.is-not-mobile using ($is-not-mobile) {
+		@if $is-not-mobile {
+			& > div {
+				// Make the games column larger than the accounts column.
+				grid-template-columns: 1fr 2fr;
 			}
 		}
 	}

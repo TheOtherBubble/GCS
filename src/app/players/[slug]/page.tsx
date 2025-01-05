@@ -74,12 +74,17 @@ export default async function Page(props: PageProps<PlayersPageParams>) {
 					{(session?.user?.isAdministator ||
 						session?.user?.id === player.id) && (
 						<>
-							<AddAccountForm player={player} accounts={accounts} />
-							<UpdatePlayerForm player={player} />
+							<AddAccountForm
+								player={player}
+								accounts={accounts}
+								className="hide-on-mobile"
+							/>
+							<UpdatePlayerForm player={player} className="hide-on-mobile" />
 							{player.backgroundChampionId && (
 								<UpdateSkinForm
 									player={player}
 									backgroundChampionId={player.backgroundChampionId}
+									className="hide-on-mobile"
 								/>
 							)}
 							{!isDraftPlayerForLatestSeason && latestSeason && (
@@ -87,15 +92,21 @@ export default async function Page(props: PageProps<PlayersPageParams>) {
 									player={player}
 									season={latestSeason}
 									accounts={accounts}
+									className="hide-on-mobile"
 								/>
 							)}
 						</>
 					)}
 					{session?.user?.isAdministator && (
 						<>
-							<ForceVerifyAccountsForm player={player} />
-							<BanPlayerForm player={player} />
-							{!player.isAdministator && <MakeAdminForm player={player} />}
+							<ForceVerifyAccountsForm
+								player={player}
+								className="hide-on-mobile"
+							/>
+							<BanPlayerForm player={player} className="hide-on-mobile" />
+							{!player.isAdministator && (
+								<MakeAdminForm player={player} className="hide-on-mobile" />
+							)}
 						</>
 					)}
 				</div>

@@ -51,8 +51,6 @@ TODO:
  - Allow the player and administrators to remove accounts.
  - Link to multi-op.gg or multi-u.gg of all accounts.
   - Potentially display recent (non-GCS) games on-site later.
- - Mobile support.
- - Handle adding duplicate accounts (error if the account is verified for someone else, ignore if the account is already on the current player, move to current player otherwise).
 - Miscellaneous:
  - Discord integration.
  - Draft page (refresh/revalidate every few seconds with `useEffect`).
