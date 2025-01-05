@@ -7,6 +7,7 @@ import { tournamentProviderTable } from "./schema";
 /**
  * Get the tournament provider from the database or create it if it doesn't exist.
  * @returns The tournament provider.
+ * @throws `Error` if the response has a bad status, if the Riot API key is missing, or if there is a database error.
  * @public
  */
 export default async function getTournamentProvider() {

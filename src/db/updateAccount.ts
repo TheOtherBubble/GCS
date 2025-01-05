@@ -8,6 +8,8 @@ import { eq } from "drizzle-orm";
  * @param puuid - The player universally unique ID of the account.
  * @param account - The new data to update in the account.
  * @returns When finished.
+ * @throws `Error` if there is a database error.
+ * @public
  */
 export default async function updateAccount(
 	puuid: string,

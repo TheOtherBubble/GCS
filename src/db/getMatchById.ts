@@ -6,6 +6,7 @@ import { matchTable } from "./schema";
  * Get a match by its ID.
  * @param id - The ID.
  * @returns The match, if any matches.
+ * @throws `Error` if there is a database error.
  * @public
  */
 export default async function getMatchById(id: number) {
@@ -18,6 +19,7 @@ export default async function getMatchById(id: number) {
  * Get a match by its stringified ID.
  * @param slug - The stringified ID.
  * @returns The match, if any matches.
+ * @throws `Error` if there is a database error.
  * @public
  */
 export const getMatchBySlug = async (slug: number | `${number}`) => {

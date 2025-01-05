@@ -6,6 +6,7 @@ import { playerTable } from "./schema";
  * Get a player from a slug.
  * @param slug - The player's encoded display name or Discord name or ID.
  * @returns The player.
+ * @throws `Error` if there is a database error.
  * @public
  */
 export default async function getPlayerBySlug(slug: string) {

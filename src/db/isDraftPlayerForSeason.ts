@@ -9,6 +9,8 @@ import { draftPlayerTable } from "./schema";
  * @param player - The player.
  * @param season - The season.
  * @returns When finished.
+ * @throws `Error` if there is a database error.
+ * @public
  */
 export default async function isDraftPlayerForSeason(
 	player: Player,

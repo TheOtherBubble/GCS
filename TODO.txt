@@ -52,6 +52,7 @@ TODO:
  - Link to multi-op.gg or multi-u.gg of all accounts.
   - Potentially display recent (non-GCS) games on-site later.
  - Mobile support.
+ - Handle adding duplicate accounts (error if the account is verified for someone else, ignore if the account is already on the current player, move to current player otherwise).
 - Miscellaneous:
  - Discord integration.
  - Draft page (refresh/revalidate every few seconds with `useEffect`).
@@ -64,4 +65,3 @@ TODO:
  - Light theme.
  - Allow administrators to modify the rulebook (save the text in the database, probably using MDX or some other flavor of markdown).
  - Maybe allow user descriptions to use MDX or some other flavor of markdown?
- - Make form error messages display properly on production.

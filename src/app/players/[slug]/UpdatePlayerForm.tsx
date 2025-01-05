@@ -1,7 +1,6 @@
+import Form, { type FormProps } from "components/Form";
 import getPlayerUrl, { getPlayerUrlBySlug } from "util/getPlayerUrl";
 import ChampionList from "./ChampionList";
-import Form from "components/Form";
-import type { FormProps } from "next/form";
 import type { Player } from "types/db/Player";
 import type { PlayerRole } from "types/db/PlayerRole";
 import Submit from "components/Submit";
@@ -41,7 +40,6 @@ export default function UpdatePlayerForm({
 		<Form
 			action={async (form) => {
 				"use server";
-
 				const displayName = getFormField(form, "displayName");
 				const backgroundChampionId = getFormField(form, "backgroundChampionId");
 				await updatePlayer(player.id, {

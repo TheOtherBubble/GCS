@@ -6,6 +6,7 @@ import { seasonTable } from "./schema";
  * Get a season by its ID.
  * @param id - The ID.
  * @returns The season, if any matches.
+ * @throws `Error` if there is a database error.
  * @public
  */
 export default async function getSeasonById(id: number) {

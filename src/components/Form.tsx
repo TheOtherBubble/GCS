@@ -1,9 +1,25 @@
 "use client";
 
-import NextForm, { type FormProps } from "next/form";
+import NextForm, { type FormProps as NextFormProps } from "next/form";
 import multiclass from "util/multiclass";
 import style from "./styles/form.module.scss";
 import { useActionState } from "react";
+
+/**
+ * Properties that can be passed to a form.
+ * @public
+ */
+export interface FormProps extends Omit<NextFormProps, "action"> {
+	/** If this is a string, it will be interpreted as a path or URL to navigate to when the form is submitted. The path will be prefetched when the form becomes visible. If this is a function, it will be called when the form is submitted. Equivalent to `FormProps["action"]` from Next.js, but returned strings will be displayed as error messages. */
+	action: NonNullable<
+		| string
+		| ((formData: FormData) => void | Promise<void>)
+		| ((
+				formData: FormData
+		  ) => (string | undefined) | Promise<string | undefined>)
+		| undefined
+	>;
+}
 
 /**
  * Create a form. Automatically displays the message of any error that is thrown during the form action.
@@ -25,16 +41,11 @@ export default function Form({
 			}
 
 			try {
-				await action(payload);
+				return (await action(payload)) ?? void 0;
 			} catch (error) {
-				return error instanceof Error
-					? error.message
-					: typeof error === "string"
-						? error
-						: "Error.";
+				// Error messages are obfuscated in production. Return a string to show an error message to users.
+				return error instanceof Error ? error.message : "Error.";
 			}
-
-			return void 0;
 		},
 		void 0
 	);

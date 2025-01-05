@@ -6,6 +6,7 @@ import { teamTable } from "./schema";
  * Get a team by its vanity URL slug.
  * @param slug - The (decoded) vanity URL slug.
  * @returns The team, if any matches.
+ * @throws `Error` if there is a database error.
  * @public
  */
 export const getTeamByDecodedSlug = async (slug: string) =>
@@ -21,6 +22,7 @@ export const getTeamByDecodedSlug = async (slug: string) =>
  * Get a team by its vanity URL slug.
  * @param slug - The (encoded) vanity URL slug.
  * @returns The team, if any matches.
+ * @throws `Error` if there is a database error.
  * @public
  */
 export default async function getTeamByEncodedSlug(slug: string) {

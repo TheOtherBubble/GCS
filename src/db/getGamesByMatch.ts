@@ -12,6 +12,7 @@ import { eq } from "drizzle-orm";
  * Get all of a match's games.
  * @param match - The match.
  * @returns The match's games. Includes the games, game results, team game results, and player game results.
+ * @throws `Error` if there is a database error.
  * @public
  */
 export default async function getGamesByMatch(match: Match) {

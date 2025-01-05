@@ -13,7 +13,8 @@ import makeTournamentCodes from "riot/makeTournamentCodes";
  * @param cluster - The cluster to execute the request to make tournament codes against.
  * @param key - The Riot API key, or `undefined` to pull one from the environment variables.
  * @returns When finished.
- * @throws `Error` if the response has a bad status or if the Riot API key is missing.
+ * @throws `Error` if the response has a bad status, if the Riot API key is missing, or if there is a database error.
+ * @public
  */
 export default async function createMatches(
 	matches: InsertMatch[],

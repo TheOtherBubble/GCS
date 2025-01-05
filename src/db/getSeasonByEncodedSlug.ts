@@ -6,6 +6,7 @@ import { seasonTable } from "./schema";
  * Get a season by its vanity URL slug.
  * @param slug - The (decoded) vanity URL slug.
  * @returns The season, if any matches.
+ * @throws `Error` if there is a database error.
  * @public
  */
 export const getSeasonByDecodedSlug = async (slug: string) =>
@@ -28,6 +29,7 @@ export const decodeSeasonSlug = (slug: string) => decodeURIComponent(slug);
  * Get a season by its vanity URL slug.
  * @param slug - The (encoded) vanity URL slug.
  * @returns The season, if any matches.
+ * @throws `Error` if there is a database error.
  * @public
  */
 export default async function getSeasonByEncodedSlug(slug: string) {

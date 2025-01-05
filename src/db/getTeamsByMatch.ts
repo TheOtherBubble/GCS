@@ -7,6 +7,7 @@ import db from "./db";
  * Get all of a match's teams.
  * @param id - The match's ID.
  * @returns The match's teams. Includes the match and the teams.
+ * @throws `Error` if there is a database error.
  * @public
  */
 export const getTeamsByMatchId = async (id: number) =>
@@ -26,6 +27,7 @@ export const getTeamsByMatchId = async (id: number) =>
  * Get all of a match's teams.
  * @param slug - The match's stringified ID.
  * @returns The match's teams. Includes the match and the teams.
+ * @throws `Error` if there is a database error.
  * @public
  */
 export const getTeamsByMatchSlug = async (slug: number | `${number}`) =>

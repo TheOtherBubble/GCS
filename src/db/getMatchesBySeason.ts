@@ -12,6 +12,7 @@ import { eq } from "drizzle-orm";
  * Get all of the matches in a season.
  * @param season - The season.
  * @returns The season's matches. Includes the matches, games, game results, and team game results.
+ * @throws `Error` if there is a database error.
  * @public
  */
 export default async function getMatchesBySeason(season: Season) {

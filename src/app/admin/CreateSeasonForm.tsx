@@ -1,5 +1,4 @@
-import Form from "components/Form";
-import type { FormProps } from "next/form";
+import Form, { type FormProps } from "components/Form";
 import Submit from "components/Submit";
 import createSeason from "db/createSeason";
 import getFormField from "util/getFormField";

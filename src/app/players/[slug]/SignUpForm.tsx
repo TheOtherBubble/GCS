@@ -1,6 +1,5 @@
+import Form, { type FormProps } from "components/Form";
 import type { Account } from "types/db/Account";
-import Form from "components/Form";
-import type { FormProps } from "next/form";
 import type { Player } from "types/db/Player";
 import type { Season } from "types/db/Season";
 import Submit from "components/Submit";
@@ -42,12 +41,11 @@ export default function SignUpForm({
 		<Form
 			action={async () => {
 				"use server";
-
 				if (
 					player.bannedUntilDate &&
 					new Date(player.bannedUntilDate).valueOf() - Date.now() > 0
 				) {
-					throw new Error("You may not sign up while you are banned.");
+					return "You may not sign up while you are banned.";
 				}
 
 				if (
@@ -55,19 +53,16 @@ export default function SignUpForm({
 					!player.secondaryRole ||
 					player.primaryRole === player.secondaryRole
 				) {
-					throw new Error(
-						"You must select two distinct roles as your primary and secondary role to sign up."
-					);
+					return "You must select two distinct roles as your primary and secondary role to sign up.";
 				}
 
 				if (!anyAccountIsVerified) {
-					throw new Error(
-						"You must have at least one verified account to sign up."
-					);
+					return "You must have at least one verified account to sign up.";
 				}
 
 				await createDraftPlayer({ playerId: player.id, seasonId: season.id });
 				revalidatePath(getPlayerUrl(player));
+				return void 0;
 			}}
 			{...props}
 		>

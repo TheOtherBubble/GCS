@@ -8,6 +8,8 @@ import { playerTable } from "./schema";
  * @param id - The ID of the player.
  * @param player - The new data to update in the player.
  * @returns When finished.
+ * @throws `Error` if there is a database error.
+ * @public
  */
 export default async function updatePlayer(id: string, player: UpdatePlayer) {
 	await db.update(playerTable).set(player).where(eq(playerTable.id, id));

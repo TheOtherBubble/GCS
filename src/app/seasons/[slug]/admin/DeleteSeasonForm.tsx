@@ -1,5 +1,4 @@
-import Form from "components/Form";
-import type { FormProps } from "next/form";
+import Form, { type FormProps } from "components/Form";
 import type { Season } from "types/db/Season";
 import Submit from "components/Submit";
 import deleteSeason from "db/deleteSeason";
@@ -33,14 +32,13 @@ export default function DeleteSeasonForm({
 		<Form
 			action={async (form) => {
 				"use server";
-
-				// Prevent the user from accidentally doing something dangerous.
 				if (getFormField(form, "safeguard") !== "CONFIRM") {
-					return;
+					return "Invalid safeguard.";
 				}
 
 				await deleteSeason(season.id);
 				revalidatePath(getSeasonUrl(season));
+				return void 0;
 			}}
 			{...props}
 		>

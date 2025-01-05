@@ -1,5 +1,4 @@
-import Form from "components/Form";
-import type { FormProps } from "next/form";
+import Form, { type FormProps } from "components/Form";
 import type { InsertMatch } from "types/db/Match";
 import type { MatchFormat } from "types/db/MatchFormat";
 import type { Season } from "types/db/Season";
@@ -42,8 +41,6 @@ export default function GenerateRegularSeasonForm({
 		<Form
 			action={async (form) => {
 				"use server";
-
-				// Read form data.
 				const format = getFormField(form, "format", true) as MatchFormat;
 				const rounds = parseInt(getFormField(form, "rounds", true), 10);
 

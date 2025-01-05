@@ -1,5 +1,4 @@
-import Form from "components/Form";
-import type { FormProps } from "next/form";
+import Form, { type FormProps } from "components/Form";
 import type { Player } from "types/db/Player";
 import Submit from "components/Submit";
 import updatePlayer from "db/updatePlayer";
@@ -27,7 +26,6 @@ export default function MakeAdminForm({
 		<Form
 			action={async () => {
 				"use server";
-
 				await updatePlayer(player.id, { isAdministator: true });
 			}}
 			{...props}

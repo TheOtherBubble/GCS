@@ -1,6 +1,5 @@
+import Form, { type FormProps } from "components/Form";
 import type { Account } from "types/db/Account";
-import Form from "components/Form";
-import type { FormProps } from "next/form";
 import type { Player } from "types/db/Player";
 import QueueType from "types/riot/QueueType";
 import Submit from "components/Submit";
@@ -58,7 +57,6 @@ export default async function UpdateAccountsForm({
 		<Form
 			action={async () => {
 				"use server";
-
 				for (const accountData of accountDatas) {
 					if (!accountData) {
 						continue;

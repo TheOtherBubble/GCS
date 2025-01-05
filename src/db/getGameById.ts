@@ -6,6 +6,7 @@ import { gameTable } from "./schema";
  * Get a game by its ID.
  * @param id - The ID.
  * @returns The game, if any matches.
+ * @throws `Error` if there is a database error.
  * @public
  */
 export default async function getGameById(id: number) {
@@ -18,6 +19,7 @@ export default async function getGameById(id: number) {
  * Get a game by its stringified ID.
  * @param slug - The stringified ID.
  * @returns The game, if any matches.
+ * @throws `Error` if there is a database error.
  * @public
  */
 export const getGameBySlug = async (slug: number | `${number}`) => {

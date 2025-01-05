@@ -12,6 +12,7 @@ import { eq } from "drizzle-orm";
  * Get all of a player's game results.
  * @param player - The player.
  * @returns The player's completed games. Includes the game, game result, team game result, and player game result.
+ * @throws `Error` if there is a database error.
  * @public
  */
 export default async function getPlayerGameResultsByPlayer(player: Player) {

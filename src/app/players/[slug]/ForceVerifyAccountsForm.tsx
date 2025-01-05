@@ -1,5 +1,4 @@
-import Form from "components/Form";
-import type { FormProps } from "next/form";
+import Form, { type FormProps } from "components/Form";
 import type { Player } from "types/db/Player";
 import Submit from "components/Submit";
 import getPlayerUrl from "util/getPlayerUrl";
@@ -30,7 +29,6 @@ export default function ForceVerifyAccountsForm({
 		<Form
 			action={async () => {
 				"use server";
-
 				await updateAccountsByPlayer(player, { isVerified: true });
 				revalidatePath(getPlayerUrl(player));
 			}}

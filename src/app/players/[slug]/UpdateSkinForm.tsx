@@ -1,5 +1,4 @@
-import Form from "components/Form";
-import type { FormProps } from "next/form";
+import Form, { type FormProps } from "components/Form";
 import type { Player } from "types/db/Player";
 import SkinList from "./SkinList";
 import Submit from "components/Submit";
@@ -38,7 +37,6 @@ export default function UpdateSkinForm({
 		<Form
 			action={async (form) => {
 				"use server";
-
 				await updatePlayer(player.id, {
 					backgroundSkinNumber: parseInt(
 						getFormField(form, "backgroundSkinNumber", true),

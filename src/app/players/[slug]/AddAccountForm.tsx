@@ -1,6 +1,5 @@
+import Form, { type FormProps } from "components/Form";
 import type { Account } from "types/db/Account";
-import Form from "components/Form";
-import type { FormProps } from "next/form";
 import type { Player } from "types/db/Player";
 import QueueType from "types/riot/QueueType";
 import Submit from "components/Submit";
@@ -42,16 +41,13 @@ export default function AddAccountForm({
 		<Form
 			action={async (form) => {
 				"use server";
-
 				const [gameName, tagLine] = getFormField(
 					form,
 					"gameNameAndTagLine",
 					true
 				).split("#");
 				if (!gameName || !tagLine) {
-					// Next.js obfuscates errors on production, so throw a string instead.
-					// eslint-disable-next-line @typescript-eslint/only-throw-error
-					throw "Malformed game name and/or tag line.";
+					return "Malformed game name and/or tag line.";
 				}
 
 				const accountDto = await getAccountByGameName(gameName, tagLine);
@@ -64,7 +60,7 @@ export default function AddAccountForm({
 					await getLeagueEntriesBySummonerId(summonerDto.id, platform)
 				).find((leagueEntry) => leagueEntry.queueType === QueueType.SOLO);
 				if (!soloLeagueEntry) {
-					throw new Error("Failed to retrieve ranked solo 5v5 league entry.");
+					return "Failed to retrieve ranked solo 5v5 league entry.";
 				}
 
 				// Ensure that the profile icon ID to verify the account is not the summoner's current profile icon ID.
@@ -91,6 +87,7 @@ export default function AddAccountForm({
 					tierCache: soloLeagueEntry.tier
 				});
 				revalidatePath(getPlayerUrl(player));
+				return void 0;
 			}}
 			{...props}
 		>

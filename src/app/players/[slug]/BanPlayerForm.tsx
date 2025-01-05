@@ -1,5 +1,4 @@
-import Form from "components/Form";
-import type { FormProps } from "next/form";
+import Form, { type FormProps } from "components/Form";
 import type { Player } from "types/db/Player";
 import Submit from "components/Submit";
 import getFormField from "util/getFormField";
@@ -31,7 +30,6 @@ export default function BanPlayerForm({
 		<Form
 			action={async (form) => {
 				"use server";
-
 				await updatePlayer(player.id, {
 					bannedUntilDate: getFormField(
 						form,
