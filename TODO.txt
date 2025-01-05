@@ -14,8 +14,6 @@ TODO:
 - Landing page:
  - Get video from Nerve and add it.
  - Twitch stream embed if live.
-- Rulebook page:
- - Update to match the new rulebook.
 - Season page:
  - Show leaderboards (KDA and damage).
  - Split up standings by pool.
@@ -38,6 +36,7 @@ TODO:
 - Riot webhook:
  - Generate game results when receiving a relevant request.
   - Generate the next game in the relevant match when necessary.
+  - Update match and/or season winners when necessary.
 - Game page:
  - For upcoming games, show tournament code to players on teams in the match.
  - For games in a match, show the match.
@@ -59,7 +58,8 @@ TODO:
  - Inhouse integration.
  - 404 page.
  - Player reporting system.
- - Set match (and potentially season) winners if necessary when creating game results.
  - Allow some forms to be submitted on change.
  - Update to use the tournament API instead of the tournament stub API.
  - Light theme.
+ - Allow administrators to modify the rulebook (save the text in the database, probably using MDX or some other flavor of markdown).
+ - Maybe allow user descriptions to use MDX or some other flavor of markdown?

@@ -10,17 +10,22 @@ import style from "./page.module.scss";
 export default function Page() {
 	return (
 		<article className={style["content"]}>
-			<h1>{"Season One Rulebook"}</h1>
+			<h1>{"GCS Season One Rules and Regulations"}</h1>
 			<hr />
 			<h2>{"Eligibility"}</h2>
 			<p>
 				{
-					"Players who have played at least 30 games of ranked solo/duo throughout the previous split are eligible for the tournament, regardless of their rank. Accounts that are deemed likely to be smurfing will be disqualified."
+					"Players who have played at least 30 games of ranked solo/duo throughout season 2024 split 3 are eligible for the tournament, regardless of their rank. Accounts that are deemed likely to be smurfing will be disqualified."
+				}
+			</p>
+			<p>
+				{
+					"Players who are drafted to a team must pay a $5 USD admission fee. 100% of the money from admission fees will be given back as part of the prize pool. $400 USD will be given to the first place team ($50 USD per player). $240 USD will be given to the second place team ($30 USD per player). Failure to pay the admission fee before the first week will result in you being removed from your team. If this happens, your captain will be allowed to draft an undrafted player to replace you."
 				}
 			</p>
 			<p>
 				{"You must be a member of "}
-				<Link href="https://discord.com/invite/vlnleague">
+				<Link href="https://discord.gg/gcsleague">
 					{"the GCS Discord server"}
 				</Link>
 				{" throughout the tournament, or you will be disqualified."}
@@ -28,13 +33,25 @@ export default function Page() {
 			<h2>{"Scheduling"}</h2>
 			<p>
 				{
-					"The sign up period lasts for one week. The draft will take place on the following Saturday at noon CST."
+					"Sign-ups close on January 4th. The draft will take place on January 11th at noon CST. The regular season will take place on Saturdays and Sundays from January 18th through March 2nd. The playoffs will take place on Saturdays and Sundays from March 8th through April 6th, with winners bracket games taking place on Saturdays and losers bracket games taking place on Sundays (with the exceptions of the losers bracket finals on Saturday, April 5th at 12:00 PM CST and the grand finals on Sunday, April 6th at 2:00 PM CST)."
 				}
 			</p>
-			<p>{"Each team will play two best-of-three matches each weekend."}</p>
+			<p>
+				{
+					"Each team will play two best-of-three matches each weekend during the regular season. Teams may agree to move their games to the other time slot on the same day, but may not reschedule to a different day."
+				}
+			</p>
 			<ul>
-				<li>{"One match will be played at noon CST each Saturday."}</li>
-				<li>{"One match will be played at 2:00 PM CST each Sunday."}</li>
+				<li>
+					{
+						"One match will be played either from 12:00 PM to 2:00 PM CST or from 2:00 PM to 4:00 PM CST on Saturday."
+					}
+				</li>
+				<li>
+					{
+						"One match will be played either from 2:00 PM to 4:00 PM CST or from 4:00 PM to 6:00 PM CST on Sunday."
+					}
+				</li>
 			</ul>
 			<p>
 				{
@@ -91,56 +108,57 @@ export default function Page() {
 				}
 			</p>
 			<p>
-				{"Player trades are allowed within the first week following the draft."}
+				{
+					"Player trades are allowed throughout the entire regular season. Players may be traded between pools. Teams must always have exactly 8 players and must always be worth over 100 points after a sequence of trades is complete."
+				}
 			</p>
-			<ul>
-				<li>{"All trades must be approved by a tournament moderator."}</li>
-				<li>
-					{
-						"Only captains and tournament moderators need to agree to a trade for it to be considered valid."
-					}
-				</li>
-			</ul>
 			<h2>{"Format"}</h2>
 			<p>
 				{
-					"Team captains will participate in a snake draft to select their players. Draft order will be determined by allowing lower-ranked captains to choose their draft position before higher-ranked captains."
-				}
-			</p>
-			<p>
-				{
-					"Players will be assigned to tiers that are based on a combination of quantifiable and unquantifiable factors, including current rank, peak rank, past season performances, and behavior. Captains will be allowed to draft a set number of players from each tier. These numbers are subject to change depending on the composition of the draft class."
-				}
-			</p>
-			<ul>
-				<li>{"One tier 1 player."}</li>
-				<li>{"Two tier 2 players."}</li>
-				<li>{"Three tier 3 players."}</li>
-				<li>{"Two tier 4 players."}</li>
-			</ul>
-			<p>
-				{
-					"The tournament is played between 20 teams consisting of 8 players each. Teams will compete in a best-of-three single round robin regular season. During the regular season, each player must meet the following conditions:"
-				}
-			</p>
-			<ul>
-				<li>{"Each player must participate in at least 12 matches."}</li>
-				<li>{"Each player must play no more than 45 games."}</li>
-			</ul>
-			<p>
-				{
-					"The 8 teams with the highest match scores at the end of the regular season will advance to the playoff stage. Tiebreakers are determined by head-to-head score, then by game score, then by average game time. The playoffs stage will consist of a best-of-five single elimination bracket. During the playoffs stage, each team must meet the following conditions:"
+					"Team captains will participate in a snake draft to select their players. Draft order will be determined by allowing lower-ranked captains to choose their draft position before higher-ranked captains. The draft will be conducted with a player budget. All teams must meet the following conditions during their draft:"
 				}
 			</p>
 			<ul>
 				<li>
+					{"Teams must be worth more than 80 points by their third pick."}
+				</li>
+				<li>
 					{
-						"Each team must play at least 2 players in each game that did not play in the previous game."
+						"Teams must be worth more than 160 points by their seventh (final) pick."
 					}
 				</li>
-				<li>{"Each player must play at least 1 game by the third game."}</li>
-				<li>{"Each player must play at least 3 games by the fifth game."}</li>
 			</ul>
+			<p>
+				{
+					"The tournament is played between 16 teams consisting of 8 players each. Teams will be split into two pools of 8 teams each. Teams will compete in a best-of-three double round robin regular season. Teams will earn points to determine seeding based on their performance in the regular season as follows:"
+				}
+			</p>
+			<ul>
+				<li>{"3 points for winning 2-0."}</li>
+				<li>{"2 points for winning 2-1."}</li>
+				<li>{"1 point for losing 1-2."}</li>
+				<li>{"0 points for losing 0-2."}</li>
+			</ul>
+			<p>
+				{
+					"During the regular season, each player must play either 6 full matches or 15 individual games. Failure to meet these requirements with all players will result in your team being unable to advance to playoffs. If this happens, your playoffs spot will be given to the next team in line."
+				}
+			</p>
+			<p>
+				{
+					"The six teams with the highest number of points from each pool at the end of the regular season will advance to the playoff stage, with the lowest two teams of those six starting in the losers bracket. The playoffs stage will consist of a best-of-three double elimination bracket, with the exception of the winners finals, losers finals, and grand finals, which will be best-of-five matches. Bracket matches will take place on Saturdays either from 12:00 PM to 2:00 PM CST or from 2:00 PM to 4:00 PM CST. Advancement matches will take place on Sundays either from 2:00 PM to 4:00 PM or from 4:00 PM to 6:00 PM CST. Games may be rescheduled to the other time slot on the same day if all four involved captains agree."
+				}
+			</p>
+			<p>
+				{
+					"There are no bracket resets. The team that advances through the winners bracket to the grand finals will receive the ability to take away a ban from their opponent in the first game."
+				}
+			</p>
+			<p>
+				{
+					"During playoffs, the total value of your rosters by the conclusion of game 2 must be at least 140 (210 points by the conclusion of game 3 for best-of-five matches)."
+				}
+			</p>
 			<h2>{"Captains"}</h2>
 			<p>
 				{
@@ -216,9 +234,31 @@ export default function Page() {
 			</p>
 			<p>
 				{
-					"A player may be removed from a team by a unanimous anonymous vote of the other players on the team. These anonymous votes must be sent directly to the tournament administrator."
+					"A player may be removed from a team by a unanimous anonymous vote of the other players on the team. These anonymous votes must be sent directly to the tournament administrator. A replacement player for the removed player must be approved by a tournament organizer or moderator. Replacement players may not exceed the peak rank of the player being replaced."
 				}
 			</p>
+			<p>
+				{
+					"Late/emergency substitutions occur when a substitute from the official roster replaces a player due to an unanticipated event (such as an emergency, power outage, or connection issue) during a series. In such a situation, the team must reach out to a tournament organizer or moderator and inform them about the details so that they can determine the best course of action. Teams that attempt to exploit the emergency substitution rules may be forced to forfeit the game."
+				}
+			</p>
+			<ul>
+				<li>
+					{
+						"For emergency substitutions prior to the draft of a game, an official substitute will be used with a one-ban penalty or the game will be rescheduled. If neither is possible, the game will be forfeited."
+					}
+				</li>
+				<li>
+					{
+						"For emergency substitutions during a game, following a 10 minute (maximum) pause, the team will be forced to play without the affected player or forfeit."
+					}
+				</li>
+				<li>
+					{
+						"For emergency substitutions after the draft of a game, a substitute player will take over the missing player's position and the draft will remain as-is. The draft may be redone if both teams agree, with the substituting team losing one ban."
+					}
+				</li>
+			</ul>
 		</article>
 	);
 }

@@ -3,6 +3,9 @@
 a.team-card {
 	@extend .card;
 
+	// Reduce font size from card default.
+	font-size: 1.5em;
+
 	// Create columns for the team logo and details.
 	display: grid;
 	grid-template-columns: 1fr 2fr;
