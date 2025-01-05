@@ -126,7 +126,10 @@ export const oauthTable = pgTable(
 		// The ID of the associated player.
 		userId: varchar({ length: 36 })
 			.notNull()
-			.references(() => playerTable.id, { onDelete: "cascade" })
+			.references(() => playerTable.id, {
+				onDelete: "cascade",
+				onUpdate: "cascade"
+			})
 	},
 	(self) => [primaryKey({ columns: [self.provider, self.providerAccountId] })]
 );
@@ -145,7 +148,10 @@ export const sessionTable = pgTable("session", {
 	// The player that the session belongs to.
 	userId: varchar({ length: 36 })
 		.notNull()
-		.references(() => playerTable.id, { onDelete: "cascade" })
+		.references(() => playerTable.id, {
+			onDelete: "cascade",
+			onUpdate: "cascade"
+		})
 });
 
 /**
@@ -195,7 +201,10 @@ export const accountTable = pgTable(
 
 		// The ID of the player that the account is linked to.
 		playerId: varchar({ length: 36 })
-			.references(() => playerTable.id, { onDelete: "cascade" })
+			.references(() => playerTable.id, {
+				onDelete: "cascade",
+				onUpdate: "cascade"
+			})
 			.notNull(),
 
 		// The ID of the profile icon that the account must select in order to verify that the associated player owns it. Randomly selected from icons in the starter pack (IDs 0 through 28), which every player owns.
@@ -283,7 +292,10 @@ export const teamTable = pgTable(
 
 		// The ID of the team's season.
 		seasonId: integer()
-			.references(() => seasonTable.id, { onDelete: "cascade" })
+			.references(() => seasonTable.id, {
+				onDelete: "cascade",
+				onUpdate: "cascade"
+			})
 			.notNull(),
 
 		// The team's vanity URL slug. Passed through `encodeURIComponent` and then used as a slug to make the team's URL.
@@ -308,12 +320,18 @@ export const teamPlayerTable = pgTable(
 
 		// The ID of the player.
 		playerId: varchar({ length: 36 })
-			.references(() => playerTable.id, { onDelete: "cascade" })
+			.references(() => playerTable.id, {
+				onDelete: "cascade",
+				onUpdate: "cascade"
+			})
 			.notNull(),
 
 		// The ID of the team.
 		teamId: integer()
-			.references(() => teamTable.id, { onDelete: "cascade" })
+			.references(() => teamTable.id, {
+				onDelete: "cascade",
+				onUpdate: "cascade"
+			})
 			.notNull()
 	},
 	(self) => [
@@ -331,12 +349,18 @@ export const draftPlayerTable = pgTable(
 	{
 		// The ID of the player.
 		playerId: varchar({ length: 36 })
-			.references(() => playerTable.id, { onDelete: "cascade" })
+			.references(() => playerTable.id, {
+				onDelete: "cascade",
+				onUpdate: "cascade"
+			})
 			.notNull(),
 
 		// The ID of the season.
 		seasonId: integer()
-			.references(() => seasonTable.id, { onDelete: "cascade" })
+			.references(() => seasonTable.id, {
+				onDelete: "cascade",
+				onUpdate: "cascade"
+			})
 			.notNull()
 	},
 	(self) => [unique().on(self.playerId, self.seasonId)]
@@ -367,7 +391,10 @@ export const matchTeamEnum = pgEnum("matchTeam", ["Red", "Blue"]);
 export const matchTable = pgTable("match", {
 	// The ID of the red team.
 	blueTeamId: integer()
-		.references(() => teamTable.id, { onDelete: "cascade" })
+		.references(() => teamTable.id, {
+			onDelete: "cascade",
+			onUpdate: "cascade"
+		})
 		.notNull(),
 
 	// The format of the match.
@@ -378,7 +405,10 @@ export const matchTable = pgTable("match", {
 
 	// The ID of the red team.
 	redTeamId: integer()
-		.references(() => teamTable.id, { onDelete: "cascade" })
+		.references(() => teamTable.id, {
+			onDelete: "cascade",
+			onUpdate: "cascade"
+		})
 		.notNull(),
 
 	// The one-based round of its season that the match will take place. There are two rounds per week.
@@ -386,7 +416,10 @@ export const matchTable = pgTable("match", {
 
 	// The ID of the match's season.
 	seasonId: integer()
-		.references(() => seasonTable.id, { onDelete: "cascade" })
+		.references(() => seasonTable.id, {
+			onDelete: "cascade",
+			onUpdate: "cascade"
+		})
 		.notNull(),
 
 	// The team that won the match, if it has concluded.
@@ -443,7 +476,10 @@ export const gameResultTable = pgTable("gameResult", {
 
 	// The ID of the game that these results correspond to, if any. May be null if the game result isn't part of a tournament or inhouse (such as games that are just pulled from the Riot API to collect statistics).
 	gameId: integer()
-		.references(() => gameTable.id, { onDelete: "set null" })
+		.references(() => gameTable.id, {
+			onDelete: "set null",
+			onUpdate: "cascade"
+		})
 		.unique(),
 
 	// The game/match ID of the game in the Riot API.
@@ -483,7 +519,10 @@ export const teamGameResultTable = pgTable(
 	{
 		// The ID of the game result that these results correspond to.
 		gameResultId: integer()
-			.references(() => gameResultTable.id, { onDelete: "cascade" })
+			.references(() => gameResultTable.id, {
+				onDelete: "cascade",
+				onUpdate: "cascade"
+			})
 			.notNull(),
 
 		// Unique identifier.
@@ -493,7 +532,10 @@ export const teamGameResultTable = pgTable(
 		isWinner: boolean().notNull(),
 
 		// The ID of the team, if any. May be null if the game result isn't part of a tournament or inhouse (such as games that are just pulled from the Riot API to collect statistics).
-		teamId: integer().references(() => teamTable.id, { onDelete: "set null" })
+		teamId: integer().references(() => teamTable.id, {
+			onDelete: "set null",
+			onUpdate: "cascade"
+		})
 	},
 	(self) => [unique().on(self.gameResultId, self.isWinner)]
 );
@@ -513,7 +555,10 @@ export const teamGameResultBanTable = pgTable(
 
 		// The ID of the team game result that this ban correspond to.
 		teamGameResultId: integer()
-			.references(() => teamGameResultTable.id, { onDelete: "cascade" })
+			.references(() => teamGameResultTable.id, {
+				onDelete: "cascade",
+				onUpdate: "cascade"
+			})
 			.notNull()
 	},
 	(self) => [
@@ -633,7 +678,8 @@ export const playerGameResultTable = pgTable(
 
 		// The ID of the player, if any. May be null if the game result isn't part of a tournament or inhouse (such as games that are just pulled from the Riot API to collect statistics).
 		playerId: varchar({ length: 36 }).references(() => playerTable.id, {
-			onDelete: "set null"
+			onDelete: "set null",
+			onUpdate: "cascade"
 		}),
 
 		// The position that the player most likely played, as determined by the Riot API.
@@ -653,7 +699,10 @@ export const playerGameResultTable = pgTable(
 
 		// The ID of the team game result that these results correspond to.
 		teamGameResultId: integer()
-			.references(() => teamGameResultTable.id, { onDelete: "cascade" })
+			.references(() => teamGameResultTable.id, {
+				onDelete: "cascade",
+				onUpdate: "cascade"
+			})
 			.notNull(),
 
 		// The amount of damage that the player dealt to towers.
