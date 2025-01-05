@@ -27,7 +27,11 @@ export default function Form({
 			try {
 				await action(payload);
 			} catch (error) {
-				return error instanceof Error ? error.message : "Error.";
+				return error instanceof Error
+					? error.message
+					: typeof error === "string"
+						? error
+						: "Error.";
 			}
 
 			return void 0;

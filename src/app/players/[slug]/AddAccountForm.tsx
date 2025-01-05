@@ -49,7 +49,9 @@ export default function AddAccountForm({
 					true
 				).split("#");
 				if (!gameName || !tagLine) {
-					throw new Error("Malformed game name and/or tag line.");
+					// Next.js obfuscates errors on production, so throw a string instead.
+					// eslint-disable-next-line @typescript-eslint/only-throw-error
+					throw "Malformed game name and/or tag line.";
 				}
 
 				const accountDto = await getAccountByGameName(gameName, tagLine);
