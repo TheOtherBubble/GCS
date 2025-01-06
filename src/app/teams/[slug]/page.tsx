@@ -1,8 +1,6 @@
 import getTeamUrl, { getTeamUrlByEncodedSlug } from "util/getTeamUrl";
 import type { Metadata } from "next";
 import type PageProps from "types/PageProps";
-import TeamCard from "components/TeamCard";
-import getSeasonById from "db/getSeasonById";
 import getTeamByEncodedSlug from "db/getTeamByEncodedSlug";
 
 /**
@@ -27,9 +25,7 @@ export default async function Page(props: PageProps<TeamsPageParams>) {
 		return <p>{"Unknown team."}</p>;
 	}
 
-	const season = await getSeasonById(team.seasonId);
-
-	return <TeamCard team={team} season={season} />;
+	return <p>{"Coming soon..."}</p>;
 }
 
 /**
