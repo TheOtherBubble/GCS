@@ -16,12 +16,9 @@ export default function Page() {
 			<YoutubeVideo
 				id="Kr7lWQ04mmM"
 				autoPlay
-				controls={false}
-				disableKeyboard
 				fs={false}
 				ivLoadPolicy={false}
 				relYt={false}
-				loop
 				mute
 				sandbox="allow-same-origin allow-scripts"
 				loading="lazy"
