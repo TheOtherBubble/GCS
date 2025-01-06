@@ -21,7 +21,10 @@ export default function Page() {
 				fs={false}
 				ivLoadPolicy={false}
 				relYt={false}
+				loop
 				mute
+				sandbox="allow-same-origin allow-scripts"
+				loading="lazy"
 			/>
 			<div>
 				<Link href="https://discord.gg/gcsleague">

@@ -55,7 +55,7 @@ export interface YoutubeVideoProps
 	/** Identifies the content that will load in the player. */
 	listType?: "playlist" | "user_uploads";
 
-	/** Whether or not to loop the initial video. Requires that `playlist` also be set to the same value as `id`. */
+	/** Whether or not to loop the initial video. */
 	loop?: boolean;
 
 	/** A security measure for the IFrame API. When using the IFrame API, always set this to this website's domain. */
@@ -172,6 +172,9 @@ export default function YoutubeVideo({
 	}
 	if (playlist) {
 		src.searchParams.set("playlist", playlist.join(","));
+	}
+	if (loop && !playlist) {
+		src.searchParams.set("playlist", id);
 	}
 	if (typeof playsInline === "boolean") {
 		src.searchParams.set("playsinline", playsInline ? "1" : "0");
