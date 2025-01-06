@@ -23,6 +23,9 @@ a.team-card {
 		// Sizing.
 		height: 80%;
 
+		// Logos are expected to be square. Stretch them if they aren't.
+		aspect-ratio: 1;
+
 		// Align the logo towards the center (to the right).
 		justify-self: end;
 	}

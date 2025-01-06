@@ -29,5 +29,8 @@ a.match-card {
 
 		// Sizing.
 		height: 80%;
+
+		// Logos are expected to be square. Stretch them if they aren't.
+		aspect-ratio: 1;
 	}
 }
