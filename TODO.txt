@@ -12,7 +12,6 @@ TODO:
  - For current games, indicate if any involved players' streams are live.
  - Add the ability to display just one player's stats really big (similar to u.gg or op.gg) for use on player match histories.
 - Landing page:
- - Get video from Nerve and add it.
  - Twitch stream embed if live.
 - Season page:
  - Show leaderboards (KDA and damage).
