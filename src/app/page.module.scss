@@ -5,9 +5,9 @@ article.content {
 	// Increase the font size in the rulebook for ease of reading.
 	font-size: 1.2em;
 
-	// Temporary style until the promotional video is added. TODO: Delete.
-	& > p.center {
-		text-align: center;
+	// Make video take up full width on mobile.
+	& > iframe {
+		width: 100%;
 	}
 
 	// Display social links like buttons.
@@ -50,6 +50,18 @@ article.content {
 			& > * {
 				grid-column: 2;
 				overflow: auto hidden;
+			}
+
+			// Full-bleed video.
+			& > iframe {
+				// Full-bleed.
+				grid-column: 1 / 4;
+
+				// Center.
+				margin: 0 auto;
+
+				// Sizing.
+				width: 60%;
 			}
 		}
 	}

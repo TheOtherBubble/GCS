@@ -1,6 +1,7 @@
 import { BsDiscord, BsTwitch, BsYoutube } from "react-icons/bs";
 import Link from "components/Link";
 import type { Metadata } from "next";
+import YoutubeVideo from "components/YoutubeVideo";
 import style from "./page.module.scss";
 
 /**
@@ -12,7 +13,16 @@ export default function Page() {
 	return (
 		<article className={style["content"]}>
 			<h1>{"Gauntlet Championship Series"}</h1>
-			<p className={style["center"]}>{"Promotional video coming soon!"}</p>
+			<YoutubeVideo
+				id="Kr7lWQ04mmM"
+				autoPlay
+				controls={false}
+				disableKeyboard
+				fs={false}
+				ivLoadPolicy={false}
+				relYt={false}
+				mute
+			/>
 			<div>
 				<Link href="https://discord.gg/gcsleague">
 					<BsDiscord />
