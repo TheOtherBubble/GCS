@@ -37,6 +37,7 @@ export default function CreateMatchForm({
 	const formatId = useId();
 	const redTeamIdId = useId();
 	const roundId = useId();
+	const timeSlotId = useId();
 
 	return (
 		<Form
@@ -47,7 +48,8 @@ export default function CreateMatchForm({
 					format: getFormField(form, "format", true) as MatchFormat,
 					redTeamId: parseInt(getFormField(form, "redTeamId", true), 10),
 					round: parseInt(getFormField(form, "round", true), 10),
-					seasonId: season.id
+					seasonId: season.id,
+					timeSlot: parseInt(getFormField(form, "timeSlot", true), 10)
 				});
 				revalidatePath(getSeasonUrl(season));
 			}}
@@ -85,6 +87,15 @@ export default function CreateMatchForm({
 				type="number"
 				id={roundId}
 				name="round"
+				min={1}
+				defaultValue={1}
+				required
+			/>
+			<label htmlFor={timeSlotId}>{"Time slot"}</label>
+			<input
+				type="number"
+				id={timeSlotId}
+				name="timeSlot"
 				min={1}
 				defaultValue={1}
 				required

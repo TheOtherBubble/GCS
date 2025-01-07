@@ -110,6 +110,12 @@ export default async function Page(props: PageProps<SeasonsPageParams>) {
 		match.teamGameResults.push(row.teamGameResult);
 	}
 
+	// Create a date time format for the user's timezone.
+	const dateTimeFormat = new Intl.DateTimeFormat(void 0, {
+		dateStyle: "long",
+		timeStyle: "short"
+	});
+
 	return (
 		<div className={style["content"]}>
 			<div className={style["info"]}>
@@ -135,14 +141,21 @@ export default async function Page(props: PageProps<SeasonsPageParams>) {
 							<header>
 								<h3>{`Round ${round.toString()}`}</h3>
 							</header>
-							{matches.map((match) => (
-								<MatchCard
-									key={match.match.id}
-									match={match.match}
-									teamGameResults={match.teamGameResults}
-									teams={teams}
-								/>
-							))}
+							{matches
+								.sort(
+									({ match: { timeSlot: a } }, { match: { timeSlot: b } }) =>
+										a - b
+								)
+								.map((match) => (
+									<MatchCard
+										key={match.match.id}
+										match={match.match}
+										season={season}
+										teamGameResults={match.teamGameResults}
+										dateTimeFormat={dateTimeFormat}
+										teams={teams}
+									/>
+								))}
 						</div>
 					))}
 			</div>

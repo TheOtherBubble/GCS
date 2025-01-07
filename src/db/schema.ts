@@ -422,6 +422,9 @@ export const matchTable = pgTable("match", {
 		})
 		.notNull(),
 
+	// The one-based time slot at which the match will take place.
+	timeSlot: integer().notNull(),
+
 	// The team that won the match, if it has concluded.
 	winner: matchTeamEnum()
 });

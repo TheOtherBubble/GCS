@@ -1,8 +1,10 @@
 import Image from "./Image";
 import type { LinkProps } from "./Link";
 import type { Match } from "types/db/Match";
+import type { Season } from "types/db/Season";
 import type { Team } from "types/db/Team";
 import type { TeamGameResult } from "types/db/TeamGameResult";
+import getMatchDateTime from "util/getMatchDateTime";
 import getMatchUrl from "util/getMatchUrl";
 import multiclass from "util/multiclass";
 import style from "./styles/match-card.module.scss";
@@ -15,11 +17,17 @@ export interface MatchCardProps extends Omit<LinkProps, "children" | "href"> {
 	/** The match that is represented by the card. */
 	match: Match;
 
+	/** The season that the match is part of. */
+	season?: Season;
+
 	/** The teams in the match. */
 	teams?: Team[];
 
 	/** The game results in the match. */
 	teamGameResults?: TeamGameResult[];
+
+	/** The date time format to use for formatting the date string. */
+	dateTimeFormat?: Intl.DateTimeFormat;
 }
 
 /**
@@ -30,8 +38,10 @@ export interface MatchCardProps extends Omit<LinkProps, "children" | "href"> {
  */
 export default function MatchCard({
 	match,
+	season,
 	teams,
 	teamGameResults,
+	dateTimeFormat,
 	className,
 	...props
 }: MatchCardProps) {
@@ -44,6 +54,7 @@ export default function MatchCard({
 			href={getMatchUrl(match)}
 			{...props}
 		>
+			<p className="hide-on-mobile">{match.format}</p>
 			{blueTeam ? (
 				<>
 					<h3 className={style["blue"]}>{blueTeam.code}</h3>
@@ -63,11 +74,11 @@ export default function MatchCard({
 					<p className={style["blue"]}>{"Logo"}</p>
 				</>
 			)}
-			<h2>
+			<h3>
 				{teamGameResults?.length
 					? `${teamGameResults.filter((team) => team.isWinner && team.id === blueTeam?.id).length.toString()}-${teamGameResults.filter((team) => team.isWinner && team.id === redTeam?.id).length.toString()}`
 					: "VS"}
-			</h2>
+			</h3>
 			{redTeam ? (
 				<>
 					<Image
@@ -86,6 +97,13 @@ export default function MatchCard({
 					<p className={style["red"]}>{"Logo"}</p>
 					<h3 className={style["red"]}>{"???"}</h3>
 				</>
+			)}
+			{season && (
+				<p className="hide-on-mobile">
+					{dateTimeFormat
+						? dateTimeFormat.format(getMatchDateTime(match, season))
+						: getMatchDateTime(match, season).toLocaleString()}
+				</p>
 			)}
 		</a>
 	);

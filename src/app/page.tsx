@@ -20,7 +20,7 @@ export default function Page() {
 				ivLoadPolicy={false}
 				relYt={false}
 				mute
-				sandbox="allow-same-origin allow-scripts"
+				sandbox="allow-popups allow-same-origin allow-scripts"
 				loading="lazy"
 			/>
 			<div>

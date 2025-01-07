@@ -58,13 +58,13 @@ export default function GenerateRegularSeasonForm({
 
 				// Use the circle method to generate a single round robin regular season.
 				const matches: InsertMatch[] = [];
-				// Use the given number of round robin rounds.
 				for (let i = 0; i < rounds; i++) {
 					for (const pool of pools.values()) {
 						// One round per team, adding a fake "bye" team if there are an odd number of teams.
-						const l = pool.length + (pool.length % 2) - 1;
+						const l = pool.length + (pool.length % 2) - 1; // Minus one to make zero-based for ease of use.
+						const matchesInRound = (l + 1) / 2;
 						for (let j = 0; j < l; j++) {
-							for (let k = 0; k < (l + 1) / 2; k++) {
+							for (let k = 0; k < matchesInRound; k++) {
 								const blueTeam = pool[k && ((j + k - 1) % l) + 1];
 								const redTeam = pool[l - k && ((j + (l - k) - 1) % l) + 1];
 
@@ -77,8 +77,9 @@ export default function GenerateRegularSeasonForm({
 									blueTeamId: blueTeam.id,
 									format,
 									redTeamId: redTeam.id,
-									round: i * l + j + 1,
-									seasonId: season.id
+									round: i * l + j + 1, // One-based in database.
+									seasonId: season.id,
+									timeSlot: Math.floor((2 * k) / matchesInRound) + 1 // One-based in database.
 								});
 							}
 						}
