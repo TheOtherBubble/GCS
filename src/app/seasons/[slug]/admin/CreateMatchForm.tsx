@@ -43,15 +43,22 @@ export default function CreateMatchForm({
 		<Form
 			action={async (form) => {
 				"use server";
+				const blueTeamId = parseInt(getFormField(form, "blueTeamId", true), 10);
+				const redTeamId = parseInt(getFormField(form, "redTeamId", true), 10);
+				if (blueTeamId === redTeamId) {
+					return "A team cannot play a match against itself!";
+				}
+
 				await createMatch({
-					blueTeamId: parseInt(getFormField(form, "blueTeamId", true), 10),
+					blueTeamId,
 					format: getFormField(form, "format", true) as MatchFormat,
-					redTeamId: parseInt(getFormField(form, "redTeamId", true), 10),
+					redTeamId,
 					round: parseInt(getFormField(form, "round", true), 10),
 					seasonId: season.id,
 					timeSlot: parseInt(getFormField(form, "timeSlot", true), 10)
 				});
 				revalidatePath(getSeasonUrl(season));
+				return void 0;
 			}}
 			{...props}
 		>
