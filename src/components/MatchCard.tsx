@@ -8,6 +8,7 @@ import type { TeamGameResult } from "types/db/TeamGameResult";
 import getMatchDateTime from "util/getMatchDateTime";
 import getMatchUrl from "util/getMatchUrl";
 import multiclass from "util/multiclass";
+import placeholder from "./assets/placeholder.png";
 import style from "./styles/match-card.module.scss";
 
 /**
@@ -63,7 +64,7 @@ export default function MatchCard({
 			<p className="hide-on-mobile">{match.format}</p>
 			{blueTeam ? (
 				<>
-					<h3 className={style["blue"]}>{blueTeam.code}</h3>
+					<h3>{blueTeam.code}</h3>
 					<Image
 						alt="Logo"
 						src={blueTeam.logoUrl}
@@ -76,10 +77,10 @@ export default function MatchCard({
 			) : (
 				<>
 					<h3>{"CODE"}</h3>
-					<p>{"Logo"}</p>
+					<Image alt="Logo" src={placeholder} />
 				</>
 			)}
-			<h3>
+			<h3 className={style["score"]}>
 				{teamGameResults?.length
 					? `${teamGameResults.filter((team) => team.isWinner && team.id === blueTeam?.id).length.toString()}-${teamGameResults.filter((team) => team.isWinner && team.id === redTeam?.id).length.toString()}`
 					: "VS"}
@@ -98,8 +99,8 @@ export default function MatchCard({
 				</>
 			) : (
 				<div>
-					<p>{"Logo"}</p>
-					<h3>{"???"}</h3>
+					<h3>{"CODE"}</h3>
+					<Image alt="Logo" src={placeholder} />
 				</div>
 			)}
 			{dateTime && (

@@ -15,11 +15,6 @@ a.match-card {
 		overflow: hidden;
 	}
 
-	// Make text go over images when overlapping is necessary.
-	& > h3 {
-		z-index: 1;
-	}
-
 	// Maintain logo aspect ratio.
 	& > img {
 		width: auto;
