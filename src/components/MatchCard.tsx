@@ -70,14 +70,13 @@ export default function MatchCard({
 						untrusted
 						width={512}
 						height={512}
-						className={style["blue"]}
 						style={{ border: `1px solid #${blueTeam.color}` }}
 					/>
 				</>
 			) : (
 				<>
-					<h3 className={style["blue"]}>{"???"}</h3>
-					<p className={style["blue"]}>{"Logo"}</p>
+					<h3>{"CODE"}</h3>
+					<p>{"Logo"}</p>
 				</>
 			)}
 			<h3>
@@ -93,16 +92,15 @@ export default function MatchCard({
 						untrusted
 						width={512}
 						height={512}
-						className={style["red"]}
 						style={{ border: `1px solid #${redTeam.color}` }}
 					/>
-					<h3 className={style["red"]}>{redTeam.code}</h3>
+					<h3>{redTeam.code}</h3>
 				</>
 			) : (
-				<>
-					<p className={style["red"]}>{"Logo"}</p>
-					<h3 className={style["red"]}>{"???"}</h3>
-				</>
+				<div>
+					<p>{"Logo"}</p>
+					<h3>{"???"}</h3>
+				</div>
 			)}
 			{dateTime && (
 				<p className="hide-on-mobile">

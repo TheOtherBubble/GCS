@@ -4,35 +4,21 @@
 a.match-card {
 	@extend .card;
 
-	// Create columns for the blue team code and icon, the match score, and the red team code and icon.
+	// Display in a grid so that the match scores are lined up in a list of match cards.
 	display: grid;
-	grid-template-columns: 2fr 2fr 1fr 2fr 2fr;
-	gap: 2px 10px;
+	grid-template-columns: 2fr 1fr 1fr 1fr 2fr;
+	column-gap: 10px;
 	place-items: center;
 
-	// Align blue team items towards the center of the card (to the right).
-	& > .blue {
-		justify-self: end;
+	// Maintain grid alignment even on very small screens.
+	& > * {
+		overflow: hidden;
 	}
 
-	// Align red team items towards the center of the card (to the left).
-	& > .red {
-		justify-self: start;
-	}
-
-	// Ensure that team icons don't take up more space than their column.
+	// Maintain logo aspect ratio.
 	& > img {
-		// Necessary to fit images in grid columns.
-		max-width: 100%;
-
-		// Maintain aspect ratio.
 		width: auto;
-
-		// Sizing.
-		max-height: 100%;
-
-		// Logos are expected to be square. Stretch them if they aren't.
-		aspect-ratio: 1;
+		height: 100%;
 	}
 
 	// On desktop devices, also show the match format and date.
@@ -43,10 +29,10 @@ a.match-card {
 
 			// Add columns for the format and date strings.
 			grid-template-rows: $fd-size 1fr $fd-size;
+			row-gap: 2px;
 
 			// Center format and date strings.
 			& > p {
-				// Center format and date strings.
 				grid-column: 1 / 6;
 
 				// Match the height of the column.
