@@ -47,6 +47,10 @@ div.content {
 			// Increase font size within leaderboards.
 			& > div.leaderboards > ol {
 				font-size: 1.5em;
+
+				// Make display prettier on narrow desktop displays.
+				text-wrap: nowrap;
+				overflow: auto;
 			}
 		}
 	}
