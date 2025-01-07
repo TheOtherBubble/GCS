@@ -9,10 +9,10 @@ import type PageProps from "types/PageProps";
 import type { TeamGameResult } from "types/db/TeamGameResult";
 import { auth } from "db/auth";
 import getAllSeasons from "db/getAllSeasons";
-import getAllTeamsWithSeasonId from "db/getAllTeamsWithSeasonId";
 import getSeasonByEncodedSlug from "db/getSeasonByEncodedSlug";
 import getTeamGameResultsBySeason from "db/getMatchesBySeason";
 import getTeamUrl from "util/getTeamUrl";
+import getTeamsBySeason from "db/getTeamsBySeason";
 import multiclass from "util/multiclass";
 import style from "./page.module.scss";
 
@@ -52,7 +52,7 @@ export default async function Page(props: PageProps<SeasonsPageParams>) {
 	}
 
 	// Sort teams by score for the leaderboard.
-	const teams = await getAllTeamsWithSeasonId(season.id);
+	const teams = await getTeamsBySeason(season.id);
 	const teamScores = teams.map((team) => ({ losses: 0, team, wins: 0 }));
 
 	// Split matches into rounds for displaying.

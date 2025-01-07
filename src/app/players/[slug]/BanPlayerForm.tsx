@@ -42,6 +42,7 @@ export default function BanPlayerForm({
 		>
 			<header>
 				<h2>{"Ban Player"}</h2>
+				<p>{"Set this to a date in the past to unban this player."}</p>
 			</header>
 			<label htmlFor={bannedUntilDateId}>{"Banned until"}</label>
 			<input

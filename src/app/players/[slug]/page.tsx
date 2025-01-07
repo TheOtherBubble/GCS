@@ -1,6 +1,7 @@
 import getPlayerUrl, { getPlayerUrlBySlug } from "util/getPlayerUrl";
 import AccountCard from "components/AccountCard";
 import AddAccountForm from "./AddAccountForm";
+import AddToTeamForm from "./AddToTeamForm";
 import BanPlayerForm from "./BanPlayerForm";
 import ForceVerifyAccountsForm from "./ForceVerifyAccountsForm";
 import GameCard from "components/GameCard";
@@ -18,6 +19,7 @@ import getBackgroundImageUrl from "util/getBackgroundImageUrl";
 import getLatestSeason from "db/getLatestSeason";
 import getPlayerBySlug from "db/getPlayerBySlug";
 import getPlayerGameResultsByPlayer from "db/getPlayerGameResultsByPlayer";
+import getTeamsBySeason from "db/getTeamsBySeason";
 import isDraftPlayerForSeason from "db/isDraftPlayerForSeason";
 import style from "./page.module.scss";
 
@@ -103,6 +105,12 @@ export default async function Page(props: PageProps<PlayersPageParams>) {
 								player={player}
 								className="hide-on-mobile"
 							/>
+							{latestSeason && (
+								<AddToTeamForm
+									player={player}
+									teams={await getTeamsBySeason(latestSeason.id)}
+								/>
+							)}
 							<BanPlayerForm player={player} className="hide-on-mobile" />
 							{!player.isAdministator && (
 								<MakeAdminForm player={player} className="hide-on-mobile" />

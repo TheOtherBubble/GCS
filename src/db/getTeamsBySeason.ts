@@ -9,7 +9,7 @@ import { teamTable } from "./schema";
  * @throws `Error` if there is a database error.
  * @public
  */
-export default async function getAllTeamsWithSeasonId(seasonId: number) {
+export default async function getTeamsBySeason(seasonId: number) {
 	return await db
 		.select()
 		.from(teamTable)
