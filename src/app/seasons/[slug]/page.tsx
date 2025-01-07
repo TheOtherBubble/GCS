@@ -110,12 +110,6 @@ export default async function Page(props: PageProps<SeasonsPageParams>) {
 		match.teamGameResults.push(row.teamGameResult);
 	}
 
-	// Create a date time format for the user's timezone.
-	const dateTimeFormat = new Intl.DateTimeFormat(void 0, {
-		dateStyle: "long",
-		timeStyle: "short"
-	});
-
 	return (
 		<div className={style["content"]}>
 			<div className={style["info"]}>
@@ -152,7 +146,10 @@ export default async function Page(props: PageProps<SeasonsPageParams>) {
 										match={match.match}
 										season={season}
 										teamGameResults={match.teamGameResults}
-										dateTimeFormat={dateTimeFormat}
+										dateTimeFormatOptions={{
+											dateStyle: "long",
+											timeStyle: "short"
+										}}
 										teams={teams}
 									/>
 								))}

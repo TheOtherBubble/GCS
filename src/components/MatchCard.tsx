@@ -1,5 +1,6 @@
 import Image from "./Image";
 import type { LinkProps } from "./Link";
+import LocalDate from "./LocalDate";
 import type { Match } from "types/db/Match";
 import type { Season } from "types/db/Season";
 import type { Team } from "types/db/Team";
@@ -26,8 +27,11 @@ export interface MatchCardProps extends Omit<LinkProps, "children" | "href"> {
 	/** The game results in the match. */
 	teamGameResults?: TeamGameResult[];
 
-	/** The date time format to use for formatting the date string. */
-	dateTimeFormat?: Intl.DateTimeFormat;
+	/** The locales to use for formatting the date time string. */
+	dateTimeLocales?: Intl.LocalesArgument;
+
+	/** The date time format options to use for formatting the date string. */
+	dateTimeFormatOptions?: Intl.DateTimeFormatOptions;
 }
 
 /**
@@ -41,12 +45,14 @@ export default function MatchCard({
 	season,
 	teams,
 	teamGameResults,
-	dateTimeFormat,
+	dateTimeLocales,
+	dateTimeFormatOptions,
 	className,
 	...props
 }: MatchCardProps) {
 	const blueTeam = teams?.find((team) => team.id === match.blueTeamId);
 	const redTeam = teams?.find((team) => team.id === match.redTeamId);
+	const dateTime = season && getMatchDateTime(match, season);
 
 	return (
 		<a
@@ -98,11 +104,13 @@ export default function MatchCard({
 					<h3 className={style["red"]}>{"???"}</h3>
 				</>
 			)}
-			{season && (
+			{dateTime && (
 				<p className="hide-on-mobile">
-					{dateTimeFormat
-						? dateTimeFormat.format(getMatchDateTime(match, season))
-						: getMatchDateTime(match, season).toLocaleString()}
+					<LocalDate
+						date={dateTime}
+						locales={dateTimeLocales}
+						options={dateTimeFormatOptions}
+					/>
 				</p>
 			)}
 		</a>
