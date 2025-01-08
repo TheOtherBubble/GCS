@@ -32,11 +32,11 @@ export interface SignUpFormProps
 export default function SignUpForm({
 	player,
 	season,
-	accounts,
+	// `accounts,`
 	...props
 }: SignUpFormProps) {
 	// Can't call methods on properties passed from the client to the server, so do it here instead.
-	const anyAccountIsVerified = accounts.some((account) => account.isVerified);
+	// `const anyAccountIsVerified = accounts.some((account) => account.isVerified);`
 
 	return (
 		<Form
@@ -57,9 +57,12 @@ export default function SignUpForm({
 					return "You must select two distinct roles as your primary and secondary role to sign up.";
 				}
 
+				/*
+				// TODO: Uncomment once Riot gives us an API key.
 				if (!anyAccountIsVerified) {
 					return "You must have at least one verified account to sign up.";
 				}
+				*/
 
 				await createDraftPlayer({ playerId: player.id, seasonId: season.id });
 				revalidatePath(getPlayerUrl(player));

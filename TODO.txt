@@ -42,6 +42,7 @@ TODO:
    - For each player, show their name, champion, items, and stats, and link to their player page if they have one.
  - For games in a match, allow administrators to remove the game from the match. If necessary, generate a new game in that match when this happens.
 - Player page:
+ - Restrict players from joining a season if they don't have any linked accounts.
  - Show Discord account, stats, and seasons played and won. Link to Twitch and YouTube.
  - Allow the player and administrators to update Twitch and YouTube accounts.
  - Allow administrators to merge players in case a Discord account needs to be changed.
