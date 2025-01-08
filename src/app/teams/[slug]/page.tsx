@@ -140,7 +140,7 @@ export const generateMetadata = async (props: PageProps<TeamsPageParams>) => {
 		team
 			? {
 					description: `Gauntlet Championship Series team "${team.name}."`,
-					openGraph: { url: getTeamUrl(team) },
+					openGraph: { images: team.logoUrl, url: getTeamUrl(team) },
 					title: team.name
 				}
 			: {

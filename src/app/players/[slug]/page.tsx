@@ -130,7 +130,10 @@ export const generateMetadata = async (props: PageProps<PlayersPageParams>) => {
 		player
 			? {
 					description: `Gauntlet Championship Series player "${player.displayName ?? player.name}."`,
-					openGraph: { url: getPlayerUrl(player) },
+					openGraph: {
+						images: getBackgroundImageUrl(player),
+						url: getPlayerUrl(player)
+					},
 					title: player.displayName ?? player.name
 				}
 			: {
