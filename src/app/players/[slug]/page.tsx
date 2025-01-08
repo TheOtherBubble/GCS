@@ -13,6 +13,7 @@ import getBackgroundImageUrl from "util/getBackgroundImageUrl";
 import getLatestSeason from "db/getLatestSeason";
 import getPlayerBySlug from "db/getPlayerBySlug";
 import getPlayerGameResultsByPlayer from "db/getPlayerGameResultsByPlayer";
+import getTeamsBySeason from "db/getTeamsBySeason";
 import multiclass from "util/multiclass";
 import style from "./page.module.scss";
 
@@ -96,12 +97,16 @@ export default async function Page(props: PageProps<PlayersPageParams>) {
 							return playerPanel;
 						}
 
+						const teams = latestSeason
+							? await getTeamsBySeason(latestSeason)
+							: [];
+
 						return (
 							<>
 								{playerPanel}
 								<AdminPanel
 									player={player}
-									latestSeason={latestSeason}
+									teams={teams}
 									className={multiclass("hide-on-mobile", style["panel"])}
 								/>
 							</>

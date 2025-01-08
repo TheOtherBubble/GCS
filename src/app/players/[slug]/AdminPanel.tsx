@@ -4,8 +4,7 @@ import ForceVerifyAccountsForm from "./player/ForceVerifyAccountsForm";
 import { type JSX } from "react";
 import MakeAdminForm from "./admin/MakeAdminForm";
 import type { Player } from "types/db/Player";
-import type { Season } from "types/db/Season";
-import getTeamsBySeason from "db/getTeamsBySeason";
+import type { Team } from "types/db/Team";
 
 /**
  * Properties that can be passed to an admin panel.
@@ -16,8 +15,8 @@ export interface AdminPanelProps
 	/** The player to modify. */
 	player: Player;
 
-	/** The latest season. */
-	latestSeason?: Season | undefined;
+	/** The teams that the player may join. */
+	teams?: Team[];
 }
 
 /**
@@ -26,9 +25,9 @@ export interface AdminPanelProps
  * @returns The panel.
  * @public
  */
-export default async function AdminPanel({
+export default function AdminPanel({
 	player,
-	latestSeason,
+	teams,
 	...props
 }: AdminPanelProps) {
 	return (
@@ -37,12 +36,7 @@ export default async function AdminPanel({
 				<h2>{"Admin Panel"}</h2>
 			</header>
 			<ForceVerifyAccountsForm player={player} className="hide-on-mobile" />
-			{latestSeason && (
-				<AddToTeamForm
-					player={player}
-					teams={await getTeamsBySeason(latestSeason.id)}
-				/>
-			)}
+			{teams && <AddToTeamForm player={player} teams={teams} />}
 			<BanPlayerForm player={player} className="hide-on-mobile" />
 			{!player.isAdministator && (
 				<MakeAdminForm player={player} className="hide-on-mobile" />
