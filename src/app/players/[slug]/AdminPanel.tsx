@@ -11,13 +11,14 @@ import getTeamsBySeason from "db/getTeamsBySeason";
  * Properties that can be passed to an admin panel.
  * @public
  */
-export type AdminPanelProps = Omit<JSX.IntrinsicElements["div"], "children"> & {
+export interface AdminPanelProps
+	extends Omit<JSX.IntrinsicElements["div"], "children"> {
 	/** The player to modify. */
 	player: Player;
 
 	/** The latest season. */
 	latestSeason?: Season | undefined;
-};
+}
 
 /**
  * A player page admin panel.

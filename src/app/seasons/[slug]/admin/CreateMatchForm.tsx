@@ -15,7 +15,8 @@ import { useId } from "react";
  * Properties that can be passed to a create match form.
  * @public
  */
-export interface CreateMatchFormProps extends Omit<FormProps, "action"> {
+export interface CreateMatchFormProps
+	extends Omit<FormProps, "action" | "children"> {
 	/** The current season. */
 	season: Season;
 

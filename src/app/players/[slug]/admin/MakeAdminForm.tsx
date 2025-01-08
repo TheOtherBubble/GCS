@@ -7,7 +7,8 @@ import updatePlayer from "db/updatePlayer";
  * Properties that can be passed to a make administrator form.
  * @public
  */
-export interface MakeAdminFormProps extends Omit<FormProps, "action"> {
+export interface MakeAdminFormProps
+	extends Omit<FormProps, "action" | "children"> {
 	/** The player to make an administrator. */
 	player: Player;
 }

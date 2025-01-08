@@ -11,7 +11,8 @@ import { useId } from "react";
  * Properties that can be passed to a delete season form.
  * @public
  */
-export interface DeleteSeasonFormProps extends Omit<FormProps, "action"> {
+export interface DeleteSeasonFormProps
+	extends Omit<FormProps, "action" | "children"> {
 	/** The current season. */
 	season: Season;
 }

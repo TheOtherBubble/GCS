@@ -1,0 +1,77 @@
+@use "../../../styles/mixins";
+@use "../../../styles/blob.module.scss";
+
+div.content {
+	// List header above accounts/games grid.
+	@extend .list;
+
+	// Use a grid layout for the header with the logo on the left and team details on the right.
+	& > header {
+		display: grid;
+		grid-template-columns: 1fr 3fr;
+		gap: 10px;
+
+		// Align the logo towards the center (to the right).
+		& > img {
+			justify-self: end;
+
+			// Apply a maximum size to the image.
+			max-width: 100%;
+			max-height: 256px;
+
+			// Maintain aspect ratio.
+			width: auto;
+			height: auto;
+
+			// Logos are expected to be square. Stretch them if they aren't.
+			aspect-ratio: 1;
+		}
+
+		// Align details towards the center (to the right).
+		& > div {
+			& > * {
+				text-align: left;
+			}
+
+			// Increase regular text font size.
+			& > p {
+				font-size: 1.5em;
+
+				// Reduce spacing between lines.
+				margin: 0px;
+			}
+		}
+	}
+
+	// List players and matches in separate sections.
+	& > div {
+		display: grid;
+		gap: 10px;
+		align-items: start;
+
+		// List both players and matches in blob sections.
+		& > div {
+			@extend .blob-section;
+
+			// Display any forms added to the lists as blobs.
+			& > form {
+				@extend .blob;
+			}
+		}
+
+		// Place admin and captain panels in the left column.
+		& > div.panel {
+			grid-column: 1;
+		}
+	}
+
+	// On desktop, create a grid with players on the left and matches on the right.
+	@include mixins.is-not-mobile using ($is-not-mobile) {
+		@if $is-not-mobile {
+			& > div {
+				// Make the matches column larger than the players column.
+				grid-template-columns: 1fr 2fr;
+			}
+		}
+	}
+}

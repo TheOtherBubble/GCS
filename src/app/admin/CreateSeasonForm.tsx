@@ -10,7 +10,7 @@ import { useId } from "react";
  * Properties that can be passed to a create season form.
  * @public
  */
-export type CreateSeasonFormProps = Omit<FormProps, "action">;
+export type CreateSeasonFormProps = Omit<FormProps, "action" | "children">;
 
 /**
  * A form for creating a season.

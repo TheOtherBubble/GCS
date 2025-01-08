@@ -12,7 +12,8 @@ import { useId } from "react";
  * Properties that can be passed to an update skin form.
  * @public
  */
-export interface UpdateSkinFormProps extends Omit<FormProps, "action"> {
+export interface UpdateSkinFormProps
+	extends Omit<FormProps, "action" | "children"> {
 	/** The current player. */
 	player: Player;
 

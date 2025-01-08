@@ -10,7 +10,7 @@ import updateAccountsByPlayer from "db/updateAccountsByPlayer";
  * @public
  */
 export interface ForceVerifyAccountsFormProps
-	extends Omit<FormProps, "action"> {
+	extends Omit<FormProps, "action" | "children"> {
 	/** The player to verify the accounts of. */
 	player: Player;
 }

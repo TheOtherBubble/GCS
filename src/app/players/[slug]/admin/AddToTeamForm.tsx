@@ -15,7 +15,8 @@ import { useId } from "react";
  * Properties that can be passed to an add player to team form.
  * @public
  */
-export interface AddToTeamFormProps extends Omit<FormProps, "action"> {
+export interface AddToTeamFormProps
+	extends Omit<FormProps, "action" | "children"> {
 	/** The player to add to the team. */
 	player: Player;
 

@@ -7,7 +7,7 @@ import style from "./styles/youtube-video.module.scss";
  * @public
  */
 export interface YoutubeVideoProps
-	extends Omit<JSX.IntrinsicElements["iframe"], "src" | "allow"> {
+	extends Omit<JSX.IntrinsicElements["iframe"], "src" | "allow" | "children"> {
 	/** The ID of the YouTube video to embed. */
 	id: string;
 

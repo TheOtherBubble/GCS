@@ -64,7 +64,7 @@ export default async function Page(props: PageProps<PlayersPageParams>) {
 				</div>
 				<div>
 					<header>
-						<h2>{"Match History"}</h2>
+						<h2>{"Game History"}</h2>
 					</header>
 					{games.map(
 						({ game, gameResult, teamGameResult, playerGameResult }) => (

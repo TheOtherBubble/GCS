@@ -11,7 +11,8 @@ import { revalidatePath } from "next/cache";
  * Properties that can be passed to a sign-up form.
  * @public
  */
-export interface SignUpFormProps extends Omit<FormProps, "action"> {
+export interface SignUpFormProps
+	extends Omit<FormProps, "action" | "children"> {
 	/** The player to sign up for the next season. */
 	player: Player;
 

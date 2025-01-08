@@ -9,15 +9,18 @@ import multiclass from "util/multiclass";
 import style from "./styles/topnav.module.scss";
 
 /**
+ * Properties that can be passed to the top navigation bar.
+ * @public
+ */
+export type TopnavProps = Omit<JSX.IntrinsicElements["nav"], "children">;
+
+/**
  * The site-wide top navigation bar.
  * @param props - The properties to pass to the navigation bar.
  * @returns The navigation bar.
  * @public
  */
-export default async function Topnav({
-	className,
-	...props
-}: JSX.IntrinsicElements["nav"]) {
+export default async function Topnav({ className, ...props }: TopnavProps) {
 	const session = await auth();
 	return (
 		<nav className={multiclass(className, style["topnav"])} {...props}>

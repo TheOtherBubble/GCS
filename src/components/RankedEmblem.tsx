@@ -19,7 +19,7 @@ import silver from "./assets/silver.png";
  */
 export type RankedEmblemProps = Omit<
 	ImageProps,
-	"src" | "alt" | "width" | "height"
+	"src" | "alt" | "width" | "height" | "children"
 > & {
 	/** The ranked tier to be represented by the emblem image. */
 	tier: AccountTier;

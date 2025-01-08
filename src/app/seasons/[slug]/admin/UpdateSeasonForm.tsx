@@ -12,7 +12,8 @@ import { useId } from "react";
  * Properties that can be passed to an update season form.
  * @public
  */
-export interface UpdateSeasonFormProps extends Omit<FormProps, "action"> {
+export interface UpdateSeasonFormProps
+	extends Omit<FormProps, "action" | "children"> {
 	/** The current season. */
 	season: Season;
 }

@@ -16,7 +16,8 @@ import { useId } from "react";
  * Properties that can be passed to a seed season form.
  * @public
  */
-export interface SeedSeasonFormProps extends Omit<FormProps, "action"> {
+export interface SeedSeasonFormProps
+	extends Omit<FormProps, "action" | "children"> {
 	/** The current season. */
 	season: Season;
 

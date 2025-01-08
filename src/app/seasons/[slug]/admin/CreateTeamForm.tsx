@@ -12,7 +12,8 @@ import { useId } from "react";
  * Properties that can be passed to a create team form.
  * @public
  */
-export interface CreateTeamFormProps extends Omit<FormProps, "action"> {
+export interface CreateTeamFormProps
+	extends Omit<FormProps, "action" | "children"> {
 	/** The current season. */
 	season: Season;
 }

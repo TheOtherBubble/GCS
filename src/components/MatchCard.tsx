@@ -20,7 +20,7 @@ export interface MatchCardProps extends Omit<LinkProps, "children" | "href"> {
 	match: Match;
 
 	/** The season that the match is part of. */
-	season?: Season;
+	season?: Season | undefined;
 
 	/** The teams in the match. */
 	teams?: Team[];
@@ -98,10 +98,10 @@ export default function MatchCard({
 					<h3>{redTeam.code}</h3>
 				</>
 			) : (
-				<div>
-					<h3>{"CODE"}</h3>
+				<>
 					<Image alt="Logo" src={placeholder} />
-				</div>
+					<h3>{"CODE"}</h3>
+				</>
 			)}
 			{dateTime && (
 				<p className="hide-on-mobile">

@@ -12,10 +12,8 @@ import isDraftPlayerForSeason from "db/isDraftPlayerForSeason";
  * Properties that can be passed to a player panel.
  * @public
  */
-export type PlayerPanelProps = Omit<
-	JSX.IntrinsicElements["div"],
-	"children"
-> & {
+export interface PlayerPanelProps
+	extends Omit<JSX.IntrinsicElements["div"], "children"> {
 	/** The player to modify. */
 	player: Player;
 
@@ -24,7 +22,7 @@ export type PlayerPanelProps = Omit<
 
 	/** The latest season. */
 	latestSeason?: Season | undefined;
-};
+}
 
 /**
  * A player page player panel.

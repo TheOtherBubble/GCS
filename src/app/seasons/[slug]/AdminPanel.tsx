@@ -13,13 +13,14 @@ import style from "styles/blob.module.scss";
  * Properties that can be passed to an admin panel.
  * @public
  */
-export type AdminPanelProps = JSX.IntrinsicElements["div"] & {
+export interface AdminPanelProps
+	extends Omit<JSX.IntrinsicElements["div"], "children"> {
 	/** The current season. */
 	season: Season;
 
 	/** A list of all teams in the current season. */
 	teams: Team[];
-};
+}
 
 /**
  * A season page admin panel.

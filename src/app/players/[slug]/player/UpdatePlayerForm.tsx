@@ -15,7 +15,8 @@ import { useId } from "react";
  * Properties that can be passed to an update player form.
  * @public
  */
-export interface UpdatePlayerFormProps extends Omit<FormProps, "action"> {
+export interface UpdatePlayerFormProps
+	extends Omit<FormProps, "action" | "children"> {
 	/** The current player. */
 	player: Player;
 }

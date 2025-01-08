@@ -9,7 +9,8 @@ import { useId } from "react";
  * Properties that can be passed to a ban player form.
  * @public
  */
-export interface BanPlayerFormProps extends Omit<FormProps, "action"> {
+export interface BanPlayerFormProps
+	extends Omit<FormProps, "action" | "children"> {
 	/** The player to ban. */
 	player: Player;
 }

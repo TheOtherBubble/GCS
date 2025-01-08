@@ -5,7 +5,7 @@ import defaultBlur from "./assets/default-blur.png";
  * Equivalent to the props that can be passed to a Next.js image or an image element.
  * @public
  */
-export type ImageProps = NextImageProps & {
+export type ImageProps = Omit<NextImageProps, "children"> & {
 	/**
 	 * Whether or not the image is trusted. Untrusted images don't use the Next.js image optimization API, so their `src` doesn't need to be a `trustedDomain`.
 	 * @see {@link https://nextjs.org/docs/messages/next-image-unconfigured-host | Un-configured host}

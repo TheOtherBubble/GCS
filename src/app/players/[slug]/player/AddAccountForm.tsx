@@ -19,7 +19,8 @@ import { useId } from "react";
  * Properties that can be passed to an add account form.
  * @public
  */
-export interface AddAccountFormProps extends Omit<FormProps, "action"> {
+export interface AddAccountFormProps
+	extends Omit<FormProps, "action" | "children"> {
 	/** The player to add the account to. */
 	player: Player;
 
