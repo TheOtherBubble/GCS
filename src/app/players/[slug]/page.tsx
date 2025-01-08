@@ -42,7 +42,6 @@ export default async function Page(props: PageProps<PlayersPageParams>) {
 	const accounts = await getAccountsByPlayer(player);
 	const games = await getPlayerGameResultsByPlayer(player);
 	const backgroundImageUrl = getBackgroundImageUrl(player);
-	const latestSeason = await getLatestSeason();
 
 	return (
 		<div className={style["content"]}>
@@ -80,21 +79,34 @@ export default async function Page(props: PageProps<PlayersPageParams>) {
 					)}
 				</div>
 				{/* eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing */}
-				{(session?.user?.isAdministator || session?.user?.id === player.id) && (
-					<PlayerPanel
-						player={player}
-						accounts={accounts}
-						latestSeason={latestSeason}
-						className={multiclass("hide-on-mobile", style["panel"])}
-					/>
-				)}
-				{session?.user?.isAdministator && (
-					<AdminPanel
-						player={player}
-						latestSeason={latestSeason}
-						className={multiclass("hide-on-mobile", style["panel"])}
-					/>
-				)}
+				{(session?.user?.isAdministator || session?.user?.id === player.id) &&
+					(async () => {
+						const latestSeason = await getLatestSeason();
+
+						const playerPanel = (
+							<PlayerPanel
+								player={player}
+								accounts={accounts}
+								latestSeason={latestSeason}
+								className={multiclass("hide-on-mobile", style["panel"])}
+							/>
+						);
+
+						if (!session.user?.isAdministator) {
+							return playerPanel;
+						}
+
+						return (
+							<>
+								{playerPanel}
+								<AdminPanel
+									player={player}
+									latestSeason={latestSeason}
+									className={multiclass("hide-on-mobile", style["panel"])}
+								/>
+							</>
+						);
+					})()}
 			</div>
 		</div>
 	);
