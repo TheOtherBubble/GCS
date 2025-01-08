@@ -52,7 +52,7 @@ export default async function Page(props: PageProps<SeasonsPageParams>) {
 	}
 
 	// Sort teams by score for the leaderboard.
-	const teams = await getTeamsBySeason(season.id);
+	const teams = await getTeamsBySeason(season);
 	const teamScores = teams.map((team) => ({ losses: 0, team, wins: 0 }));
 
 	// Split matches into rounds for displaying.

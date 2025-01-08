@@ -6,13 +6,14 @@ import MatchCard from "components/MatchCard";
 import type { Metadata } from "next";
 import type PageProps from "types/PageProps";
 import PlayerCard from "components/PlayerCard";
-import type { Team } from "types/db/Team";
+import type { TeamGameResult } from "types/db/TeamGameResult";
 import getMatchesByTeam from "db/getMatchesByTeam";
 import getPlayerUrl from "util/getPlayerUrl";
 import getPlayersByTeam from "db/getPlayersByTeam";
 import getSeasonById from "db/getSeasonById";
 import getSeasonUrl from "util/getSeasonUrl";
 import getTeamByEncodedSlug from "db/getTeamByEncodedSlug";
+import getTeamsBySeason from "db/getTeamsBySeason";
 import style from "./page.module.scss";
 
 /**
@@ -38,27 +39,31 @@ export default async function Page(props: PageProps<TeamsPageParams>) {
 	}
 
 	const season = await getSeasonById(team.seasonId);
+	const teams = season ? await getTeamsBySeason(season) : [];
 	const players = await getPlayersByTeam(team);
 	const captain = players.find((player) => player.teamPlayer.isCaptain)?.player;
 
 	// Organize match data by match.
 	const rows = await getMatchesByTeam(team);
-	const matches = new Map<number, { match: Match; teams: Team[] }>();
+	const matches = new Map<number, { match: Match; games: TeamGameResult[] }>();
 	for (const row of rows) {
-		// Insert new match.
+		// Insert a new match.
 		const match = matches.get(row.match.id);
 		if (!match) {
 			matches.set(row.match.id, {
-				match: row.match,
-				teams: row.team ? [row.team] : []
+				games: row.teamGameResult ? [row.teamGameResult] : [],
+				match: row.match
 			});
 			continue;
 		}
 
-		// Add teams if they aren't present.
-		if (row.team && !match.teams.some((value) => value.id === row.team?.id)) {
-			match.teams.push(row.team);
+		// Nothing more to add if there's no team game result.
+		if (!row.teamGameResult) {
+			continue;
 		}
+
+		// Add data to an existing match.
+		match.games.push(row.teamGameResult);
 	}
 
 	return (
@@ -103,12 +108,13 @@ export default async function Page(props: PageProps<TeamsPageParams>) {
 					<header>
 						<h2>{"Match History"}</h2>
 					</header>
-					{Array.from(matches).map(([, { match, teams }]) => (
+					{Array.from(matches).map(([, { games, match }]) => (
 						<MatchCard
 							key={match.id}
 							match={match}
 							season={season}
 							teams={teams}
+							teamGameResults={games}
 							dateTimeFormatOptions={{
 								dateStyle: "long",
 								timeStyle: "short"
