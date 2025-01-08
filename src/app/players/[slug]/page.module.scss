@@ -47,6 +47,11 @@ div.content {
 				@extend .blob;
 			}
 		}
+
+		// Place admin and user panels in the left column.
+		& > div.panel {
+			grid-column: 1;
+		}
 	}
 
 	// On desktop, create a grid with accounts on the left and games on the right.

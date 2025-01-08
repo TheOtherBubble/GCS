@@ -72,7 +72,9 @@ export default function AddToTeamForm({
 			<header>
 				<h2>{"Add to Team"}</h2>
 				<p>
-					{"If the team has no players, this player will be made the captain."}
+					{
+						"If the team has no players, this player will be made the captain. If this player is already on a team in this season, they will be removed from that team."
+					}
 				</p>
 			</header>
 			<label htmlFor={teamIdId}>{"Team"}</label>

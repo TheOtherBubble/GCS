@@ -10,6 +10,7 @@ import getFormField from "util/getFormField";
 import getLeagueEntriesBySummonerId from "riot/getLeagueEntriesBySummonerId";
 import getPlayerUrl from "util/getPlayerUrl";
 import getSummonerByPuuid from "riot/getSummonerByPuuid";
+import hasRiotApiKey from "util/hasRiotApiKey";
 import { revalidatePath } from "next/cache";
 import updateAccount from "db/updateAccount";
 import { useId } from "react";
@@ -43,6 +44,10 @@ export default function AddAccountForm({
 		<Form
 			action={async (form) => {
 				"use server";
+				if (!hasRiotApiKey()) {
+					return "Missing Riot API key.";
+				}
+
 				const [gameName, tagLine] = getFormField(
 					form,
 					"gameNameAndTagLine",

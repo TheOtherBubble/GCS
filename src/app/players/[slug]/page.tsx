@@ -1,26 +1,19 @@
 import getPlayerUrl, { getPlayerUrlBySlug } from "util/getPlayerUrl";
 import AccountCard from "components/AccountCard";
-import AddAccountForm from "./AddAccountForm";
-import AddToTeamForm from "./AddToTeamForm";
-import BanPlayerForm from "./BanPlayerForm";
-import ForceVerifyAccountsForm from "./ForceVerifyAccountsForm";
+import AdminPanel from "./AdminPanel";
 import GameCard from "components/GameCard";
 import Image from "components/Image";
-import MakeAdminForm from "./MakeAdminForm";
 import type { Metadata } from "next";
 import type PageProps from "types/PageProps";
-import SignUpForm from "./SignUpForm";
+import PlayerPanel from "./PlayerPanel";
 import UpdateAccountsForm from "./UpdateAccountsForm";
-import UpdatePlayerForm from "./UpdatePlayerForm";
-import UpdateSkinForm from "./UpdateSkinForm";
 import { auth } from "db/auth";
 import getAccountsByPlayer from "db/getAccountsByPlayer";
 import getBackgroundImageUrl from "util/getBackgroundImageUrl";
 import getLatestSeason from "db/getLatestSeason";
 import getPlayerBySlug from "db/getPlayerBySlug";
 import getPlayerGameResultsByPlayer from "db/getPlayerGameResultsByPlayer";
-import getTeamsBySeason from "db/getTeamsBySeason";
-import isDraftPlayerForSeason from "db/isDraftPlayerForSeason";
+import multiclass from "util/multiclass";
 import style from "./page.module.scss";
 
 /**
@@ -50,9 +43,6 @@ export default async function Page(props: PageProps<PlayersPageParams>) {
 	const games = await getPlayerGameResultsByPlayer(player);
 	const backgroundImageUrl = getBackgroundImageUrl(player);
 	const latestSeason = await getLatestSeason();
-	const isDraftPlayerForLatestSeason = latestSeason
-		? await isDraftPlayerForSeason(player, latestSeason)
-		: false;
 
 	return (
 		<div className={style["content"]}>
@@ -72,51 +62,6 @@ export default async function Page(props: PageProps<PlayersPageParams>) {
 						<AccountCard key={account.accountId} account={account} />
 					))}
 					<UpdateAccountsForm player={player} accounts={accounts} />
-					{/* eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing */}
-					{(session?.user?.isAdministator ||
-						session?.user?.id === player.id) && (
-						<>
-							<AddAccountForm
-								player={player}
-								accounts={accounts}
-								className="hide-on-mobile"
-							/>
-							<UpdatePlayerForm player={player} className="hide-on-mobile" />
-							{player.backgroundChampionId && (
-								<UpdateSkinForm
-									player={player}
-									backgroundChampionId={player.backgroundChampionId}
-									className="hide-on-mobile"
-								/>
-							)}
-							{!isDraftPlayerForLatestSeason && latestSeason && (
-								<SignUpForm
-									player={player}
-									season={latestSeason}
-									accounts={accounts}
-									className="hide-on-mobile"
-								/>
-							)}
-						</>
-					)}
-					{session?.user?.isAdministator && (
-						<>
-							<ForceVerifyAccountsForm
-								player={player}
-								className="hide-on-mobile"
-							/>
-							{latestSeason && (
-								<AddToTeamForm
-									player={player}
-									teams={await getTeamsBySeason(latestSeason.id)}
-								/>
-							)}
-							<BanPlayerForm player={player} className="hide-on-mobile" />
-							{!player.isAdministator && (
-								<MakeAdminForm player={player} className="hide-on-mobile" />
-							)}
-						</>
-					)}
 				</div>
 				<div>
 					<header>
@@ -134,6 +79,22 @@ export default async function Page(props: PageProps<PlayersPageParams>) {
 						)
 					)}
 				</div>
+				{/* eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing */}
+				{(session?.user?.isAdministator || session?.user?.id === player.id) && (
+					<PlayerPanel
+						player={player}
+						accounts={accounts}
+						latestSeason={latestSeason}
+						className={multiclass("hide-on-mobile", style["panel"])}
+					/>
+				)}
+				{session?.user?.isAdministator && (
+					<AdminPanel
+						player={player}
+						latestSeason={latestSeason}
+						className={multiclass("hide-on-mobile", style["panel"])}
+					/>
+				)}
 			</div>
 		</div>
 	);

@@ -6,6 +6,7 @@ import type { Team } from "types/db/Team";
 import createMatch from "db/createMatch";
 import getFormField from "util/getFormField";
 import getSeasonUrl from "util/getSeasonUrl";
+import hasRiotApiKey from "util/hasRiotApiKey";
 import { matchFormatEnum } from "db/schema";
 import { revalidatePath } from "next/cache";
 import { useId } from "react";
@@ -43,6 +44,10 @@ export default function CreateMatchForm({
 		<Form
 			action={async (form) => {
 				"use server";
+				if (!hasRiotApiKey()) {
+					return "Missing Riot API key.";
+				}
+
 				const blueTeamId = parseInt(getFormField(form, "blueTeamId", true), 10);
 				const redTeamId = parseInt(getFormField(form, "redTeamId", true), 10);
 				if (blueTeamId === redTeamId) {

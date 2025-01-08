@@ -2,6 +2,7 @@ import Form, { type FormProps } from "components/Form";
 import Submit from "components/Submit";
 import createSeason from "db/createSeason";
 import getFormField from "util/getFormField";
+import hasRiotApiKey from "util/hasRiotApiKey";
 import makeTournament from "riot/makeTournament";
 import { useId } from "react";
 
@@ -26,6 +27,10 @@ export default function CreateSeasonForm(props: CreateSeasonFormProps) {
 		<Form
 			action={async (form) => {
 				"use server";
+				if (!hasRiotApiKey()) {
+					return "Missing Riot API key.";
+				}
+
 				const name = getFormField(form, "name", true);
 				await createSeason({
 					id: await makeTournament(name),
@@ -33,6 +38,7 @@ export default function CreateSeasonForm(props: CreateSeasonFormProps) {
 					startDate: getFormField(form, "startDate"),
 					vanityUrlSlug: getFormField(form, "vanityUrlSlug", true)
 				});
+				return void 0;
 			}}
 			{...props}
 		>

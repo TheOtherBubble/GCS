@@ -7,6 +7,7 @@ import getAccountByPuuid from "riot/getAccountByPuuid";
 import getLeagueEntriesBySummonerId from "riot/getLeagueEntriesBySummonerId";
 import getPlayerUrl from "util/getPlayerUrl";
 import getSummonerByPuuid from "riot/getSummonerByPuuid";
+import hasRiotApiKey from "util/hasRiotApiKey";
 import { revalidatePath } from "next/cache";
 import updateAccount from "db/updateAccount";
 
@@ -57,6 +58,10 @@ export default async function UpdateAccountsForm({
 		<Form
 			action={async () => {
 				"use server";
+				if (!hasRiotApiKey()) {
+					return "Missing Riot API key.";
+				}
+
 				for (const accountData of accountDatas) {
 					if (!accountData) {
 						continue;
@@ -79,6 +84,7 @@ export default async function UpdateAccountsForm({
 					});
 				}
 				revalidatePath(getPlayerUrl(player));
+				return void 0;
 			}}
 			{...props}
 		>

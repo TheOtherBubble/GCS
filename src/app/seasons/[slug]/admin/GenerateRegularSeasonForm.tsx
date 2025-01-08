@@ -7,6 +7,7 @@ import type { Team } from "types/db/Team";
 import createMatches from "db/createMatches";
 import getFormField from "util/getFormField";
 import getSeasonUrl from "util/getSeasonUrl";
+import hasRiotApiKey from "util/hasRiotApiKey";
 import { matchFormatEnum } from "db/schema";
 import { revalidatePath } from "next/cache";
 import { useId } from "react";
@@ -41,6 +42,10 @@ export default function GenerateRegularSeasonForm({
 		<Form
 			action={async (form) => {
 				"use server";
+				if (!hasRiotApiKey()) {
+					return "Missing Riot API key.";
+				}
+
 				const format = getFormField(form, "format", true) as MatchFormat;
 				const rounds = parseInt(getFormField(form, "rounds", true), 10);
 
@@ -88,6 +93,7 @@ export default function GenerateRegularSeasonForm({
 
 				await createMatches(matches);
 				revalidatePath(getSeasonUrl(season));
+				return void 0;
 			}}
 			{...props}
 		>
