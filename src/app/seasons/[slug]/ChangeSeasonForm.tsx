@@ -38,9 +38,12 @@ export default function ChangeSeasonForm({
 			// eslint-disable-next-line @typescript-eslint/require-await
 			action={async (form) => {
 				"use server";
-				redirect(
-					getSeasonUrlByDecodedSlug(getFormField(form, "vanityUrlSlug", true))
-				);
+				const vanityUrlSlug = getFormField(form, "vanityUrlSlug", true);
+				if (season?.vanityUrlSlug === vanityUrlSlug) {
+					return;
+				}
+
+				redirect(getSeasonUrlByDecodedSlug(vanityUrlSlug));
 			}}
 			{...props}
 		>
