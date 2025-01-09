@@ -14,7 +14,6 @@ import getLatestSeason from "db/getLatestSeason";
 import getPlayerBySlug from "db/getPlayerBySlug";
 import getPlayerGameResultsByPlayer from "db/getPlayerGameResultsByPlayer";
 import getTeamsBySeason from "db/getTeamsBySeason";
-import multiclass from "util/multiclass";
 import style from "./page.module.scss";
 
 /**
@@ -40,9 +39,14 @@ export default async function Page(props: PageProps<PlayersPageParams>) {
 	}
 
 	const session = await auth();
+	const isAdmin = session?.user?.isAdministator ?? false;
+	const isPlayer = isAdmin || session?.user?.id === player.id;
+
 	const accounts = await getAccountsByPlayer(player);
 	const games = await getPlayerGameResultsByPlayer(player);
 	const backgroundImageUrl = getBackgroundImageUrl(player);
+	const latestSeason = isPlayer ? await getLatestSeason() : void 0;
+	const teams = latestSeason ? await getTeamsBySeason(latestSeason) : [];
 
 	return (
 		<div className={style["content"]}>
@@ -55,63 +59,49 @@ export default async function Page(props: PageProps<PlayersPageParams>) {
 			</header>
 			<div>
 				<div>
-					<header>
-						<h2>{"Accounts"}</h2>
-					</header>
-					{accounts.map((account) => (
-						<AccountCard key={account.accountId} account={account} />
-					))}
-					<UpdateAccountsForm player={player} accounts={accounts} />
-				</div>
-				<div>
-					<header>
-						<h2>{"Game History"}</h2>
-					</header>
-					{games.map(
-						({ game, gameResult, teamGameResult, playerGameResult }) => (
-							<GameCard
-								key={game.id}
-								game={game}
-								gameResult={gameResult}
-								teamGameResults={[teamGameResult]}
-								playerGameResults={[playerGameResult]}
-							/>
-						)
+					<div>
+						<header>
+							<h2>{"Accounts"}</h2>
+						</header>
+						{accounts.map((account) => (
+							<AccountCard key={account.accountId} account={account} />
+						))}
+						<UpdateAccountsForm player={player} accounts={accounts} />
+					</div>
+					{isPlayer && (
+						<PlayerPanel
+							player={player}
+							accounts={accounts}
+							latestSeason={latestSeason}
+							className="hide-on-mobile"
+						/>
+					)}
+					{isAdmin && (
+						<AdminPanel
+							player={player}
+							teams={teams}
+							className="hide-on-mobile"
+						/>
 					)}
 				</div>
-				{/* eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing */}
-				{(session?.user?.isAdministator || session?.user?.id === player.id) &&
-					(async () => {
-						const latestSeason = await getLatestSeason();
-
-						const playerPanel = (
-							<PlayerPanel
-								player={player}
-								accounts={accounts}
-								latestSeason={latestSeason}
-								className={multiclass("hide-on-mobile", style["panel"])}
-							/>
-						);
-
-						if (!session.user?.isAdministator) {
-							return playerPanel;
-						}
-
-						const teams = latestSeason
-							? await getTeamsBySeason(latestSeason)
-							: [];
-
-						return (
-							<>
-								{playerPanel}
-								<AdminPanel
-									player={player}
-									teams={teams}
-									className={multiclass("hide-on-mobile", style["panel"])}
+				<div>
+					<div>
+						<header>
+							<h2>{"Game History"}</h2>
+						</header>
+						{games.map(
+							({ game, gameResult, teamGameResult, playerGameResult }) => (
+								<GameCard
+									key={game.id}
+									game={game}
+									gameResult={gameResult}
+									teamGameResults={[teamGameResult]}
+									playerGameResults={[playerGameResult]}
 								/>
-							</>
-						);
-					})()}
+							)
+						)}
+					</div>
+				</div>
 			</div>
 		</div>
 	);

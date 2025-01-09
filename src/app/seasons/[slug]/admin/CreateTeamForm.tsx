@@ -71,7 +71,14 @@ export default function CreateTeamForm({
 			<label htmlFor={nameId}>{"Name"}</label>
 			<input type="text" id={nameId} name="name" maxLength={0x40} required />
 			<label htmlFor={poolId}>{"Pool"}</label>
-			<input type="number" id={poolId} name="pool" min={1} defaultValue={1} />
+			<input
+				type="number"
+				id={poolId}
+				name="pool"
+				min={1}
+				defaultValue={1}
+				required
+			/>
 			<label htmlFor={vanityUrlSlugId}>{"Vanity URL slug"}</label>
 			<input
 				type="text"

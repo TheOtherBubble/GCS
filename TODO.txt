@@ -21,8 +21,7 @@ TODO:
 - Team page:
  - Show stats.
  - Show an indicator if the team won its season.
- - Allow administrators and the team's captain to change the code, color, logo, and name.
- - Allow administrators to change the pool, season, captain, and players.
+ - Allow administrators to change the captain and players.
  - Allow administrators to delete teams.
 - Match page:
  - For upcoming and ongoing matches, show the tournament code of the next game to players on teams in the match.

@@ -38,12 +38,15 @@ export default function UpdateSkinForm({
 		<Form
 			action={async (form) => {
 				"use server";
-				await updatePlayer(player.id, {
-					backgroundSkinNumber: parseInt(
-						getFormField(form, "backgroundSkinNumber", true),
-						10
-					)
-				});
+				const backgroundSkinNumber = parseInt(
+					getFormField(form, "backgroundSkinNumber", true),
+					10
+				);
+				if (backgroundSkinNumber === player.backgroundSkinNumber) {
+					return;
+				}
+
+				await updatePlayer(player.id, { backgroundSkinNumber });
 				revalidatePath(getPlayerUrl(player));
 			}}
 			{...props}
@@ -56,6 +59,7 @@ export default function UpdateSkinForm({
 				championId={backgroundChampionId}
 				id={backgroundSkinNumberId}
 				name="backgroundSkinNumber"
+				defaultValue={player.backgroundSkinNumber ?? 0}
 				required
 			/>
 			<Submit value="Update" />

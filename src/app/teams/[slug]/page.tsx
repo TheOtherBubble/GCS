@@ -1,4 +1,5 @@
 import getTeamUrl, { getTeamUrlByEncodedSlug } from "util/getTeamUrl";
+import AdminPanel from "./AdminPanel";
 import Image from "components/Image";
 import Link from "components/Link";
 import type { Match } from "types/db/Match";
@@ -7,6 +8,7 @@ import type { Metadata } from "next";
 import type PageProps from "types/PageProps";
 import PlayerCard from "components/PlayerCard";
 import type { TeamGameResult } from "types/db/TeamGameResult";
+import { auth } from "db/auth";
 import getMatchesByTeam from "db/getMatchesByTeam";
 import getPlayerUrl from "util/getPlayerUrl";
 import getPlayersByTeam from "db/getPlayersByTeam";
@@ -38,6 +40,7 @@ export default async function Page(props: PageProps<TeamsPageParams>) {
 		return <p>{"Unknown team."}</p>;
 	}
 
+	const session = await auth();
 	const season = await getSeasonById(team.seasonId);
 	const teams = season ? await getTeamsBySeason(season) : [];
 	const players = await getPlayersByTeam(team);
@@ -97,30 +100,35 @@ export default async function Page(props: PageProps<TeamsPageParams>) {
 			</header>
 			<div>
 				<div>
-					<header>
-						<h2>{"Players"}</h2>
-					</header>
-					{players.map(({ player }) => (
-						<PlayerCard key={player.id} player={player} />
-					))}
+					<div>
+						<header>
+							<h2>{"Players"}</h2>
+						</header>
+						{players.map(({ player }) => (
+							<PlayerCard key={player.id} player={player} />
+						))}
+					</div>
+					{session?.user?.isAdministator && <AdminPanel team={team} />}
 				</div>
 				<div>
-					<header>
-						<h2>{"Match History"}</h2>
-					</header>
-					{Array.from(matches).map(([, { games, match }]) => (
-						<MatchCard
-							key={match.id}
-							match={match}
-							season={season}
-							teams={teams}
-							teamGameResults={games}
-							dateTimeFormatOptions={{
-								dateStyle: "long",
-								timeStyle: "short"
-							}}
-						/>
-					))}
+					<div>
+						<header>
+							<h2>{"Match History"}</h2>
+						</header>
+						{Array.from(matches).map(([, { games, match }]) => (
+							<MatchCard
+								key={match.id}
+								match={match}
+								season={season}
+								teams={teams}
+								teamGameResults={games}
+								dateTimeFormatOptions={{
+									dateStyle: "long",
+									timeStyle: "short"
+								}}
+							/>
+						))}
+					</div>
 				</div>
 			</div>
 		</div>

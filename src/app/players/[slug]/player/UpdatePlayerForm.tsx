@@ -77,11 +77,8 @@ export default function UpdatePlayerForm({
 			<label htmlFor={biographyId}>{"Biography"}</label>
 			<textarea id={biographyId} name="biography" maxLength={0x100} />
 			<label htmlFor={primaryRoleId}>{"Primary role"}</label>
-			<select
-				id={primaryRoleId}
-				name="primaryRole"
-				defaultValue={player.primaryRole ?? void 0}
-			>
+			<select id={primaryRoleId} name="primaryRole">
+				<option />
 				{playerRoleEnum.enumValues.map((role) => (
 					<option value={role} key={role}>
 						{role}
@@ -89,11 +86,8 @@ export default function UpdatePlayerForm({
 				))}
 			</select>
 			<label htmlFor={secondaryRoleId}>{"Secondary role"}</label>
-			<select
-				id={secondaryRoleId}
-				name="secondaryRole"
-				defaultValue={player.secondaryRole ?? void 0}
-			>
+			<select id={secondaryRoleId} name="secondaryRole">
+				<option />
 				{playerRoleEnum.enumValues.map((role) => (
 					<option value={role} key={role}>
 						{role}
@@ -101,11 +95,7 @@ export default function UpdatePlayerForm({
 				))}
 			</select>
 			<label htmlFor={backgroundChampionIdId}>{"Background champion"}</label>
-			<ChampionList
-				id={backgroundChampionIdId}
-				name="backgroundChampionId"
-				defaultValue={player.backgroundChampionId ?? void 0}
-			/>
+			<ChampionList id={backgroundChampionIdId} name="backgroundChampionId" />
 			<Submit value="Update" />
 		</Form>
 	);

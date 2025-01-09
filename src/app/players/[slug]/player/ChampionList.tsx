@@ -15,9 +15,13 @@ export type ChampionListProps = Omit<
  * @returns The list.
  * @public
  */
-export default async function ChampionList(props: ChampionListProps) {
+export default async function ChampionList({
+	required,
+	...props
+}: ChampionListProps) {
 	return (
-		<select {...props}>
+		<select required={required} {...props}>
+			{!required && <option />}
 			{Object.entries((await getChampionsList()) ?? {}).map(
 				([id, champion]) => (
 					<option value={id} key={id}>

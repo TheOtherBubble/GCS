@@ -38,19 +38,19 @@ div.content {
 		gap: 10px;
 		align-items: start;
 
-		// List both accounts and games in blob sections.
+		// Display each column as a list of blob sections.
 		& > div {
-			@extend .blob-section;
+			@extend .list;
 
-			// Display any forms added to the lists as blobs.
-			& > form {
-				@extend .blob;
+			// List both accounts and games in blob sections.
+			& > div {
+				@extend .blob-section;
+
+				// Display any forms added to the lists as blobs.
+				& > form {
+					@extend .blob;
+				}
 			}
-		}
-
-		// Place admin and user panels in the left column.
-		& > div.panel {
-			grid-column: 1;
 		}
 	}
 

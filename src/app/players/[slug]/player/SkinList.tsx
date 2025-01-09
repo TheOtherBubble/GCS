@@ -18,10 +18,12 @@ export interface SkinListProps
  */
 export default async function SkinList({
 	championId,
+	required,
 	...props
 }: SkinListProps) {
 	return (
-		<select {...props}>
+		<select required={required} {...props}>
+			{!required && <option />}
 			{(await getChampion(championId))?.skins.map(({ name, num }) => (
 				<option value={num} key={num}>
 					{name}
