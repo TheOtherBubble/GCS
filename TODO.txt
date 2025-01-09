@@ -1,62 +1,61 @@
-TODO:
-- Player cards:
- - Indicator if they are live.
-- Team cards:
- - Indicator if the team won its season.
-- Match cards:
- - For current matches, indicate if any involved players' streams are live.
-- Game cards:
- - For completed games, show the result and players.
-  - For each player, show the player's name and champion.
- - For current games, indicate if any involved players' streams are live.
- - Add the ability to display just one player's stats really big (similar to u.gg or op.gg) for use on player match histories.
-- Landing page:
- - Twitch stream embed if live.
-- Season page:
- - Show leaderboards (KDA and damage).
- - Split up standings by pool.
- - Show the playoffs bracket once the playoffs stage begins.
- - Add an admin tool for generating the playoffs bracket from the current top 8 teams. Maybe do this automatically after the last regular season game ends.
- - Scroll to the next unfinished round when opening the page.
-- Team page:
- - Show stats.
- - Show an indicator if the team won its season.
- - Allow administrators to change the captain and players.
- - Allow administrators to delete teams.
-- Match page:
- - For upcoming and ongoing matches, show the tournament code of the next game to players on teams in the match.
- - Show season, round, and format.
- - For completed matches, show the match's winner.
- - Allow administrators to update the match's teams, games, format, round, season, and winner.
- - Allow administrators to delete matches.
-- Riot webhook:
- - Generate game results when receiving a relevant request.
-  - Generate the next game in the relevant match when necessary.
-  - Update match and/or season winners when necessary.
-- Game page:
- - For upcoming games, show tournament code to players on teams in the match.
- - For games in a match, show the match.
- - For completed games, show the map, mode, name, platform, queue, start date, type, version, result, and teams.
-  - For each team, show the bans and players.
-   - For each player, show their name, champion, items, and stats, and link to their player page if they have one.
- - For games in a match, allow administrators to remove the game from the match. If necessary, generate a new game in that match when this happens.
-- Player page:
- - Restrict players from joining a season if they don't have any linked accounts.
- - Show Discord account, stats, and seasons played and won. Link to Twitch and YouTube.
- - Allow the player and administrators to update Twitch and YouTube accounts.
- - Allow administrators to merge players in case a Discord account needs to be changed.
- - Allow the player and administrators to remove accounts.
- - Link to multi-op.gg or multi-u.gg of all accounts.
-  - Potentially display recent (non-GCS) games on-site later.
-- Miscellaneous:
- - Discord integration.
- - Draft page (refresh/revalidate every few seconds with `useEffect`).
- - Restrict PUUIDs that are allowed to join games.
- - Inhouse integration.
- - 404 page.
- - Player reporting system.
- - Allow some forms to be submitted on change.
- - Update to use the tournament API instead of the tournament stub API.
- - Light theme.
- - Allow administrators to modify the rulebook (save the text in the database, probably using MDX or some other flavor of markdown).
- - Maybe allow user descriptions to use MDX or some other flavor of markdown?
+Core functionality, necessary before the season starts:
+- Administrator tool for modifying team players.
+- Administrator tool for modifying team captains.
+- Administrator tool for deleting teams.
+- Split up season standings by pool.
+- Show round on match pages.
+- Show format on match pages.
+- Administrator tool for deleting matches.
+- Link to match on game pages.
+- Show game results on game pages.
+- Administrator tool for deleting games.
+- Administrator tool for creating games.
+- Show the tournament code of the game to players on teams in the game on game pages.
+- Show the tournament code of the next game to players on teams in the match on match pages.
+- Show the match score on match pages.
+- Game cards for completed games should show game results.
+- Player game cards to show game results of just one player.
+- Show the playoffs bracket once the playoffs stage begins.
+
+Core functionality, waiting on Riot to give us an API key:
+- Update to use the tournament API instead of the tournament stub API.
+- Restrict players from signing up for a season if they don't have any linked accounts.
+- API endpoint for receiving and storing game results and creating games when necessary.
+
+Core functionality, necessary before the next season:
+- Add point values to draftable players.
+- Add a page for captains to draft.
+- Administrator tool for modifying draftable players' point values.
+
+Extra features to add after everything else is done (or when waiting on other people):
+- 404 page.
+- Link to player multi-u.gg.
+- Player reporting system.
+- Administrator tool for updating the rulebook.
+- Support markdown in player biographies and the rulebook.
+- Player list page.
+- Team list page.
+- Season list page.
+- Embed the GCS Twitch stream on the landing page when live.
+- Scroll to the next unfinished round when opening a season page.
+- Team card indicator for teams that won their season.
+- Team page indicator for teams that won their season.
+- Season KDA leaderboard.
+- Season damage leaderboard.
+- Display Discord account name on player pages.
+- Player tool to remove accounts.
+- Player tool to link a Twitch account.
+- Player tool to link a YouTube channel.
+- Player page link to Twitch.
+- Player page link to YouTube.
+- Show player teams on player pages.
+- Show seasons won on player pages.
+- Player card indicator when live on Twitch/YouTube.
+- Game card indicator when any player is live on Twitch/YouTube.
+- Match card indicator when any player is live on Twitch/YouTube.
+- Administrator tool for merging players.
+- Display player non-GCS match history on player pages.
+- Discord app integration.
+- Inhouse integration.
+- Restrict PUUIDs that are allowed to join games.
+- Light theme.
