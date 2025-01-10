@@ -12,6 +12,6 @@ export default function robots() {
 			allow: "/",
 			userAgent: "*"
 		},
-		sitemap: `${domain}/sitemap.xml`
+		sitemap: new URL("/sitemap.xml", domain).href
 	} satisfies MetadataRoute.Robots;
 }
