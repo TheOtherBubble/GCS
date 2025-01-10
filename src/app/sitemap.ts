@@ -8,11 +8,11 @@ import domain from "util/domain";
  */
 export default function sitemap() {
 	return [
-		{ url: `${domain}/players` },
-		{ url: `${domain}/rulebook` },
-		{ url: `${domain}/schedule` },
-		{ url: `${domain}/seasons` },
-		{ url: `${domain}/teams` },
-		{ url: `${domain}/` }
+		{ url: new URL("/players", domain).href },
+		{ url: new URL("/rulebook", domain).href },
+		{ url: new URL("/schedule", domain).href },
+		{ url: new URL("/seasons", domain).href },
+		{ url: new URL("/teams", domain).href },
+		{ url: new URL("/", domain).href }
 	] satisfies MetadataRoute.Sitemap;
 }
