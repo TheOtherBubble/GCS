@@ -16,6 +16,7 @@ import getSeasonById from "db/getSeasonById";
 import getSeasonUrl from "util/getSeasonUrl";
 import getTeamByEncodedSlug from "db/getTeamByEncodedSlug";
 import getTeamsBySeason from "db/getTeamsBySeason";
+import { redirect } from "next/navigation";
 import style from "./page.module.scss";
 
 /**
@@ -37,7 +38,7 @@ export default async function Page(props: PageProps<TeamsPageParams>) {
 	const { slug } = await props.params;
 	const team = await getTeamByEncodedSlug(slug);
 	if (!team) {
-		return <p>{"Unknown team."}</p>;
+		redirect("/teams");
 	}
 
 	const session = await auth();

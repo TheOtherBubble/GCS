@@ -14,6 +14,7 @@ import getLatestSeason from "db/getLatestSeason";
 import getPlayerBySlug from "db/getPlayerBySlug";
 import getPlayerGameResultsByPlayer from "db/getPlayerGameResultsByPlayer";
 import getTeamsBySeason from "db/getTeamsBySeason";
+import { redirect } from "next/navigation";
 import style from "./page.module.scss";
 
 /**
@@ -35,7 +36,7 @@ export default async function Page(props: PageProps<PlayersPageParams>) {
 	const { slug } = await props.params;
 	const player = await getPlayerBySlug(slug);
 	if (!player) {
-		return <p>{"Unknown player."}</p>;
+		redirect("/players");
 	}
 
 	const session = await auth();

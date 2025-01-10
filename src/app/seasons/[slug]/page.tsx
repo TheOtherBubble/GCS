@@ -1,6 +1,5 @@
 import getSeasonUrl, { getSeasonUrlByEncodedSlug } from "util/getSeasonUrl";
 import AdminPanel from "./AdminPanel";
-import ChangeSeasonForm from "./ChangeSeasonForm";
 import Link from "components/Link";
 import type { Match } from "types/db/Match";
 import MatchCard from "components/MatchCard";
@@ -8,12 +7,12 @@ import type { Metadata } from "next";
 import type PageProps from "types/PageProps";
 import type { TeamGameResult } from "types/db/TeamGameResult";
 import { auth } from "db/auth";
-import getAllSeasons from "db/getAllSeasons";
 import getSeasonByEncodedSlug from "db/getSeasonByEncodedSlug";
 import getTeamGameResultsBySeason from "db/getMatchesBySeason";
 import getTeamUrl from "util/getTeamUrl";
 import getTeamsBySeason from "db/getTeamsBySeason";
 import multiclass from "util/multiclass";
+import { redirect } from "next/navigation";
 import style from "./page.module.scss";
 
 /**
@@ -33,22 +32,9 @@ export interface SeasonsPageParams {
  */
 export default async function Page(props: PageProps<SeasonsPageParams>) {
 	const { slug } = await props.params;
-	const seasons = await getAllSeasons();
-	const season = seasons.find(
-		(value) => value.vanityUrlSlug === decodeURIComponent(slug)
-	);
-
-	// Prompt the user to select another season if none is found.
+	const season = await getSeasonByEncodedSlug(slug);
 	if (!season) {
-		return (
-			<div className={style["content"]}>
-				<div className={style["info"]}>
-					<h1>{"Unknown Season"}</h1>
-					<hr />
-					<ChangeSeasonForm season={season} seasons={seasons} />
-				</div>
-			</div>
-		);
+		redirect("/seasons");
 	}
 
 	// Sort teams by score for the leaderboard.
@@ -116,7 +102,6 @@ export default async function Page(props: PageProps<SeasonsPageParams>) {
 				<h1>{season.name}</h1>
 				<hr />
 				<div>
-					<ChangeSeasonForm season={season} seasons={seasons} />
 					{(await auth())?.user?.isAdministator && (
 						<AdminPanel
 							className="hide-on-mobile"
