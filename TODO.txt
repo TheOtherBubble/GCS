@@ -27,6 +27,8 @@ Core functionality, necessary before the next season:
 - Administrator tool for modifying draftable players' point values.
 
 Extra features to add after everything else is done (or when waiting on other people):
+- Ensure that hovering over cards uses the right pointer on Google Chrome.
+- Ensure that team (and all other) cards are sized properly on Google Chrome.
 - Add a function for organizing left-joined queries into a hierarchy.
 - Reduce duplicate code in simple database query functions (i.e. by passing the table as a parameter).
 - Split up season standings by pool.
