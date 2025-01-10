@@ -109,7 +109,7 @@ export default function Page() {
 			</p>
 			<p>
 				{
-					"Player trades are allowed throughout the entire regular season. Players may be traded between pools. Teams must always have exactly 8 players and must always be worth over 160 points after a sequence of trades is complete."
+					"Player trades are allowed throughout the entire regular season. Players may be traded between pools. Teams must always have exactly 8 players and must always be worth over 150 points after a sequence of trades is complete."
 				}
 			</p>
 			<h2>{"Format"}</h2>
