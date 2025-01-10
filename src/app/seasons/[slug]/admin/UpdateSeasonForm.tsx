@@ -1,11 +1,11 @@
 import Form, { type FormProps } from "components/Form";
-import getSeasonUrl, { getSeasonUrlByDecodedSlug } from "util/getSeasonUrl";
 import type { Season } from "types/db/Season";
 import Submit from "components/Submit";
 import getFormField from "util/getFormField";
+import getSeasonUrl from "util/getSeasonUrl";
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
-import updateSeason from "db/updateSeason";
+import updateSeasons from "db/updateSeasons";
 import { useId } from "react";
 
 /**
@@ -37,17 +37,20 @@ export default function UpdateSeasonForm({
 			action={async (form) => {
 				"use server";
 				const vanityUrlSlug = getFormField(form, "vanityUrlSlug");
-				await updateSeason(season.id, {
-					name: getFormField(form, "name"),
-					startDate: getFormField(form, "startDate"),
-					vanityUrlSlug
-				});
+				await updateSeasons(
+					{
+						name: getFormField(form, "name"),
+						startDate: getFormField(form, "startDate"),
+						vanityUrlSlug
+					},
+					season.id
+				);
 				if (vanityUrlSlug) {
-					redirect(getSeasonUrlByDecodedSlug(vanityUrlSlug));
+					redirect(getSeasonUrl(encodeURIComponent(vanityUrlSlug)));
 				}
 
 				// If the vanity URL didn't change, just reload the page instead.
-				revalidatePath(getSeasonUrl(season));
+				revalidatePath(getSeasonUrl(encodeURIComponent(season.vanityUrlSlug)));
 			}}
 			{...props}
 		>

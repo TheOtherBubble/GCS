@@ -7,6 +7,7 @@ import type { NextConfig } from "next";
  */
 export default {
 	experimental: {
+		authInterrupts: true,
 		turbo: { rules: { "*.svg": { as: "*.js", loaders: ["@svgr/webpack"] } } }
 	},
 	images: { remotePatterns: [{ hostname: "ddragon.leagueoflegends.com" }] },

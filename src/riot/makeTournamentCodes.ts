@@ -7,34 +7,6 @@ import getRiotApiBaseUrl from "./getRiotApiBaseUrl";
 import riotFetch from "./riotFetch";
 
 /**
- * Get the URL of the Riot API endpoint for making tournament codes.
- * @param count - The number of tournament codes to make, or `undefined` for one.
- * @param tournamentId - The ID of the tournament that is associated with the tournament codes.
- * @param cluster - The cluster to use to make the request.
- * @returns The URL.
- */
-export const getMakeTournamentCodesUrl = (
-	count?: number,
-	tournamentId?: number,
-	cluster = Cluster.AMERICAS
-) => {
-	const url = new URL(
-		"/lol/tournament-stub/v5/codes",
-		getRiotApiBaseUrl(cluster)
-	);
-
-	if (count) {
-		url.searchParams.append("count", count.toString());
-	}
-
-	if (tournamentId) {
-		url.searchParams.append("tournamentId", tournamentId.toString());
-	}
-
-	return url.href;
-};
-
-/**
  * Make tournament codes in the Riot API.
  * @param params - The tournament code parameters, or `undefined` to use sensible defaults.
  * @param count - The number of tournament codes to make.
@@ -49,12 +21,25 @@ export default async function makeTournamentCodes(
 	params?: TournamentCodeParameters,
 	count?: number,
 	tournamentId?: number,
-	cluster?: Cluster,
-	key?: string
+	cluster: Cluster = Cluster.AMERICAS,
+	key: string | undefined = void 0
 ) {
+	const url = new URL(
+		"/lol/tournament-stub/v5/codes",
+		getRiotApiBaseUrl(cluster)
+	);
+
+	if (count) {
+		url.searchParams.append("count", count.toString());
+	}
+
+	if (tournamentId) {
+		url.searchParams.append("tournamentId", tournamentId.toString());
+	}
+
 	return (await (
 		await riotFetch(
-			getMakeTournamentCodesUrl(count, tournamentId, cluster),
+			url.href,
 			{
 				body: JSON.stringify(
 					params ?? {

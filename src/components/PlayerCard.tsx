@@ -45,7 +45,7 @@ export default function PlayerCard({
 	...props
 }: PlayerCardProps) {
 	const highestRankedAccount = accounts
-		? getHighestRankedAccount(accounts)
+		? getHighestRankedAccount(...accounts)
 		: void 0;
 	const backgroundImageUrl = getBackgroundImageUrl(player);
 	let finalStyle = style;
@@ -69,7 +69,7 @@ export default function PlayerCard({
 						<RankedEmblem tier={highestRankedAccount.tierCache} />
 					)}
 				</h3>
-				{games && <p>{`KDA: ${getAverageKda(games).toFixed(2)}`}</p>}
+				{games && <p>{`KDA: ${getAverageKda(...games).toFixed(2)}`}</p>}
 				{teams && <p>{`Seasons: ${teams.length.toString()}`}</p>}
 			</div>
 		</a>

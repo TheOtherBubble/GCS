@@ -1,4 +1,3 @@
-import getTeamUrl, { getTeamUrlByEncodedSlug } from "util/getTeamUrl";
 import AdminPanel from "./AdminPanel";
 import Image from "components/Image";
 import Link from "components/Link";
@@ -9,13 +8,14 @@ import type PageProps from "types/PageProps";
 import PlayerCard from "components/PlayerCard";
 import type { TeamGameResult } from "types/db/TeamGameResult";
 import { auth } from "db/auth";
-import getMatchesByTeam from "db/getMatchesByTeam";
+import getMatchesByTeams from "db/getMatchesByTeams";
 import getPlayerUrl from "util/getPlayerUrl";
-import getPlayersByTeam from "db/getPlayersByTeam";
-import getSeasonById from "db/getSeasonById";
+import getPlayersByTeams from "db/getPlayersByTeams";
 import getSeasonUrl from "util/getSeasonUrl";
-import getTeamByEncodedSlug from "db/getTeamByEncodedSlug";
-import getTeamsBySeason from "db/getTeamsBySeason";
+import getSeasons from "db/getSeasons";
+import getTeamBySlug from "db/getTeamBySlug";
+import getTeamUrl from "util/getTeamUrl";
+import getTeamsBySeasons from "db/getTeamsBySeasons";
 import { redirect } from "next/navigation";
 import style from "./page.module.scss";
 
@@ -36,19 +36,19 @@ export interface TeamsPageParams {
  */
 export default async function Page(props: PageProps<TeamsPageParams>) {
 	const { slug } = await props.params;
-	const team = await getTeamByEncodedSlug(slug);
+	const team = await getTeamBySlug(slug);
 	if (!team) {
 		redirect("/teams");
 	}
 
 	const session = await auth();
-	const season = await getSeasonById(team.seasonId);
-	const teams = season ? await getTeamsBySeason(season) : [];
-	const players = await getPlayersByTeam(team);
+	const [season] = await getSeasons(team.seasonId);
+	const teams = season ? await getTeamsBySeasons(season.id) : [];
+	const players = await getPlayersByTeams(team.id);
 	const captain = players.find((player) => player.teamPlayer.isCaptain)?.player;
 
 	// Organize match data by match.
-	const rows = await getMatchesByTeam(team);
+	const rows = await getMatchesByTeams(team.id);
 	const matches = new Map<number, { match: Match; games: TeamGameResult[] }>();
 	for (const row of rows) {
 		// Insert a new match.
@@ -85,7 +85,11 @@ export default async function Page(props: PageProps<TeamsPageParams>) {
 					<h1>{`${team.code} | ${team.name}`}</h1>
 					{season && (
 						<p>
-							<Link href={getSeasonUrl(season)}>{season.name}</Link>
+							<Link
+								href={getSeasonUrl(encodeURIComponent(season.vanityUrlSlug))}
+							>
+								{season.name}
+							</Link>
 							{`, Pool ${team.pool.toString()}`}
 						</p>
 					)}
@@ -144,17 +148,20 @@ export default async function Page(props: PageProps<TeamsPageParams>) {
  */
 export const generateMetadata = async (props: PageProps<TeamsPageParams>) => {
 	const { slug } = await props.params;
-	const team = await getTeamByEncodedSlug(slug);
+	const team = await getTeamBySlug(slug);
 	return (
 		team
 			? {
 					description: `Gauntlet Championship Series team "${team.name}."`,
-					openGraph: { images: team.logoUrl, url: getTeamUrl(team) },
+					openGraph: {
+						images: team.logoUrl,
+						url: getTeamUrl(encodeURIComponent(team.vanityUrlSlug))
+					},
 					title: team.name
 				}
 			: {
 					description: "An unknown team in the Gauntlet Championship Series.",
-					openGraph: { url: getTeamUrlByEncodedSlug(slug) },
+					openGraph: { url: getTeamUrl(slug) },
 					title: "Unknown Team"
 				}
 	) satisfies Metadata;

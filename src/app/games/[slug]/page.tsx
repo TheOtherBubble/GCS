@@ -2,10 +2,10 @@ import CopyToClipboardButton from "components/CopyToClipboardButton";
 import type { Metadata } from "next";
 import type PageProps from "types/PageProps";
 import { auth } from "db/auth";
-import { getGameBySlug } from "db/getGameById";
-import { getGameUrlBySlug } from "util/getGameUrl";
-import getMatchById from "db/getMatchById";
-import getTeamPlayersByPlayer from "db/getTeamPlayersByPlayer";
+import getGameBySlug from "util/getGameBySlug";
+import getGameUrl from "util/getGameUrl";
+import getMatches from "db/getMatches";
+import isPlayerOnTeams from "db/isPlayerOnTeams";
 
 /**
  * Parameters that are passed to a game page.
@@ -29,18 +29,18 @@ export default async function Page(props: PageProps<GamesPageParams>) {
 		return <p>{"Unknown game."}</p>;
 	}
 
-	const match = game.matchId ? await getMatchById(game.matchId) : void 0;
+	const [match] = game.matchId ? await getMatches(game.matchId) : [];
 
 	// The tournament code is visible if the viewer is logged in and either the game isn't associated with a match or the viewer is on a team in the associated match.
 	const session = await auth();
 	const canViewTournamentCode =
 		session?.user &&
 		(!match ||
-			(await getTeamPlayersByPlayer(session.user)).some(
-				(playerTeam) =>
-					playerTeam.teamId === match.blueTeamId ||
-					playerTeam.teamId === match.redTeamId
-			));
+			(await isPlayerOnTeams(
+				session.user.id,
+				match.blueTeamId,
+				match.redTeamId
+			)));
 
 	return canViewTournamentCode ? (
 		<CopyToClipboardButton text={game.tournamentCode}>
@@ -61,7 +61,7 @@ export const generateMetadata = async (props: PageProps<GamesPageParams>) => {
 	const { slug } = await props.params;
 	return {
 		description: `Gauntlet Championship Series game #${slug}`,
-		openGraph: { url: getGameUrlBySlug(slug) },
+		openGraph: { url: getGameUrl(slug) },
 		title: `Game #${slug}`
 	} satisfies Metadata;
 };

@@ -43,7 +43,7 @@ export default function GameCard({
 		return (
 			<a
 				className={multiclass(className, style["not-done"])}
-				href={getGameUrl(game)}
+				href={getGameUrl(game.id.toString() as `${number}`)}
 				{...props}
 			>
 				<h2>{`Game #${game.id.toString()}`}</h2>
@@ -55,7 +55,7 @@ export default function GameCard({
 		return (
 			<a
 				className={multiclass(className, style["not-done"])}
-				href={getGameUrl(game)}
+				href={getGameUrl(game.id.toString() as `${number}`)}
 				{...props}
 			>
 				<h2>{gameResult.name}</h2>
@@ -66,7 +66,7 @@ export default function GameCard({
 	return (
 		<a
 			className={multiclass(className, style["done"])}
-			href={getGameUrl(game)}
+			href={getGameUrl(game.id.toString() as `${number}`)}
 			{...props}
 		>
 			<p>{"Coming soon..."}</p>

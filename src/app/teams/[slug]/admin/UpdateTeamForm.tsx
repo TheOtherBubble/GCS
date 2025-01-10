@@ -1,11 +1,11 @@
 import Form, { type FormProps } from "components/Form";
-import getTeamUrl, { getTeamUrlByDecodedSlug } from "util/getTeamUrl";
 import Submit from "components/Submit";
 import type { Team } from "types/db/Team";
 import getFormField from "util/getFormField";
+import getTeamUrl from "util/getTeamUrl";
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
-import updateTeam from "db/updateTeam";
+import updateTeam from "db/updateTeams";
 import { useId } from "react";
 
 /**
@@ -41,20 +41,23 @@ export default function UpdateTeamForm({
 				"use server";
 				const vanityUrlSlug = getFormField(form, "vanityUrlSlug");
 				const poolString = getFormField(form, "pool");
-				await updateTeam(team.id, {
-					code: getFormField(form, "code"),
-					color: getFormField(form, "color")?.substring(1), // Cut off pound.
-					logoUrl: getFormField(form, "logoUrl"),
-					name: getFormField(form, "name"),
-					pool: poolString ? parseInt(poolString, 10) : void 0,
-					vanityUrlSlug
-				});
+				await updateTeam(
+					{
+						code: getFormField(form, "code"),
+						color: getFormField(form, "color")?.substring(1), // Cut off pound.
+						logoUrl: getFormField(form, "logoUrl"),
+						name: getFormField(form, "name"),
+						pool: poolString ? parseInt(poolString, 10) : void 0,
+						vanityUrlSlug
+					},
+					team.id
+				);
 				if (vanityUrlSlug) {
-					redirect(getTeamUrlByDecodedSlug(vanityUrlSlug));
+					redirect(getTeamUrl(encodeURIComponent(vanityUrlSlug)));
 				}
 
 				// If the vanity URL didn't change, just reload the page instead.
-				revalidatePath(getTeamUrl(team));
+				revalidatePath(getTeamUrl(encodeURIComponent(team.vanityUrlSlug)));
 			}}
 			{...props}
 		>

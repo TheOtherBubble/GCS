@@ -2,12 +2,12 @@ import Form, { type FormProps } from "components/Form";
 import type { Player } from "types/db/Player";
 import Submit from "components/Submit";
 import type { Team } from "types/db/Team";
-import createTeamPlayer from "db/createTeamPlayer";
+import createTeamPlayers from "db/createTeamPlayers";
+import deleteTeamPlayers from "db/deleteTeamPlayers";
 import getFormField from "util/getFormField";
 import getPlayerUrl from "util/getPlayerUrl";
-import { getPlayersByTeamId } from "db/getPlayersByTeam";
-import getTeamsByPlayer from "db/getTeamsByPlayer";
-import removePlayerFromTeam from "db/removePlayerFromTeam";
+import getPlayersByTeams from "db/getPlayersByTeams";
+import getTeamsByPlayers from "db/getTeamsByPlayers";
 import { revalidatePath } from "next/cache";
 import { useId } from "react";
 
@@ -45,7 +45,7 @@ export default function AddToTeamForm({
 			action={async (form) => {
 				"use server";
 				const teamId = parseInt(getFormField(form, "teamId", true), 10);
-				for (const teamPlayer of await getTeamsByPlayer(player)) {
+				for (const teamPlayer of await getTeamsByPlayers(player.id)) {
 					// If the player is already part of the selected team, do nothing.
 					if (teamPlayer.teamId === teamId) {
 						return;
@@ -57,15 +57,15 @@ export default function AddToTeamForm({
 
 					// If the player is already part of another team in the list, remove them from that team.
 					// eslint-disable-next-line no-await-in-loop
-					await removePlayerFromTeam(player.id, teamPlayer.teamId);
+					await deleteTeamPlayers(player.id, teamPlayer.teamId);
 				}
 
 				// If the player is the first on the team, make them the captain. Must be `null` rather than `false` for non-captains in order to meet a database constraint.
 				const isCaptain =
-					(await getPlayersByTeamId(teamId)).length === 0 || null;
+					(await getPlayersByTeams(teamId)).length === 0 || null;
 
 				// Add the player to the team.
-				await createTeamPlayer({ isCaptain, playerId: player.id, teamId });
+				await createTeamPlayers({ isCaptain, playerId: player.id, teamId });
 				revalidatePath(getPlayerUrl(player));
 			}}
 			{...props}

@@ -3,16 +3,16 @@ import type { Account } from "types/db/Account";
 import type { Player } from "types/db/Player";
 import QueueType from "types/riot/QueueType";
 import Submit from "components/Submit";
-import createAccount from "db/createAccount";
+import createAccounts from "db/createAccounts";
 import getAccountByGameName from "riot/getAccountByGameName";
-import getAccountById from "db/getAccountById";
+import getAccounts from "db/getAccounts";
 import getFormField from "util/getFormField";
 import getLeagueEntriesBySummonerId from "riot/getLeagueEntriesBySummonerId";
 import getPlayerUrl from "util/getPlayerUrl";
 import getSummonerByPuuid from "riot/getSummonerByPuuid";
 import hasRiotApiKey from "util/hasRiotApiKey";
 import { revalidatePath } from "next/cache";
-import updateAccount from "db/updateAccount";
+import updateAccounts from "db/updateAccounts";
 import { useId } from "react";
 
 /**
@@ -62,7 +62,7 @@ export default function AddAccountForm({
 				const accountDto = await getAccountByGameName(gameName, tagLine);
 
 				// Check if the account is already in the database.
-				const existingAccount = await getAccountById(accountDto.puuid);
+				const [existingAccount] = await getAccounts(accountDto.puuid);
 				if (existingAccount) {
 					// Check if this player already has this account.
 					if (existingAccount.playerId === player.id) {
@@ -75,7 +75,7 @@ export default function AddAccountForm({
 					}
 
 					// Otherwise, move the account over to this player.
-					await updateAccount(accountDto.puuid, { playerId: player.id });
+					await updateAccounts({ playerId: player.id }, accountDto.puuid);
 					revalidatePath(getPlayerUrl(player));
 					return void 0;
 				}
@@ -103,7 +103,7 @@ export default function AddAccountForm({
 						(profileIconIdToVerify + 1) % starterPackMaxId;
 				}
 
-				await createAccount({
+				await createAccounts({
 					accountId: summonerDto.accountId,
 					gameNameCache: accountDto.gameName,
 					isPrimary: accounts.length ? void 0 : true,

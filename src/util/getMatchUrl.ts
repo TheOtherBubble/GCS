@@ -1,19 +1,9 @@
-import type { Match } from "types/db/Match";
-
-/**
- * Get the URL of a match from a slug.
- * @param slug - The slug.
- * @returns The URL.
- * @public
- */
-export const getMatchUrlBySlug = (slug: string) => `/matches/${slug}`;
-
 /**
  * Get the URL of the given match.
- * @param match - The match.
+ * @param slug - The match's stringified ID.
  * @returns The URL.
  * @public
  */
-export default function getMatchUrl(match: Match) {
-	return getMatchUrlBySlug(match.id.toString());
+export default function getMatchUrl(slug: `${number}`) {
+	return `/matches/${slug}`;
 }

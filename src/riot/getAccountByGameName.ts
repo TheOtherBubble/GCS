@@ -4,23 +4,6 @@ import getRiotApiBaseUrl from "./getRiotApiBaseUrl";
 import riotFetch from "./riotFetch";
 
 /**
- * Get the URL of the Riot API endpoint for getting accounts by game name.
- * @param gameName - The game name.
- * @param tagLine - The tag line.
- * @param cluster - The cluster to use to make the request.
- * @returns The URL.
- */
-export const getGetAccountByGameNameUrl = (
-	gameName: string,
-	tagLine: string,
-	cluster = Cluster.AMERICAS
-) =>
-	new URL(
-		`/riot/account/v1/accounts/by-riot-id/${gameName}/${tagLine}`,
-		getRiotApiBaseUrl(cluster)
-	).href;
-
-/**
  * Get an account in the Riot API.
  * @param gameName - The game name.
  * @param tagLine - The tag line.
@@ -33,12 +16,15 @@ export const getGetAccountByGameNameUrl = (
 export default async function getAccountByGameName(
 	gameName: string,
 	tagLine: string,
-	cluster?: Cluster,
-	key?: string
+	cluster = Cluster.AMERICAS,
+	key: string | undefined = void 0
 ) {
 	return (await (
 		await riotFetch(
-			getGetAccountByGameNameUrl(gameName, tagLine, cluster),
+			new URL(
+				`/riot/account/v1/accounts/by-riot-id/${gameName}/${tagLine}`,
+				getRiotApiBaseUrl(cluster)
+			).href,
 			void 0,
 			key
 		)

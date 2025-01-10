@@ -19,7 +19,9 @@ export default async function Page() {
 					.sort((a, b) => a.name.localeCompare(b.name))
 					.map((team) => (
 						<li key={team.id}>
-							<Link href={getTeamUrl(team)}>{team.name}</Link>
+							<Link href={getTeamUrl(encodeURIComponent(team.vanityUrlSlug))}>
+								{team.name}
+							</Link>
 						</li>
 					))}
 			</ul>

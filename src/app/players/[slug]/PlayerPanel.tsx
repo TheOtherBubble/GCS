@@ -6,7 +6,7 @@ import type { Season } from "types/db/Season";
 import SignUpForm from "./player/SignUpForm";
 import UpdatePlayerForm from "./player/UpdatePlayerForm";
 import UpdateSkinForm from "./player/UpdateSkinForm";
-import isDraftPlayerForSeason from "db/isDraftPlayerForSeason";
+import isDraftPlayerForSeasons from "db/isDraftPlayerForSeasons";
 
 /**
  * Properties that can be passed to a player panel.
@@ -36,10 +36,6 @@ export default async function PlayerPanel({
 	latestSeason,
 	...props
 }: PlayerPanelProps) {
-	const isDraftPlayerForLatestSeason = latestSeason
-		? await isDraftPlayerForSeason(player, latestSeason)
-		: false;
-
 	return (
 		<div {...props}>
 			<header>
@@ -58,14 +54,15 @@ export default async function PlayerPanel({
 					className="hide-on-mobile"
 				/>
 			)}
-			{!isDraftPlayerForLatestSeason && latestSeason && (
-				<SignUpForm
-					player={player}
-					season={latestSeason}
-					accounts={accounts}
-					className="hide-on-mobile"
-				/>
-			)}
+			{latestSeason &&
+				!(await isDraftPlayerForSeasons(player.id, latestSeason.id)) && (
+					<SignUpForm
+						player={player}
+						season={latestSeason}
+						accounts={accounts}
+						className="hide-on-mobile"
+					/>
+				)}
 		</div>
 	);
 }

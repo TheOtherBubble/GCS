@@ -17,7 +17,9 @@ export default async function Page() {
 			<ul>
 				{seasons.map((season) => (
 					<li key={season.id}>
-						<Link href={getSeasonUrl(season)}>{season.name}</Link>
+						<Link href={getSeasonUrl(encodeURIComponent(season.vanityUrlSlug))}>
+							{season.name}
+						</Link>
 					</li>
 				))}
 			</ul>

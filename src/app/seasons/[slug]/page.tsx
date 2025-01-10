@@ -1,4 +1,3 @@
-import getSeasonUrl, { getSeasonUrlByEncodedSlug } from "util/getSeasonUrl";
 import AdminPanel from "./AdminPanel";
 import Link from "components/Link";
 import type { Match } from "types/db/Match";
@@ -7,10 +6,11 @@ import type { Metadata } from "next";
 import type PageProps from "types/PageProps";
 import type { TeamGameResult } from "types/db/TeamGameResult";
 import { auth } from "db/auth";
-import getSeasonByEncodedSlug from "db/getSeasonByEncodedSlug";
-import getTeamGameResultsBySeason from "db/getMatchesBySeason";
+import getSeasonBySlug from "db/getSeasonBySlug";
+import getSeasonUrl from "util/getSeasonUrl";
+import getTeamGameResultsBySeason from "db/getMatchesBySeasons";
 import getTeamUrl from "util/getTeamUrl";
-import getTeamsBySeason from "db/getTeamsBySeason";
+import getTeamsBySeasons from "db/getTeamsBySeasons";
 import multiclass from "util/multiclass";
 import { redirect } from "next/navigation";
 import style from "./page.module.scss";
@@ -32,17 +32,17 @@ export interface SeasonsPageParams {
  */
 export default async function Page(props: PageProps<SeasonsPageParams>) {
 	const { slug } = await props.params;
-	const season = await getSeasonByEncodedSlug(slug);
+	const season = await getSeasonBySlug(slug);
 	if (!season) {
 		redirect("/seasons");
 	}
 
 	// Sort teams by score for the leaderboard.
-	const teams = await getTeamsBySeason(season);
+	const teams = await getTeamsBySeasons(season.id);
 	const teamScores = teams.map((team) => ({ losses: 0, team, wins: 0 }));
 
 	// Split matches into rounds for displaying.
-	const rows = await getTeamGameResultsBySeason(season);
+	const rows = await getTeamGameResultsBySeason(season.id);
 	const rounds = new Map<
 		number,
 		{
@@ -149,7 +149,9 @@ export default async function Page(props: PageProps<SeasonsPageParams>) {
 						.sort((a, b) => a.wins - b.wins || b.losses - a.losses)
 						.map(({ team, wins, losses }) => (
 							<li key={team.id}>
-								<Link href={getTeamUrl(team)}>{team.name}</Link>
+								<Link href={getTeamUrl(encodeURIComponent(team.vanityUrlSlug))}>
+									{team.name}
+								</Link>
 								{` ${wins.toString()}-${losses.toString()}`}
 							</li>
 						))}
@@ -167,17 +169,19 @@ export default async function Page(props: PageProps<SeasonsPageParams>) {
  */
 export const generateMetadata = async (props: PageProps<SeasonsPageParams>) => {
 	const { slug } = await props.params;
-	const season = await getSeasonByEncodedSlug(slug);
+	const season = await getSeasonBySlug(slug);
 	return (
 		season
 			? {
 					description: `The schedule for Gauntlet Championship Series ${season.name}.`,
-					openGraph: { url: getSeasonUrl(season) },
+					openGraph: {
+						url: getSeasonUrl(encodeURIComponent(season.vanityUrlSlug))
+					},
 					title: season.name
 				}
 			: {
 					description: "An unknown season of the Gauntlet Championship Series.",
-					openGraph: { url: getSeasonUrlByEncodedSlug(slug) },
+					openGraph: { url: getSeasonUrl(slug) },
 					title: "Unknown Season"
 				}
 	) satisfies Metadata;

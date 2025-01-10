@@ -1,3 +1,4 @@
+import { forbidden, unauthorized } from "next/navigation";
 import CreateSeasonForm from "./CreateSeasonForm";
 import type { Metadata } from "next";
 import { auth } from "db/auth";
@@ -10,8 +11,12 @@ import style from "./page.module.scss";
  */
 export default async function Page() {
 	const session = await auth();
-	if (!session?.user?.isAdministator) {
-		return <p>{"You must be an administrator to view this page."}</p>;
+	if (!session?.user) {
+		unauthorized();
+	}
+
+	if (!session.user.isAdministator) {
+		forbidden();
 	}
 
 	return (

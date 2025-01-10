@@ -92,8 +92,8 @@ export default function GenerateRegularSeasonForm({
 					}
 				}
 
-				await createMatches(matches);
-				revalidatePath(getSeasonUrl(season));
+				await createMatches(...matches);
+				revalidatePath(getSeasonUrl(encodeURIComponent(season.vanityUrlSlug)));
 				return void 0;
 			}}
 			{...props}

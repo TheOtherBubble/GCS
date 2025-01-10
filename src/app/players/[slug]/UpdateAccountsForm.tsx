@@ -9,7 +9,7 @@ import getPlayerUrl from "util/getPlayerUrl";
 import getSummonerByPuuid from "riot/getSummonerByPuuid";
 import hasRiotApiKey from "util/hasRiotApiKey";
 import { revalidatePath } from "next/cache";
-import updateAccount from "db/updateAccount";
+import updateAccounts from "db/updateAccounts";
 
 /**
  * Properties that can be passed to an update accounts form.
@@ -71,18 +71,21 @@ export default async function UpdateAccountsForm({
 					const { account, platform, soloQueueDto, summonerDto } = accountData;
 
 					// eslint-disable-next-line no-await-in-loop
-					await updateAccount(account.puuid, {
-						cacheDate: new Date().toISOString().substring(0, 10),
-						// eslint-disable-next-line no-await-in-loop
-						gameNameCache: (await getAccountByPuuid(account.puuid)).gameName,
-						isVerified:
-							account.isVerified ||
-							summonerDto.profileIconId === account.profileIconIdToVerify,
-						rankCache: soloQueueDto.rank,
-						region: platform,
-						tagLineCache: account.tagLineCache,
-						tierCache: soloQueueDto.tier
-					});
+					await updateAccounts(
+						{
+							cacheDate: new Date().toISOString().substring(0, 10),
+							// eslint-disable-next-line no-await-in-loop
+							gameNameCache: (await getAccountByPuuid(account.puuid)).gameName,
+							isVerified:
+								account.isVerified ||
+								summonerDto.profileIconId === account.profileIconIdToVerify,
+							rankCache: soloQueueDto.rank,
+							region: platform,
+							tagLineCache: account.tagLineCache,
+							tierCache: soloQueueDto.tier
+						},
+						account.puuid
+					);
 				}
 				revalidatePath(getPlayerUrl(player));
 				return void 0;

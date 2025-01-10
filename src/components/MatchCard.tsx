@@ -58,7 +58,7 @@ export default function MatchCard({
 	return (
 		<a
 			className={multiclass(className, style["match-card"])}
-			href={getMatchUrl(match)}
+			href={getMatchUrl(match.id.toString() as `${number}`)}
 			{...props}
 		>
 			<p className="hide-on-mobile">{match.format}</p>

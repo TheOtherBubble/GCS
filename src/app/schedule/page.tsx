@@ -11,7 +11,7 @@ import { redirect } from "next/navigation";
 export default async function Page() {
 	const season = await getLatestSeason();
 	if (season) {
-		redirect(getSeasonUrl(season));
+		redirect(getSeasonUrl(encodeURIComponent(season.vanityUrlSlug)));
 	}
 
 	return <p>{"There are no seasons."}</p>;

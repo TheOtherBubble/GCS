@@ -2,7 +2,7 @@ import Form, { type FormProps } from "components/Form";
 import type { Player } from "types/db/Player";
 import Submit from "components/Submit";
 import getFormField from "util/getFormField";
-import updatePlayer from "db/updatePlayer";
+import updatePlayers from "db/updatePlayers";
 import { useId } from "react";
 
 /**
@@ -31,13 +31,16 @@ export default function BanPlayerForm({
 		<Form
 			action={async (form) => {
 				"use server";
-				await updatePlayer(player.id, {
-					bannedUntilDate: getFormField(
-						form,
-						"bannedUntilDate",
-						true
-					).substring(0, 10)
-				});
+				await updatePlayers(
+					{
+						bannedUntilDate: getFormField(
+							form,
+							"bannedUntilDate",
+							true
+						).substring(0, 10)
+					},
+					player.id
+				);
 			}}
 			{...props}
 		>

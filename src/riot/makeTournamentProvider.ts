@@ -4,14 +4,6 @@ import getRiotApiBaseUrl from "./getRiotApiBaseUrl";
 import riotFetch from "./riotFetch";
 
 /**
- * Get the URL of the Riot API endpoint for making tournament providers.
- * @param cluster - The cluster to use to make the request.
- * @returns The URL.
- */
-export const getMakeTournamentProviderUrl = (cluster = Cluster.AMERICAS) =>
-	new URL("/lol/tournament-stub/v5/providers", getRiotApiBaseUrl(cluster)).href;
-
-/**
  * Make a tournament provider in the Riot API.
  * @param params - The provider registration parameters.
  * @param cluster - The cluster to use to make the request.
@@ -22,12 +14,13 @@ export const getMakeTournamentProviderUrl = (cluster = Cluster.AMERICAS) =>
  */
 export default async function makeTournamentProvider(
 	params: ProviderRegistrationParameters,
-	cluster?: Cluster,
-	key?: string
+	cluster = Cluster.AMERICAS,
+	key: string | undefined = void 0
 ) {
 	return (await (
 		await riotFetch(
-			getMakeTournamentProviderUrl(cluster),
+			new URL("/lol/tournament-stub/v5/providers", getRiotApiBaseUrl(cluster))
+				.href,
 			{ body: JSON.stringify(params), method: "POST" },
 			key
 		)

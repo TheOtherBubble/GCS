@@ -4,21 +4,6 @@ import getRiotApiBaseUrl from "./getRiotApiBaseUrl";
 import riotFetch from "./riotFetch";
 
 /**
- * Get the URL of the Riot API endpoint for getting league entries by summoner ID.
- * @param id - The summoner ID.
- * @param platform - The platform to use to make the request.
- * @returns The URL.
- */
-export const getGetLeagueEntriesBySummonerIdUrl = (
-	id: string,
-	platform: Platform = "NA1"
-) =>
-	new URL(
-		`/lol/league/v4/entries/by-summoner/${id}`,
-		getRiotApiBaseUrl(platform)
-	).href;
-
-/**
  * Get a league entry in the Riot API.
  * @param id - The summoner ID.
  * @param platform - The platform to use to make the request.
@@ -29,12 +14,15 @@ export const getGetLeagueEntriesBySummonerIdUrl = (
  */
 export default async function getLeagueEntriesBySummonerId(
 	id: string,
-	platform?: Platform,
-	key?: string
+	platform: Platform = "NA1",
+	key: string | undefined = void 0
 ) {
 	return (await (
 		await riotFetch(
-			getGetLeagueEntriesBySummonerIdUrl(id, platform),
+			new URL(
+				`/lol/league/v4/entries/by-summoner/${id}`,
+				getRiotApiBaseUrl(platform)
+			).href,
 			void 0,
 			key
 		)

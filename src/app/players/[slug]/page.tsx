@@ -1,4 +1,3 @@
-import getPlayerUrl, { getPlayerUrlBySlug } from "util/getPlayerUrl";
 import AccountCard from "components/AccountCard";
 import AdminPanel from "./AdminPanel";
 import GameCard from "components/GameCard";
@@ -8,12 +7,14 @@ import type PageProps from "types/PageProps";
 import PlayerPanel from "./PlayerPanel";
 import UpdateAccountsForm from "./UpdateAccountsForm";
 import { auth } from "db/auth";
-import getAccountsByPlayer from "db/getAccountsByPlayer";
+import getAccountsByPlayers from "db/getAccountsByPlayers";
 import getBackgroundImageUrl from "util/getBackgroundImageUrl";
+import getGameResultsByPlayers from "db/getGameResultsByPlayers";
 import getLatestSeason from "db/getLatestSeason";
 import getPlayerBySlug from "db/getPlayerBySlug";
-import getPlayerGameResultsByPlayer from "db/getPlayerGameResultsByPlayer";
-import getTeamsBySeason from "db/getTeamsBySeason";
+import getPlayerUrl from "util/getPlayerUrl";
+import getPlayerUrlBySlug from "util/getPlayerUrlBySlug";
+import getTeamsBySeasons from "db/getTeamsBySeasons";
 import { redirect } from "next/navigation";
 import style from "./page.module.scss";
 
@@ -22,7 +23,7 @@ import style from "./page.module.scss";
  * @public
  */
 export interface PlayersPageParams {
-	/** The player's encoded display name or Discord name or ID. */
+	/** The player's encoded display name or Discord name. */
 	slug: string;
 }
 
@@ -43,11 +44,11 @@ export default async function Page(props: PageProps<PlayersPageParams>) {
 	const isAdmin = session?.user?.isAdministator ?? false;
 	const isPlayer = isAdmin || session?.user?.id === player.id;
 
-	const accounts = await getAccountsByPlayer(player);
-	const games = await getPlayerGameResultsByPlayer(player);
+	const accounts = await getAccountsByPlayers(player.id);
+	const games = await getGameResultsByPlayers(player.id);
 	const backgroundImageUrl = getBackgroundImageUrl(player);
 	const latestSeason = isPlayer ? await getLatestSeason() : void 0;
-	const teams = latestSeason ? await getTeamsBySeason(latestSeason) : [];
+	const teams = latestSeason ? await getTeamsBySeasons(latestSeason.id) : [];
 
 	return (
 		<div className={style["content"]}>

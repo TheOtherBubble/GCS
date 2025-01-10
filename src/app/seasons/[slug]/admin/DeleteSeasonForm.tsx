@@ -1,7 +1,7 @@
 import Form, { type FormProps } from "components/Form";
 import type { Season } from "types/db/Season";
 import Submit from "components/Submit";
-import deleteSeason from "db/deleteSeason";
+import deleteSeasons from "db/deleteSeasons";
 import getFormField from "util/getFormField";
 import getSeasonUrl from "util/getSeasonUrl";
 import { revalidatePath } from "next/cache";
@@ -37,8 +37,8 @@ export default function DeleteSeasonForm({
 					return "Invalid safeguard.";
 				}
 
-				await deleteSeason(season.id);
-				revalidatePath(getSeasonUrl(season));
+				await deleteSeasons(season.id);
+				revalidatePath(getSeasonUrl(encodeURIComponent(season.vanityUrlSlug)));
 				return void 0;
 			}}
 			{...props}

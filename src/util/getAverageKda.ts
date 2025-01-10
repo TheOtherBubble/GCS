@@ -6,7 +6,7 @@ import type { PlayerGameResult } from "types/db/PlayerGameResult";
  * @returns The player's KDA ratio.
  * @public
  */
-export default function getAverageKda(games: PlayerGameResult[]) {
+export default function getAverageKda(...games: PlayerGameResult[]) {
 	let kills = 0;
 	let deaths = 0;
 	let assists = 0;

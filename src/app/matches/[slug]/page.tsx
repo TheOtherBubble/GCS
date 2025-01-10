@@ -7,11 +7,12 @@ import PlayerCard from "components/PlayerCard";
 import type { PlayerGameResult } from "types/db/PlayerGameResult";
 import TeamCard from "components/TeamCard";
 import type { TeamGameResult } from "types/db/TeamGameResult";
-import getGamesByMatch from "db/getGamesByMatch";
-import { getMatchUrlBySlug } from "util/getMatchUrl";
-import getPlayersByTeam from "db/getPlayersByTeam";
-import getSeasonById from "db/getSeasonById";
-import { getTeamsByMatchSlug } from "db/getTeamsByMatch";
+import getGamesByMatches from "db/getGamesByMatches";
+import getMatchUrl from "util/getMatchUrl";
+import getMatches from "db/getMatches";
+import getPlayersByTeams from "db/getPlayersByTeams";
+import getSeasons from "db/getSeasons";
+import getTeams from "db/getTeams";
 import multiclass from "util/multiclass";
 import style from "./page.module.scss";
 
@@ -32,24 +33,33 @@ export interface MatchesPageParams {
  */
 export default async function Page(props: PageProps<MatchesPageParams>) {
 	const { slug } = await props.params;
-	const matchRows = await getTeamsByMatchSlug(slug);
-	const match = matchRows[0]?.match;
-	const season = match ? await getSeasonById(match.seasonId) : void 0;
-	const blueTeam = matchRows.find(
-		(row) => row.team.id === match?.blueTeamId
-	)?.team;
-	const redTeam = matchRows.find(
-		(row) => row.team.id === match?.redTeamId
-	)?.team;
-	if (!match || !season || !blueTeam || !redTeam) {
+	const [match] = await getMatches(parseInt(slug, 10));
+	if (!match) {
 		return <p>{"Unknown match."}</p>;
 	}
 
-	const blueTeamPlayers = await getPlayersByTeam(blueTeam);
-	const redTeamPlayers = await getPlayersByTeam(redTeam);
+	const [season] = await getSeasons(match.seasonId);
+	if (!season) {
+		return <p>{"Unknown season."}</p>;
+	}
+
+	const teams = await getTeams(match.blueTeamId, match.redTeamId);
+	const blueTeam = teams.find((team) => team.id === match.blueTeamId);
+	const redTeam = teams.find((team) => team.id === match.redTeamId);
+	if (!blueTeam || !redTeam) {
+		return <p>{"Unknown team."}</p>;
+	}
+
+	const teamPlayers = await getPlayersByTeams(blueTeam.id, redTeam.id);
+	const blueTeamPlayers = teamPlayers.filter(
+		({ teamPlayer }) => teamPlayer.teamId === blueTeam.id
+	);
+	const redTeamPlayers = teamPlayers.filter(
+		({ teamPlayer }) => teamPlayer.teamId === redTeam.id
+	);
 
 	// Organize game data.
-	const gameRows = await getGamesByMatch(match);
+	const gameRows = await getGamesByMatches(match.id);
 	const games: {
 		game: Game;
 		result: GameResult | undefined;
@@ -141,7 +151,7 @@ export const generateMetadata = async (props: PageProps<MatchesPageParams>) => {
 	const { slug } = await props.params;
 	return {
 		description: `Gauntlet Championship Series match #${slug}`,
-		openGraph: { url: getMatchUrlBySlug(slug) },
+		openGraph: { url: getMatchUrl(slug) },
 		title: `Match #${slug}`
 	} satisfies Metadata;
 };

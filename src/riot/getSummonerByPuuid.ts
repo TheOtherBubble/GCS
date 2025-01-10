@@ -4,21 +4,6 @@ import getRiotApiBaseUrl from "./getRiotApiBaseUrl";
 import riotFetch from "./riotFetch";
 
 /**
- * Get the URL of the Riot API endpoint for getting summoners by PUUID.
- * @param puuid - The PUUID.
- * @param platform - The platform to use to make the request.
- * @returns The URL.
- */
-export const getGetSummonerByPuuidUrl = (
-	puuid: string,
-	platform: Platform = "NA1"
-) =>
-	new URL(
-		`/lol/summoner/v4/summoners/by-puuid/${puuid}`,
-		getRiotApiBaseUrl(platform)
-	).href;
-
-/**
  * Get a summoner in the Riot API.
  * @param puuid - The PUUID.
  * @param platform - The platform to use to make the request.
@@ -29,10 +14,17 @@ export const getGetSummonerByPuuidUrl = (
  */
 export default async function getSummonerByPuuid(
 	puuid: string,
-	platform?: Platform,
-	key?: string
+	platform: Platform = "NA1",
+	key: string | undefined = void 0
 ) {
 	return (await (
-		await riotFetch(getGetSummonerByPuuidUrl(puuid, platform), void 0, key)
+		await riotFetch(
+			new URL(
+				`/lol/summoner/v4/summoners/by-puuid/${puuid}`,
+				getRiotApiBaseUrl(platform)
+			).href,
+			void 0,
+			key
+		)
 	).json()) as SummonerDto;
 }

@@ -3,7 +3,7 @@ import type { Account } from "types/db/Account";
 import type { Player } from "types/db/Player";
 import type { Season } from "types/db/Season";
 import Submit from "components/Submit";
-import createDraftPlayer from "db/createDraftPlayer";
+import createDraftPlayers from "db/createDraftPlayers";
 import getPlayerUrl from "util/getPlayerUrl";
 import { revalidatePath } from "next/cache";
 
@@ -64,7 +64,7 @@ export default function SignUpForm({
 				}
 				*/
 
-				await createDraftPlayer({ playerId: player.id, seasonId: season.id });
+				await createDraftPlayers({ playerId: player.id, seasonId: season.id });
 				revalidatePath(getPlayerUrl(player));
 				return void 0;
 			}}

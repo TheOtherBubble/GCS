@@ -1,14 +1,15 @@
 import Form, { type FormProps } from "components/Form";
-import getPlayerUrl, { getPlayerUrlBySlug } from "util/getPlayerUrl";
 import ChampionList from "./ChampionList";
 import type { Player } from "types/db/Player";
 import type { PlayerRole } from "types/db/PlayerRole";
 import Submit from "components/Submit";
 import getFormField from "util/getFormField";
+import getPlayerUrl from "util/getPlayerUrl";
+import getPlayerUrlBySlug from "util/getPlayerUrlBySlug";
 import { playerRoleEnum } from "db/schema";
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
-import updatePlayer from "db/updatePlayer";
+import updatePlayers from "db/updatePlayers";
 import { useId } from "react";
 
 /**
@@ -43,20 +44,23 @@ export default function UpdatePlayerForm({
 				"use server";
 				const displayName = getFormField(form, "displayName");
 				const backgroundChampionId = getFormField(form, "backgroundChampionId");
-				await updatePlayer(player.id, {
-					backgroundChampionId,
-					backgroundSkinNumber: backgroundChampionId ? 0 : void 0,
-					biography: getFormField(form, "biography"),
-					displayName,
-					primaryRole: getFormField(form, "primaryRole") as
-						| PlayerRole
-						| undefined,
-					secondaryRole: getFormField(form, "secondaryRole") as
-						| PlayerRole
-						| undefined
-				});
+				await updatePlayers(
+					{
+						backgroundChampionId,
+						backgroundSkinNumber: backgroundChampionId ? 0 : void 0,
+						biography: getFormField(form, "biography"),
+						displayName,
+						primaryRole: getFormField(form, "primaryRole") as
+							| PlayerRole
+							| undefined,
+						secondaryRole: getFormField(form, "secondaryRole") as
+							| PlayerRole
+							| undefined
+					},
+					player.id
+				);
 				if (displayName) {
-					redirect(getPlayerUrlBySlug(displayName));
+					redirect(getPlayerUrlBySlug(encodeURIComponent(displayName)));
 				}
 
 				// If the vanity URL didn't change, just reload the page instead.

@@ -1,17 +1,8 @@
 import Cluster from "types/riot/Cluster";
 import type TournamentRegistrationParameters from "types/riot/TournamentRegistrationParameters";
 import getRiotApiBaseUrl from "./getRiotApiBaseUrl";
-import getTournamentProvider from "db/getTournamentProvider";
+import getTournamentProviderId from "util/getTournamentProviderId";
 import riotFetch from "./riotFetch";
-
-/**
- * Get the URL of the Riot API endpoint for making tournaments.
- * @param cluster - The cluster to use to make the request.
- * @returns The URL.
- */
-export const getMakeTournamentUrl = (cluster = Cluster.AMERICAS) =>
-	new URL("/lol/tournament-stub/v5/tournaments", getRiotApiBaseUrl(cluster))
-		.href;
 
 /**
  * Make a tournament in the Riot API.
@@ -24,19 +15,20 @@ export const getMakeTournamentUrl = (cluster = Cluster.AMERICAS) =>
  */
 export default async function makeTournament(
 	params?: TournamentRegistrationParameters | string,
-	cluster?: Cluster,
-	key?: string
+	cluster = Cluster.AMERICAS,
+	key: string | undefined = void 0
 ) {
 	return (await (
 		await riotFetch(
-			getMakeTournamentUrl(cluster),
+			new URL("/lol/tournament-stub/v5/tournaments", getRiotApiBaseUrl(cluster))
+				.href,
 			{
 				body: JSON.stringify(
 					params
 						? typeof params === "string"
-							? { name: params, providerId: await getTournamentProvider() }
+							? { name: params, providerId: await getTournamentProviderId() }
 							: params
-						: { providerId: await getTournamentProvider() }
+						: { providerId: await getTournamentProviderId() }
 				),
 				method: "POST"
 			},

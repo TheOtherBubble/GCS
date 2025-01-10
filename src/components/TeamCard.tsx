@@ -33,7 +33,7 @@ export default function TeamCard({
 	return (
 		<a
 			className={multiclass(className, style["team-card"])}
-			href={getTeamUrl(team)}
+			href={getTeamUrl(encodeURIComponent(team.vanityUrlSlug))}
 			{...props}
 		>
 			<Image

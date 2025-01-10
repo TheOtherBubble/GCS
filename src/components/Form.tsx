@@ -1,6 +1,7 @@
 "use client";
 
 import NextForm, { type FormProps as NextFormProps } from "next/form";
+import isDev from "util/isDev";
 import multiclass from "util/multiclass";
 import style from "./styles/form.module.scss";
 import { useActionState } from "react";
@@ -44,7 +45,11 @@ export default function Form({
 				return (await action(payload)) ?? void 0;
 			} catch (error) {
 				// Error messages are obfuscated in production. Return a string to show an error message to users.
-				return error instanceof Error ? error.message : "Error.";
+				return isDev
+					? error instanceof Error
+						? error.message
+						: "Error."
+					: "There was an error submitting the form. Did you fill out any fields?";
 			}
 		},
 		void 0

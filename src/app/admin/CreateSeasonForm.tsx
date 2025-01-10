@@ -1,6 +1,6 @@
 import Form, { type FormProps } from "components/Form";
 import Submit from "components/Submit";
-import createSeason from "db/createSeason";
+import createSeasons from "db/createSeasons";
 import getFormField from "util/getFormField";
 import hasRiotApiKey from "util/hasRiotApiKey";
 import makeTournament from "riot/makeTournament";
@@ -32,7 +32,7 @@ export default function CreateSeasonForm(props: CreateSeasonFormProps) {
 				}
 
 				const name = getFormField(form, "name", true);
-				await createSeason({
+				await createSeasons({
 					id: await makeTournament(name),
 					name,
 					startDate: getFormField(form, "startDate"),

@@ -3,7 +3,7 @@ import type { Player } from "types/db/Player";
 import Submit from "components/Submit";
 import getPlayerUrl from "util/getPlayerUrl";
 import { revalidatePath } from "next/cache";
-import updateAccountsByPlayer from "db/updateAccountsByPlayer";
+import updateAccountsByPlayers from "db/updateAccountsByPlayers";
 
 /**
  * Properties that can be passed to a force verify accounts form.
@@ -29,7 +29,7 @@ export default function ForceVerifyAccountsForm({
 		<Form
 			action={async () => {
 				"use server";
-				await updateAccountsByPlayer(player, { isVerified: true });
+				await updateAccountsByPlayers({ isVerified: true }, player.id);
 				revalidatePath(getPlayerUrl(player));
 			}}
 			{...props}

@@ -5,7 +5,7 @@ import Submit from "components/Submit";
 import getFormField from "util/getFormField";
 import getPlayerUrl from "util/getPlayerUrl";
 import { revalidatePath } from "next/cache";
-import updatePlayer from "db/updatePlayer";
+import updatePlayers from "db/updatePlayers";
 import { useId } from "react";
 
 /**
@@ -46,7 +46,7 @@ export default function UpdateSkinForm({
 					return;
 				}
 
-				await updatePlayer(player.id, { backgroundSkinNumber });
+				await updatePlayers({ backgroundSkinNumber }, player.id);
 				revalidatePath(getPlayerUrl(player));
 			}}
 			{...props}

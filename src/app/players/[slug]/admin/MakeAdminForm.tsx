@@ -1,7 +1,7 @@
 import Form, { type FormProps } from "components/Form";
 import type { Player } from "types/db/Player";
 import Submit from "components/Submit";
-import updatePlayer from "db/updatePlayer";
+import updatePlayers from "db/updatePlayers";
 
 /**
  * Properties that can be passed to a make administrator form.
@@ -27,7 +27,7 @@ export default function MakeAdminForm({
 		<Form
 			action={async () => {
 				"use server";
-				await updatePlayer(player.id, { isAdministator: true });
+				await updatePlayers({ isAdministator: true }, player.id);
 			}}
 			{...props}
 		>

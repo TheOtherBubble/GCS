@@ -1,7 +1,7 @@
 import Form, { type FormProps } from "components/Form";
 import type { Season } from "types/db/Season";
 import Submit from "components/Submit";
-import createTeam from "db/createTeam";
+import createTeams from "db/createTeams";
 import domain from "util/domain";
 import getFormField from "util/getFormField";
 import getSeasonUrl from "util/getSeasonUrl";
@@ -39,7 +39,7 @@ export default function CreateTeamForm({
 		<Form
 			action={async (form) => {
 				"use server";
-				await createTeam({
+				await createTeams({
 					code: getFormField(form, "code", true),
 					color: getFormField(form, "color", true).substring(1), // Cut off pound.
 					logoUrl: getFormField(form, "logoUrl", true),
@@ -48,7 +48,7 @@ export default function CreateTeamForm({
 					seasonId: season.id,
 					vanityUrlSlug: getFormField(form, "vanityUrlSlug", true)
 				});
-				revalidatePath(getSeasonUrl(season));
+				revalidatePath(getSeasonUrl(encodeURIComponent(season.vanityUrlSlug)));
 			}}
 			{...props}
 		>
