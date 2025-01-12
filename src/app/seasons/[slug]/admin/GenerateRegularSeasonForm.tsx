@@ -4,7 +4,7 @@ import type { MatchFormat } from "types/db/MatchFormat";
 import type { Season } from "types/db/Season";
 import Submit from "components/Submit";
 import type { Team } from "types/db/Team";
-import createMatches from "db/createMatches";
+import createMatchesWithGames from "util/createMatchesWithGames";
 import getFormField from "util/getFormField";
 import getSeasonUrl from "util/getSeasonUrl";
 import hasRiotApiKey from "util/hasRiotApiKey";
@@ -92,7 +92,7 @@ export default function GenerateRegularSeasonForm({
 					}
 				}
 
-				await createMatches(...matches);
+				await createMatchesWithGames(matches);
 				revalidatePath(getSeasonUrl(encodeURIComponent(season.vanityUrlSlug)));
 				return void 0;
 			}}
