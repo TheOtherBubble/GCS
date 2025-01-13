@@ -1,11 +1,13 @@
 import AdminPanel from "./AdminPanel";
 import Link from "components/Link";
+import LocalDate from "components/LocalDate";
 import type { Match } from "types/db/Match";
 import MatchCard from "components/MatchCard";
 import type { Metadata } from "next";
 import type PageProps from "types/PageProps";
 import type { TeamGameResult } from "types/db/TeamGameResult";
 import { auth } from "db/auth";
+import getMatchDateTime from "util/getMatchDateTime";
 import getSeasonBySlug from "db/getSeasonBySlug";
 import getSeasonUrl from "util/getSeasonUrl";
 import getTeamGameResultsBySeason from "db/getMatchesBySeasons";
@@ -118,7 +120,16 @@ export default async function Page(props: PageProps<SeasonsPageParams>) {
 					.map(([round, matches]) => (
 						<div key={round}>
 							<header>
-								<h3>{`Round ${round.toString()}`}</h3>
+								{matches[0] ? (
+									<h3>
+										<LocalDate
+											date={getMatchDateTime(matches[0].match, season)}
+											options={{ dateStyle: "full" }}
+										/>
+									</h3>
+								) : (
+									<h3>{`Round ${round.toString()}`}</h3>
+								)}
 							</header>
 							{matches
 								.sort(

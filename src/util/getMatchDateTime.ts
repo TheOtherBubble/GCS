@@ -1,5 +1,6 @@
 import type { Match } from "types/db/Match";
 import type { Season } from "types/db/Season";
+import { TIME_SLOT_DURATION } from "./const";
 
 /** The numeric value of Saturday for `Date.prototype.getDay` and `Date.prototype.getUTCDay`. */
 const SATURDAY = 6;
@@ -33,8 +34,8 @@ export default function getMatchDateTime(match: Match, season: Season) {
 	// Go forward two hours for Sunday games.
 	date.setUTCHours(date.getUTCHours() + 2 * sun);
 
-	// Go forward two hours per time slot.
-	date.setUTCHours(date.getUTCHours() + 2 * timeSlot);
+	// Go forward `TIME_SLOT_DURATION` per time slot.
+	date.setUTCHours(date.getUTCHours() + TIME_SLOT_DURATION * timeSlot);
 
 	return date;
 }

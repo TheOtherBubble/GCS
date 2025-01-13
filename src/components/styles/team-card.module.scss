@@ -5,28 +5,25 @@ a.team-card {
 
 	// Reduce font size from card default.
 	font-size: 1.5em;
+	text-wrap: nowrap;
 
 	// Create columns for the team logo and details.
 	display: grid;
 	grid-template-columns: 1fr 2fr;
 	gap: 10px;
-	align-items: center;
+	place-items: center;
 
-	// Ensure that the team logo is sized properly.
+	// Maintain grid alignment even on very small screens.
+	& > * {
+		overflow: hidden;
+	}
+
 	& > img {
-		// Necessary to fit images in grid columns.
-		max-width: 100%;
-
-		// Maintain aspect ratio.
+		// Ensure that the team logo is sized properly.
+		height: 100%;
 		width: auto;
 
-		// Sizing.
-		height: 80%;
-
-		// Logos are expected to be square. Stretch them if they aren't.
-		aspect-ratio: 1;
-
-		// Align the logo towards the center (to the right).
+		// Align the team logo towards the center (to the right).
 		justify-self: end;
 	}
 
