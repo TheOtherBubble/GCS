@@ -12,7 +12,6 @@ import getTeamGameResultsBySeason from "db/getMatchesBySeasons";
 import getTeamUrl from "util/getTeamUrl";
 import getTeamsBySeasons from "db/getTeamsBySeasons";
 import leftHierarchy from "util/leftHierarchy";
-import multiclass from "util/multiclass";
 import { redirect } from "next/navigation";
 import style from "./page.module.scss";
 
@@ -60,62 +59,68 @@ export default async function Page(props: PageProps<SeasonsPageParams>) {
 	return (
 		<div className={style["content"]}>
 			<div className={style["info"]}>
-				<h1>{season.name}</h1>
-				<hr />
-				<div>
-					{(await auth())?.user?.isAdministator && (
-						<AdminPanel
-							className="hide-on-mobile"
-							season={season}
-							teams={teams}
-						/>
-					)}
-				</div>
+				<header>
+					<h1>{season.name}</h1>
+					<hr />
+				</header>
+				{(await auth())?.user?.isAdministator && (
+					<AdminPanel season={season} teams={teams} />
+				)}
 			</div>
 			<div className={style["schedule"]}>
-				<h2>{"Schedule"}</h2>
-				{Array.from(rounds)
-					.sort(([a], [b]) => a - b)
-					.map(([round, roundMatches]) => (
-						<div key={round}>
-							<header>
-								{roundMatches[0] ? (
-									<h3>
-										<LocalDate
-											date={getMatchDateTime(roundMatches[0].value, season)}
-											options={{ dateStyle: "full" }}
-										/>
-									</h3>
-								) : (
-									<h3>{`Round ${round.toString()}`}</h3>
-								)}
-							</header>
-							{roundMatches
-								.sort(
-									({ value: { timeSlot: a } }, { value: { timeSlot: b } }) =>
-										a - b
-								)
-								.map((match) => (
-									<MatchCard
-										key={match.value.id}
-										match={match.value}
-										season={season}
-										teamGameResults={match.children
-											.flatMap(({ children }) => children)
-											.flatMap(({ children }) => children)}
-										dateTimeFormatOptions={{
-											dateStyle: "long",
-											timeStyle: "short"
-										}}
-										teams={teams}
-									/>
-								))}
-						</div>
-					))}
+				<header>
+					<h2>{"Schedule"}</h2>
+				</header>
+				<ol>
+					{Array.from(rounds)
+						.sort(([a], [b]) => a - b)
+						.map(([round, roundMatches]) => (
+							<li key={round}>
+								<header>
+									{roundMatches[0] ? (
+										<h3>
+											<LocalDate
+												date={getMatchDateTime(roundMatches[0].value, season)}
+												options={{ dateStyle: "full" }}
+											/>
+										</h3>
+									) : (
+										<h3>{`Round ${round.toString()}`}</h3>
+									)}
+								</header>
+								<ol>
+									{roundMatches
+										.sort(
+											(
+												{ value: { timeSlot: a, id: c } },
+												{ value: { timeSlot: b, id: d } }
+											) => a - b || c - d
+										)
+										.map((match) => (
+											<li key={match.value.id}>
+												<MatchCard
+													match={match.value}
+													season={season}
+													teamGameResults={match.children
+														.flatMap(({ children }) => children)
+														.flatMap(({ children }) => children)}
+													dateTimeFormatOptions={{
+														dateStyle: "long",
+														timeStyle: "short"
+													}}
+													teams={teams}
+												/>
+											</li>
+										))}
+								</ol>
+							</li>
+						))}
+				</ol>
 			</div>
-			<div className={multiclass(style["leaderboards"], "hide-on-mobile")}>
-				<h2>{"Leaderboards"}</h2>
-				<h3>{"Standings"}</h3>
+			<div className={style["leaderboards"]}>
+				<header>
+					<h2>{"Standings"}</h2>
+				</header>
 				<ol>
 					{teamScores
 						.sort((a, b) => a.wins - b.wins || b.losses - a.losses)

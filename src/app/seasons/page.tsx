@@ -14,15 +14,22 @@ export default async function Page() {
 	return (
 		<>
 			<h1>{"Seasons"}</h1>
-			<ul>
-				{seasons.map((season) => (
-					<li key={season.id}>
-						<Link href={getSeasonUrl(encodeURIComponent(season.vanityUrlSlug))}>
-							{season.name}
-						</Link>
-					</li>
-				))}
-			</ul>
+			<ol>
+				{seasons
+					.sort(
+						({ startDate: a }, { startDate: b }) =>
+							new Date(a).valueOf() - new Date(b).valueOf()
+					)
+					.map((season) => (
+						<li key={season.id}>
+							<Link
+								href={getSeasonUrl(encodeURIComponent(season.vanityUrlSlug))}
+							>
+								{season.name}
+							</Link>
+						</li>
+					))}
+			</ol>
 		</>
 	);
 }

@@ -1,7 +1,4 @@
 Core functionality, necessary before the season starts:
-- Show date or round on match pages.
-- Show format on match pages.
-- Show match score on match pages.
 - Link to match on game pages.
 - Show the tournament code of the game to players on teams in the game on game pages.
 - Show the tournament code of the next game to players on teams in the match on match pages.
@@ -44,7 +41,6 @@ Extra features to add after everything else is done (or when waiting on other pe
 - Add a "permanent link" to player pages that links to the player page with the player's ID.
 - Team card indicator for teams that won their season.
 - Team page indicator for teams that won their season.
-- Use better semantic HTML elements, including putting all lists in list elements and putting all headers in header elements.
 - Embed the GCS Twitch stream on the landing page when live.
 - Player card indicator when live on Twitch/YouTube.
 - Game card indicator when any player is live on Twitch/YouTube.

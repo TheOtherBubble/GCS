@@ -71,9 +71,11 @@ export default function SignUpForm({
 			{...props}
 		>
 			<header>
-				<h2>{`Register for ${season.name}`}</h2>
+				<h3>{`Register for ${season.name}`}</h3>
 			</header>
-			<Submit value="Register" />
+			<p>
+				<Submit value="Register" />
+			</p>
 		</Form>
 	);
 }

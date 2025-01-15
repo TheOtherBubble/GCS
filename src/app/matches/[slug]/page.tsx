@@ -1,16 +1,17 @@
 import GameCard from "components/GameCard";
+import LocalDate from "components/LocalDate";
 import type { Metadata } from "next";
 import type PageProps from "types/PageProps";
 import PlayerCard from "components/PlayerCard";
 import TeamCard from "components/TeamCard";
 import getGamesByMatches from "db/getGamesByMatches";
+import getMatchDateTime from "util/getMatchDateTime";
 import getMatchUrl from "util/getMatchUrl";
 import getMatches from "db/getMatches";
 import getPlayersByTeams from "db/getPlayersByTeams";
 import getSeasons from "db/getSeasons";
 import getTeams from "db/getTeams";
 import leftHierarchy from "util/leftHierarchy";
-import multiclass from "util/multiclass";
 import style from "./page.module.scss";
 
 /**
@@ -36,10 +37,6 @@ export default async function Page(props: PageProps<MatchesPageParams>) {
 	}
 
 	const [season] = await getSeasons(match.seasonId);
-	if (!season) {
-		return <p>{"Unknown season."}</p>;
-	}
-
 	const teams = await getTeams(match.blueTeamId, match.redTeamId);
 	const blueTeam = teams.find((team) => team.id === match.blueTeamId);
 	const redTeam = teams.find((team) => team.id === match.redTeamId);
@@ -65,40 +62,63 @@ export default async function Page(props: PageProps<MatchesPageParams>) {
 
 	return (
 		<div className={style["content"]}>
-			<div className={multiclass(style["team"], "hide-on-mobile")}>
-				<TeamCard team={blueTeam} season={season} />
-				<hr />
-				<div>
+			<div className={style["team"]}>
+				<header>
+					<TeamCard team={blueTeam} season={season} />
+					<hr />
+				</header>
+				<ul>
 					{blueTeamPlayers.map(({ player }) => (
-						<PlayerCard key={player.id} player={player} />
+						<li key={player.id}>
+							<PlayerCard player={player} />
+						</li>
 					))}
-				</div>
+				</ul>
 			</div>
 			<div className={style["games"]}>
-				<h1 className="hide-on-desktop">{`${blueTeam.name} vs ${redTeam.name}`}</h1>
-				<h2>{"Games"}</h2>
-				<div>
-					{games.map(({ children: [gameResult], value: game }) => (
-						<GameCard
-							key={game.id}
-							game={game}
-							gameResult={gameResult?.value}
-							teamGameResults={gameResult?.children.map(({ value }) => value)}
-							playerGameResults={gameResult?.children.flatMap(
-								({ children }) => children
-							)}
-						/>
-					))}
-				</div>
+				<header>
+					<h1>{`${blueTeam.name} vs ${redTeam.name}`}</h1>
+					<h2>
+						{season ? (
+							<LocalDate
+								date={getMatchDateTime(match, season)}
+								options={{ dateStyle: "long", timeStyle: "short" }}
+							/>
+						) : (
+							`Round ${match.round.toString()}`
+						)}
+						{` - ${match.format}`}
+					</h2>
+					<h2>{"Games"}</h2>
+				</header>
+				<ol>
+					{games
+						.sort(({ value: { id: a } }, { value: { id: b } }) => a - b)
+						.map(({ children: [gameResult], value: game }) => (
+							<GameCard
+								key={game.id}
+								game={game}
+								gameResult={gameResult?.value}
+								teamGameResults={gameResult?.children.map(({ value }) => value)}
+								playerGameResults={gameResult?.children.flatMap(
+									({ children }) => children
+								)}
+							/>
+						))}
+				</ol>
 			</div>
-			<div className={multiclass(style["team"], "hide-on-mobile")}>
-				<TeamCard team={redTeam} season={season} />
-				<hr />
-				<div>
+			<div className={style["team"]}>
+				<header>
+					<TeamCard team={redTeam} season={season} />
+					<hr />
+				</header>
+				<ul>
 					{redTeamPlayers.map(({ player }) => (
-						<PlayerCard key={player.id} player={player} />
+						<li key={player.id}>
+							<PlayerCard player={player} />
+						</li>
 					))}
-				</div>
+				</ul>
 			</div>
 		</div>
 	);

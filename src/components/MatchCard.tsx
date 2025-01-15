@@ -61,7 +61,7 @@ export default function MatchCard({
 			href={getMatchUrl(match.id.toString() as `${number}`)}
 			{...props}
 		>
-			<p className="hide-on-mobile">{match.format}</p>
+			<p>{match.format}</p>
 			{blueTeam ? (
 				<>
 					<h3>{blueTeam.code}</h3>
@@ -104,7 +104,7 @@ export default function MatchCard({
 				</>
 			)}
 			{dateTime && (
-				<p className="hide-on-mobile">
+				<p>
 					<LocalDate
 						date={dateTime}
 						locales={dateTimeLocales}

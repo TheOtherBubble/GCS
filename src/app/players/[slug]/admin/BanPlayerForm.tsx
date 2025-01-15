@@ -3,7 +3,6 @@ import type { Player } from "types/db/Player";
 import Submit from "components/Submit";
 import getFormField from "util/getFormField";
 import updatePlayers from "db/updatePlayers";
-import { useId } from "react";
 
 /**
  * Properties that can be passed to a ban player form.
@@ -25,8 +24,6 @@ export default function BanPlayerForm({
 	player,
 	...props
 }: BanPlayerFormProps) {
-	const bannedUntilDateId = useId();
-
 	return (
 		<Form
 			action={async (form) => {
@@ -45,17 +42,18 @@ export default function BanPlayerForm({
 			{...props}
 		>
 			<header>
-				<h2>{"Ban Player"}</h2>
+				<h3>{"Ban Player"}</h3>
 				<p>{"Set this to a date in the past to unban this player."}</p>
 			</header>
-			<label htmlFor={bannedUntilDateId}>{"Banned until"}</label>
-			<input
-				type="date"
-				id={bannedUntilDateId}
-				name="bannedUntilDate"
-				required
-			/>
-			<Submit value="Ban" />
+			<p>
+				<label>
+					{"Banned until"}
+					<input type="date" name="bannedUntilDate" required />
+				</label>
+			</p>
+			<p>
+				<Submit value="Ban" />
+			</p>
 		</Form>
 	);
 }

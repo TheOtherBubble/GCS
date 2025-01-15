@@ -1,23 +1,18 @@
 @use "card.module.scss";
 @use "../../styles/blob.module.scss";
 
+// Player card.
 a.player-card {
 	@extend .card;
-
-	// Cover the entire background with the player's selected champion skin splash art.
 	background-size: cover;
 
-	// Place the content in a transparent blob
+	// Player card content.
 	& > div {
 		@extend .blob;
-
-		// Make the blob be only as large as it needs to be to contain its content.
 		display: inline-block;
-
-		// Make the blob transparent.
 		background-color: #00000080;
 
-		// Align the ranked emblem with the player's name.
+		// Ranked emblem.
 		& > h3 > img {
 			display: inline-block;
 			vertical-align: top;

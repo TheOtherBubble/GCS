@@ -1,31 +1,35 @@
-@use "../../layout.module.scss" as layout;
 @use "../../../styles/mixins";
+@use "../../../styles/clean-list.module.scss";
 @use "../../../styles/blob.module.scss";
-@use "../../../components/styles/topnav.module.scss" as topnav;
+@use "../../../styles/sticky-column.module.scss";
 
+// Match page.
 div.content {
-	// List players and games vertically.
-	& > div > div {
-		@extend .blob-section;
+	// Columns
+	& > div {
+		// Team columns.
+		&.team {
+			@extend .sticky-column;
+			display: none;
+		}
+
+		// Player and game lists.
+		& > ul,
+		& > ol {
+			@extend .clean-list;
+			@extend .blob-section;
+		}
 	}
 
-	// On desktop devices, use a three-column display.
 	@include mixins.is-not-mobile using ($is-not-mobile) {
 		@if $is-not-mobile {
-			// Make the games column larger than the others.
 			display: grid;
 			grid-template-columns: 2fr 3fr 2fr;
 			gap: 10px;
 
-			// Make the team columns sticky so that only the games scroll with the page.
+			// Team columns.
 			& > div.team {
-				// Don't scroll with screen.
-				position: sticky;
-				top: topnav.$height + layout.$margin;
-
-				// Ensure that all content can still be accessed.
-				overflow: auto;
-				max-height: calc(100vh - topnav.$height - layout.$margin * 2);
+				display: block;
 			}
 		}
 	}

@@ -41,17 +41,12 @@ export default async function PlayerPanel({
 			<header>
 				<h2>{"Player Panel"}</h2>
 			</header>
-			<AddAccountForm
-				player={player}
-				accounts={accounts}
-				className="hide-on-mobile"
-			/>
-			<UpdatePlayerForm player={player} className="hide-on-mobile" />
+			<AddAccountForm player={player} accounts={accounts} />
+			<UpdatePlayerForm player={player} />
 			{player.backgroundChampionId && (
 				<UpdateSkinForm
 					player={player}
 					backgroundChampionId={player.backgroundChampionId}
-					className="hide-on-mobile"
 				/>
 			)}
 			{latestSeason &&
@@ -60,7 +55,6 @@ export default async function PlayerPanel({
 						player={player}
 						season={latestSeason}
 						accounts={accounts}
-						className="hide-on-mobile"
 					/>
 				)}
 		</div>

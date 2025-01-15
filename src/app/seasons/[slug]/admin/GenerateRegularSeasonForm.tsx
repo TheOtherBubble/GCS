@@ -10,7 +10,6 @@ import getSeasonUrl from "util/getSeasonUrl";
 import hasRiotApiKey from "util/hasRiotApiKey";
 import { matchFormatEnum } from "db/schema";
 import { revalidatePath } from "next/cache";
-import { useId } from "react";
 
 /**
  * Properties that can be passed to a seed season form.
@@ -36,9 +35,6 @@ export default function GenerateRegularSeasonForm({
 	teams,
 	...props
 }: SeedSeasonFormProps) {
-	const formatId = useId();
-	const roundsId = useId();
-
 	return (
 		<Form
 			action={async (form) => {
@@ -101,24 +97,33 @@ export default function GenerateRegularSeasonForm({
 			<header>
 				<h3>{"Generate Regular Season"}</h3>
 			</header>
-			<label htmlFor={formatId}>{"Format"}</label>
-			<select id={formatId} name="format" defaultValue="Best of 3" required>
-				{matchFormatEnum.enumValues.map((format) => (
-					<option value={format} key={format}>
-						{format}
-					</option>
-				))}
-			</select>
-			<label htmlFor={roundsId}>{"Rounds"}</label>
-			<input
-				type="number"
-				id={roundsId}
-				name="rounds"
-				min={1}
-				defaultValue={2}
-				required
-			/>
-			<Submit value="Generate" />
+			<p>
+				<label>
+					{"Format"}
+					<select name="format" defaultValue="Best of 3" required>
+						{matchFormatEnum.enumValues.map((format) => (
+							<option value={format} key={format}>
+								{format}
+							</option>
+						))}
+					</select>
+				</label>
+			</p>
+			<p>
+				<label>
+					{"Rounds"}
+					<input
+						type="number"
+						name="rounds"
+						min={1}
+						defaultValue={2}
+						required
+					/>
+				</label>
+			</p>
+			<p>
+				<Submit value="Generate" />
+			</p>
 		</Form>
 	);
 }

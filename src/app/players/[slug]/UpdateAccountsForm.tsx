@@ -93,9 +93,11 @@ export default async function UpdateAccountsForm({
 			{...props}
 		>
 			<header>
-				<h2>{"Update Accounts"}</h2>
+				<h3>{"Update Accounts"}</h3>
 			</header>
-			<Submit value="Update" />
+			<p>
+				<Submit value="Update" />
+			</p>
 		</Form>
 	);
 }

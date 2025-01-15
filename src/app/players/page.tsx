@@ -10,14 +10,15 @@ import getPlayerUrl from "util/getPlayerUrl";
  */
 export default async function Page() {
 	const players = await getAllPlayers();
+	const collator = new Intl.Collator();
 
 	return (
 		<>
 			<h1>{"Players"}</h1>
-			<ul>
+			<ol>
 				{players
 					.sort((a, b) =>
-						(a.displayName ?? a.name).localeCompare(b.displayName ?? b.name)
+						collator.compare(a.displayName ?? a.name, b.displayName ?? b.name)
 					)
 					.map((player) => (
 						<li key={player.id}>
@@ -26,7 +27,7 @@ export default async function Page() {
 							</Link>
 						</li>
 					))}
-			</ul>
+			</ol>
 		</>
 	);
 }

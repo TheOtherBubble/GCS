@@ -1,12 +1,12 @@
 @use "../../styles/blob.module.scss";
 
+// Widget list.
 div.widgets {
-	// List widgets with flexbox.
-	display: flex;
+	@extend .list;
+	flex-direction: row;
 	flex-wrap: wrap;
-	gap: 10px;
 
-	// Display forms as blobs.
+	// Widget.
 	& > form {
 		@extend .blob;
 	}

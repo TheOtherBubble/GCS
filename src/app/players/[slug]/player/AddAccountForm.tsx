@@ -13,7 +13,6 @@ import getSummonerByPuuid from "riot/getSummonerByPuuid";
 import hasRiotApiKey from "util/hasRiotApiKey";
 import { revalidatePath } from "next/cache";
 import updateAccounts from "db/updateAccounts";
-import { useId } from "react";
 
 /**
  * Properties that can be passed to an add account form.
@@ -39,8 +38,6 @@ export default function AddAccountForm({
 	accounts,
 	...props
 }: AddAccountFormProps) {
-	const gameNameAndTagLineId = useId();
-
 	return (
 		<Form
 			action={async (form) => {
@@ -122,18 +119,23 @@ export default function AddAccountForm({
 			{...props}
 		>
 			<header>
-				<h2>{"Add Account"}</h2>
+				<h3>{"Add Account"}</h3>
 			</header>
-			<label htmlFor={gameNameAndTagLineId}>{"Game name and tag line"}</label>
-			<input
-				type="text"
-				id={gameNameAndTagLineId}
-				name="gameNameAndTagLine"
-				placeholder="Lakuna#TAU3"
-				maxLength={16 + 1 + 5}
-				required
-			/>
-			<Submit value="Add" />
+			<p>
+				<label>
+					{"Game name and tag line"}
+					<input
+						type="text"
+						name="gameNameAndTagLine"
+						placeholder="Lakuna#TAU3"
+						maxLength={16 + 1 + 5}
+						required
+					/>
+				</label>
+			</p>
+			<p>
+				<Submit value="Add" />
+			</p>
 		</Form>
 	);
 }

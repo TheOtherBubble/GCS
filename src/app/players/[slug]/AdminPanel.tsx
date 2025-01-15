@@ -35,12 +35,10 @@ export default function AdminPanel({
 			<header>
 				<h2>{"Admin Panel"}</h2>
 			</header>
-			<ForceVerifyAccountsForm player={player} className="hide-on-mobile" />
+			<ForceVerifyAccountsForm player={player} />
 			{teams && <AddToTeamForm player={player} teams={teams} />}
-			<BanPlayerForm player={player} className="hide-on-mobile" />
-			{!player.isAdministator && (
-				<MakeAdminForm player={player} className="hide-on-mobile" />
-			)}
+			<BanPlayerForm player={player} />
+			{!player.isAdministator && <MakeAdminForm player={player} />}
 		</div>
 	);
 }

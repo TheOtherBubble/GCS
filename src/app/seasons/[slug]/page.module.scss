@@ -1,54 +1,72 @@
-@use "../../layout.module.scss" as layout;
 @use "../../../styles/mixins";
+@use "../../../styles/clean-list.module.scss";
 @use "../../../styles/blob.module.scss";
-@use "../../../components/styles/topnav.module.scss" as topnav;
+@use "../../../styles/sticky-column.module.scss";
 
 div.content {
-	// List configuration panels vertically.
+	// Admin panel.
 	& > div.info > div {
-		@extend .list;
+		@extend .blob-section;
+		display: none;
 
-		// Display configuration forms as blobs.
-		form {
+		// Admin form.
+		& > form {
 			@extend .blob;
 		}
 	}
 
-	// List rounds vertically.
+	// Schedule column.
 	& > div.schedule {
 		@extend .list;
 
-		// List match cards within rounds vertically.
-		& > div {
-			@extend .blob-section;
+		// Round list.
+		& > ol {
+			@extend .clean-list;
+			@extend .list;
+
+			// Round.
+			& > li {
+				@extend .blob-section;
+
+				// Match list.
+				& > ol {
+					@extend .clean-list;
+					@extend .list;
+				}
+			}
 		}
 	}
 
-	// On desktop devices, use a three-column format to display the information, schedule, and leaderboards.
+	// Leaderboards column.
+	& > div.leaderboards {
+		display: none;
+	}
+
+	// Information and leaderboards columns.
+	& > div.info,
+	& > div.leaderboards {
+		@extend .sticky-column;
+	}
+
 	@include mixins.is-not-mobile using ($is-not-mobile) {
 		@if $is-not-mobile {
-			// Make the schedule column larger than the others.
 			display: grid;
 			grid-template-columns: 1fr 2fr 1fr;
 			gap: 10px;
 
-			// Make the information and leaderboards columns sticky so that only the schedule scrolls with the page.
-			& > div.info,
-			& > div.leaderboards {
-				// Don't scroll with the page.
-				position: sticky;
-				top: topnav.$height + layout.$margin;
-
-				// Ensure that all content can still be accessed.
-				overflow: auto;
-				max-height: calc(100vh - topnav.$height - layout.$margin * 2);
+			// Admin panel.
+			& > div.info > div {
+				display: flex;
 			}
 
-			// Increase font size within leaderboards.
+			// Leaderboards column.
+			& > div.leaderboards {
+				display: block;
+			}
+
+			// Leaderboards.
 			& > div.leaderboards > ol {
 				font-size: 1.5em;
-
-				// Make display prettier on narrow desktop displays.
 				text-wrap: nowrap;
 				overflow: auto;
 			}

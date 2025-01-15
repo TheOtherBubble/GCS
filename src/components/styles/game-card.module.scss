@@ -1,19 +1,17 @@
 @use "card.module.scss";
 
-// For unfinished games, just center the content.
+// Unfinished game card.
 a.not-done {
 	@extend .card;
-
 	display: flex;
 	justify-content: center;
 	align-items: center;
 	text-align: center;
 }
 
-// For finished games, display each team on a different half.
+// Finished game card.
 a.done {
 	@extend .card;
-
 	display: grid;
 	grid-template-columns: 1fr 1fr;
 	gap: 10px;

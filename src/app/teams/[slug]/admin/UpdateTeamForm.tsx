@@ -6,7 +6,6 @@ import getTeamUrl from "util/getTeamUrl";
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import updateTeam from "db/updateTeams";
-import { useId } from "react";
 
 /**
  * Properties that can be passed to a create team form.
@@ -28,13 +27,6 @@ export default function UpdateTeamForm({
 	team,
 	...props
 }: UpdateTeamFormProps) {
-	const codeId = useId();
-	const colorId = useId();
-	const logoUrlId = useId();
-	const nameId = useId();
-	const poolId = useId();
-	const vanityUrlSlugId = useId();
-
 	return (
 		<Form
 			action={async (form) => {
@@ -64,29 +56,45 @@ export default function UpdateTeamForm({
 			<header>
 				<h3>{"Update Team"}</h3>
 			</header>
-			<label htmlFor={codeId}>{"Code"}</label>
-			<input type="text" id={codeId} name="code" maxLength={4} />
-			<label htmlFor={colorId}>{"Color"}</label>
-			<input
-				type="color"
-				id={colorId}
-				name="color"
-				defaultValue={`#${team.color}`}
-			/>
-			<label htmlFor={logoUrlId}>{"Logo URL"}</label>
-			<input type="url" id={logoUrlId} name="logoUrl" maxLength={0x800} />
-			<label htmlFor={nameId}>{"Name"}</label>
-			<input type="text" id={nameId} name="name" maxLength={0x40} />
-			<label htmlFor={poolId}>{"Pool"}</label>
-			<input type="number" id={poolId} name="pool" min={1} />
-			<label htmlFor={vanityUrlSlugId}>{"Vanity URL slug"}</label>
-			<input
-				type="text"
-				id={vanityUrlSlugId}
-				name="vanityUrlSlug"
-				maxLength={0x20}
-			/>
-			<Submit value="Update" />
+			<p>
+				<label>
+					{"Code"}
+					<input type="text" name="code" maxLength={4} />
+				</label>
+			</p>
+			<p>
+				<label>
+					{"Color"}
+					<input type="color" name="color" defaultValue={`#${team.color}`} />
+				</label>
+			</p>
+			<p>
+				<label>
+					{"Logo URL"}
+					<input type="url" name="logoUrl" maxLength={0x800} />
+				</label>
+			</p>
+			<p>
+				<label>
+					{"Name"}
+					<input type="text" name="name" maxLength={0x40} />
+				</label>
+			</p>
+			<p>
+				<label>
+					{"Pool"}
+					<input type="number" name="pool" min={1} />
+				</label>
+			</p>
+			<p>
+				<label>
+					{"Vanity URL slug"}
+					<input type="text" name="vanityUrlSlug" maxLength={0x20} />
+				</label>
+			</p>
+			<p>
+				<Submit value="Update" />
+			</p>
 		</Form>
 	);
 }

@@ -4,7 +4,6 @@ import createSeasons from "db/createSeasons";
 import getFormField from "util/getFormField";
 import hasRiotApiKey from "util/hasRiotApiKey";
 import makeTournament from "riot/makeTournament";
-import { useId } from "react";
 
 /**
  * Properties that can be passed to a create season form.
@@ -19,10 +18,6 @@ export type CreateSeasonFormProps = Omit<FormProps, "action" | "children">;
  * @public
  */
 export default function CreateSeasonForm(props: CreateSeasonFormProps) {
-	const startDateId = useId();
-	const nameId = useId();
-	const vanityUrlSlugId = useId();
-
 	return (
 		<Form
 			action={async (form) => {
@@ -45,19 +40,27 @@ export default function CreateSeasonForm(props: CreateSeasonFormProps) {
 			<header>
 				<h2>{"Create Season"}</h2>
 			</header>
-			<label htmlFor={startDateId}>{"Start date"}</label>
-			<input type="date" id={startDateId} name="startDate" />
-			<label htmlFor={nameId}>{"Name"}</label>
-			<input type="text" id={nameId} name="name" maxLength={0x40} required />
-			<label htmlFor={vanityUrlSlugId}>{"Vanity URL slug"}</label>
-			<input
-				type="text"
-				id={vanityUrlSlugId}
-				name="vanityUrlSlug"
-				maxLength={0x20}
-				required
-			/>
-			<Submit value="Create" />
+			<p>
+				<label>
+					{"Start date"}
+					<input type="date" name="startDate" />
+				</label>
+			</p>
+			<p>
+				<label>
+					{"Name"}
+					<input type="text" name="name" maxLength={0x40} required />
+				</label>
+			</p>
+			<p>
+				<label>
+					{"Vanity URL slug"}
+					<input type="text" name="vanityUrlSlug" maxLength={0x20} required />
+				</label>
+			</p>
+			<p>
+				<Submit value="Create" />
+			</p>
 		</Form>
 	);
 }

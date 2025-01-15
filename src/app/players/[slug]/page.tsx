@@ -60,14 +60,18 @@ export default async function Page(props: PageProps<PlayersPageParams>) {
 				{player.biography && <p>{player.biography}</p>}
 			</header>
 			<div>
-				<div>
+				<div className={style["left"]}>
 					<div>
 						<header>
 							<h2>{"Accounts"}</h2>
 						</header>
-						{accounts.map((account) => (
-							<AccountCard key={account.accountId} account={account} />
-						))}
+						<ul>
+							{accounts.map((account) => (
+								<li key={account.accountId}>
+									<AccountCard account={account} />
+								</li>
+							))}
+						</ul>
 						<UpdateAccountsForm player={player} accounts={accounts} />
 					</div>
 					{isPlayer && (
@@ -75,14 +79,14 @@ export default async function Page(props: PageProps<PlayersPageParams>) {
 							player={player}
 							accounts={accounts}
 							latestSeason={latestSeason}
-							className="hide-on-mobile"
+							className={style["panel"]}
 						/>
 					)}
 					{isAdmin && (
 						<AdminPanel
 							player={player}
 							teams={teams}
-							className="hide-on-mobile"
+							className={style["panel"]}
 						/>
 					)}
 				</div>
@@ -91,17 +95,27 @@ export default async function Page(props: PageProps<PlayersPageParams>) {
 						<header>
 							<h2>{"Game History"}</h2>
 						</header>
-						{games.map(
-							({ game, gameResult, teamGameResult, playerGameResult }) => (
-								<GameCard
-									key={game.id}
-									game={game}
-									gameResult={gameResult}
-									teamGameResults={[teamGameResult]}
-									playerGameResults={[playerGameResult]}
-								/>
-							)
-						)}
+						<ol>
+							{games
+								.sort(
+									(
+										{ gameResult: { startTimestamp: a } },
+										{ gameResult: { startTimestamp: b } }
+									) => b - a // Newest first.
+								)
+								.map(
+									({ game, gameResult, teamGameResult, playerGameResult }) => (
+										<li key={game.id}>
+											<GameCard
+												game={game}
+												gameResult={gameResult}
+												teamGameResults={[teamGameResult]}
+												playerGameResults={[playerGameResult]}
+											/>
+										</li>
+									)
+								)}
+						</ol>
 					</div>
 				</div>
 			</div>

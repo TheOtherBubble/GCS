@@ -6,7 +6,6 @@ import getSeasonUrl from "util/getSeasonUrl";
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import updateSeasons from "db/updateSeasons";
-import { useId } from "react";
 
 /**
  * Properties that can be passed to an update season form.
@@ -28,10 +27,6 @@ export default function UpdateSeasonForm({
 	season,
 	...props
 }: UpdateSeasonFormProps) {
-	const startDateId = useId();
-	const nameId = useId();
-	const vanityUrlSlugId = useId();
-
 	return (
 		<Form
 			action={async (form) => {
@@ -57,13 +52,27 @@ export default function UpdateSeasonForm({
 			<header>
 				<h3>{"Update Season"}</h3>
 			</header>
-			<label htmlFor={startDateId}>{"Start date"}</label>
-			<input type="date" id={startDateId} name="startDate" />
-			<label htmlFor={nameId}>{"Name"}</label>
-			<input type="text" id={nameId} name="name" />
-			<label htmlFor={vanityUrlSlugId}>{"Vanity URL slug"}</label>
-			<input type="text" id={vanityUrlSlugId} name="vanityUrlSlug" />
-			<Submit value="Update" />
+			<p>
+				<label>
+					{"Start date"}
+					<input type="date" name="startDate" />
+				</label>
+			</p>
+			<p>
+				<label>
+					{"Name"}
+					<input type="text" name="name" />
+				</label>
+			</p>
+			<p>
+				<label>
+					{"Vanity URL slug"}
+					<input type="text" name="vanityUrlSlug" />
+				</label>
+			</p>
+			<p>
+				<Submit value="Update" />
+			</p>
 		</Form>
 	);
 }

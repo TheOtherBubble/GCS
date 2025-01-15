@@ -6,7 +6,6 @@ import domain from "util/domain";
 import getFormField from "util/getFormField";
 import getSeasonUrl from "util/getSeasonUrl";
 import { revalidatePath } from "next/cache";
-import { useId } from "react";
 
 /**
  * Properties that can be passed to a create team form.
@@ -28,13 +27,6 @@ export default function CreateTeamForm({
 	season,
 	...props
 }: CreateTeamFormProps) {
-	const codeId = useId();
-	const colorId = useId();
-	const logoUrlId = useId();
-	const nameId = useId();
-	const poolId = useId();
-	const vanityUrlSlugId = useId();
-
 	return (
 		<Form
 			action={async (form) => {
@@ -55,39 +47,51 @@ export default function CreateTeamForm({
 			<header>
 				<h3>{"Create Team"}</h3>
 			</header>
-			<label htmlFor={codeId}>{"Code"}</label>
-			<input type="text" id={codeId} name="code" maxLength={4} required />
-			<label htmlFor={colorId}>{"Color"}</label>
-			<input type="color" id={colorId} name="color" required />
-			<label htmlFor={logoUrlId}>{"Logo URL"}</label>
-			<input
-				type="url"
-				id={logoUrlId}
-				name="logoUrl"
-				maxLength={0x800}
-				defaultValue={new URL("/default.png", domain).href}
-				required
-			/>
-			<label htmlFor={nameId}>{"Name"}</label>
-			<input type="text" id={nameId} name="name" maxLength={0x40} required />
-			<label htmlFor={poolId}>{"Pool"}</label>
-			<input
-				type="number"
-				id={poolId}
-				name="pool"
-				min={1}
-				defaultValue={1}
-				required
-			/>
-			<label htmlFor={vanityUrlSlugId}>{"Vanity URL slug"}</label>
-			<input
-				type="text"
-				id={vanityUrlSlugId}
-				name="vanityUrlSlug"
-				maxLength={0x20}
-				required
-			/>
-			<Submit value="Create" />
+			<p>
+				<label>
+					{"Code"}
+					<input type="text" name="code" maxLength={4} required />
+				</label>
+			</p>
+			<p>
+				<label>
+					{"Color"}
+					<input type="color" name="color" required />
+				</label>
+			</p>
+			<p>
+				<label>
+					{"Logo URL"}
+					<input
+						type="url"
+						name="logoUrl"
+						maxLength={0x800}
+						defaultValue={new URL("/default.png", domain).href}
+						required
+					/>
+				</label>
+			</p>
+			<p>
+				<label>
+					{"Name"}
+					<input type="text" name="name" maxLength={0x40} required />
+				</label>
+			</p>
+			<p>
+				<label>
+					{"Pool"}
+					<input type="number" name="pool" min={1} defaultValue={1} required />
+				</label>
+			</p>
+			<p>
+				<label>
+					{"Vanity URL slug"}
+					<input type="text" name="vanityUrlSlug" maxLength={0x20} required />
+				</label>
+			</p>
+			<p>
+				<Submit value="Create" />
+			</p>
 		</Form>
 	);
 }

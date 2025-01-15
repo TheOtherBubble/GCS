@@ -35,7 +35,7 @@ export default async function Topnav({ className, ...props }: TopnavProps) {
 						<span>{"Schedule"}</span>
 					</Link>
 				</li>
-				<li className="hide-on-mobile">
+				<li className={style["hide-on-mobile"]}>
 					<Link href="/rulebook">
 						<span>{"Rulebook"}</span>
 					</Link>
@@ -48,13 +48,13 @@ export default async function Topnav({ className, ...props }: TopnavProps) {
 							</Link>
 						</li>
 						{session.user.isAdministator && (
-							<li className="hide-on-mobile">
+							<li className={style["hide-on-mobile"]}>
 								<Link href="/admin">
 									<span>{"Admin"}</span>
 								</Link>
 							</li>
 						)}
-						<li className="hide-on-mobile">
+						<li className={style["hide-on-mobile"]}>
 							<Form
 								action={async () => {
 									"use server";

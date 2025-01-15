@@ -1,0 +1,10 @@
+@use "../app/layout.module.scss" as layout;
+@use "../components/styles/topnav.module.scss" as topnav;
+
+// A column that should scroll independently from the rest of the page.
+.sticky-column {
+	position: sticky;
+	top: topnav.$height + layout.$margin;
+	overflow: auto;
+	max-height: calc(100vh - topnav.$height - layout.$margin * 2);
+}

@@ -1,85 +1,75 @@
 @use "../../styles/variables";
 @use "../../styles/mixins";
+@use "../../styles/clean-list.module.scss";
 
 $height: 80px;
 
+// Top navigation bar.
 nav.topnav {
-	// Fixed-size bar.
 	height: $height;
-
-	// Make text bigger within the navigation bar.
 	font-size: 1.5em;
 
-	// Elements are stored in an unordered list.
+	// Top navigation bar element list.
 	& > ul {
-		// Remove default unordered list styling.
-		margin: 0px;
-		padding: 0px;
-		list-style-type: none;
-
-		// Take up the entire height of the navigation bar.
+		@extend .clean-list;
 		height: 100%;
-
-		// List elements using flexbox.
 		display: flex;
 
-		// List items take up entire height due to flexbox stretch.
+		// Top navigation bar item.
 		& > li {
-			// Remove default list item styling.
 			display: block;
-
-			// Take up the entire height of the navigation bar.
 			height: 100%;
 
-			// Highlight list items on hover.
+			// Top navigation bar item hover.
 			&:hover {
 				background-color: variables.$fg-color;
 			}
 
-			// Uniform padding for children.
 			$padding: 0px 16px;
 
+			// Top navigation bar item content.
 			& > * {
-				// Ensure that all children take up the entire height of the navigation bar.
 				height: 100%;
-
-				// Apply horizontal padding to all children.
 				padding: $padding;
-
-				// Center content vertically within children.
 				display: flex;
 				align-items: center;
 			}
 
-			// Allow some elements to be right-aligned.
+			// Right-aligned top navigation bar item.
 			&.right {
 				margin-left: auto;
 			}
 
-			// Remove element-specific styling from anchors.
+			// Desktop-only top navigation bar item.
+			&.hide-on-mobile {
+				display: none;
+
+				@include mixins.is-not-mobile using ($is-not-mobile) {
+					@if $is-not-mobile {
+						display: block;
+					}
+				}
+			}
+
+			// Top navigation bar item link.
 			& > a {
 				text-decoration: none;
 				color: variables.$text-color;
 
-				// Apply a size to SVG elements (the logo).
+				// Top navigation bar item link logo.
 				& > svg {
 					height: 80%;
 				}
 			}
 
-			// For forms (the ones that contain the sign in and sign out buttons), ensure that the submit button takes up the entire form.
+			// Sign in and sign out forms.
 			& > form {
-				// Remove the padding so that it can be applied to the submit button instead.
 				padding: 0px;
 
-				& > input[type="submit"] {
-					// Ensure that the submit button takes up the entire height of the navigation bar.
+				// Sign in and sign out buttons.
+				& > input {
 					height: 100%;
-
-					// Apply the padding to the submit button instead.
 					padding: $padding;
-
-					// Remove element-specific styling from submit buttons.
 					border: none;
 					background-color: inherit;
 					cursor: pointer;

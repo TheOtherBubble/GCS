@@ -1,43 +1,37 @@
 @use "card.module.scss";
 @use "../../styles/mixins";
 
+// Match card.
 a.match-card {
 	@extend .card;
-
-	// Display in a grid so that the match scores are lined up in a list of match cards.
 	display: grid;
 	grid-template-columns: 2fr 1fr 1fr 1fr 2fr;
 	column-gap: 10px;
 	place-items: center;
 
-	// Maintain grid alignment even on very small screens.
-	& > * {
-		overflow: hidden;
+	// Format and date strings.
+	& > p {
+		display: none;
 	}
 
-	// Maintain logo aspect ratio.
-	& > img {
-		width: auto;
-		height: 100%;
-	}
-
-	// On desktop devices, also show the match format and date.
 	@include mixins.is-not-mobile using ($is-not-mobile) {
 		@if $is-not-mobile {
-			// The font size of the format and date strings.
 			$fd-size: 1rem;
-
-			// Add columns for the format and date strings.
 			grid-template-rows: $fd-size 1fr $fd-size;
 			row-gap: 2px;
 
-			// Center format and date strings.
+			// Format and date strings.
 			& > p {
+				display: block;
 				grid-column: 1 / 6;
-
-				// Match the height of the column.
 				font-size: $fd-size;
 			}
 		}
+	}
+
+	// Team logos.
+	& > img {
+		width: auto;
+		height: 100%;
 	}
 }

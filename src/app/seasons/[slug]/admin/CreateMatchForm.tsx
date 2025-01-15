@@ -9,7 +9,6 @@ import getSeasonUrl from "util/getSeasonUrl";
 import hasRiotApiKey from "util/hasRiotApiKey";
 import { matchFormatEnum } from "db/schema";
 import { revalidatePath } from "next/cache";
-import { useId } from "react";
 
 /**
  * Properties that can be passed to a create match form.
@@ -35,12 +34,6 @@ export default function CreateMatchForm({
 	teams,
 	...props
 }: CreateMatchFormProps) {
-	const blueTeamIdId = useId();
-	const formatId = useId();
-	const redTeamIdId = useId();
-	const roundId = useId();
-	const timeSlotId = useId();
-
 	return (
 		<Form
 			action={async (form) => {
@@ -73,49 +66,63 @@ export default function CreateMatchForm({
 			<header>
 				<h3>{"Create Match"}</h3>
 			</header>
-			<label htmlFor={blueTeamIdId}>{"Blue team"}</label>
-			<select id={blueTeamIdId} name="blueTeamId" required>
-				{teams.map((team) => (
-					<option value={team.id} key={team.id}>
-						{team.name}
-					</option>
-				))}
-			</select>
-			<label htmlFor={formatId}>{"Format"}</label>
-			<select id={formatId} name="format" defaultValue="Best of 3" required>
-				{matchFormatEnum.enumValues.map((format) => (
-					<option value={format} key={format}>
-						{format}
-					</option>
-				))}
-			</select>
-			<label htmlFor={redTeamIdId}>{"Red team"}</label>
-			<select id={redTeamIdId} name="redTeamId" required>
-				{teams.map((team) => (
-					<option value={team.id} key={team.id}>
-						{team.name}
-					</option>
-				))}
-			</select>
-			<label htmlFor={roundId}>{"Round"}</label>
-			<input
-				type="number"
-				id={roundId}
-				name="round"
-				min={1}
-				defaultValue={1}
-				required
-			/>
-			<label htmlFor={timeSlotId}>{"Time slot"}</label>
-			<input
-				type="number"
-				id={timeSlotId}
-				name="timeSlot"
-				min={1}
-				defaultValue={1}
-				required
-			/>
-			<Submit value="Create" />
+			<p>
+				<label>
+					{"Blue team"}
+					<select name="blueTeamId" required>
+						{teams.map((team) => (
+							<option value={team.id} key={team.id}>
+								{team.name}
+							</option>
+						))}
+					</select>
+				</label>
+			</p>
+			<p>
+				<label>
+					{"Format"}
+					<select name="format" defaultValue="Best of 3" required>
+						{matchFormatEnum.enumValues.map((format) => (
+							<option value={format} key={format}>
+								{format}
+							</option>
+						))}
+					</select>
+				</label>
+			</p>
+			<p>
+				<label>
+					{"Red team"}
+					<select name="redTeamId" required>
+						{teams.map((team) => (
+							<option value={team.id} key={team.id}>
+								{team.name}
+							</option>
+						))}
+					</select>
+				</label>
+			</p>
+			<p>
+				<label>
+					{"Round"}
+					<input type="number" name="round" min={1} defaultValue={1} required />
+				</label>
+			</p>
+			<p>
+				<label>
+					{"Time slot"}
+					<input
+						type="number"
+						name="timeSlot"
+						min={1}
+						defaultValue={1}
+						required
+					/>
+				</label>
+			</p>
+			<p>
+				<Submit value="Create" />
+			</p>
 		</Form>
 	);
 }

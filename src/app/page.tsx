@@ -12,7 +12,9 @@ import style from "./page.module.scss";
 export default function Page() {
 	return (
 		<article className={style["content"]}>
-			<h1>{"Gauntlet Championship Series"}</h1>
+			<header>
+				<h1>{"Gauntlet Championship Series"}</h1>
+			</header>
 			<YoutubeVideo
 				id="Kr7lWQ04mmM"
 				autoPlay

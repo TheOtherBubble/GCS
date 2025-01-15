@@ -35,9 +35,11 @@ export default function ForceVerifyAccountsForm({
 			{...props}
 		>
 			<header>
-				<h2>{"Force Verify Accounts"}</h2>
+				<h3>{"Force Verify Accounts"}</h3>
 			</header>
-			<Submit value="Verify" />
+			<p>
+				<Submit value="Verify" />
+			</p>
 		</Form>
 	);
 }

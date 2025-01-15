@@ -5,7 +5,6 @@ import deleteSeasons from "db/deleteSeasons";
 import getFormField from "util/getFormField";
 import getSeasonUrl from "util/getSeasonUrl";
 import { revalidatePath } from "next/cache";
-import { useId } from "react";
 
 /**
  * Properties that can be passed to a delete season form.
@@ -27,8 +26,6 @@ export default function DeleteSeasonForm({
 	season,
 	...props
 }: DeleteSeasonFormProps) {
-	const safeguardId = useId();
-
 	return (
 		<Form
 			action={async (form) => {
@@ -46,15 +43,15 @@ export default function DeleteSeasonForm({
 			<header>
 				<h3>{"Delete Season"}</h3>
 			</header>
-			<label htmlFor={safeguardId}>{"Safeguard"}</label>
-			<input
-				type="text"
-				id={safeguardId}
-				name="safeguard"
-				placeholder="CONFIRM"
-				required
-			/>
-			<Submit value="Delete" />
+			<p>
+				<label>
+					{"Safeguard"}
+					<input type="text" name="safeguard" placeholder="CONFIRM" required />
+				</label>
+			</p>
+			<p>
+				<Submit value="Delete" />
+			</p>
 		</Form>
 	);
 }

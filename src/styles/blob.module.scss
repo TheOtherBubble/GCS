@@ -16,53 +16,52 @@
 	}
 }
 
-// For form blobs, use a special grid layout.
-form.blob {
-	@extend .blob;
-
-	// Create a grid with labels on the left and input elements on the right.
-	display: grid;
-	grid-template-columns: 1fr 2fr;
-	gap: 5px;
-
-	// Position labels on the left.
-	& > label {
-		text-align: right;
-		grid-column: 1;
-	}
-
-	// Position input elements on the right.
-	& > input,
-	& > select,
-	& > textarea {
-		grid-column: 2;
-
-		// Add back the default padding on input elements that was removed above.
-		padding: revert;
-
-		// Use the full width for the submit button.
-		&[type="submit"] {
-			grid-column: 1 / 3;
-		}
-	}
-
-	// Allow the header and footer to span the entire form.
-	& > header,
-	& > footer {
-		grid-column: 1 / 3;
-
-		// Remove margins from header and footer content.
-		* {
-			margin: 0px;
-		}
-	}
-}
-
 // Elements that contain a vertical list of elements.
 .list {
 	display: flex;
 	flex-direction: column;
 	gap: 10px;
+}
+
+// For form blobs, use a special flexbox layout.
+form.blob {
+	@extend .blob;
+
+	// List form elements vertically.
+	@extend .list;
+
+	// Reduce the list gap from the list default.
+	gap: 5px;
+
+	// Remove margins from form content.
+	* {
+		margin: 0px;
+	}
+
+	// Create a grid with labels on the left and input elements on the right.
+	& > p > label {
+		display: grid;
+		grid-template-columns: 1fr 2fr;
+		gap: 5px;
+
+		// Position labels on the left and float them towards the center.
+		text-align: right;
+
+		// Position input elements on the right.
+		& > input,
+		& > select,
+		& > textarea {
+			// Add back the default padding on input elements that was removed above.
+			padding: revert;
+		}
+	}
+
+	// Allow unlabeled input elements to span the entire form width.
+	& > p > input,
+	& > p > select,
+	& > p > textarea {
+		width: 100%;
+	}
 }
 
 // Elements that should contain blobs. Are themselves blobs, but with a toned-down color.

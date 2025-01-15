@@ -1,21 +1,21 @@
 @use "../styles/mixins";
 @use "../styles/variables";
 
+// Landing page.
 article.content {
-	// Increase the font size in the rulebook for ease of reading.
 	font-size: 1.2em;
 
-	// Make video take up full width on mobile.
+	// Introduction video or live stream.
 	& > iframe {
 		width: 100%;
 	}
 
-	// Display social links like buttons.
+	// Social links section.
 	& > div {
-		// Evenly space the social links.
 		display: flex;
 		justify-content: space-around;
 
+		// Social link.
 		& > a {
 			color: variables.$text-color;
 			background-color: variables.$fg-color;
@@ -24,14 +24,14 @@ article.content {
 			padding: 10px;
 			text-decoration: none;
 
-			// Invert colors on hover.
+			// Social link hover.
 			&:hover {
 				color: variables.$fg-color;
 				background-color: variables.$text-color;
 				border: 1px solid variables.$fg-color;
 			}
 
-			// Align icons with text.
+			// Social link icon.
 			& > svg {
 				padding: 4px;
 				vertical-align: middle;
@@ -39,29 +39,23 @@ article.content {
 		}
 	}
 
-	// On desktop devices, limit the introduction width to 65 characters (ideal for reading).
 	@include mixins.is-not-mobile using ($is-not-mobile) {
 		@if $is-not-mobile {
-			// Create a three-column display (only the middle will be used).
 			display: grid;
-			grid-template-columns: 1fr min(65ch, 100%) 1fr;
+			$column-max: 65ch;
+			grid-template-columns: 1fr min($column-max, 100%) 1fr;
 
-			// Put all elements in the middle column.
+			// Landing page content.
 			& > * {
 				grid-column: 2;
 				overflow: auto hidden;
 			}
 
-			// Full-bleed video.
+			// Introduction video or live stream.
 			& > iframe {
-				// Full-bleed.
 				grid-column: 1 / 4;
-
-				// Center and add a vertical margin.
 				margin: 10px auto;
-
-				// Sizing.
-				width: 60%;
+				width: max($column-max, 60%);
 			}
 		}
 	}

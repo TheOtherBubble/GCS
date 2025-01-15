@@ -9,7 +9,6 @@ import getPlayerUrl from "util/getPlayerUrl";
 import getPlayersByTeams from "db/getPlayersByTeams";
 import getTeamsByPlayers from "db/getTeamsByPlayers";
 import { revalidatePath } from "next/cache";
-import { useId } from "react";
 
 /**
  * Properties that can be passed to an add player to team form.
@@ -35,8 +34,6 @@ export default function AddToTeamForm({
 	teams,
 	...props
 }: AddToTeamFormProps) {
-	const teamIdId = useId();
-
 	// Can't call methods on properties passed from the client to the server, so do it here instead.
 	const teamIds = teams.map((team) => team.id);
 
@@ -71,22 +68,28 @@ export default function AddToTeamForm({
 			{...props}
 		>
 			<header>
-				<h2>{"Add to Team"}</h2>
+				<h3>{"Add to Team"}</h3>
 				<p>
 					{
 						"If the team has no players, this player will be made the captain. If this player is already on a team in this season, they will be removed from that team."
 					}
 				</p>
 			</header>
-			<label htmlFor={teamIdId}>{"Team"}</label>
-			<select id={teamIdId} name="teamId" required>
-				{teams.map((team) => (
-					<option value={team.id} key={team.id}>
-						{team.name}
-					</option>
-				))}
-			</select>
-			<Submit value="Add" />
+			<p>
+				<label>
+					{"Team"}
+					<select name="teamId" required>
+						{teams.map((team) => (
+							<option value={team.id} key={team.id}>
+								{team.name}
+							</option>
+						))}
+					</select>
+				</label>
+			</p>
+			<p>
+				<Submit value="Add" />
+			</p>
 		</Form>
 	);
 }

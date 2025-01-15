@@ -1,36 +1,22 @@
 @use "card.module.scss";
 
+// Account card.
 a.account-card {
 	@extend .card;
-
-	// Reduce font size from card default.
 	font-size: 1.5em;
-
-	// Create columns for the team logo and details.
 	display: grid;
 	grid-template-columns: 1fr 2fr;
 	gap: 10px;
 	align-items: center;
 
-	// Ensure that the team logo is sized properly.
+	// Ranked emblem.
 	& > img {
-		// Necessary to fit images in grid columns.
-		max-width: 100%;
-
-		// Maintain aspect ratio.
 		width: auto;
-
-		// Sizing.
-		height: 80%;
-
-		// Logos are expected to be square. Stretch them if they aren't.
-		aspect-ratio: 1;
-
-		// Align the logo towards the center (to the right).
+		height: 100%;
 		justify-self: end;
 	}
 
-	// Align the team details towards the center (to the left).
+	// Account details.
 	& > div {
 		justify-self: start;
 	}

@@ -1,65 +1,72 @@
 @use "../../../styles/mixins";
+@use "../../../styles/clean-list.module.scss";
 @use "../../../styles/blob.module.scss";
 
+// Season page.
 div.content {
-	// List header above accounts/games grid.
 	@extend .list;
 
-	// Place the background image behind other elements.
+	// Background image.
 	& > img {
-		// Prevent the image from taking up space on the page.
 		position: absolute;
 		z-index: -1;
 		max-width: 100%;
 		max-height: 100%;
-
-		// Maintain aspect ratio.
 		width: auto;
 		height: auto;
-
-		// Center the image.
 		left: 50%;
 		transform: translate(-50%);
-
-		// Fade around the edges.
 		mask:
 			linear-gradient(to bottom, transparent, white, transparent 80%) intersect,
 			linear-gradient(to right, transparent 5%, white, transparent 95%);
 	}
 
-	// Center all text in the header.
+	// Header.
 	& > header {
 		text-align: center;
 	}
 
-	// List accounts and games in separate sections.
+	// Main content.
 	& > div {
 		display: grid;
 		gap: 10px;
 		align-items: start;
 
-		// Display each column as a list of blob sections.
+		// Left and right columns.
 		& > div {
 			@extend .list;
 
-			// List both accounts and games in blob sections.
+			// Column sections.
 			& > div {
 				@extend .blob-section;
 
-				// Display any forms added to the lists as blobs.
+				// Account and game lists.
+				& > ol,
+				& > ul {
+					@extend .clean-list;
+					@extend .list;
+				}
+
+				// Admin and player panels.
+				&.panel {
+					display: none;
+				}
+
+				// Admin and player panel and update accounts forms.
 				& > form {
 					@extend .blob;
 				}
 			}
 		}
-	}
 
-	// On desktop, create a grid with accounts on the left and games on the right.
-	@include mixins.is-not-mobile using ($is-not-mobile) {
-		@if $is-not-mobile {
-			& > div {
-				// Make the games column larger than the accounts column.
+		@include mixins.is-not-mobile using ($is-not-mobile) {
+			@if $is-not-mobile {
 				grid-template-columns: 1fr 2fr;
+
+				// Admin and player panels.
+				& > div > div.panel {
+					display: flex;
+				}
 			}
 		}
 	}

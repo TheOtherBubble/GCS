@@ -10,13 +10,14 @@ import getTeamUrl from "util/getTeamUrl";
  */
 export default async function Page() {
 	const teams = await getAllTeams();
+	const collator = new Intl.Collator();
 
 	return (
 		<>
 			<h1>{"Teams"}</h1>
-			<ul>
+			<ol>
 				{teams
-					.sort((a, b) => a.name.localeCompare(b.name))
+					.sort(({ name: a }, { name: b }) => collator.compare(a, b))
 					.map((team) => (
 						<li key={team.id}>
 							<Link href={getTeamUrl(encodeURIComponent(team.vanityUrlSlug))}>
@@ -24,7 +25,7 @@ export default async function Page() {
 							</Link>
 						</li>
 					))}
-			</ul>
+			</ol>
 		</>
 	);
 }

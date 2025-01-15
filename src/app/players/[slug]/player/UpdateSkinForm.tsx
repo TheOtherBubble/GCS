@@ -6,7 +6,6 @@ import getFormField from "util/getFormField";
 import getPlayerUrl from "util/getPlayerUrl";
 import { revalidatePath } from "next/cache";
 import updatePlayers from "db/updatePlayers";
-import { useId } from "react";
 
 /**
  * Properties that can be passed to an update skin form.
@@ -32,8 +31,6 @@ export default function UpdateSkinForm({
 	backgroundChampionId,
 	...props
 }: UpdateSkinFormProps) {
-	const backgroundSkinNumberId = useId();
-
 	return (
 		<Form
 			action={async (form) => {
@@ -54,15 +51,20 @@ export default function UpdateSkinForm({
 			<header>
 				<h3>{"Update Background Skin"}</h3>
 			</header>
-			<label htmlFor={backgroundSkinNumberId}>{"Background skin"}</label>
-			<SkinList
-				championId={backgroundChampionId}
-				id={backgroundSkinNumberId}
-				name="backgroundSkinNumber"
-				defaultValue={player.backgroundSkinNumber ?? 0}
-				required
-			/>
-			<Submit value="Update" />
+			<p>
+				<label>
+					{"Background skin"}
+					<SkinList
+						championId={backgroundChampionId}
+						name="backgroundSkinNumber"
+						defaultValue={player.backgroundSkinNumber ?? 0}
+						required
+					/>
+				</label>
+			</p>
+			<p>
+				<Submit value="Update" />
+			</p>
 		</Form>
 	);
 }

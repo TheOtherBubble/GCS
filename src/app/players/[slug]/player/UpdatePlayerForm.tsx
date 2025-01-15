@@ -10,7 +10,6 @@ import { playerRoleEnum } from "db/schema";
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import updatePlayers from "db/updatePlayers";
-import { useId } from "react";
 
 /**
  * Properties that can be passed to an update player form.
@@ -32,12 +31,6 @@ export default function UpdatePlayerForm({
 	player,
 	...props
 }: UpdatePlayerFormProps) {
-	const backgroundChampionIdId = useId();
-	const biographyId = useId();
-	const displayNameId = useId();
-	const primaryRoleId = useId();
-	const secondaryRoleId = useId();
-
 	return (
 		<Form
 			action={async (form) => {
@@ -71,36 +64,53 @@ export default function UpdatePlayerForm({
 			<header>
 				<h3>{"Update Player"}</h3>
 			</header>
-			<label htmlFor={displayNameId}>{"Display name"}</label>
-			<input
-				type="text"
-				id={displayNameId}
-				name="displayName"
-				maxLength={0x20}
-			/>
-			<label htmlFor={biographyId}>{"Biography"}</label>
-			<textarea id={biographyId} name="biography" maxLength={0x100} />
-			<label htmlFor={primaryRoleId}>{"Primary role"}</label>
-			<select id={primaryRoleId} name="primaryRole">
-				<option />
-				{playerRoleEnum.enumValues.map((role) => (
-					<option value={role} key={role}>
-						{role}
-					</option>
-				))}
-			</select>
-			<label htmlFor={secondaryRoleId}>{"Secondary role"}</label>
-			<select id={secondaryRoleId} name="secondaryRole">
-				<option />
-				{playerRoleEnum.enumValues.map((role) => (
-					<option value={role} key={role}>
-						{role}
-					</option>
-				))}
-			</select>
-			<label htmlFor={backgroundChampionIdId}>{"Background champion"}</label>
-			<ChampionList id={backgroundChampionIdId} name="backgroundChampionId" />
-			<Submit value="Update" />
+			<p>
+				<label>
+					{"Display name"}
+					<input type="text" name="displayName" maxLength={0x20} />
+				</label>
+			</p>
+			<p>
+				<label>
+					{"Biography"}
+					<textarea name="biography" maxLength={0x100} />
+				</label>
+			</p>
+			<p>
+				<label>
+					{"Primary role"}
+					<select name="primaryRole">
+						<option />
+						{playerRoleEnum.enumValues.map((role) => (
+							<option value={role} key={role}>
+								{role}
+							</option>
+						))}
+					</select>
+				</label>
+			</p>
+			<p>
+				<label>
+					{"Secondary role"}
+					<select name="secondaryRole">
+						<option />
+						{playerRoleEnum.enumValues.map((role) => (
+							<option value={role} key={role}>
+								{role}
+							</option>
+						))}
+					</select>
+				</label>
+			</p>
+			<p>
+				<label>
+					{"Background champion"}
+					<ChampionList name="backgroundChampionId" />
+				</label>
+			</p>
+			<p>
+				<Submit value="Update" />
+			</p>
 		</Form>
 	);
 }

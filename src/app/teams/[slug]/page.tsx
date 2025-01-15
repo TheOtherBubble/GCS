@@ -93,32 +93,48 @@ export default async function Page(props: PageProps<TeamsPageParams>) {
 						<header>
 							<h2>{"Players"}</h2>
 						</header>
-						{players.map(({ player }) => (
-							<PlayerCard key={player.id} player={player} />
-						))}
+						<ul>
+							{players.map(({ player }) => (
+								<li key={player.id}>
+									<PlayerCard player={player} />
+								</li>
+							))}
+						</ul>
 					</div>
-					{session?.user?.isAdministator && <AdminPanel team={team} />}
+					{session?.user?.isAdministator && (
+						<AdminPanel team={team} className={style["admin"]} />
+					)}
 				</div>
 				<div>
 					<div>
 						<header>
 							<h2>{"Match History"}</h2>
 						</header>
-						{Array.from(matches).map(({ children: games, value: match }) => (
-							<MatchCard
-								key={match.id}
-								match={match}
-								season={season}
-								teams={teams}
-								teamGameResults={games
-									.flatMap(({ children }) => children)
-									.flatMap(({ children }) => children)}
-								dateTimeFormatOptions={{
-									dateStyle: "long",
-									timeStyle: "short"
-								}}
-							/>
-						))}
+						<ol>
+							{Array.from(matches)
+								.sort(
+									(
+										{ value: { round: a, timeSlot: c, id: e } },
+										{ value: { round: b, timeSlot: d, id: f } }
+									) => a - b || c - d || e - f
+								)
+								.map(({ children: games, value: match }) => (
+									<li key={match.id}>
+										<MatchCard
+											match={match}
+											season={season}
+											teams={teams}
+											teamGameResults={games
+												.flatMap(({ children }) => children)
+												.flatMap(({ children }) => children)}
+											dateTimeFormatOptions={{
+												dateStyle: "long",
+												timeStyle: "short"
+											}}
+										/>
+									</li>
+								))}
+						</ol>
 					</div>
 				</div>
 			</div>

@@ -6,8 +6,6 @@ import { type JSX } from "react";
 import type { Season } from "types/db/Season";
 import type { Team } from "types/db/Team";
 import UpdateSeasonForm from "./admin/UpdateSeasonForm";
-import multiclass from "util/multiclass";
-import style from "styles/blob.module.scss";
 
 /**
  * Properties that can be passed to an admin panel.
@@ -31,11 +29,10 @@ export interface AdminPanelProps
 export default function AdminPanel({
 	season,
 	teams,
-	className,
 	...props
 }: AdminPanelProps) {
 	return (
-		<div className={multiclass(style["blob-section"], className)} {...props}>
+		<div {...props}>
 			<header>
 				<h2>{"Admin Panel"}</h2>
 			</header>

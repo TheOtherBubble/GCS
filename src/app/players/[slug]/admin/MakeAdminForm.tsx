@@ -32,9 +32,11 @@ export default function MakeAdminForm({
 			{...props}
 		>
 			<header>
-				<h2>{"Make Player an Admin"}</h2>
+				<h3>{"Make Player an Admin"}</h3>
 			</header>
-			<Submit value="Authorize" />
+			<p>
+				<Submit value="Authorize" />
+			</p>
 		</Form>
 	);
 }
