@@ -1,18 +1,15 @@
-import type { Game } from "types/db/Game";
 import GameCard from "components/GameCard";
-import type { GameResult } from "types/db/GameResult";
 import type { Metadata } from "next";
 import type PageProps from "types/PageProps";
 import PlayerCard from "components/PlayerCard";
-import type { PlayerGameResult } from "types/db/PlayerGameResult";
 import TeamCard from "components/TeamCard";
-import type { TeamGameResult } from "types/db/TeamGameResult";
 import getGamesByMatches from "db/getGamesByMatches";
 import getMatchUrl from "util/getMatchUrl";
 import getMatches from "db/getMatches";
 import getPlayersByTeams from "db/getPlayersByTeams";
 import getSeasons from "db/getSeasons";
 import getTeams from "db/getTeams";
+import leftHierarchy from "util/leftHierarchy";
 import multiclass from "util/multiclass";
 import style from "./page.module.scss";
 
@@ -59,48 +56,12 @@ export default async function Page(props: PageProps<MatchesPageParams>) {
 	);
 
 	// Organize game data.
-	const gameRows = await getGamesByMatches(match.id);
-	const games: {
-		game: Game;
-		result: GameResult | undefined;
-		teamResults: TeamGameResult[];
-		playerResults: PlayerGameResult[];
-	}[] = [];
-	for (const row of gameRows) {
-		// Insert new game.
-		const game = games.find((value) => value.game.id === row.game.id);
-		if (!game) {
-			games.push({
-				game: row.game,
-				playerResults: row.playerGameResult ? [row.playerGameResult] : [],
-				result: row.gameResult ?? void 0,
-				teamResults: row.teamGameResult ? [row.teamGameResult] : []
-			});
-			continue;
-		}
-
-		// Nothing more to add if there's no team game result.
-		if (!row.teamGameResult) {
-			continue;
-		}
-
-		// Add a team game result to an existing game if it isn't already there.
-		if (
-			!game.teamResults.find(
-				(teamResult) => teamResult.id === row.teamGameResult?.id
-			)
-		) {
-			game.teamResults.push(row.teamGameResult);
-		}
-
-		// Nothing more to add if there's no player game result.
-		if (!row.playerGameResult) {
-			continue;
-		}
-
-		// Add a player game result to an existing game.
-		game.playerResults.push(row.playerGameResult);
-	}
+	const games = leftHierarchy(await getGamesByMatches(match.id), [
+		"game",
+		"gameResult",
+		"teamGameResult",
+		"playerGameResult"
+	]);
 
 	return (
 		<div className={style["content"]}>
@@ -117,13 +78,15 @@ export default async function Page(props: PageProps<MatchesPageParams>) {
 				<h1 className="hide-on-desktop">{`${blueTeam.name} vs ${redTeam.name}`}</h1>
 				<h2>{"Games"}</h2>
 				<div>
-					{games.map(({ game, result, teamResults, playerResults }) => (
+					{games.map(({ children: [gameResult], value: game }) => (
 						<GameCard
 							key={game.id}
 							game={game}
-							gameResult={result}
-							teamGameResults={teamResults}
-							playerGameResults={playerResults}
+							gameResult={gameResult?.value}
+							teamGameResults={gameResult?.children.map(({ value }) => value)}
+							playerGameResults={gameResult?.children.flatMap(
+								({ children }) => children
+							)}
 						/>
 					))}
 				</div>

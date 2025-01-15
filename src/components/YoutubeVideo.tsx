@@ -12,77 +12,77 @@ export interface YoutubeVideoProps
 	id: string;
 
 	/** Change `allow` functionality to support a list of strings. */
-	allow?: string[];
+	allow?: string[] | undefined;
 
 	// Parameters documented at https://developers.google.com/youtube/player_parameters.
 
 	/** Whether or not to auto-play the video. Requires that `allow` contains `"autoplay"`. */
-	autoPlay?: boolean;
+	autoPlay?: boolean | undefined;
 
 	/** The ISO 639-1 two-letter language code of the preferred language for closed captions. */
-	ccLangPref?: string;
+	ccLangPref?: string | undefined;
 
 	/** Whether or not to display closed captions by default. */
-	ccLoadPolicy?: boolean;
+	ccLoadPolicy?: boolean | undefined;
 
 	/** The color to use in the progress bar. */
-	color?: "red" | "white";
+	color?: "red" | "white" | undefined;
 
 	/** Whether or not to display player controls. */
-	controls?: boolean;
+	controls?: boolean | undefined;
 
 	/** Whether or not to disable keyboard controls. */
-	disableKeyboard?: boolean;
+	disableKeyboard?: boolean | undefined;
 
 	/** Whether or not to enable controlling the player via the IFrame Player API. */
-	enableJsApi?: boolean;
+	enableJsApi?: boolean | undefined;
 
 	/** The time (measured in seconds from the start of the video) at which the player should stop playing the video. */
-	end?: number;
+	end?: number | undefined;
 
 	/** Whether or not to show the full-screen button. Required that `allowFullscreen` is `true`. */
-	fs?: boolean;
+	fs?: boolean | undefined;
 
 	/** The ISO 639-1 two-letter language code of the interface language. */
-	hl?: string;
+	hl?: string | undefined;
 
 	/** Whether or not to show video annotations by default. */
-	ivLoadPolicy?: boolean;
+	ivLoadPolicy?: boolean | undefined;
 
 	/** Identifies the content that will load in the player. */
-	list?: string;
+	list?: string | undefined;
 
 	/** Identifies the content that will load in the player. */
-	listType?: "playlist" | "user_uploads";
+	listType?: "playlist" | "user_uploads" | undefined;
 
 	/** Whether or not to loop the initial video. */
-	loop?: boolean;
+	loop?: boolean | undefined;
 
 	/** A security measure for the IFrame API. When using the IFrame API, always set this to this website's domain. */
-	origin?: string;
+	origin?: string | undefined;
 
 	/** A list of video IDs to play. */
-	playlist?: string[];
+	playlist?: string[] | undefined;
 
 	/** Whether or not videos should be played inline (as opposed to fullscreen) on iOS. */
-	playsInline?: boolean;
+	playsInline?: boolean | undefined;
 
 	/** Whether or not related videos should not be required to come from the same channel as the video that was just played. */
-	relYt?: boolean;
+	relYt?: boolean | undefined;
 
 	/** The time (measured in seconds from the start of the video) at which the player should start playing the video. */
-	start?: number;
+	start?: number | undefined;
 
 	/** The URL at which the video is embedded. */
-	widgetReferrer?: string;
+	widgetReferrer?: string | undefined;
 
 	// Undocumented parameters.
 
 	/** Whether or not to mute the video by default. */
-	mute?: boolean;
+	mute?: boolean | undefined;
 
 	/** A tracking token. */
-	si?: string;
+	si?: string | undefined;
 }
 
 /**

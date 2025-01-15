@@ -23,16 +23,16 @@ export interface MatchCardProps extends Omit<LinkProps, "children" | "href"> {
 	season?: Season | undefined;
 
 	/** The teams in the match. */
-	teams?: Team[];
+	teams?: Team[] | undefined;
 
 	/** The game results in the match. */
-	teamGameResults?: TeamGameResult[];
+	teamGameResults?: TeamGameResult[] | undefined;
 
 	/** The locales to use for formatting the date time string. */
-	dateTimeLocales?: Intl.LocalesArgument;
+	dateTimeLocales?: Intl.LocalesArgument | undefined;
 
 	/** The date time format options to use for formatting the date string. */
-	dateTimeFormatOptions?: Intl.DateTimeFormatOptions;
+	dateTimeFormatOptions?: Intl.DateTimeFormatOptions | undefined;
 }
 
 /**

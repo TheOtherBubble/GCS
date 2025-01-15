@@ -10,7 +10,7 @@ export type ImageProps = Omit<NextImageProps, "children"> & {
 	 * Whether or not the image is trusted. Untrusted images don't use the Next.js image optimization API, so their `src` doesn't need to be a `trustedDomain`.
 	 * @see {@link https://nextjs.org/docs/messages/next-image-unconfigured-host | Un-configured host}
 	 */
-	untrusted?: boolean;
+	untrusted?: boolean | undefined;
 };
 
 /**

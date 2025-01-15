@@ -1,12 +1,10 @@
 import AdminPanel from "./AdminPanel";
 import Image from "components/Image";
 import Link from "components/Link";
-import type { Match } from "types/db/Match";
 import MatchCard from "components/MatchCard";
 import type { Metadata } from "next";
 import type PageProps from "types/PageProps";
 import PlayerCard from "components/PlayerCard";
-import type { TeamGameResult } from "types/db/TeamGameResult";
 import { auth } from "db/auth";
 import getMatchesByTeams from "db/getMatchesByTeams";
 import getPlayerUrl from "util/getPlayerUrl";
@@ -16,6 +14,7 @@ import getSeasons from "db/getSeasons";
 import getTeamBySlug from "db/getTeamBySlug";
 import getTeamUrl from "util/getTeamUrl";
 import getTeamsBySeasons from "db/getTeamsBySeasons";
+import leftHierarchy from "util/leftHierarchy";
 import { redirect } from "next/navigation";
 import style from "./page.module.scss";
 
@@ -48,27 +47,12 @@ export default async function Page(props: PageProps<TeamsPageParams>) {
 	const captain = players.find((player) => player.teamPlayer.isCaptain)?.player;
 
 	// Organize match data by match.
-	const rows = await getMatchesByTeams(team.id);
-	const matches = new Map<number, { match: Match; games: TeamGameResult[] }>();
-	for (const row of rows) {
-		// Insert a new match.
-		const match = matches.get(row.match.id);
-		if (!match) {
-			matches.set(row.match.id, {
-				games: row.teamGameResult ? [row.teamGameResult] : [],
-				match: row.match
-			});
-			continue;
-		}
-
-		// Nothing more to add if there's no team game result.
-		if (!row.teamGameResult) {
-			continue;
-		}
-
-		// Add data to an existing match.
-		match.games.push(row.teamGameResult);
-	}
+	const matches = leftHierarchy(await getMatchesByTeams(team.id), [
+		"match",
+		"game",
+		"gameResult",
+		"teamGameResult"
+	]);
 
 	return (
 		<div className={style["content"]}>
@@ -120,13 +104,15 @@ export default async function Page(props: PageProps<TeamsPageParams>) {
 						<header>
 							<h2>{"Match History"}</h2>
 						</header>
-						{Array.from(matches).map(([, { games, match }]) => (
+						{Array.from(matches).map(({ children: games, value: match }) => (
 							<MatchCard
 								key={match.id}
 								match={match}
 								season={season}
 								teams={teams}
-								teamGameResults={games}
+								teamGameResults={games
+									.flatMap(({ children }) => children)
+									.flatMap(({ children }) => children)}
 								dateTimeFormatOptions={{
 									dateStyle: "long",
 									timeStyle: "short"

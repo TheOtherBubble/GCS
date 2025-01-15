@@ -29,7 +29,6 @@ Core functionality, necessary before the next season:
 - Add a page for captains to draft.
 
 Extra features to add after everything else is done (or when waiting on other people):
-- Add a function for organizing left-joined queries into a hierarchy.
 - Reduce duplicate code in simple database query functions (i.e. by passing the table as a parameter).
 - Split up season standings by pool.
 - Link to player multi-u.ggs.

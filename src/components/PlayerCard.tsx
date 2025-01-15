@@ -20,13 +20,13 @@ export interface PlayerCardProps extends Omit<LinkProps, "children" | "href"> {
 	player: Player;
 
 	/** The player's accounts. */
-	accounts?: Account[];
+	accounts?: Account[] | undefined;
 
 	/** The player's game results. */
-	games?: PlayerGameResult[];
+	games?: PlayerGameResult[] | undefined;
 
 	/** The player's teams. */
-	teams?: TeamPlayer[];
+	teams?: TeamPlayer[] | undefined;
 }
 
 /**

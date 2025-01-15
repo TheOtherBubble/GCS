@@ -1,11 +1,9 @@
 import AdminPanel from "./AdminPanel";
 import Link from "components/Link";
 import LocalDate from "components/LocalDate";
-import type { Match } from "types/db/Match";
 import MatchCard from "components/MatchCard";
 import type { Metadata } from "next";
 import type PageProps from "types/PageProps";
-import type { TeamGameResult } from "types/db/TeamGameResult";
 import { auth } from "db/auth";
 import getMatchDateTime from "util/getMatchDateTime";
 import getSeasonBySlug from "db/getSeasonBySlug";
@@ -13,6 +11,7 @@ import getSeasonUrl from "util/getSeasonUrl";
 import getTeamGameResultsBySeason from "db/getMatchesBySeasons";
 import getTeamUrl from "util/getTeamUrl";
 import getTeamsBySeasons from "db/getTeamsBySeasons";
+import leftHierarchy from "util/leftHierarchy";
 import multiclass from "util/multiclass";
 import { redirect } from "next/navigation";
 import style from "./page.module.scss";
@@ -44,59 +43,19 @@ export default async function Page(props: PageProps<SeasonsPageParams>) {
 	const teamScores = teams.map((team) => ({ losses: 0, team, wins: 0 }));
 
 	// Split matches into rounds for displaying.
-	const rows = await getTeamGameResultsBySeason(season.id);
-	const rounds = new Map<
-		number,
-		{
-			match: Match;
-			teamGameResults: TeamGameResult[];
-		}[]
-	>(); // Round numbers to match IDs in that round.
-	for (const row of rows) {
-		// Add wins/losses to team scores.
-		if (row.teamGameResult) {
-			const teamScore = teamScores.find(
-				(value) => value.team.id === row.teamGameResult?.teamId
-			);
-			if (teamScore) {
-				if (row.teamGameResult.isWinner) {
-					teamScore.wins++;
-				} else {
-					teamScore.losses++;
-				}
-			}
-		}
-
-		// Insert match as the first in its round.
-		const round = rounds.get(row.match.round);
-		if (!round) {
-			rounds.set(row.match.round, [
-				{
-					match: row.match,
-					teamGameResults: row.teamGameResult ? [row.teamGameResult] : []
-				}
-			]);
-			continue;
-		}
-
-		// Insert a new match.
-		const match = round.find((value) => value.match.id === row.match.id);
-		if (!match) {
-			round.push({
-				match: row.match,
-				teamGameResults: row.teamGameResult ? [row.teamGameResult] : []
-			});
-			continue;
-		}
-
-		// Nothing more to add if there's no team game result.
-		if (!row.teamGameResult) {
-			continue;
-		}
-
-		// Add data to an existing match.
-		match.teamGameResults.push(row.teamGameResult);
-	}
+	const matches = leftHierarchy(await getTeamGameResultsBySeason(season.id), [
+		"match",
+		"game",
+		"gameResult",
+		"teamGameResult"
+	]);
+	const rounds = matches.reduce((previousValue, currentValue) => {
+		void (
+			previousValue.get(currentValue.value.round)?.push(currentValue) ??
+			previousValue.set(currentValue.value.round, [currentValue])
+		);
+		return previousValue;
+	}, new Map<number, (typeof matches)[number][]>());
 
 	return (
 		<div className={style["content"]}>
@@ -117,13 +76,13 @@ export default async function Page(props: PageProps<SeasonsPageParams>) {
 				<h2>{"Schedule"}</h2>
 				{Array.from(rounds)
 					.sort(([a], [b]) => a - b)
-					.map(([round, matches]) => (
+					.map(([round, roundMatches]) => (
 						<div key={round}>
 							<header>
-								{matches[0] ? (
+								{roundMatches[0] ? (
 									<h3>
 										<LocalDate
-											date={getMatchDateTime(matches[0].match, season)}
+											date={getMatchDateTime(roundMatches[0].value, season)}
 											options={{ dateStyle: "full" }}
 										/>
 									</h3>
@@ -131,17 +90,19 @@ export default async function Page(props: PageProps<SeasonsPageParams>) {
 									<h3>{`Round ${round.toString()}`}</h3>
 								)}
 							</header>
-							{matches
+							{roundMatches
 								.sort(
-									({ match: { timeSlot: a } }, { match: { timeSlot: b } }) =>
+									({ value: { timeSlot: a } }, { value: { timeSlot: b } }) =>
 										a - b
 								)
 								.map((match) => (
 									<MatchCard
-										key={match.match.id}
-										match={match.match}
+										key={match.value.id}
+										match={match.value}
 										season={season}
-										teamGameResults={match.teamGameResults}
+										teamGameResults={match.children
+											.flatMap(({ children }) => children)
+											.flatMap(({ children }) => children)}
 										dateTimeFormatOptions={{
 											dateStyle: "long",
 											timeStyle: "short"

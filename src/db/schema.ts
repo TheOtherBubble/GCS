@@ -425,7 +425,7 @@ export const matchTable = pgTable("match", {
 	// The one-based time slot at which the match will take place.
 	timeSlot: integer().notNull(),
 
-	// The team that won the match, if it has concluded.
+	// An override for the team that won the match. This should only be set when the match winner does not match the automatically-determined winner from the game winners.
 	winner: matchTeamEnum()
 });
 

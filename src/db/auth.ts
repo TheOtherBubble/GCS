@@ -77,7 +77,7 @@ export type NextAuthResultAuth = ((
 	) => AppRouteHandlerFn);
 
 /**
- * Equivalent to `NextAuthResult` from Auth.js
+ * Equivalent to `NextAuthResult` from Auth.js, but specifies that the session user matches the type in the database.
  * @public
  */
 export interface NextAuthResultFixed {

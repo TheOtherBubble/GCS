@@ -19,10 +19,10 @@ export interface GameCardProps extends Omit<LinkProps, "children" | "href"> {
 	gameResult?: GameResult | undefined;
 
 	/** The team game results. */
-	teamGameResults?: TeamGameResult[];
+	teamGameResults?: TeamGameResult[] | undefined;
 
 	/** The player game results. */
-	playerGameResults?: PlayerGameResult[];
+	playerGameResults?: PlayerGameResult[] | undefined;
 }
 
 /**

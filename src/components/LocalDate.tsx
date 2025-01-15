@@ -14,7 +14,7 @@ export interface LocalDateProps
 	// An `Intl.DateTimeFormat` cannot be passed from the server to a client component, so we need to pass the arguments instead.
 
 	/** The date time locales to use for formatting the date string. */
-	locales?: Intl.LocalesArgument;
+	locales?: Intl.LocalesArgument | undefined;
 
 	/** The date time format to use for formatting the date string. */
 	options?: Intl.DateTimeFormatOptions | undefined;
