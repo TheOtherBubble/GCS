@@ -40,13 +40,11 @@ export default function LocalDate({
 	// Rebuild the date time format from its arguments.
 	const format = new Intl.DateTimeFormat(locales, options);
 
-	// Next.js uses UTC by default. If that changes, this will display the wrong timezone pre-hydration.
-
 	// Credit: François Best (https://francoisbest.com/posts/2023/displaying-local-times-in-nextjs).
 	return (
-		<Suspense key={hydrated ? "local" : "utc"}>
+		<Suspense key={hydrated ? "local" : "server"}>
 			<time dateTime={date.toISOString()} {...props}>
-				{`${format.format(date)}${hydrated ? "" : " UTC"}`}
+				{format.format(date)}
 			</time>
 		</Suspense>
 	);

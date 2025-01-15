@@ -82,7 +82,14 @@ export default async function Page(props: PageProps<MatchesPageParams>) {
 						{season ? (
 							<LocalDate
 								date={getMatchDateTime(match, season)}
-								options={{ dateStyle: "long", timeStyle: "short" }}
+								options={{
+									day: "numeric",
+									hour: "numeric",
+									minute: "numeric",
+									month: "long",
+									timeZoneName: "short",
+									weekday: "long"
+								}}
 							/>
 						) : (
 							`Round ${match.round.toString()}`

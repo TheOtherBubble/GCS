@@ -81,7 +81,11 @@ export default async function Page(props: PageProps<SeasonsPageParams>) {
 										<h3>
 											<LocalDate
 												date={getMatchDateTime(roundMatches[0].value, season)}
-												options={{ dateStyle: "full" }}
+												options={{
+													day: "numeric",
+													month: "long",
+													weekday: "long"
+												}}
 											/>
 										</h3>
 									) : (
@@ -105,8 +109,12 @@ export default async function Page(props: PageProps<SeasonsPageParams>) {
 														.flatMap(({ children }) => children)
 														.flatMap(({ children }) => children)}
 													dateTimeFormatOptions={{
-														dateStyle: "long",
-														timeStyle: "short"
+														day: "numeric",
+														hour: "numeric",
+														minute: "numeric",
+														month: "long",
+														timeZoneName: "short",
+														weekday: "long"
 													}}
 													teams={teams}
 												/>
