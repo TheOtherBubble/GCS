@@ -6,7 +6,7 @@ import type { Season } from "types/db/Season";
 import SignUpForm from "./player/SignUpForm";
 import UpdatePlayerForm from "./player/UpdatePlayerForm";
 import UpdateSkinForm from "./player/UpdateSkinForm";
-import isDraftPlayerForSeasons from "db/isDraftPlayerForSeasons";
+import getDraftPlayersBySeasons from "db/getDraftPlayersBySeasons";
 
 /**
  * Properties that can be passed to a player panel.
@@ -50,7 +50,9 @@ export default async function PlayerPanel({
 				/>
 			)}
 			{latestSeason &&
-				!(await isDraftPlayerForSeasons(player.id, latestSeason.id)) && (
+				!(await getDraftPlayersBySeasons(latestSeason.id)).some(
+					({ player: { id } }) => id === player.id
+				) && (
 					<SignUpForm
 						player={player}
 						season={latestSeason}

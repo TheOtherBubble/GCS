@@ -37,15 +37,11 @@ div.content {
 		}
 	}
 
-	// Leaderboards column.
-	& > div.leaderboards {
-		display: none;
-	}
-
 	// Information and leaderboards columns.
 	& > div.info,
 	& > div.leaderboards {
 		@extend .sticky-column;
+		display: none;
 	}
 
 	@include mixins.is-not-mobile using ($is-not-mobile) {
@@ -59,16 +55,22 @@ div.content {
 				display: flex;
 			}
 
-			// Leaderboards column.
+			// Information and leaderboards columns.
+			& > div.info,
 			& > div.leaderboards {
 				display: block;
 			}
 
-			// Leaderboards.
-			& > div.leaderboards > ol {
-				font-size: 1.5em;
-				text-wrap: nowrap;
-				overflow: auto;
+			// Leaderboards column.
+			& > div.leaderboards {
+				display: block;
+
+				// Leaderboards.
+				& > ol {
+					font-size: 1.5em;
+					text-wrap: nowrap;
+					overflow: auto;
+				}
 			}
 		}
 	}

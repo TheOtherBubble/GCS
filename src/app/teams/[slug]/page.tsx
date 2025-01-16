@@ -6,6 +6,7 @@ import type { Metadata } from "next";
 import type PageProps from "types/PageProps";
 import PlayerCard from "components/PlayerCard";
 import { auth } from "db/auth";
+import getDraftPlayersBySeasons from "db/getDraftPlayersBySeasons";
 import getMatchesByTeams from "db/getMatchesByTeams";
 import getPlayerUrl from "util/getPlayerUrl";
 import getPlayersByTeams from "db/getPlayersByTeams";
@@ -102,7 +103,14 @@ export default async function Page(props: PageProps<TeamsPageParams>) {
 						</ul>
 					</div>
 					{session?.user?.isAdministator && (
-						<AdminPanel team={team} className={style["admin"]} />
+						<AdminPanel
+							team={team}
+							teamPlayers={players.map(({ teamPlayer }) => teamPlayer)}
+							players={(await getDraftPlayersBySeasons(team.seasonId)).map(
+								({ player }) => player
+							)}
+							className={style["admin"]}
+						/>
 					)}
 				</div>
 				<div>
@@ -128,8 +136,12 @@ export default async function Page(props: PageProps<TeamsPageParams>) {
 												.flatMap(({ children }) => children)
 												.flatMap(({ children }) => children)}
 											dateTimeFormatOptions={{
-												dateStyle: "long",
-												timeStyle: "short"
+												day: "numeric",
+												hour: "numeric",
+												minute: "numeric",
+												month: "long",
+												timeZoneName: "short",
+												weekday: "long"
 											}}
 										/>
 									</li>
