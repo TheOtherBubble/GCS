@@ -37,12 +37,9 @@ export default async function Page(props: PageProps<SeasonsPageParams>) {
 		redirect("/seasons");
 	}
 
-	// Sort teams by score for the leaderboard.
-	const teams = await getTeamsBySeasons(season.id);
-	const teamScores = teams.map((team) => ({ losses: 0, team, wins: 0 }));
-
 	// Split matches into rounds for displaying.
-	const matches = leftHierarchy(await getTeamGameResultsBySeason(season.id), [
+	const matchRows = await getTeamGameResultsBySeason(season.id);
+	const matches = leftHierarchy(matchRows, [
 		"match",
 		"game",
 		"gameResult",
@@ -55,6 +52,36 @@ export default async function Page(props: PageProps<SeasonsPageParams>) {
 		);
 		return previousValue;
 	}, new Map<number, (typeof matches)[number][]>());
+
+	// Sort teams by pool and score for the leaderboard.
+	const teams = await getTeamsBySeasons(season.id);
+	const teamScores = teams.map((team) => ({ losses: 0, team, wins: 0 }));
+	for (const teamGameResult of leftHierarchy(matchRows, ["teamGameResult"])) {
+		const team = teamScores.find(
+			({ team: value }) => value.id === teamGameResult.teamId
+		);
+		if (!team) {
+			continue;
+		}
+
+		if (teamGameResult.isWinner) {
+			team.wins++;
+			continue;
+		}
+
+		team.losses++;
+	}
+
+	const poolScores = new Map<number, typeof teamScores>();
+	for (const teamScore of teamScores) {
+		const pool = poolScores.get(teamScore.team.pool);
+		if (!pool) {
+			poolScores.set(teamScore.team.pool, [teamScore]);
+			continue;
+		}
+
+		pool.push(teamScore);
+	}
 
 	return (
 		<div className={style["content"]}>
@@ -130,14 +157,29 @@ export default async function Page(props: PageProps<SeasonsPageParams>) {
 					<h2>{"Standings"}</h2>
 				</header>
 				<ol>
-					{teamScores
-						.sort((a, b) => a.wins - b.wins || b.losses - a.losses)
-						.map(({ team, wins, losses }) => (
-							<li key={team.id}>
-								<Link href={getTeamUrl(encodeURIComponent(team.vanityUrlSlug))}>
-									{team.name}
-								</Link>
-								{` ${wins.toString()}-${losses.toString()}`}
+					{Array.from(poolScores)
+						.sort(([a], [b]) => a - b)
+						.map(([pool, scores]) => (
+							<li key={pool}>
+								<header>
+									<h3>{`Pool ${pool.toString()}`}</h3>
+								</header>
+								<ol>
+									{scores
+										.sort((a, b) => a.wins - b.wins || b.losses - a.losses)
+										.map(({ team, wins, losses }) => (
+											<li key={team.id}>
+												<Link
+													href={getTeamUrl(
+														encodeURIComponent(team.vanityUrlSlug)
+													)}
+												>
+													{team.name}
+												</Link>
+												{` ${wins.toString()}-${losses.toString()}`}
+											</li>
+										))}
+								</ol>
 							</li>
 						))}
 				</ol>

@@ -44,6 +44,11 @@ div.content {
 		display: none;
 	}
 
+	// Leaderboards list.
+	& > div.leaderboards > ol {
+		@extend .clean-list;
+	}
+
 	@include mixins.is-not-mobile using ($is-not-mobile) {
 		@if $is-not-mobile {
 			display: grid;
@@ -66,7 +71,7 @@ div.content {
 				display: block;
 
 				// Leaderboards.
-				& > ol {
+				& > ol > li {
 					font-size: 1.5em;
 					text-wrap: nowrap;
 					overflow: auto;
