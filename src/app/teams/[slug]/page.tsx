@@ -116,7 +116,7 @@ export default async function Page(props: PageProps<TeamsPageParams>) {
 				<div>
 					<div>
 						<header>
-							<h2>{"Match History"}</h2>
+							<h2>{"Match Schedule"}</h2>
 						</header>
 						<ol>
 							{Array.from(matches)

@@ -1,5 +1,6 @@
 import Form, { type FormProps } from "components/Form";
 import ChampionList from "./ChampionList";
+import Link from "components/Link";
 import type { Player } from "types/db/Player";
 import type { PlayerRole } from "types/db/PlayerRole";
 import Submit from "components/Submit";
@@ -63,6 +64,11 @@ export default function UpdatePlayerForm({
 		>
 			<header>
 				<h3>{"Update Player"}</h3>
+				<p>
+					{"Player biographies support "}
+					<Link href="https://commonmark.org/">{"CommonMark"}</Link>
+					{"."}
+				</p>
 			</header>
 			<p>
 				<label>

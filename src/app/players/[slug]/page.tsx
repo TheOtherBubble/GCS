@@ -2,6 +2,7 @@ import AccountCard from "components/AccountCard";
 import AdminPanel from "./AdminPanel";
 import GameCard from "components/GameCard";
 import Image from "components/Image";
+import Markdown from "react-markdown";
 import type { Metadata } from "next";
 import type PageProps from "types/PageProps";
 import PlayerPanel from "./PlayerPanel";
@@ -57,7 +58,7 @@ export default async function Page(props: PageProps<PlayersPageParams>) {
 			)}
 			<header>
 				<h1>{player.displayName ?? player.name}</h1>
-				{player.biography && <p>{player.biography}</p>}
+				{player.biography && <Markdown>{player.biography}</Markdown>}
 			</header>
 			<div>
 				<div className={style["left"]}>

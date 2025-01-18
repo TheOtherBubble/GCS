@@ -21,7 +21,6 @@ Core functionality, waiting on Riot to give us an API key:
 - API endpoint for receiving and storing game results and creating games when necessary.
 
 Core functionality, necessary before the next season:
-- Add point values to draftable players.
 - Administrator tool for modifying draftable players' point values.
 - Add a page for captains to draft.
 
@@ -46,8 +45,6 @@ Extra features to add after everything else is done (or when waiting on other pe
 - Match card indicator when any player is live on Twitch/YouTube.
 - Show the playoffs bracket once the playoffs stage begins.
 - Player reporting system.
-- Administrator tool for updating the rulebook.
-- Support markdown in player biographies and the rulebook.
 - Season KDA leaderboard.
 - Season damage leaderboard.
 - Administrator tool for merging players.
