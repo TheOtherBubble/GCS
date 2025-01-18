@@ -19,7 +19,10 @@ export default async function getMatchesBySeasons(...ids: number[]) {
 		.select()
 		.from(matchTable)
 		.leftJoin(gameTable, eq(matchTable.id, gameTable.matchId))
-		.leftJoin(gameResultTable, eq(gameTable.id, gameResultTable.gameId))
+		.leftJoin(
+			gameResultTable,
+			eq(gameTable.tournamentCode, gameResultTable.tournamentCode)
+		)
 		.leftJoin(
 			teamGameResultTable,
 			eq(gameResultTable.id, teamGameResultTable.gameResultId)

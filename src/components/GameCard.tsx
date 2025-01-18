@@ -58,7 +58,7 @@ export default function GameCard({
 				href={getGameUrl(game.id.toString() as `${number}`)}
 				{...props}
 			>
-				<h2>{gameResult.name}</h2>
+				<h2>{gameResult.tournamentCode}</h2>
 			</a>
 		);
 	}

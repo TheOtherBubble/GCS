@@ -1,6 +1,9 @@
 import type ChallengesDto from "./ChallengesDto";
+import type ChampionTransform from "./ChampionTransform";
+import type Lane from "./Lane";
 import type MissionsDto from "./MissionsDto";
 import type PerksDto from "./PerksDto";
+import type { Position } from "types/db/Position";
 
 /**
  * Information about a participant in a match.
@@ -38,7 +41,7 @@ export default interface ParticipantDto {
 	commandPings: number;
 
 	/** The participant's champion's transformation. */
-	championTransform: number;
+	championTransform: ChampionTransform;
 
 	/** The number of consumable items purchased by the participant. */
 	consumablesPurchased: number;
@@ -110,7 +113,7 @@ export default interface ParticipantDto {
 	goldSpent: number;
 
 	/** The most likely position played by the participant when disregarding anything else. Generally, `teamPosition` should be used instead. */
-	individualPosition: string;
+	individualPosition: Position;
 
 	/** The participant's inhibitor kill count. */
 	inhibitorKills: number;
@@ -152,7 +155,7 @@ export default interface ParticipantDto {
 	kills: number;
 
 	/** An undocumented value. */
-	lane: string;
+	lane: Lane;
 
 	/** The participant's largest critical strike damage. */
 	largestCriticalStrike: number;
@@ -341,7 +344,7 @@ export default interface ParticipantDto {
 	teamId: number;
 
 	/** The most likely position played by the participant when considering that each player on a team must play a different role. */
-	teamPosition: string;
+	teamPosition: Position;
 
 	/** The participant's time spent crowd controlling other participants. */
 	timeCCingOthers: number;

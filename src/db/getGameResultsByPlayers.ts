@@ -9,16 +9,19 @@ import db from "./db";
 
 /**
  * Get all of a set of player's game results, including the games, game results, and team game results.
- * @param ids - The IDs of the players.
+ * @param puuids - The PUUIDs of the players.
  * @returns The players' game results. Includes the game, game result, team game result, and player game result.
  * @throws `Error` if there is a database error.
  * @public
  */
-export default async function getGameResultsByPlayers(...ids: string[]) {
+export default async function getGameResultsByPlayers(...puuids: string[]) {
 	return await db
 		.select()
 		.from(gameTable)
-		.innerJoin(gameResultTable, eq(gameTable.id, gameResultTable.gameId))
+		.innerJoin(
+			gameResultTable,
+			eq(gameTable.tournamentCode, gameResultTable.tournamentCode)
+		)
 		.innerJoin(
 			teamGameResultTable,
 			eq(gameResultTable.id, teamGameResultTable.gameResultId)
@@ -27,5 +30,7 @@ export default async function getGameResultsByPlayers(...ids: string[]) {
 			playerGameResultTable,
 			eq(teamGameResultTable.id, playerGameResultTable.teamGameResultId)
 		)
-		.where(or(...ids.map((id) => eq(playerGameResultTable.playerId, id))));
+		.where(
+			or(...puuids.map((puuid) => eq(playerGameResultTable.puuid, puuid)))
+		);
 }

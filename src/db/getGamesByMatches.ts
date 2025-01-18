@@ -18,7 +18,10 @@ export default async function getGamesByMatches(...ids: number[]) {
 	return await db
 		.select()
 		.from(gameTable)
-		.leftJoin(gameResultTable, eq(gameTable.id, gameResultTable.gameId))
+		.leftJoin(
+			gameResultTable,
+			eq(gameTable.tournamentCode, gameResultTable.tournamentCode)
+		)
 		.leftJoin(
 			teamGameResultTable,
 			eq(gameResultTable.id, teamGameResultTable.gameResultId)

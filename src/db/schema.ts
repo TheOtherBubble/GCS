@@ -6,6 +6,7 @@ import {
 	pgEnum,
 	pgTable,
 	primaryKey,
+	text,
 	timestamp,
 	unique,
 	varchar
@@ -355,6 +356,9 @@ export const draftPlayerTable = pgTable(
 			})
 			.notNull(),
 
+		// The point value of the player in the season. Null for players that have signed up but have not been accepted into the season by a tournament administrator.
+		pointValue: integer(),
+
 		// The ID of the season.
 		seasonId: integer()
 			.references(() => seasonTable.id, {
@@ -474,18 +478,10 @@ export const platformEnum = pgEnum("platform", [
  * @public
  */
 export const gameResultTable = pgTable("gameResult", {
-	// The duration of the game in seconds.
+	// The duration of the game in milliseconds.
 	duration: integer().notNull(),
 
-	// The ID of the game that these results correspond to, if any. May be null if the game result isn't part of a tournament or inhouse (such as games that are just pulled from the Riot API to collect statistics).
-	gameId: integer()
-		.references(() => gameTable.id, {
-			onDelete: "set null",
-			onUpdate: "cascade"
-		})
-		.unique(),
-
-	// The game/match ID of the game in the Riot API.
+	// The game ID of the game in the Riot API.
 	id: integer().primaryKey(),
 
 	// The ID of the map that the game was played on.
@@ -494,10 +490,7 @@ export const gameResultTable = pgTable("gameResult", {
 	// The game's mode.
 	mode: varchar({ length: 0x20 }).notNull(),
 
-	// The game's name.
-	name: varchar({ length: 0x40 }).notNull(),
-
-	// The ID of the platform that the game was played on.
+	// The ID of the platform that the game was played on. Can be joined with the game ID by an underscore to make the match ID.
 	platformId: platformEnum().notNull(),
 
 	// The ID of the queue that the game was in.
@@ -505,6 +498,9 @@ export const gameResultTable = pgTable("gameResult", {
 
 	// The Unix timestamp of the date that the game was started on the game server.
 	startTimestamp: integer().notNull(),
+
+	// The tournament code of the match. Can be used to pair game results with games.
+	tournamentCode: varchar({ length: 0x40 }).unique(),
 
 	// The game type.
 	type: varchar({ length: 0x40 }).notNull(),
@@ -540,35 +536,23 @@ export const teamGameResultTable = pgTable(
 			onUpdate: "cascade"
 		})
 	},
-	(self) => [unique().on(self.gameResultId, self.isWinner)]
+	(self) => [
+		unique().on(self.gameResultId, self.isWinner),
+		unique().on(self.gameResultId, self.teamId)
+	]
 );
 
 /**
- * A ban in a team game result. This is just cached data from the Riot API. Always corresponds to a team game result.
+ * League of Legends positions.
  * @public
  */
-export const teamGameResultBanTable = pgTable(
-	"teamGameResultBan",
-	{
-		// The key of the champion that was banned. Referred to as the champion's ID in the Riot API.
-		championKey: varchar({ length: 0x20 }).notNull(),
-
-		// The order in which this ban occurred.
-		order: integer().notNull(),
-
-		// The ID of the team game result that this ban correspond to.
-		teamGameResultId: integer()
-			.references(() => teamGameResultTable.id, {
-				onDelete: "cascade",
-				onUpdate: "cascade"
-			})
-			.notNull()
-	},
-	(self) => [
-		unique().on(self.championKey, self.teamGameResultId),
-		unique().on(self.order, self.teamGameResultId)
-	]
-);
+export const positionEnum = pgEnum("position", [
+	"TOP",
+	"JUNGLE",
+	"MIDDLE",
+	"BOTTOM",
+	"UTILITY"
+]);
 
 /**
  * A player in a team game result. This is just cached data from the Riot API. Always corresponds to a team game result, but may not always correspond to a player (such as for game results that are just pulled from the Riot API to collect statistics).
@@ -577,12 +561,6 @@ export const teamGameResultBanTable = pgTable(
 export const playerGameResultTable = pgTable(
 	"playerGameResult",
 	{
-		// The amount of life that the player healed on their allies, excluding regeneration.
-		allyHealing: integer().notNull(),
-
-		// The player's creep score from killing monsters in their own jungle.
-		allyMonsterCreepScore: integer().notNull(),
-
 		// The number of assists that the player got.
 		assists: integer().notNull(),
 
@@ -592,47 +570,8 @@ export const playerGameResultTable = pgTable(
 		// The key of the champion that the player played. Referred to as the champion's ID in the Riot API.
 		championKey: varchar({ length: 0x20 }).notNull(),
 
-		// The player's creep score from killing monsters in the enemy jungle.
-		counterJungleCreepScore: integer().notNull(),
-
-		// The amount of time that the player applied crowd control for.
-		crowdControlScore: integer().notNull(),
-
-		// The amount of damage that the player dealt.
-		damage: integer().notNull(),
-
-		// The amount of damage that the player took.
-		damageTaken: integer().notNull(),
-
 		// The number of deaths that the player has.
 		deaths: integer().notNull(),
-
-		// The number of double kills that the player got.
-		doubleKills: integer().notNull(),
-
-		// The number of dragon kills that the player got.
-		dragonKills: integer().notNull(),
-
-		// Whether or not this player got the first champion kill.
-		firstBlood: boolean().notNull(),
-
-		// Whether or not this player got the first tower kill.
-		firstTower: boolean().notNull(),
-
-		// The amount of gold that the player has over their lane opponent at 14 minutes into the game (when the Rift Herald spawns and turret plating falls off).
-		gd14: integer().notNull(),
-
-		// The amount of gold that the player has over their lane opponent at 20 minutes into the game (when Baron Nashor/Atakhan spawns).
-		gd20: integer().notNull(),
-
-		// The amount of gold that the player has over their lane opponent at 6 minutes into the game (when the Voidgrubs spawn).
-		gd6: integer().notNull(),
-
-		// The amount of gold that the player earned.
-		goldEarned: integer().notNull(),
-
-		// The amount of life that the player healed, excluding regeneration.
-		healing: integer().notNull(),
 
 		// Unique identifier.
 		id: integer().primaryKey().generatedAlwaysAsIdentity(),
@@ -655,50 +594,29 @@ export const playerGameResultTable = pgTable(
 		// The ID of the item in the player's sixth item slot at the end of the game.
 		item5Id: integer().notNull(),
 
+		// The ID of the item in the player's seventh item slot at the end of the game.
+		item6Id: integer().notNull(),
+
 		// The number of kills that the player got.
 		kills: integer().notNull(),
 
-		// The player's creep score from killing minions.
-		laneCreepScore: integer().notNull(),
+		// The player's champion level at the end of the game.
+		level: integer().notNull(),
 
-		// The number of kills in the player's largest killing spree.
-		largestKillingSpree: integer().notNull(),
-
-		// The number of kills in the player's largest multi-kill.
-		largestMultiKill: integer().notNull(),
-
-		// The summoner name of the player at the point when this player game result was cached.
-		name: integer().notNull(),
-
-		// The amount of damage that the player dealt to objectives.
-		objectiveDamage: integer().notNull(),
-
-		// The number of objectives that the player stole.
-		objectivesStolen: integer().notNull(),
-
-		// The number of penta kills that the player got.
-		pentaKills: integer().notNull(),
-
-		// The ID of the player, if any. May be null if the game result isn't part of a tournament or inhouse (such as games that are just pulled from the Riot API to collect statistics).
-		playerId: varchar({ length: 36 }).references(() => playerTable.id, {
-			onDelete: "set null",
-			onUpdate: "cascade"
-		}),
+		// The game name of the player at the point when this player game result was cached.
+		name: varchar({ length: 16 }).notNull(),
 
 		// The position that the player most likely played, as determined by the Riot API.
-		position: integer().notNull(),
+		position: varchar({ length: 0x20 }).notNull(),
 
-		// The PUUID of the player.
-		puuid: integer().notNull(),
+		// The PUUID of the player. Can be used to link player game results to accounts (and, by extension, players).
+		puuid: char({ length: 78 }).notNull(),
 
-		// The number of quadra kills that the player got.
-		quadraKills: integer().notNull(),
+		// The ID of the player's first summoner spell.
+		summoner1Id: integer().notNull(),
 
-		// The amount of damage that the player mitigated via resistances.
-		selfMitigatedDamage: integer().notNull(),
-
-		// The amount of damage that the player shielded their allies from.
-		shieldedDamage: integer().notNull(),
+		// The ID of the player's second summoner spell.
+		summoner2Id: integer().notNull(),
 
 		// The ID of the team game result that these results correspond to.
 		teamGameResultId: integer()
@@ -706,25 +624,22 @@ export const playerGameResultTable = pgTable(
 				onDelete: "cascade",
 				onUpdate: "cascade"
 			})
-			.notNull(),
-
-		// The amount of damage that the player dealt to towers.
-		towerDamage: integer().notNull(),
-
-		// The number of triple kills that the player got.
-		tripleKills: integer().notNull(),
-
-		// The number of turrets that the player killed.
-		turretKills: integer().notNull(),
-
-		// The number of turrets that the player killed or assisted in killing.
-		turretTakedowns: integer().notNull(),
-
-		// The player's vision score.
-		visionScore: integer().notNull(),
-
-		// The player's creep score from killing wards.
-		wardCreepScore: integer().notNull()
+			.notNull()
 	},
-	(self) => [unique().on(self.position, self.teamGameResultId)]
+	(self) => [
+		unique().on(self.position, self.teamGameResultId),
+		unique().on(self.puuid, self.teamGameResultId)
+	]
 );
+
+/**
+ * A long document, such as the rulebook.
+ * @public
+ */
+export const documentTable = pgTable("document", {
+	/** The unique identifier of the document. User-defined to allow specific documents to be displayed in specific places. */
+	id: integer().primaryKey(),
+
+	/** The content of the document. */
+	text: text()
+});
