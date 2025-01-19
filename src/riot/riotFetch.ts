@@ -22,7 +22,9 @@ export default async function riotFetch(
 	request.headers.set("X-Riot-Token", realKey);
 	const response = await fetch(request);
 	if (!response.ok) {
-		throw new Error(`Bad Riot API response: ${await response.text()}`);
+		throw new Error(
+			`Bad Riot API response: ${JSON.stringify(await response.json())}`
+		);
 	}
 
 	return response;

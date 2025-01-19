@@ -17,7 +17,7 @@ export default interface InfoDto {
 	gameDuration: number;
 
 	/** The Unix timestamp at which the game ended on the game server. Can occasionally be significantly later than when the match actually ends, so it is better to determine the timestamp of the end of the match by adding the `gameDuration` to the `gameStartTimestamp`. Added on patch 11.20. */
-	gameEndTimestamp: number;
+	gameEndTimestamp?: number;
 
 	/** The game's ID. */
 	gameId: number;
@@ -50,8 +50,8 @@ export default interface InfoDto {
 	queueId: number;
 
 	/** The teams in the match. */
-	teams: TeamDto;
+	teams: TeamDto[];
 
 	/** The tournament code used to generate the match. Added in patch 11.13. */
-	tournamentCode: string;
+	tournamentCode?: string;
 }

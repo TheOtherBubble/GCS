@@ -44,10 +44,6 @@ export default async function UpdateAccountsForm({
 				const soloQueueDto = (
 					await getLeagueEntriesBySummonerId(summonerDto.id, platform)
 				).find((leagueEntry) => leagueEntry.queueType === QueueType.SOLO);
-				if (!soloQueueDto) {
-					throw new Error("Failed to retrieve ranked solo 5v5 league entry.");
-				}
-
 				return { account, platform, soloQueueDto, summonerDto };
 			} catch {
 				return void 0;
@@ -79,10 +75,10 @@ export default async function UpdateAccountsForm({
 							isVerified:
 								account.isVerified ||
 								summonerDto.profileIconId === account.profileIconIdToVerify,
-							rankCache: soloQueueDto.rank,
+							rankCache: soloQueueDto?.rank,
 							region: platform,
 							tagLineCache: account.tagLineCache,
-							tierCache: soloQueueDto.tier
+							tierCache: soloQueueDto?.tier
 						},
 						account.puuid
 					);

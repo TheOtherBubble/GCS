@@ -1,4 +1,4 @@
-import { eq, or } from "drizzle-orm";
+import { and, eq, or } from "drizzle-orm";
 import {
 	gameResultTable,
 	gameTable,
@@ -28,7 +28,13 @@ export default async function getGameResultsByPlayers(...puuids: string[]) {
 		)
 		.innerJoin(
 			playerGameResultTable,
-			eq(teamGameResultTable.id, playerGameResultTable.teamGameResultId)
+			and(
+				eq(
+					teamGameResultTable.gameResultId,
+					playerGameResultTable.gameResultId
+				),
+				eq(teamGameResultTable.riotId, playerGameResultTable.teamId)
+			)
 		)
 		.where(
 			or(...puuids.map((puuid) => eq(playerGameResultTable.puuid, puuid)))

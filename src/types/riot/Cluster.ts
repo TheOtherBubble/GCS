@@ -1,5 +1,5 @@
 /**
- * A Riot API cluster.
+ * A Riot API regional routing value.
  * @public
  */
 enum Cluster {
@@ -12,8 +12,8 @@ enum Cluster {
 	/** Europe. */
 	EUROPE = "europe",
 
-	/** The cluster dedicated to professional games. */
-	ESPORTS = "esports"
+	/** Southeast Asia. */
+	SEA = "sea"
 }
 
 export default Cluster;

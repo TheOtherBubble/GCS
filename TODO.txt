@@ -1,4 +1,5 @@
 Core functionality, necessary before the season starts:
+- Track victory points.
 - Link to match on game pages.
 - Show the tournament code of the game to players on teams in the game on game pages.
 - Show the tournament code of the next game to players on teams in the match on match pages.

@@ -1,9 +1,11 @@
+import AdminPanel from "./AdminPanel";
 import GameCard from "components/GameCard";
 import LocalDate from "components/LocalDate";
 import type { Metadata } from "next";
 import type PageProps from "types/PageProps";
 import PlayerCard from "components/PlayerCard";
 import TeamCard from "components/TeamCard";
+import { auth } from "db/auth";
 import getGamesByMatches from "db/getGamesByMatches";
 import getMatchDateTime from "util/getMatchDateTime";
 import getMatchUrl from "util/getMatchUrl";
@@ -113,6 +115,7 @@ export default async function Page(props: PageProps<MatchesPageParams>) {
 							/>
 						))}
 				</ol>
+				{(await auth())?.user?.isAdministator && <AdminPanel match={match} />}
 			</div>
 			<div className={style["team"]}>
 				<header>

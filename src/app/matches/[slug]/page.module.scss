@@ -7,6 +7,8 @@
 div.content {
 	// Columns
 	& > div {
+		@extend .list;
+
 		// Team columns.
 		&.team {
 			@extend .sticky-column;
@@ -18,6 +20,16 @@ div.content {
 		& > ol {
 			@extend .clean-list;
 			@extend .blob-section;
+		}
+
+		// Admin panel.
+		& > div {
+			@extend .blob-section;
+
+			// Admin panel form.
+			& > form {
+				@extend .blob;
+			}
 		}
 	}
 

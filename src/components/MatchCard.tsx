@@ -82,7 +82,7 @@ export default function MatchCard({
 			)}
 			<h3 className={style["score"]}>
 				{teamGameResults?.length
-					? `${teamGameResults.filter((team) => team.isWinner && team.id === blueTeam?.id).length.toString()}-${teamGameResults.filter((team) => team.isWinner && team.id === redTeam?.id).length.toString()}`
+					? `${teamGameResults.filter(({ isWinner, teamId }) => isWinner && teamId === blueTeam?.id).length.toString()}-${teamGameResults.filter(({ isWinner, teamId }) => isWinner && teamId === redTeam?.id).length.toString()}`
 					: "VS"}
 			</h3>
 			{redTeam ? (

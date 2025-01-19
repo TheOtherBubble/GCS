@@ -1,4 +1,5 @@
 import {
+	bigint,
 	boolean,
 	char,
 	date,
@@ -393,7 +394,7 @@ export const matchTeamEnum = pgEnum("matchTeam", ["Red", "Blue"]);
  * @public
  */
 export const matchTable = pgTable("match", {
-	// The ID of the red team.
+	// The ID of the blue team.
 	blueTeamId: integer()
 		.references(() => teamTable.id, {
 			onDelete: "cascade",
@@ -466,9 +467,7 @@ export const platformEnum = pgEnum("platform", [
 	"OC1",
 	"TR1",
 	"RU",
-	"PH2",
 	"SG2",
-	"TH2",
 	"TW2",
 	"VN2"
 ]);
@@ -482,7 +481,7 @@ export const gameResultTable = pgTable("gameResult", {
 	duration: integer().notNull(),
 
 	// The game ID of the game in the Riot API.
-	id: integer().primaryKey(),
+	id: bigint({ mode: "number" }).primaryKey(),
 
 	// The ID of the map that the game was played on.
 	mapId: integer().notNull(),
@@ -497,7 +496,7 @@ export const gameResultTable = pgTable("gameResult", {
 	queueId: integer().notNull(),
 
 	// The Unix timestamp of the date that the game was started on the game server.
-	startTimestamp: integer().notNull(),
+	startTimestamp: bigint({ mode: "number" }).notNull(),
 
 	// The tournament code of the match. Can be used to pair game results with games.
 	tournamentCode: varchar({ length: 0x40 }).unique(),
@@ -517,7 +516,7 @@ export const teamGameResultTable = pgTable(
 	"teamGameResult",
 	{
 		// The ID of the game result that these results correspond to.
-		gameResultId: integer()
+		gameResultId: bigint({ mode: "number" })
 			.references(() => gameResultTable.id, {
 				onDelete: "cascade",
 				onUpdate: "cascade"
@@ -530,6 +529,9 @@ export const teamGameResultTable = pgTable(
 		// Whether or not this team won the game.
 		isWinner: boolean().notNull(),
 
+		// The ID of the team within the Riot API.
+		riotId: integer().notNull(),
+
 		// The ID of the team, if any. May be null if the game result isn't part of a tournament or inhouse (such as games that are just pulled from the Riot API to collect statistics).
 		teamId: integer().references(() => teamTable.id, {
 			onDelete: "set null",
@@ -538,7 +540,41 @@ export const teamGameResultTable = pgTable(
 	},
 	(self) => [
 		unique().on(self.gameResultId, self.isWinner),
+		unique().on(self.gameResultId, self.riotId),
 		unique().on(self.gameResultId, self.teamId)
+	]
+);
+
+/**
+ * A ban in a team game result. This is just cached data from the Riot API. Always corresponds to a team game result.
+ * @public
+ */
+export const teamGameResultBanTable = pgTable(
+	"teamGameResultBan",
+	{
+		// The key of the champion that was banned. Referred to as the champion's ID in the Riot API.
+		championKey: integer().notNull(),
+
+		// The ID of the game result that these results correspond to.
+		gameResultId: bigint({ mode: "number" })
+			.references(() => gameResultTable.id, {
+				onDelete: "cascade",
+				onUpdate: "cascade"
+			})
+			.notNull(),
+
+		// Unique identifier.
+		id: integer().primaryKey().generatedAlwaysAsIdentity(),
+
+		// The order in which this ban occurred.
+		order: integer().notNull(),
+
+		// The Riot API ID of the team that these results correspond to.
+		teamId: integer().notNull()
+	},
+	(self) => [
+		unique().on(self.championKey, self.gameResultId),
+		unique().on(self.gameResultId, self.order, self.teamId)
 	]
 );
 
@@ -568,10 +604,18 @@ export const playerGameResultTable = pgTable(
 		championDamage: integer().notNull(),
 
 		// The key of the champion that the player played. Referred to as the champion's ID in the Riot API.
-		championKey: varchar({ length: 0x20 }).notNull(),
+		championKey: integer().notNull(),
 
 		// The number of deaths that the player has.
 		deaths: integer().notNull(),
+
+		// The ID of the game result that these results correspond to.
+		gameResultId: bigint({ mode: "number" })
+			.references(() => gameResultTable.id, {
+				onDelete: "cascade",
+				onUpdate: "cascade"
+			})
+			.notNull(),
 
 		// Unique identifier.
 		id: integer().primaryKey().generatedAlwaysAsIdentity(),
@@ -618,17 +662,12 @@ export const playerGameResultTable = pgTable(
 		// The ID of the player's second summoner spell.
 		summoner2Id: integer().notNull(),
 
-		// The ID of the team game result that these results correspond to.
-		teamGameResultId: integer()
-			.references(() => teamGameResultTable.id, {
-				onDelete: "cascade",
-				onUpdate: "cascade"
-			})
-			.notNull()
+		// The Riot API ID of the team that these results correspond to.
+		teamId: integer().notNull()
 	},
 	(self) => [
-		unique().on(self.position, self.teamGameResultId),
-		unique().on(self.puuid, self.teamGameResultId)
+		unique().on(self.gameResultId, self.position, self.teamId),
+		unique().on(self.gameResultId, self.puuid)
 	]
 );
 

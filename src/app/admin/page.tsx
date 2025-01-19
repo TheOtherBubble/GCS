@@ -1,6 +1,7 @@
 import { forbidden, unauthorized } from "next/navigation";
 import CreateSeasonForm from "./CreateSeasonForm";
 import type { Metadata } from "next";
+import SaveGameForm from "./SaveGameForm";
 import { auth } from "db/auth";
 import style from "./page.module.scss";
 
@@ -27,6 +28,7 @@ export default async function Page() {
 			</header>
 			<div className={style["widgets"]}>
 				<CreateSeasonForm />
+				<SaveGameForm />
 			</div>
 		</>
 	);

@@ -1,11 +1,7 @@
-import CopyToClipboardButton from "components/CopyToClipboardButton";
 import type { Metadata } from "next";
 import type PageProps from "types/PageProps";
-import { auth } from "db/auth";
 import getGameBySlug from "util/getGameBySlug";
 import getGameUrl from "util/getGameUrl";
-import getMatches from "db/getMatches";
-import isPlayerOnTeams from "db/isPlayerOnTeams";
 
 /**
  * Parameters that are passed to a game page.
@@ -29,6 +25,8 @@ export default async function Page(props: PageProps<GamesPageParams>) {
 		return <p>{"Unknown game."}</p>;
 	}
 
+	/*
+	// TODO
 	const [match] = game.matchId ? await getMatches(game.matchId) : [];
 
 	// The tournament code is visible if the viewer is logged in and either the game isn't associated with a match or the viewer is on a team in the associated match.
@@ -41,14 +39,9 @@ export default async function Page(props: PageProps<GamesPageParams>) {
 				match.blueTeamId,
 				match.redTeamId
 			)));
+	*/
 
-	return canViewTournamentCode ? (
-		<CopyToClipboardButton text={game.tournamentCode}>
-			{"Copy tournament code to clipboard."}
-		</CopyToClipboardButton>
-	) : (
-		<p>{"Coming soon..."}</p>
-	);
+	return <p>{"Coming soon..."}</p>;
 }
 
 /**

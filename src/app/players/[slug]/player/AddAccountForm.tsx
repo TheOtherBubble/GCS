@@ -86,9 +86,6 @@ export default function AddAccountForm({
 				const soloLeagueEntry = (
 					await getLeagueEntriesBySummonerId(summonerDto.id, platform)
 				).find((leagueEntry) => leagueEntry.queueType === QueueType.SOLO);
-				if (!soloLeagueEntry) {
-					return "Failed to retrieve ranked solo 5v5 league entry.";
-				}
 
 				// Ensure that the profile icon ID to verify the account is not the summoner's current profile icon ID.
 				const starterPackMaxId = 28;
@@ -107,11 +104,11 @@ export default function AddAccountForm({
 					playerId: player.id,
 					profileIconIdToVerify,
 					puuid: summonerDto.puuid,
-					rankCache: soloLeagueEntry.rank,
+					rankCache: soloLeagueEntry?.rank ?? "IV",
 					region: platform,
 					summonerId: summonerDto.id,
 					tagLineCache: accountDto.tagLine,
-					tierCache: soloLeagueEntry.tier
+					tierCache: soloLeagueEntry?.tier ?? "IRON"
 				});
 				revalidatePath(getPlayerUrl(player));
 				return void 0;
