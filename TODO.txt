@@ -1,4 +1,7 @@
 Core functionality, necessary before the season starts:
+- Stop linking team game results to teams on creation (use best guess at display time instead).
+- Administrator tool for connecting game results to a game. Should also update the game's tournament code to match the game result if necessary.
+- Administrator tool for modifying games' tournament codes.
 - Track victory points.
 - Link to match on game pages.
 - Show the tournament code of the game to players on teams in the game on game pages.
@@ -11,10 +14,7 @@ Core functionality, necessary before the season starts:
 - Administrator tool for deleting teams.
 - Administrator tool for deleting matches.
 - Administrator tool for deleting games.
-- Administrator tool for creating games with matches.
 - Administrator tool for creating games without matches.
-- Administrator tool for modifying games' tournament codes.
-- Administrator tool for connecting game results to a game.
 
 Core functionality, waiting on Riot to give us an API key:
 - Restrict players from signing up for a season if they don't have any linked accounts.
