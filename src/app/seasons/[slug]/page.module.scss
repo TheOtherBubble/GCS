@@ -1,9 +1,16 @@
 @use "../../../styles/mixins";
 @use "../../../styles/clean-list.module.scss";
 @use "../../../styles/blob.module.scss";
-@use "../../../styles/sticky-column.module.scss";
+@use "../../../components/styles/topnav.module.scss" as topnav;
+@use "../../layout.module.scss" as layout;
 
 div.content {
+	// Columns.
+	& > div {
+		height: calc(100vh - topnav.$height - layout.$margin * 2);
+		overflow: auto;
+	}
+
 	// Admin panel.
 	& > div.info > div {
 		@extend .blob-section;
@@ -40,7 +47,6 @@ div.content {
 	// Information and leaderboards columns.
 	& > div.info,
 	& > div.leaderboards {
-		@extend .sticky-column;
 		display: none;
 	}
 

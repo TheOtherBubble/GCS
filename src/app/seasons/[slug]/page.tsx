@@ -1,9 +1,9 @@
 import AdminPanel from "./AdminPanel";
 import Link from "components/Link";
-import LocalDate from "components/LocalDate";
 import MatchCard from "components/MatchCard";
 import type { Metadata } from "next";
 import type PageProps from "types/PageProps";
+import RoundHeader from "./RoundHeader";
 import { auth } from "db/auth";
 import getMatchDateTime from "util/getMatchDateTime";
 import getSeasonBySlug from "db/getSeasonBySlug";
@@ -52,6 +52,24 @@ export default async function Page(props: PageProps<SeasonsPageParams>) {
 		);
 		return previousValue;
 	}, new Map<number, (typeof matches)[number][]>());
+
+	// Determine the next upcoming round.
+	let upcomingRound = 0;
+	for (const [round, [firstMatchRow]] of Array.from(rounds).sort(
+		([a], [b]) => a - b
+	)) {
+		if (!firstMatchRow) {
+			continue;
+		}
+
+		if (
+			getMatchDateTime(firstMatchRow.value, season).valueOf() >
+			Date.now() - 1000 * 60 * 60 * 12
+		) {
+			upcomingRound = round;
+			break;
+		}
+	}
 
 	// Sort teams by pool and score for the leaderboard.
 	const teams = await getTeamsBySeasons(season.id);
@@ -103,22 +121,12 @@ export default async function Page(props: PageProps<SeasonsPageParams>) {
 						.sort(([a], [b]) => a - b)
 						.map(([round, roundMatches]) => (
 							<li key={round}>
-								<header>
-									{roundMatches[0] ? (
-										<h3>
-											<LocalDate
-												date={getMatchDateTime(roundMatches[0].value, season)}
-												options={{
-													day: "numeric",
-													month: "long",
-													weekday: "long"
-												}}
-											/>
-										</h3>
-									) : (
-										<h3>{`Round ${round.toString()}`}</h3>
-									)}
-								</header>
+								<RoundHeader
+									round={round}
+									match={roundMatches[0]?.value}
+									season={season}
+									doScrollTo={round === upcomingRound}
+								/>
 								<ol>
 									{roundMatches
 										.sort(

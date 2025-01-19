@@ -1,17 +1,19 @@
 @use "../../../styles/mixins";
 @use "../../../styles/clean-list.module.scss";
 @use "../../../styles/blob.module.scss";
-@use "../../../styles/sticky-column.module.scss";
+@use "../../../components/styles/topnav.module.scss" as topnav;
+@use "../../layout.module.scss" as layout;
 
 // Match page.
 div.content {
 	// Columns
 	& > div {
 		@extend .list;
+		height: calc(100vh - topnav.$height - layout.$margin * 2);
+		overflow: auto;
 
 		// Team columns.
 		&.team {
-			@extend .sticky-column;
 			display: none;
 		}
 
