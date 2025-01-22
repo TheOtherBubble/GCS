@@ -49,6 +49,11 @@ export default function ImportResultsForm({
 	redAccounts,
 	...props
 }: ImportResultsFormProps) {
+	const puuids = new Map([
+		[blueTeam.id, blueAccounts.map(({ puuid }) => puuid)],
+		[redTeam.id, redAccounts.map(({ puuid }) => puuid)]
+	]);
+
 	return (
 		<Form
 			action={async (form) => {
@@ -61,10 +66,7 @@ export default function ImportResultsForm({
 					await getMatchDtoByGameId(
 						parseInt(getFormField(form, "gameId", true), 10)
 					),
-					new Map([
-						[blueTeam.id, blueAccounts.map(({ puuid }) => puuid)],
-						[redTeam.id, redAccounts.map(({ puuid }) => puuid)]
-					])
+					puuids
 				);
 				await updateGames(
 					{ tournamentCode: gameResult.tournamentCode ?? void 0 },
