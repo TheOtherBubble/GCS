@@ -1,7 +1,6 @@
 Core functionality, necessary before the season starts:
 - Administrator tool for connecting game results to a game. Should also update the game's tournament code to match the game result if necessary.
 - Administrator tool for modifying games' tournament codes.
-- Revert season page to scroll with match schedule. Probably requires some sort of modification to the base header and main elements (i.e. fixed positioning or a scroll frame).
 - Track victory points.
 - Link to match on game pages.
 - Show the tournament code of the game to players on teams in the game on game pages.

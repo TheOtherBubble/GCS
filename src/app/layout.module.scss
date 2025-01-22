@@ -1,5 +1,6 @@
 @use "../styles/variables";
 
+$top: 80px;
 $margin: 8px;
 
 // Base layout.
@@ -14,6 +15,7 @@ body.spacer {
 	& > header {
 		position: sticky;
 		top: 0px;
+		height: $top;
 		background-color: variables.$mg2-color;
 	}
 

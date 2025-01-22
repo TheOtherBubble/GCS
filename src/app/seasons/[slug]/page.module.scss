@@ -1,13 +1,11 @@
 @use "../../../styles/mixins";
 @use "../../../styles/clean-list.module.scss";
 @use "../../../styles/blob.module.scss";
-@use "../../../components/styles/topnav.module.scss" as topnav;
 @use "../../layout.module.scss" as layout;
 
 div.content {
 	// Columns.
 	& > div {
-		height: calc(100vh - topnav.$height - layout.$margin * 2);
 		overflow: auto;
 	}
 
@@ -70,6 +68,10 @@ div.content {
 			& > div.info,
 			& > div.leaderboards {
 				display: block;
+				position: sticky;
+				top: calc(layout.$top + layout.$margin);
+				height: calc(100vh - layout.$top - layout.$margin * 2);
+				overflow: auto;
 			}
 
 			// Leaderboards column.

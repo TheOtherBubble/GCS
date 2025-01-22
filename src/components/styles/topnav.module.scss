@@ -2,11 +2,9 @@
 @use "../../styles/mixins";
 @use "../../styles/clean-list.module.scss";
 
-$height: 80px;
-
 // Top navigation bar.
 nav.topnav {
-	height: $height;
+	height: 100%;
 	font-size: 1.5em;
 
 	// Top navigation bar element list.
