@@ -1,0 +1,14 @@
+@use "../../../styles/blob.module.scss";
+
+// Game page.
+div.content {
+	// Admin panel.
+	& > div {
+		@extend .blob-section;
+
+		// Admin form.
+		& > form {
+			@extend .blob;
+		}
+	}
+}

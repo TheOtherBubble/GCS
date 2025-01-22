@@ -3,7 +3,7 @@ import { playerTable, teamPlayerTable } from "./schema";
 import db from "./db";
 
 /**
- * Get all of a set teams' players.
+ * Get all of a set of teams' players.
  * @param ids - The IDs of the teams.
  * @returns The teams' players. Includes the player and the team player.
  * @throws `Error` if there is a database error.

@@ -15,7 +15,7 @@ import leftHierarchy from "util/leftHierarchy";
  * Properties that can be passed to a save game form.
  * @public
  */
-export type SaveGameForm = Omit<FormProps, "action" | "children">;
+export type SaveGameFormProps = Omit<FormProps, "action" | "children">;
 
 /**
  * A form for saving a game to the database.
@@ -23,7 +23,7 @@ export type SaveGameForm = Omit<FormProps, "action" | "children">;
  * @returns The form.
  * @public
  */
-export default function SaveGameForm(props: SaveGameForm) {
+export default function SaveGameForm(props: SaveGameFormProps) {
 	return (
 		<Form
 			action={async (form) => {

@@ -174,7 +174,7 @@ export default async function Page(props: PageProps<SeasonsPageParams>) {
 								</header>
 								<ol>
 									{scores
-										.sort((a, b) => a.wins - b.wins || b.losses - a.losses)
+										.sort((a, b) => b.wins - a.wins || a.losses - b.losses)
 										.map(({ team, wins, losses }) => (
 											<li key={team.id}>
 												<Link
