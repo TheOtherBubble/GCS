@@ -384,12 +384,6 @@ export const matchFormatEnum = pgEnum("matchFormat", [
 ]);
 
 /**
- * Teams in a match.
- * @public
- */
-export const matchTeamEnum = pgEnum("matchTeam", ["Red", "Blue"]);
-
-/**
  * The table of matches. Each match belongs to a week of a season, is played between two teams, and may be composed of any number of games (depending on the match's format).
  * @public
  */
@@ -428,10 +422,7 @@ export const matchTable = pgTable("match", {
 		.notNull(),
 
 	// The one-based time slot at which the match will take place.
-	timeSlot: integer().notNull(),
-
-	// An override for the team that won the match. This should only be set when the match winner does not match the automatically-determined winner from the game winners.
-	winner: matchTeamEnum()
+	timeSlot: integer().notNull()
 });
 
 /**

@@ -1,5 +1,4 @@
 import type { Match } from "types/db/Match";
-import type { MatchTeam } from "types/db/MatchTeam";
 import type { TeamGameResult } from "types/db/TeamGameResult";
 import getFormatGameCount from "./getFormatGameCount";
 import getMatchScore from "./getMatchScore";
@@ -19,11 +18,11 @@ export default function getMatchWinner(
 	const [blue, red] = getMatchScore(match, results);
 
 	if (blue >= toWin) {
-		return "Blue" satisfies MatchTeam;
+		return "Blue";
 	}
 
 	if (red >= toWin) {
-		return "Red" satisfies MatchTeam;
+		return "Red";
 	}
 
 	return void 0;
