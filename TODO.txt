@@ -1,12 +1,10 @@
 Core functionality, necessary before the season starts:
-- Administrator tool for connecting game results to a game. Should also update the game's tournament code to match the game result if necessary.
+- Administrator tool for modifying team captains.
 - Administrator tool for modifying games' tournament codes.
 - Track victory points.
 - Link to match on game pages.
 - Show the tournament code of the game to players on teams in the game on game pages.
 - Show the tournament code of the next game to players on teams in the match on match pages.
-- Administrator tool for modifying team players.
-- Administrator tool for modifying team captains.
 - Game cards for completed games should show game results.
 - Show game results on game pages.
 - Player game cards to show game results of just one player.

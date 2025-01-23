@@ -106,9 +106,11 @@ export default async function Page(props: PageProps<TeamsPageParams>) {
 						<AdminPanel
 							team={team}
 							teamPlayers={players.map(({ teamPlayer }) => teamPlayer)}
-							players={(await getDraftPlayersBySeasons(team.seasonId)).map(
-								({ player }) => player
-							)}
+							players={players.map(({ player }) => player)}
+							potentialPlayers={(
+								await getDraftPlayersBySeasons(team.seasonId)
+							).map(({ player }) => player)}
+							otherTeams={teams}
 							className={style["admin"]}
 						/>
 					)}

@@ -1,6 +1,7 @@
 import AddPlayerForm from "./admin/AddPlayerForm";
 import { type JSX } from "react";
 import type { Player } from "types/db/Player";
+import RemovePlayerForm from "./admin/RemovePlayerForm";
 import type { Team } from "types/db/Team";
 import type { TeamPlayer } from "types/db/TeamPlayer";
 import UpdateTeamForm from "./admin/UpdateTeamForm";
@@ -17,8 +18,14 @@ export interface AdminPanelProps
 	/** The players on the team. */
 	teamPlayers: TeamPlayer[];
 
-	/** The players that may be added to the team. */
+	/** The players on the team. */
 	players: Player[];
+
+	/** The players that may be added to the team. */
+	potentialPlayers: Player[];
+
+	/** The other teams in the team's season. */
+	otherTeams: Team[];
 }
 
 /**
@@ -31,6 +38,8 @@ export default function AdminPanel({
 	team,
 	teamPlayers,
 	players,
+	potentialPlayers,
+	otherTeams,
 	...props
 }: AdminPanelProps) {
 	return (
@@ -39,7 +48,17 @@ export default function AdminPanel({
 				<h2>{"Admin Panel"}</h2>
 			</header>
 			<UpdateTeamForm team={team} />
-			<AddPlayerForm team={team} teamPlayers={teamPlayers} players={players} />
+			<AddPlayerForm
+				team={team}
+				teamPlayers={teamPlayers}
+				players={potentialPlayers}
+				otherTeams={otherTeams}
+			/>
+			<RemovePlayerForm
+				team={team}
+				teamPlayers={teamPlayers}
+				players={players}
+			/>
 		</div>
 	);
 }
