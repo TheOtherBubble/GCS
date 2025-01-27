@@ -120,18 +120,21 @@ export default async function Page(
 							</Link>
 						</p>
 					)}
-					{accounts.length > 0 && (
-						<p>
-							<Link href={ugg(...accounts)}>{"U.GG"}</Link>
-						</p>
-					)}
 				</div>
 			</header>
 			<div>
 				<div>
 					<div>
 						<header>
-							<h2>{"Players"}</h2>
+							<h2>
+								{"Players"}
+								{accounts.length > 0 && (
+									<>
+										{" | "}
+										<Link href={ugg(...accounts)}>{"U.GG"}</Link>
+									</>
+								)}
+							</h2>
 						</header>
 						<ul>
 							{players.map((player) => (

@@ -141,18 +141,21 @@ export default async function Page(
 			)}
 			<header>
 				<h1>{player.displayName ?? player.name}</h1>
-				{accounts.length > 0 && (
-					<p>
-						<Link href={ugg(...accounts)}>{"U.GG"}</Link>
-					</p>
-				)}
 				{player.biography && <Markdown>{player.biography}</Markdown>}
 			</header>
 			<div>
 				<div className={style["left"]}>
 					<div>
 						<header>
-							<h2>{"Accounts"}</h2>
+							<h2>
+								{"Accounts"}
+								{accounts.length > 0 && (
+									<>
+										{" | "}
+										<Link href={ugg(...accounts)}>{"U.GG"}</Link>
+									</>
+								)}
+							</h2>
 						</header>
 						<ul>
 							{accounts.map((account) => (
