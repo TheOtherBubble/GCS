@@ -141,7 +141,7 @@ export default async function Page(
 			)}
 			<header>
 				<h1>{player.displayName ?? player.name}</h1>
-				{accounts.length && (
+				{accounts.length > 0 && (
 					<p>
 						<Link href={ugg(...accounts)}>{"U.GG"}</Link>
 					</p>
