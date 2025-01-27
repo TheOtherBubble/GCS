@@ -94,26 +94,10 @@ export default async function Page(
 		"gameResult",
 		"teamGameResult"
 	);
-	const teams = leftHierarchy(
-		await db
-			.select()
-			.from(matchTable)
-			.leftJoin(
-				teamTable,
-				or(
-					eq(matchTable.blueTeamId, teamTable.id),
-					eq(matchTable.redTeamId, teamTable.id)
-				)
-			)
-			.where(
-				or(
-					eq(matchTable.blueTeamId, team.id),
-					eq(matchTable.redTeamId, team.id)
-				)
-			),
-		"team"
-	);
-
+	const teams = await db
+		.select()
+		.from(teamTable)
+		.where(eq(teamTable.seasonId, team.seasonId));
 	return (
 		<div className={style["content"]}>
 			<header>
