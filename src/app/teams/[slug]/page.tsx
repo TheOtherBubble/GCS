@@ -70,29 +70,48 @@ export default async function Page(
 	const captain = players.find(({ id }) => id === captainId);
 
 	// Organize (other) team, match, game, game result, and team game result data.
-	const matchRows = await db
-		.select()
-		.from(matchTable)
-		.leftJoin(gameTable, eq(matchTable.id, gameTable.matchId))
-		.leftJoin(
-			gameResultTable,
-			eq(gameTable.tournamentCode, gameResultTable.tournamentCode)
-		)
-		.leftJoin(
-			teamGameResultTable,
-			eq(gameResultTable.id, teamGameResultTable.gameResultId)
-		)
-		.leftJoin(teamTable, eq(teamGameResultTable.teamId, teamTable.id))
-		.where(
-			or(eq(matchTable.blueTeamId, team.id), eq(matchTable.redTeamId, team.id))
-		);
-	const teams = leftHierarchy(matchRows, "team");
 	const matches = leftHierarchy(
-		matchRows,
+		await db
+			.select()
+			.from(matchTable)
+			.leftJoin(gameTable, eq(matchTable.id, gameTable.matchId))
+			.leftJoin(
+				gameResultTable,
+				eq(gameTable.tournamentCode, gameResultTable.tournamentCode)
+			)
+			.leftJoin(
+				teamGameResultTable,
+				eq(gameResultTable.id, teamGameResultTable.gameResultId)
+			)
+			.where(
+				or(
+					eq(matchTable.blueTeamId, team.id),
+					eq(matchTable.redTeamId, team.id)
+				)
+			),
 		"match",
 		"game",
 		"gameResult",
 		"teamGameResult"
+	);
+	const teams = leftHierarchy(
+		await db
+			.select()
+			.from(matchTable)
+			.leftJoin(
+				teamTable,
+				or(
+					eq(matchTable.blueTeamId, teamTable.id),
+					eq(matchTable.redTeamId, teamTable.id)
+				)
+			)
+			.where(
+				or(
+					eq(matchTable.blueTeamId, team.id),
+					eq(matchTable.redTeamId, team.id)
+				)
+			),
+		"team"
 	);
 
 	return (
