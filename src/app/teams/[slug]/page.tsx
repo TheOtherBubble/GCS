@@ -1,4 +1,5 @@
 import {
+	accountTable,
 	draftPlayerTable,
 	gameResultTable,
 	gameTable,
@@ -26,6 +27,7 @@ import getTeamUrl from "util/getTeamUrl";
 import leftHierarchy from "util/leftHierarchy";
 import { redirect } from "next/navigation";
 import style from "./page.module.scss";
+import ugg from "util/ugg";
 
 /**
  * Parameters that are passed to a team page.
@@ -52,16 +54,18 @@ export default async function Page(
 		.innerJoin(teamTable, eq(seasonTable.id, teamTable.seasonId))
 		.leftJoin(teamPlayerTable, eq(teamTable.id, teamPlayerTable.teamId))
 		.leftJoin(playerTable, eq(teamPlayerTable.playerId, playerTable.id))
+		.leftJoin(accountTable, eq(playerTable.id, accountTable.playerId))
 		.where(eq(teamTable.vanityUrlSlug, decodeURIComponent(slug)));
 	const [first] = seasonRows;
 	if (!first) {
 		redirect("/teams");
 	}
 
-	// Organize season, team, team player, and player data.
+	// Organize season, team, team player, player, and account data.
 	const { season, team } = first;
 	const teamPlayers = leftHierarchy(seasonRows, "teamPlayer");
 	const players = leftHierarchy(seasonRows, "player");
+	const accounts = leftHierarchy(seasonRows, "account");
 	const captainId = teamPlayers.find(({ isCaptain }) => isCaptain)?.playerId;
 	const captain = players.find(({ id }) => id === captainId);
 
@@ -114,6 +118,11 @@ export default async function Page(
 							<Link href={getPlayerUrl(captain)}>
 								{captain.displayName ?? captain.name}
 							</Link>
+						</p>
+					)}
+					{accounts.length && (
+						<p>
+							<Link href={ugg(...accounts)}>{"U.GG"}</Link>
 						</p>
 					)}
 				</div>

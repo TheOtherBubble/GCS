@@ -1,6 +1,4 @@
 Core functionality, necessary before the season starts:
-- Link to player multi-u.ggs.
-- Link to team multi-u.ggs.
 - Administrator tool for modifying team captains.
 - Administrator tool for modifying games' tournament codes.
 - Track victory points.
@@ -16,7 +14,6 @@ Core functionality, necessary before the season starts:
 - Administrator tool for creating games without matches.
 
 Core functionality, waiting on Riot to give us an API key:
-- Restrict players from signing up for a season if they don't have any linked accounts.
 - Update to use the tournament API instead of the tournament stub API.
 - API endpoint for receiving and storing game results and creating games when necessary.
 

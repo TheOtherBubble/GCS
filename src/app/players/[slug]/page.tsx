@@ -15,6 +15,7 @@ import AdminPanel from "./AdminPanel";
 import GameCard from "components/GameCard";
 import Image from "components/Image";
 import type { JSX } from "react";
+import Link from "components/Link";
 import Markdown from "react-markdown";
 import type { Metadata } from "next";
 import type PageProps from "types/PageProps";
@@ -27,6 +28,7 @@ import getPlayerUrl from "util/getPlayerUrl";
 import leftHierarchy from "util/leftHierarchy";
 import { redirect } from "next/navigation";
 import style from "./page.module.scss";
+import ugg from "util/ugg";
 
 /**
  * Parameters that are passed to a player page.
@@ -139,6 +141,11 @@ export default async function Page(
 			)}
 			<header>
 				<h1>{player.displayName ?? player.name}</h1>
+				{accounts.length && (
+					<p>
+						<Link href={ugg(...accounts)}>{"U.GG"}</Link>
+					</p>
+				)}
 				{player.biography && <Markdown>{player.biography}</Markdown>}
 			</header>
 			<div>
