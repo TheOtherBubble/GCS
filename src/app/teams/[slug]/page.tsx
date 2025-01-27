@@ -158,7 +158,12 @@ export default async function Page(
 						<ul>
 							{players.map((player) => (
 								<li key={player.id}>
-									<PlayerCard player={player} />
+									<PlayerCard
+										player={player}
+										accounts={accounts.filter(
+											({ playerId }) => playerId === player.id
+										)}
+									/>
 								</li>
 							))}
 						</ul>
