@@ -8,7 +8,7 @@ import riotFetch from "./riotFetch";
  * @param puuid - The PUUID.
  * @param cluster - The cluster to use to make the request.
  * @param key - The Riot API key to use.
- * @returns The account.
+ * @return The account.
  * @throws `Error` if the response has a bad status or if the Riot API key is missing.
  * @public
  */
@@ -16,7 +16,7 @@ export default async function getAccountByPuuid(
 	puuid: string,
 	cluster = Cluster.AMERICAS,
 	key: string | undefined = void 0
-) {
+): Promise<AccountDto> {
 	return (await (
 		await riotFetch(
 			new URL(

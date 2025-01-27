@@ -1,12 +1,16 @@
-import type { Account } from "types/db/Account";
+import {
+	type accountTable,
+	draftPlayerTable,
+	type playerTable,
+	type seasonTable
+} from "db/schema";
+import { and, eq } from "drizzle-orm";
 import AddAccountForm from "./player/AddAccountForm";
 import { type JSX } from "react";
-import type { Player } from "types/db/Player";
-import type { Season } from "types/db/Season";
 import SignUpForm from "./player/SignUpForm";
 import UpdatePlayerForm from "./player/UpdatePlayerForm";
 import UpdateSkinForm from "./player/UpdateSkinForm";
-import getDraftPlayersBySeasons from "db/getDraftPlayersBySeasons";
+import db from "db/db";
 
 /**
  * Properties that can be passed to a player panel.
@@ -15,19 +19,19 @@ import getDraftPlayersBySeasons from "db/getDraftPlayersBySeasons";
 export interface PlayerPanelProps
 	extends Omit<JSX.IntrinsicElements["div"], "children"> {
 	/** The player to modify. */
-	player: Player;
+	player: typeof playerTable.$inferSelect;
 
 	/** The player's accounts. */
-	accounts: Account[];
+	accounts: (typeof accountTable.$inferSelect)[];
 
 	/** The latest season. */
-	latestSeason?: Season | undefined;
+	latestSeason?: typeof seasonTable.$inferSelect | undefined;
 }
 
 /**
  * A player page player panel.
  * @param props - Properties to pass to the panel.
- * @returns The panel.
+ * @return The panel.
  * @public
  */
 export default async function PlayerPanel({
@@ -35,7 +39,7 @@ export default async function PlayerPanel({
 	accounts,
 	latestSeason,
 	...props
-}: PlayerPanelProps) {
+}: PlayerPanelProps): Promise<JSX.Element> {
 	return (
 		<div {...props}>
 			<header>
@@ -50,9 +54,17 @@ export default async function PlayerPanel({
 				/>
 			)}
 			{latestSeason &&
-				!(await getDraftPlayersBySeasons(latestSeason.id)).some(
-					({ player: { id } }) => id === player.id
-				) && (
+				(
+					await db
+						.select()
+						.from(draftPlayerTable)
+						.where(
+							and(
+								eq(draftPlayerTable.playerId, player.id),
+								eq(draftPlayerTable.seasonId, latestSeason.id)
+							)
+						)
+				).length === 0 && (
 					<SignUpForm
 						player={player}
 						season={latestSeason}

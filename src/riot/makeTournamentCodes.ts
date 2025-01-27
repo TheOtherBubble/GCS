@@ -13,7 +13,7 @@ import riotFetch from "./riotFetch";
  * @param tournamentId - The ID of the tournament that is associated with the tournament codes.
  * @param cluster - The cluster to use to make the request.
  * @param key - The Riot API key to use.
- * @returns The tournament ID.
+ * @return The tournament ID.
  * @throws `Error` if the response has a bad status or if the Riot API key is missing.
  * @public
  */
@@ -23,7 +23,7 @@ export default async function makeTournamentCodes(
 	tournamentId?: number,
 	cluster: Cluster = Cluster.AMERICAS,
 	key: string | undefined = void 0
-) {
+): Promise<string[]> {
 	const url = new URL(
 		"/lol/tournament-stub/v5/codes",
 		getRiotApiBaseUrl(cluster)

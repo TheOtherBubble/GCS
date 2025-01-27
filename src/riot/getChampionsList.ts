@@ -4,11 +4,13 @@ import getDataDragonVersion from "./getDataDragonVersion";
 
 /**
  * Get a list of champion data from Data Dragon.
- * @returns A map of champion IDs to champion data.
+ * @return A map of champion IDs to champion data.
  * @see {@link https://developer.riotgames.com/docs/lol#data-dragon_champions | Champions}
  * @public
  */
-export default async function getChampionsList() {
+export default async function getChampionsList(): Promise<
+	Record<string, ChampionData> | undefined
+> {
 	const version = await getDataDragonVersion();
 	if (!version) {
 		return void 0;

@@ -1,6 +1,6 @@
 import CreateGameForm from "./admin/CreateGameForm";
 import { type JSX } from "react";
-import type { Match } from "types/db/Match";
+import type { matchTable } from "db/schema";
 
 /**
  * Properties that can be passed to an admin panel.
@@ -9,16 +9,19 @@ import type { Match } from "types/db/Match";
 export interface AdminPanelProps
 	extends Omit<JSX.IntrinsicElements["div"], "children"> {
 	/** The current match. */
-	match: Match;
+	match: typeof matchTable.$inferSelect;
 }
 
 /**
  * A match page admin panel.
  * @param props - Properties to pass to the panel.
- * @returns The panel.
+ * @return The panel.
  * @public
  */
-export default function AdminPanel({ match, ...props }: AdminPanelProps) {
+export default function AdminPanel({
+	match,
+	...props
+}: AdminPanelProps): JSX.Element {
 	return (
 		<div {...props}>
 			<header>

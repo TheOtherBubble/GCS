@@ -15,7 +15,7 @@ export type LinkProps = Omit<NextLinkProps, keyof JSX.IntrinsicElements["a"]> &
 /**
  * Create a hyperlink. Uses Next.js-style preloading for internal links and HTML anchor elements for external links.
  * @param props - The properties to pass to the link.
- * @returns The link.
+ * @return The link.
  * @public
  */
 export default function Link({
@@ -24,7 +24,7 @@ export default function Link({
 	onTouchStart,
 	onClick,
 	...props
-}: LinkProps) {
+}: LinkProps): JSX.Element {
 	// Ensure that required properties are present.
 	if (!href) {
 		throw new Error("Link reference is required.");

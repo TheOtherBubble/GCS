@@ -1,11 +1,13 @@
 import Form, { type FormProps } from "components/Form";
-import type { Season } from "types/db/Season";
+import type { JSX } from "react";
 import Submit from "components/Submit";
+import db from "db/db";
+import { eq } from "drizzle-orm";
 import getFormField from "util/getFormField";
 import getSeasonUrl from "util/getSeasonUrl";
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
-import updateSeasons from "db/updateSeasons";
+import { seasonTable } from "db/schema";
 
 /**
  * Properties that can be passed to an update season form.
@@ -14,38 +16,38 @@ import updateSeasons from "db/updateSeasons";
 export interface UpdateSeasonFormProps
 	extends Omit<FormProps, "action" | "children"> {
 	/** The current season. */
-	season: Season;
+	season: typeof seasonTable.$inferSelect;
 }
 
 /**
  * A form for updating a season.
  * @param props - Properties to pass to the form.
- * @returns The form.
+ * @return The form.
  * @public
  */
 export default function UpdateSeasonForm({
 	season,
 	...props
-}: UpdateSeasonFormProps) {
+}: UpdateSeasonFormProps): JSX.Element {
 	return (
 		<Form
 			action={async (form) => {
 				"use server";
 				const vanityUrlSlug = getFormField(form, "vanityUrlSlug");
-				await updateSeasons(
-					{
+				await db
+					.update(seasonTable)
+					.set({
 						name: getFormField(form, "name"),
 						startDate: getFormField(form, "startDate"),
 						vanityUrlSlug
-					},
-					season.id
-				);
+					})
+					.where(eq(seasonTable.id, season.id));
 				if (vanityUrlSlug) {
-					redirect(getSeasonUrl(encodeURIComponent(vanityUrlSlug)));
+					redirect(getSeasonUrl({ vanityUrlSlug }));
 				}
 
 				// If the vanity URL didn't change, just reload the page instead.
-				revalidatePath(getSeasonUrl(encodeURIComponent(season.vanityUrlSlug)));
+				revalidatePath(getSeasonUrl(season));
 			}}
 			{...props}
 		>

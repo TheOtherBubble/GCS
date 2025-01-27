@@ -1,16 +1,24 @@
+import {
+	gameResultTable,
+	gameTable,
+	matchTable,
+	seasonTable,
+	teamGameResultTable,
+	teamTable
+} from "db/schema";
 import AdminPanel from "./AdminPanel";
+import type { JSX } from "react";
 import Link from "components/Link";
 import MatchCard from "components/MatchCard";
 import type { Metadata } from "next";
 import type PageProps from "types/PageProps";
 import RoundHeader from "./RoundHeader";
 import { auth } from "db/auth";
+import db from "db/db";
+import { eq } from "drizzle-orm";
 import getMatchDateTime from "util/getMatchDateTime";
-import getSeasonBySlug from "db/getSeasonBySlug";
 import getSeasonUrl from "util/getSeasonUrl";
-import getTeamGameResultsBySeason from "db/getMatchesBySeasons";
 import getTeamUrl from "util/getTeamUrl";
-import getTeamsBySeasons from "db/getTeamsBySeasons";
 import leftHierarchy from "util/leftHierarchy";
 import { redirect } from "next/navigation";
 import style from "./page.module.scss";
@@ -27,24 +35,41 @@ export interface SeasonsPageParams {
 /**
  * A page that displays information about a season.
  * @param props - The properties that are passed to the page.
- * @returns The season page.
+ * @return The season page.
  * @public
  */
-export default async function Page(props: PageProps<SeasonsPageParams>) {
+export default async function Page(
+	props: PageProps<SeasonsPageParams>
+): Promise<JSX.Element> {
 	const { slug } = await props.params;
-	const season = await getSeasonBySlug(slug);
-	if (!season) {
+	const seasonRows = await db
+		.select()
+		.from(seasonTable)
+		.leftJoin(matchTable, eq(seasonTable.id, matchTable.seasonId))
+		.leftJoin(gameTable, eq(matchTable.id, gameTable.matchId))
+		.leftJoin(
+			gameResultTable,
+			eq(gameTable.tournamentCode, gameResultTable.tournamentCode)
+		)
+		.leftJoin(
+			teamGameResultTable,
+			eq(gameResultTable.id, teamGameResultTable.gameResultId)
+		)
+		.where(eq(seasonTable.vanityUrlSlug, decodeURIComponent(slug)));
+	const [first] = seasonRows;
+	if (!first) {
 		redirect("/seasons");
 	}
 
-	// Split matches into rounds for displaying.
-	const matchRows = await getTeamGameResultsBySeason(season.id);
-	const matches = leftHierarchy(matchRows, [
+	// Organize season, match, game, game result, and team game result data.
+	const { season } = first;
+	const matches = leftHierarchy(
+		seasonRows,
 		"match",
 		"game",
 		"gameResult",
 		"teamGameResult"
-	]);
+	);
 	const rounds = matches.reduce((previousValue, currentValue) => {
 		void (
 			previousValue.get(currentValue.value.round)?.push(currentValue) ??
@@ -72,9 +97,12 @@ export default async function Page(props: PageProps<SeasonsPageParams>) {
 	}
 
 	// Sort teams by pool and score for the leaderboard.
-	const teams = await getTeamsBySeasons(season.id);
+	const teams = await db
+		.select()
+		.from(teamTable)
+		.where(eq(teamTable.seasonId, season.id));
 	const teamScores = teams.map((team) => ({ losses: 0, team, wins: 0 }));
-	for (const teamGameResult of leftHierarchy(matchRows, ["teamGameResult"])) {
+	for (const teamGameResult of leftHierarchy(seasonRows, "teamGameResult")) {
 		const team = teamScores.find(
 			({ team: value }) => value.id === teamGameResult.teamId
 		);
@@ -177,13 +205,7 @@ export default async function Page(props: PageProps<SeasonsPageParams>) {
 										.sort((a, b) => b.wins - a.wins || a.losses - b.losses)
 										.map(({ team, wins, losses }) => (
 											<li key={team.id}>
-												<Link
-													href={getTeamUrl(
-														encodeURIComponent(team.vanityUrlSlug)
-													)}
-												>
-													{team.name}
-												</Link>
+												<Link href={getTeamUrl(team)}>{team.name}</Link>
 												{` ${wins.toString()}-${losses.toString()}`}
 											</li>
 										))}
@@ -199,25 +221,32 @@ export default async function Page(props: PageProps<SeasonsPageParams>) {
 /**
  * The season page's metadata.
  * @param props - The properties that are passed to the page.
- * @returns The metadata.
+ * @return The metadata.
  * @public
  */
-export const generateMetadata = async (props: PageProps<SeasonsPageParams>) => {
+export const generateMetadata = async (
+	props: PageProps<SeasonsPageParams>
+): Promise<Metadata> => {
 	const { slug } = await props.params;
-	const season = await getSeasonBySlug(slug);
-	return (
-		season
-			? {
-					description: `The schedule for Gauntlet Championship Series ${season.name}.`,
-					openGraph: {
-						url: getSeasonUrl(encodeURIComponent(season.vanityUrlSlug))
-					},
-					title: season.name
-				}
-			: {
-					description: "An unknown season of the Gauntlet Championship Series.",
-					openGraph: { url: getSeasonUrl(slug) },
-					title: "Unknown Season"
-				}
-	) satisfies Metadata;
+	const vanityUrlSlug = decodeURIComponent(slug);
+	const [season] = await db
+		.select()
+		.from(seasonTable)
+		.where(eq(seasonTable.vanityUrlSlug, vanityUrlSlug))
+		.limit(1);
+	return season
+		? {
+				description: `The schedule for Gauntlet Championship Series ${season.name}.`,
+				openGraph: {
+					url: getSeasonUrl(season)
+				},
+				title: season.name
+			}
+		: {
+				description: "An unknown season of the Gauntlet Championship Series.",
+				openGraph: {
+					url: getSeasonUrl({ vanityUrlSlug })
+				},
+				title: "Unknown Season"
+			};
 };

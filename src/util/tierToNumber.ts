@@ -1,4 +1,4 @@
-import type { AccountTier } from "types/db/AccountTier";
+import type { accountTierEnum } from "db/schema";
 
 const tierList = [
 	"IRON",
@@ -15,9 +15,11 @@ const tierList = [
 /**
  * Convert a tier string to a number that represents its order compared to other tiers (lower is worse).
  * @param tier - The tier string.
- * @returns The tier number.
+ * @return The tier number.
  * @internal
  */
-export default function tierToNumber(tier: AccountTier) {
+export default function tierToNumber(
+	tier: (typeof accountTierEnum.enumValues)[number]
+): number {
 	return tierList.indexOf(tier);
 }

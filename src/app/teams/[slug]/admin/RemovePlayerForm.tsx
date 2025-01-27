@@ -1,13 +1,12 @@
 import Form, { type FormProps } from "components/Form";
-import type { Player } from "types/db/Player";
+import { and, eq } from "drizzle-orm";
+import { type playerTable, teamPlayerTable, type teamTable } from "db/schema";
+import type { JSX } from "react";
 import Submit from "components/Submit";
-import type { Team } from "types/db/Team";
-import type { TeamPlayer } from "types/db/TeamPlayer";
-import deleteTeamPlayers from "db/deleteTeamPlayers";
+import db from "db/db";
 import getFormField from "util/getFormField";
 import getTeamUrl from "util/getTeamUrl";
 import { revalidatePath } from "next/cache";
-import updateTeamPlayers from "db/updateTeamPlayers";
 
 /**
  * Properties that can be passed to a remove player form.
@@ -16,19 +15,19 @@ import updateTeamPlayers from "db/updateTeamPlayers";
 export interface RemovePlayerFormProps
 	extends Omit<FormProps, "action" | "children"> {
 	/** The team to add the player to. */
-	team: Team;
+	team: typeof teamTable.$inferSelect;
 
 	/** The players already on the team. */
-	teamPlayers: TeamPlayer[];
+	teamPlayers: (typeof teamPlayerTable.$inferSelect)[];
 
 	/** The players already on the team. */
-	players: Player[];
+	players: (typeof playerTable.$inferSelect)[];
 }
 
 /**
  * A form for removing a player from a team.
  * @param props - Properties to pass to the form.
- * @returns The form.
+ * @return The form.
  * @public
  */
 export default function RemovePlayerForm({
@@ -36,7 +35,7 @@ export default function RemovePlayerForm({
 	teamPlayers,
 	players,
 	...props
-}: RemovePlayerFormProps) {
+}: RemovePlayerFormProps): JSX.Element {
 	const captainId = teamPlayers.find(({ isCaptain }) => isCaptain)?.playerId;
 	const [newCaptain] = teamPlayers.filter(
 		({ playerId: id }) => id !== captainId
@@ -49,18 +48,29 @@ export default function RemovePlayerForm({
 
 				// Remove the player from the team.
 				const playerId = getFormField(form, "playerId", true);
-				await deleteTeamPlayers(playerId, team.id);
+				await db
+					.delete(teamPlayerTable)
+					.where(
+						and(
+							eq(teamPlayerTable.playerId, playerId),
+							eq(teamPlayerTable.teamId, team.id)
+						)
+					);
 
 				// If the player was the captain and there are any other players on the team, make one of them the captain.
 				if (playerId === captainId && newCaptain) {
-					await updateTeamPlayers(
-						{ isCaptain: true },
-						team.id,
-						newCaptain.playerId
-					);
+					await db
+						.update(teamPlayerTable)
+						.set({ isCaptain: true })
+						.where(
+							and(
+								eq(teamPlayerTable.playerId, newCaptain.playerId),
+								eq(teamPlayerTable.teamId, team.id)
+							)
+						);
 				}
 
-				revalidatePath(getTeamUrl(encodeURIComponent(team.vanityUrlSlug)));
+				revalidatePath(getTeamUrl(team));
 			}}
 			{...props}
 		>

@@ -1,5 +1,6 @@
 import { forbidden, unauthorized } from "next/navigation";
 import CreateSeasonForm from "./CreateSeasonForm";
+import type { JSX } from "react";
 import type { Metadata } from "next";
 import SaveGameForm from "./SaveGameForm";
 import { auth } from "db/auth";
@@ -7,10 +8,10 @@ import style from "./page.module.scss";
 
 /**
  * An administrator-only page for configuring database objects.
- * @returns The admin page.
+ * @return The admin page.
  * @public
  */
-export default async function Page() {
+export default async function Page(): Promise<JSX.Element> {
 	const session = await auth();
 	if (!session?.user) {
 		unauthorized();

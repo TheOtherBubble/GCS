@@ -1,15 +1,17 @@
+import type { JSX } from "react";
 import Link from "components/Link";
 import type { Metadata } from "next";
-import getAllPlayers from "db/getAllPlayers";
+import db from "db/db";
 import getPlayerUrl from "util/getPlayerUrl";
+import { playerTable } from "db/schema";
 
 /**
  * The players list page.
- * @returns The players list page.
+ * @return The players list page.
  * @public
  */
-export default async function Page() {
-	const players = await getAllPlayers();
+export default async function Page(): Promise<JSX.Element> {
+	const players = await db.select().from(playerTable);
 	const collator = new Intl.Collator();
 
 	return (

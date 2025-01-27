@@ -3,10 +3,10 @@ import domain from "util/domain";
 
 /**
  * The website's sitemap.
- * @returns The sitemap.
+ * @return The sitemap.
  * @public
  */
-export default function sitemap() {
+export default function sitemap(): MetadataRoute.Sitemap {
 	return [
 		{ url: new URL("/players", domain).href },
 		{ url: new URL("/rulebook", domain).href },
@@ -14,5 +14,5 @@ export default function sitemap() {
 		{ url: new URL("/seasons", domain).href },
 		{ url: new URL("/teams", domain).href },
 		{ url: new URL("/", domain).href }
-	] satisfies MetadataRoute.Sitemap;
+	];
 }

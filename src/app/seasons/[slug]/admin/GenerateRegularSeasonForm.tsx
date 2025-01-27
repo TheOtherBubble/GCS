@@ -1,14 +1,11 @@
 import Form, { type FormProps } from "components/Form";
-import type { InsertMatch } from "types/db/Match";
-import type { MatchFormat } from "types/db/MatchFormat";
-import type { Season } from "types/db/Season";
+import { matchFormatEnum, matchTable, seasonTable, teamTable } from "db/schema";
+import type { JSX } from "react";
 import Submit from "components/Submit";
-import type { Team } from "types/db/Team";
 import createMatchesWithGames from "util/createMatchesWithGames";
 import getFormField from "util/getFormField";
 import getSeasonUrl from "util/getSeasonUrl";
 import hasRiotApiKey from "util/hasRiotApiKey";
-import { matchFormatEnum } from "db/schema";
 import { revalidatePath } from "next/cache";
 
 /**
@@ -18,23 +15,23 @@ import { revalidatePath } from "next/cache";
 export interface SeedSeasonFormProps
 	extends Omit<FormProps, "action" | "children"> {
 	/** The current season. */
-	season: Season;
+	season: typeof seasonTable.$inferSelect;
 
 	/** The teams in the current season. */
-	teams: Team[];
+	teams: (typeof teamTable.$inferSelect)[];
 }
 
 /**
  * A form for generating a regular season.
  * @param props - Properties to pass to the form.
- * @returns The form.
+ * @return The form.
  * @public
  */
 export default function GenerateRegularSeasonForm({
 	season,
 	teams,
 	...props
-}: SeedSeasonFormProps) {
+}: SeedSeasonFormProps): JSX.Element {
 	return (
 		<Form
 			action={async (form) => {
@@ -43,11 +40,15 @@ export default function GenerateRegularSeasonForm({
 					return "Missing Riot API key.";
 				}
 
-				const format = getFormField(form, "format", true) as MatchFormat;
+				const format = getFormField(
+					form,
+					"format",
+					true
+				) as (typeof matchFormatEnum.enumValues)[number];
 				const rounds = parseInt(getFormField(form, "rounds", true), 10);
 
 				// Split season teams into pools.
-				const pools = new Map<number, Team[]>();
+				const pools = new Map<number, (typeof teamTable.$inferSelect)[]>();
 				for (const team of teams) {
 					const pool = pools.get(team.pool);
 					if (pool) {
@@ -59,7 +60,7 @@ export default function GenerateRegularSeasonForm({
 				}
 
 				// Use the circle method to generate a single round robin regular season.
-				const matches: InsertMatch[] = [];
+				const matches: (typeof matchTable.$inferInsert)[] = [];
 				for (let i = 0; i < rounds; i++) {
 					for (const pool of pools.values()) {
 						// One round per team, adding a fake "bye" team if there are an odd number of teams.
@@ -89,7 +90,7 @@ export default function GenerateRegularSeasonForm({
 				}
 
 				await createMatchesWithGames(matches);
-				revalidatePath(getSeasonUrl(encodeURIComponent(season.vanityUrlSlug)));
+				revalidatePath(getSeasonUrl(season));
 				return void 0;
 			}}
 			{...props}

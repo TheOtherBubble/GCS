@@ -1,7 +1,7 @@
 import Cluster from "types/riot/Cluster";
 import type TournamentRegistrationParameters from "types/riot/TournamentRegistrationParameters";
 import getRiotApiBaseUrl from "./getRiotApiBaseUrl";
-import getTournamentProviderId from "util/getTournamentProviderId";
+import getTournamentProvider from "util/getTournamentProvider";
 import riotFetch from "./riotFetch";
 
 /**
@@ -9,7 +9,7 @@ import riotFetch from "./riotFetch";
  * @param params - The tournament registration parameters or the name of the tournament.
  * @param cluster - The cluster to use to make the request.
  * @param key - The Riot API key to use.
- * @returns The tournament ID.
+ * @return The tournament ID.
  * @throws `Error` if the response has a bad status or if the Riot API key is missing.
  * @public
  */
@@ -17,7 +17,7 @@ export default async function makeTournament(
 	params?: TournamentRegistrationParameters | string,
 	cluster = Cluster.AMERICAS,
 	key: string | undefined = void 0
-) {
+): Promise<number> {
 	return (await (
 		await riotFetch(
 			new URL("/lol/tournament-stub/v5/tournaments", getRiotApiBaseUrl(cluster))
@@ -26,9 +26,9 @@ export default async function makeTournament(
 				body: JSON.stringify(
 					params
 						? typeof params === "string"
-							? { name: params, providerId: await getTournamentProviderId() }
+							? { name: params, providerId: await getTournamentProvider() }
 							: params
-						: { providerId: await getTournamentProviderId() }
+						: { providerId: await getTournamentProvider() }
 				),
 				method: "POST"
 			},

@@ -1,11 +1,13 @@
 import Form, { type FormProps } from "components/Form";
+import type { JSX } from "react";
 import Submit from "components/Submit";
-import type { Team } from "types/db/Team";
+import db from "db/db";
+import { eq } from "drizzle-orm";
 import getFormField from "util/getFormField";
 import getTeamUrl from "util/getTeamUrl";
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
-import updateTeam from "db/updateTeams";
+import { teamTable } from "db/schema";
 
 /**
  * Properties that can be passed to a create team form.
@@ -14,42 +16,42 @@ import updateTeam from "db/updateTeams";
 export interface UpdateTeamFormProps
 	extends Omit<FormProps, "action" | "children"> {
 	/** The team to modify. */
-	team: Team;
+	team: typeof teamTable.$inferSelect;
 }
 
 /**
  * A form for updating a team.
  * @param props - Properties to pass to the form.
- * @returns The form.
+ * @return The form.
  * @public
  */
 export default function UpdateTeamForm({
 	team,
 	...props
-}: UpdateTeamFormProps) {
+}: UpdateTeamFormProps): JSX.Element {
 	return (
 		<Form
 			action={async (form) => {
 				"use server";
 				const vanityUrlSlug = getFormField(form, "vanityUrlSlug");
 				const poolString = getFormField(form, "pool");
-				await updateTeam(
-					{
+				await db
+					.update(teamTable)
+					.set({
 						code: getFormField(form, "code"),
 						color: getFormField(form, "color")?.substring(1), // Cut off pound.
 						logoUrl: getFormField(form, "logoUrl"),
 						name: getFormField(form, "name"),
 						pool: poolString ? parseInt(poolString, 10) : void 0,
 						vanityUrlSlug
-					},
-					team.id
-				);
+					})
+					.where(eq(teamTable.id, team.id));
 				if (vanityUrlSlug) {
-					redirect(getTeamUrl(encodeURIComponent(vanityUrlSlug)));
+					redirect(getTeamUrl({ vanityUrlSlug }));
 				}
 
 				// If the vanity URL didn't change, just reload the page instead.
-				revalidatePath(getTeamUrl(encodeURIComponent(team.vanityUrlSlug)));
+				revalidatePath(getTeamUrl(team));
 			}}
 			{...props}
 		>

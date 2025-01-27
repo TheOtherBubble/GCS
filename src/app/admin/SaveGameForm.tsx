@@ -1,15 +1,24 @@
 import Form, { type FormProps } from "components/Form";
+import {
+	accountTable,
+	gameResultTable,
+	playerGameResultTable,
+	playerTable,
+	teamGameResultBanTable,
+	teamGameResultTable,
+	teamPlayerTable,
+	teamTable
+} from "db/schema";
+import type { JSX } from "react";
 import Submit from "components/Submit";
 import convertResult from "util/convertResult";
-import createGameResults from "db/createGameResults";
-import createPlayerGameResults from "db/createPlayerGameResults";
-import createTeamGameResultBans from "db/createTeamGameResultBans";
-import createTeamGameResults from "db/createTeamGameResults";
-import getAllTeamsWithAccounts from "db/getAllTeamsWithAccounts";
+import db from "db/db";
+import { eq } from "drizzle-orm";
 import getFormField from "util/getFormField";
-import getMatchDtoByGameId from "util/getMatchDtoByGameId";
+import getMatchDto from "riot/getMatchDto";
 import hasRiotApiKey from "util/hasRiotApiKey";
 import leftHierarchy from "util/leftHierarchy";
+import makeMatchId from "util/makeMatchId";
 
 /**
  * Properties that can be passed to a save game form.
@@ -20,10 +29,10 @@ export type SaveGameFormProps = Omit<FormProps, "action" | "children">;
 /**
  * A form for saving a game to the database.
  * @param props - Properties to pass to the form.
- * @returns The form.
+ * @return The form.
  * @public
  */
-export default function SaveGameForm(props: SaveGameFormProps) {
+export default function SaveGameForm(props: SaveGameFormProps): JSX.Element {
 	return (
 		<Form
 			action={async (form) => {
@@ -33,13 +42,28 @@ export default function SaveGameForm(props: SaveGameFormProps) {
 				}
 
 				const [game, teams, bans, players] = convertResult(
-					await getMatchDtoByGameId(
-						parseInt(getFormField(form, "gameId", true), 10)
+					await getMatchDto(
+						makeMatchId(getFormField(form, "gameId", true) as `${number}`)
 					),
-					leftHierarchy(await getAllTeamsWithAccounts(), [
+					leftHierarchy(
+						await db
+							.select()
+							.from(teamTable)
+							.leftJoin(
+								teamPlayerTable,
+								eq(teamTable.id, teamPlayerTable.teamId)
+							)
+							.leftJoin(
+								playerTable,
+								eq(teamPlayerTable.playerId, playerTable.id)
+							)
+							.leftJoin(
+								accountTable,
+								eq(playerTable.id, accountTable.playerId)
+							),
 						"team",
 						"account"
-					]).reduce((previousValue, currentValue) => {
+					).reduce((previousValue, currentValue) => {
 						let team = previousValue.get(currentValue.value.id);
 						if (!team) {
 							team = [];
@@ -53,10 +77,10 @@ export default function SaveGameForm(props: SaveGameFormProps) {
 						return previousValue;
 					}, new Map<number, string[]>())
 				);
-				await createGameResults(game);
-				await createTeamGameResults(...teams);
-				await createTeamGameResultBans(...bans);
-				await createPlayerGameResults(...players);
+				await db.insert(gameResultTable).values(game);
+				await db.insert(teamGameResultTable).values(teams);
+				await db.insert(teamGameResultBanTable).values(bans);
+				await db.insert(playerGameResultTable).values(players);
 				return void 0;
 			}}
 			{...props}

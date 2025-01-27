@@ -3,7 +3,7 @@ import type ChampionTransform from "./ChampionTransform";
 import type Lane from "./Lane";
 import type MissionsDto from "./MissionsDto";
 import type PerksDto from "./PerksDto";
-import type { Position } from "types/db/Position";
+import type { positionEnum } from "db/schema";
 
 /**
  * Information about a participant in a match.
@@ -113,7 +113,7 @@ export default interface ParticipantDto {
 	goldSpent: number;
 
 	/** The most likely position played by the participant when disregarding anything else. Generally, `teamPosition` should be used instead. */
-	individualPosition: Position;
+	individualPosition: (typeof positionEnum.enumValues)[number];
 
 	/** The participant's inhibitor kill count. */
 	inhibitorKills: number;
@@ -344,7 +344,7 @@ export default interface ParticipantDto {
 	teamId: number;
 
 	/** The most likely position played by the participant when considering that each player on a team must play a different role. */
-	teamPosition: Position;
+	teamPosition: (typeof positionEnum.enumValues)[number];
 
 	/** The participant's time spent crowd controlling other participants. */
 	timeCCingOthers: number;

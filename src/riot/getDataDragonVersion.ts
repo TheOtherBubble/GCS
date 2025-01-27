@@ -1,10 +1,12 @@
 /**
  * Get the most recent version of Data Dragon.
- * @returns The version.
+ * @return The version.
  * @see {@link https://developer.riotgames.com/docs/lol#data-dragon_versions | Versions}
  * @public
  */
-export default async function getDataDragonVersion() {
+export default async function getDataDragonVersion(): Promise<
+	string | undefined
+> {
 	const request = await fetch(
 		"https://ddragon.leagueoflegends.com/api/versions.json"
 	);

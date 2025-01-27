@@ -1,10 +1,13 @@
+import type {
+	matchTable,
+	seasonTable,
+	teamGameResultTable,
+	teamTable
+} from "db/schema";
 import Image from "./Image";
+import type { JSX } from "react";
 import type { LinkProps } from "./Link";
 import LocalDate from "./LocalDate";
-import type { Match } from "types/db/Match";
-import type { Season } from "types/db/Season";
-import type { Team } from "types/db/Team";
-import type { TeamGameResult } from "types/db/TeamGameResult";
 import getMatchDateTime from "util/getMatchDateTime";
 import getMatchUrl from "util/getMatchUrl";
 import multiclass from "util/multiclass";
@@ -17,16 +20,16 @@ import style from "./styles/match-card.module.scss";
  */
 export interface MatchCardProps extends Omit<LinkProps, "children" | "href"> {
 	/** The match that is represented by the card. */
-	match: Match;
+	match: typeof matchTable.$inferSelect;
 
 	/** The season that the match is part of. */
-	season?: Season | undefined;
+	season?: typeof seasonTable.$inferSelect | undefined;
 
 	/** The teams in the match. */
-	teams?: Team[] | undefined;
+	teams?: (typeof teamTable.$inferSelect)[] | undefined;
 
 	/** The game results in the match. */
-	teamGameResults?: TeamGameResult[] | undefined;
+	teamGameResults?: (typeof teamGameResultTable.$inferSelect)[] | undefined;
 
 	/** The locales to use for formatting the date time string. */
 	dateTimeLocales?: Intl.LocalesArgument | undefined;
@@ -38,7 +41,7 @@ export interface MatchCardProps extends Omit<LinkProps, "children" | "href"> {
 /**
  * A card that displays information about a match.
  * @param props - The properties to pass to the team card.
- * @returns The team card.
+ * @return The team card.
  * @public
  */
 export default function MatchCard({
@@ -50,7 +53,7 @@ export default function MatchCard({
 	dateTimeFormatOptions,
 	className,
 	...props
-}: MatchCardProps) {
+}: MatchCardProps): JSX.Element {
 	const blueTeam = teams?.find((team) => team.id === match.blueTeamId);
 	const redTeam = teams?.find((team) => team.id === match.redTeamId);
 	const dateTime = season && getMatchDateTime(match, season);
@@ -58,7 +61,7 @@ export default function MatchCard({
 	return (
 		<a
 			className={multiclass(className, style["match-card"])}
-			href={getMatchUrl(match.id.toString() as `${number}`)}
+			href={getMatchUrl(match)}
 			{...props}
 		>
 			<p>{match.format}</p>

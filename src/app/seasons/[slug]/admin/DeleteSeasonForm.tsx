@@ -1,10 +1,12 @@
 import Form, { type FormProps } from "components/Form";
-import type { Season } from "types/db/Season";
+import type { JSX } from "react";
 import Submit from "components/Submit";
-import deleteSeasons from "db/deleteSeasons";
+import db from "db/db";
+import { eq } from "drizzle-orm";
 import getFormField from "util/getFormField";
 import getSeasonUrl from "util/getSeasonUrl";
 import { revalidatePath } from "next/cache";
+import { seasonTable } from "db/schema";
 
 /**
  * Properties that can be passed to a delete season form.
@@ -13,19 +15,19 @@ import { revalidatePath } from "next/cache";
 export interface DeleteSeasonFormProps
 	extends Omit<FormProps, "action" | "children"> {
 	/** The current season. */
-	season: Season;
+	season: typeof seasonTable.$inferSelect;
 }
 
 /**
  * A form for deleting a season.
  * @param props - Properties to pass to the form.
- * @returns The form.
+ * @return The form.
  * @public
  */
 export default function DeleteSeasonForm({
 	season,
 	...props
-}: DeleteSeasonFormProps) {
+}: DeleteSeasonFormProps): JSX.Element {
 	return (
 		<Form
 			action={async (form) => {
@@ -34,8 +36,8 @@ export default function DeleteSeasonForm({
 					return "Invalid safeguard.";
 				}
 
-				await deleteSeasons(season.id);
-				revalidatePath(getSeasonUrl(encodeURIComponent(season.vanityUrlSlug)));
+				await db.delete(seasonTable).where(eq(seasonTable.id, season.id));
+				revalidatePath(getSeasonUrl(season));
 				return void 0;
 			}}
 			{...props}

@@ -1,9 +1,13 @@
+import type { matchTable } from "db/schema";
+
 /**
- * Get the URL of the given match.
- * @param slug - The match's stringified ID.
- * @returns The URL.
+ * Get the URL for a match's page.
+ * @param match - The match.
+ * @return The URL for the match's page.
  * @public
  */
-export default function getMatchUrl(slug: `${number}`) {
-	return `/matches/${slug}`;
+export default function getMatchUrl(
+	match: Pick<typeof matchTable.$inferSelect, "id">
+): `/matches/${typeof match.id}` {
+	return `/matches/${match.id.toString() as `${number}`}`;
 }

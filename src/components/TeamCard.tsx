@@ -1,7 +1,7 @@
+import type { seasonTable, teamTable } from "db/schema";
 import Image from "./Image";
+import type { JSX } from "react";
 import type { LinkProps } from "./Link";
-import type { Season } from "types/db/Season";
-import type { Team } from "types/db/Team";
 import getTeamUrl from "util/getTeamUrl";
 import multiclass from "util/multiclass";
 import style from "./styles/team-card.module.scss";
@@ -12,16 +12,16 @@ import style from "./styles/team-card.module.scss";
  */
 export interface TeamCardProps extends Omit<LinkProps, "children" | "href"> {
 	/** The team that is represented by the card. */
-	team: Team;
+	team: typeof teamTable.$inferSelect;
 
 	/** The season that the team participated in. */
-	season?: Season | undefined;
+	season?: typeof seasonTable.$inferSelect | undefined;
 }
 
 /**
  * A card that displays information about a team.
  * @param props - The properties to pass to the team card.
- * @returns The team card.
+ * @return The team card.
  * @public
  */
 export default function TeamCard({
@@ -29,11 +29,11 @@ export default function TeamCard({
 	season,
 	className,
 	...props
-}: TeamCardProps) {
+}: TeamCardProps): JSX.Element {
 	return (
 		<a
 			className={multiclass(className, style["team-card"])}
-			href={getTeamUrl(encodeURIComponent(team.vanityUrlSlug))}
+			href={getTeamUrl(team)}
 			{...props}
 		>
 			<Image

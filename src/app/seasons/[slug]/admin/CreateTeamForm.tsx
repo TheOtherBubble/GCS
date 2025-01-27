@@ -1,7 +1,8 @@
 import Form, { type FormProps } from "components/Form";
-import type { Season } from "types/db/Season";
+import { type seasonTable, teamTable } from "db/schema";
+import type { JSX } from "react";
 import Submit from "components/Submit";
-import createTeams from "db/createTeams";
+import db from "db/db";
 import domain from "util/domain";
 import getFormField from "util/getFormField";
 import getSeasonUrl from "util/getSeasonUrl";
@@ -14,24 +15,24 @@ import { revalidatePath } from "next/cache";
 export interface CreateTeamFormProps
 	extends Omit<FormProps, "action" | "children"> {
 	/** The current season. */
-	season: Season;
+	season: typeof seasonTable.$inferSelect;
 }
 
 /**
  * A form for creating a team.
  * @param props - Properties to pass to the form.
- * @returns The form.
+ * @return The form.
  * @public
  */
 export default function CreateTeamForm({
 	season,
 	...props
-}: CreateTeamFormProps) {
+}: CreateTeamFormProps): JSX.Element {
 	return (
 		<Form
 			action={async (form) => {
 				"use server";
-				await createTeams({
+				await db.insert(teamTable).values({
 					code: getFormField(form, "code", true),
 					color: getFormField(form, "color", true).substring(1), // Cut off pound.
 					logoUrl: getFormField(form, "logoUrl", true),
@@ -40,7 +41,7 @@ export default function CreateTeamForm({
 					seasonId: season.id,
 					vanityUrlSlug: getFormField(form, "vanityUrlSlug", true)
 				});
-				revalidatePath(getSeasonUrl(encodeURIComponent(season.vanityUrlSlug)));
+				revalidatePath(getSeasonUrl(season));
 			}}
 			{...props}
 		>

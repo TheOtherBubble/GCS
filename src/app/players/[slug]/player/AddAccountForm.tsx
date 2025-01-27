@@ -1,18 +1,17 @@
 import Form, { type FormProps } from "components/Form";
-import type { Account } from "types/db/Account";
-import type { Player } from "types/db/Player";
+import { accountTable, type playerTable } from "db/schema";
+import type { JSX } from "react";
 import QueueType from "types/riot/QueueType";
 import Submit from "components/Submit";
-import createAccounts from "db/createAccounts";
+import db from "db/db";
+import { eq } from "drizzle-orm";
 import getAccountByGameName from "riot/getAccountByGameName";
-import getAccounts from "db/getAccounts";
 import getFormField from "util/getFormField";
 import getLeagueEntriesBySummonerId from "riot/getLeagueEntriesBySummonerId";
 import getPlayerUrl from "util/getPlayerUrl";
 import getSummonerByPuuid from "riot/getSummonerByPuuid";
 import hasRiotApiKey from "util/hasRiotApiKey";
 import { revalidatePath } from "next/cache";
-import updateAccounts from "db/updateAccounts";
 
 /**
  * Properties that can be passed to an add account form.
@@ -21,23 +20,23 @@ import updateAccounts from "db/updateAccounts";
 export interface AddAccountFormProps
 	extends Omit<FormProps, "action" | "children"> {
 	/** The player to add the account to. */
-	player: Player;
+	player: typeof playerTable.$inferSelect;
 
 	/** The player's existing accounts. */
-	accounts: Account[];
+	accounts: (typeof accountTable.$inferSelect)[];
 }
 
 /**
  * A form for adding an account.
  * @param props - Properties to pass to the form.
- * @returns The form.
+ * @return The form.
  * @public
  */
 export default function AddAccountForm({
 	player,
 	accounts,
 	...props
-}: AddAccountFormProps) {
+}: AddAccountFormProps): JSX.Element {
 	return (
 		<Form
 			action={async (form) => {
@@ -59,7 +58,10 @@ export default function AddAccountForm({
 				const accountDto = await getAccountByGameName(gameName, tagLine);
 
 				// Check if the account is already in the database.
-				const [existingAccount] = await getAccounts(accountDto.puuid);
+				const [existingAccount] = await db
+					.select()
+					.from(accountTable)
+					.where(eq(accountTable.puuid, accountDto.puuid));
 				if (existingAccount) {
 					// Check if this player already has this account.
 					if (existingAccount.playerId === player.id) {
@@ -72,7 +74,10 @@ export default function AddAccountForm({
 					}
 
 					// Otherwise, move the account over to this player.
-					await updateAccounts({ playerId: player.id }, accountDto.puuid);
+					await db
+						.update(accountTable)
+						.set({ playerId: player.id })
+						.where(eq(accountTable.puuid, accountDto.puuid));
 					revalidatePath(getPlayerUrl(player));
 					return void 0;
 				}
@@ -97,7 +102,7 @@ export default function AddAccountForm({
 						(profileIconIdToVerify + 1) % starterPackMaxId;
 				}
 
-				await createAccounts({
+				await db.insert(accountTable).values({
 					accountId: summonerDto.accountId,
 					gameNameCache: accountDto.gameName,
 					isPrimary: accounts.length ? void 0 : true,

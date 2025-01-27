@@ -1,7 +1,8 @@
 import Link, { type LinkProps } from "./Link";
-import type { Account } from "types/db/Account";
 import Image from "./Image";
+import type { JSX } from "react";
 import RankedEmblem from "./RankedEmblem";
+import type { accountTable } from "db/schema";
 import getProfileIconUrl from "riot/getProfileIconUrl";
 import multiclass from "util/multiclass";
 import style from "./styles/account-card.module.scss";
@@ -12,20 +13,20 @@ import style from "./styles/account-card.module.scss";
  */
 export interface AccountCardProps extends Omit<LinkProps, "children" | "href"> {
 	/** The account that is represented by the card. */
-	account: Account;
+	account: typeof accountTable.$inferSelect;
 }
 
 /**
  * A card that displays information about an account.
  * @param props - The properties to pass to the account card.
- * @returns The account card.
+ * @return The account card.
  * @public
  */
 export default async function AccountCard({
 	account,
 	className,
 	...props
-}: AccountCardProps) {
+}: AccountCardProps): Promise<JSX.Element> {
 	const ugg = `https://u.gg/lol/profile/${account.region}/${account.gameNameCache}-${account.tagLineCache}/overview`;
 
 	if (!account.isVerified) {

@@ -1,10 +1,13 @@
 import Form, { type FormProps } from "components/Form";
 import Document from "types/Document";
+import type { JSX } from "react";
 import Link from "components/Link";
 import Submit from "components/Submit";
+import db from "db/db";
+import { documentTable } from "db/schema";
+import { eq } from "drizzle-orm";
 import getFormField from "util/getFormField";
 import { revalidatePath } from "next/cache";
-import updateDocuments from "db/updateDocuments";
 
 /**
  * Properties that can be passed to an update rulebook form.
@@ -19,21 +22,21 @@ export interface UpdateRulebookFormProps
 /**
  * A form for updating a player.
  * @param props - Properties to pass to the form.
- * @returns The form.
+ * @return The form.
  * @public
  */
 export default function UpdateRulebookForm({
 	text,
 	...props
-}: UpdateRulebookFormProps) {
+}: UpdateRulebookFormProps): JSX.Element {
 	return (
 		<Form
 			action={async (form) => {
 				"use server";
-				await updateDocuments(
-					{ text: getFormField(form, "text", true) },
-					Document.RULEBOOK
-				);
+				await db
+					.update(documentTable)
+					.set({ text: getFormField(form, "text", true) })
+					.where(eq(documentTable.id, Document.RULEBOOK));
 				revalidatePath("/rulebook");
 			}}
 			{...props}

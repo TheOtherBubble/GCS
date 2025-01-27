@@ -1,11 +1,13 @@
 import type Cluster from "types/riot/Cluster";
-import type { Platform } from "types/db/Platform";
+import type { platformEnum } from "db/schema";
 
 /**
  * The base URL of Riot API endpoints.
- * @param cluster - The cluster or platform to use when executing the request.
- * @returns The base URL.
+ * @param cluster - The regional or platform routing value to use when executing the request.
+ * @return The base URL.
  */
-export default function getRiotApiBaseUrl(cluster: Cluster | Platform) {
+export default function getRiotApiBaseUrl(
+	cluster: Cluster | (typeof platformEnum.enumValues)[number]
+): `https://${Cluster | (typeof platformEnum.enumValues)[number]}.api.riotgames.com/` {
 	return `https://${cluster}.api.riotgames.com/`;
 }

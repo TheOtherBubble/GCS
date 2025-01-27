@@ -1,3 +1,16 @@
+import {
+	accountTable,
+	gameResultTable,
+	gameTable,
+	matchTable,
+	playerGameResultTable,
+	playerTable,
+	seasonTable,
+	teamGameResultTable,
+	teamPlayerTable,
+	teamTable
+} from "db/schema";
+import { and, eq, or } from "drizzle-orm";
 import AdminPanel from "./AdminPanel";
 import GameCard from "components/GameCard";
 import LocalDate from "components/LocalDate";
@@ -6,13 +19,9 @@ import type PageProps from "types/PageProps";
 import PlayerCard from "components/PlayerCard";
 import TeamCard from "components/TeamCard";
 import { auth } from "db/auth";
-import getGamesByMatches from "db/getGamesByMatches";
+import db from "db/db";
 import getMatchDateTime from "util/getMatchDateTime";
 import getMatchUrl from "util/getMatchUrl";
-import getMatches from "db/getMatches";
-import getPlayersByTeams from "db/getPlayersByTeams";
-import getSeasons from "db/getSeasons";
-import getTeams from "db/getTeams";
 import leftHierarchy from "util/leftHierarchy";
 import style from "./page.module.scss";
 
@@ -28,80 +37,117 @@ export interface MatchesPageParams {
 /**
  * A page that displays information about a match.
  * @param props - The properties that are passed to the page.
- * @returns The match page.
+ * @return The match page.
  * @public
  */
 export default async function Page(props: PageProps<MatchesPageParams>) {
+	// Organize season and match data.
 	const { slug } = await props.params;
-	const [match] = await getMatches(parseInt(slug, 10));
-	if (!match) {
+	const rows = await db
+		.select()
+		.from(seasonTable)
+		.innerJoin(matchTable, eq(seasonTable.id, matchTable.seasonId))
+		.leftJoin(gameTable, eq(matchTable.id, gameTable.matchId))
+		.leftJoin(
+			gameResultTable,
+			eq(gameTable.tournamentCode, gameResultTable.tournamentCode)
+		)
+		.leftJoin(
+			teamGameResultTable,
+			eq(gameResultTable.id, teamGameResultTable.gameResultId)
+		)
+		.leftJoin(
+			playerGameResultTable,
+			and(
+				eq(
+					teamGameResultTable.gameResultId,
+					playerGameResultTable.gameResultId
+				),
+				eq(teamGameResultTable.riotId, playerGameResultTable.teamId)
+			)
+		)
+		.where(eq(matchTable.id, parseInt(slug, 10)));
+	const [first] = rows;
+	if (!first) {
 		return <p>{"Unknown match."}</p>;
 	}
 
-	const [season] = await getSeasons(match.seasonId);
-	const teams = await getTeams(match.blueTeamId, match.redTeamId);
-	const blueTeam = teams.find((team) => team.id === match.blueTeamId);
-	const redTeam = teams.find((team) => team.id === match.redTeamId);
+	// Organize team, player, and account data.
+	const { season, match } = first;
+	const teamRows = await db
+		.select()
+		.from(matchTable)
+		.leftJoin(
+			teamTable,
+			or(
+				eq(matchTable.blueTeamId, teamTable.id),
+				eq(matchTable.redTeamId, teamTable.id)
+			)
+		)
+		.leftJoin(teamPlayerTable, eq(teamTable.id, teamPlayerTable.teamId))
+		.leftJoin(playerTable, eq(teamPlayerTable.playerId, playerTable.id))
+		.leftJoin(accountTable, eq(playerTable.id, accountTable.playerId))
+		.where(eq(matchTable.id, match.id));
+	const teamHierarchies = leftHierarchy(teamRows, "team", "player", "account");
+	const blueTeam = teamHierarchies.find(
+		({ value: { id } }) => id === match.blueTeamId
+	);
+	const redTeam = teamHierarchies.find(
+		({ value: { id } }) => id === match.redTeamId
+	);
 	if (!blueTeam || !redTeam) {
 		return <p>{"Unknown team."}</p>;
 	}
 
-	const teamPlayers = await getPlayersByTeams(blueTeam.id, redTeam.id);
-	const blueTeamPlayers = teamPlayers.filter(
-		({ teamPlayer }) => teamPlayer.teamId === blueTeam.id
-	);
-	const redTeamPlayers = teamPlayers.filter(
-		({ teamPlayer }) => teamPlayer.teamId === redTeam.id
-	);
-
-	// Organize game data.
-	const games = leftHierarchy(await getGamesByMatches(match.id), [
+	// Organize game, game result, team game result, and player game result data.
+	const gameHierarchies = leftHierarchy(
+		rows,
 		"game",
 		"gameResult",
 		"teamGameResult",
 		"playerGameResult"
-	]);
+	);
 
 	return (
 		<div className={style["content"]}>
 			<div className={style["team"]}>
 				<header>
-					<TeamCard team={blueTeam} season={season} />
+					<TeamCard team={blueTeam.value} season={season} />
 					<hr />
 				</header>
 				<ul>
-					{blueTeamPlayers.map(({ player }) => (
+					{blueTeam.children.map(({ value: player, children: accounts }) => (
 						<li key={player.id}>
-							<PlayerCard player={player} />
+							<PlayerCard
+								player={player}
+								accounts={accounts}
+								// TODO: Player teams and KDAs.
+							/>
 						</li>
 					))}
 				</ul>
 			</div>
 			<div className={style["games"]}>
 				<header>
-					<h1>{`${blueTeam.name} vs ${redTeam.name}`}</h1>
+					<h1>{`${blueTeam.value.name} vs ${redTeam.value.name}`}</h1>
 					<h2>
-						{season ? (
-							<LocalDate
-								date={getMatchDateTime(match, season)}
-								options={{
-									day: "numeric",
-									hour: "numeric",
-									minute: "numeric",
-									month: "long",
-									timeZoneName: "short",
-									weekday: "long"
-								}}
-							/>
-						) : (
-							`Round ${match.round.toString()}`
-						)}
+						<LocalDate
+							date={getMatchDateTime(match, season)}
+							options={{
+								day: "numeric",
+								hour: "numeric",
+								minute: "numeric",
+								month: "long",
+								timeZoneName: "short",
+								weekday: "long"
+							}}
+						/>
 						{` - ${match.format}`}
 					</h2>
 					<h2>{"Games"}</h2>
 				</header>
 				<ol>
-					{games
+					{gameHierarchies
 						.sort(({ value: { id: a } }, { value: { id: b } }) => a - b)
 						.map(({ children: [gameResult], value: game }) => (
 							<GameCard
@@ -119,13 +165,17 @@ export default async function Page(props: PageProps<MatchesPageParams>) {
 			</div>
 			<div className={style["team"]}>
 				<header>
-					<TeamCard team={redTeam} season={season} />
+					<TeamCard team={redTeam.value} season={season} />
 					<hr />
 				</header>
 				<ul>
-					{redTeamPlayers.map(({ player }) => (
+					{redTeam.children.map(({ value: player, children: accounts }) => (
 						<li key={player.id}>
-							<PlayerCard player={player} />
+							<PlayerCard
+								player={player}
+								accounts={accounts}
+								// TODO: Player teams and KDAs.
+							/>
 						</li>
 					))}
 				</ul>
@@ -137,14 +187,16 @@ export default async function Page(props: PageProps<MatchesPageParams>) {
 /**
  * The match page's metadata.
  * @param props - The properties that are passed to the page.
- * @returns The metadata.
+ * @return The metadata.
  * @public
  */
-export const generateMetadata = async (props: PageProps<MatchesPageParams>) => {
+export const generateMetadata = async (
+	props: PageProps<MatchesPageParams>
+): Promise<Metadata> => {
 	const { slug } = await props.params;
 	return {
 		description: `Gauntlet Championship Series match #${slug}`,
-		openGraph: { url: getMatchUrl(slug) },
+		openGraph: { url: getMatchUrl({ id: parseInt(slug, 10) }) },
 		title: `Match #${slug}`
-	} satisfies Metadata;
+	};
 };

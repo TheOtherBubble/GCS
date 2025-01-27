@@ -1,9 +1,13 @@
+import type { teamTable } from "db/schema";
+
 /**
- * Get the URL of the given team.
- * @param slug - The team's URI-encoded vanity URL slug.
- * @returns The URL.
+ * Get the URL for a team's page.
+ * @param team - The team.
+ * @return The URL for the team's page.
  * @public
  */
-export default function getTeamUrl(slug: string) {
-	return `/teams/${slug}`;
+export default function getTeamUrl(
+	team: Pick<typeof teamTable.$inferSelect, "vanityUrlSlug">
+): `/teams/${string}` {
+	return `/teams/${encodeURIComponent(team.vanityUrlSlug)}`;
 }

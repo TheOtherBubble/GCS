@@ -1,25 +1,27 @@
-import type { InsertGameResult } from "types/db/GameResult";
-import type { InsertPlayerGameResult } from "types/db/PlayerGameResult";
-import type { InsertTeamGameResult } from "types/db/TeamGameResult";
-import type { InsertTeamGameResultBan } from "types/db/TeamGameResultBan";
+import type {
+	gameResultTable,
+	playerGameResultTable,
+	teamGameResultBanTable,
+	teamGameResultTable
+} from "db/schema";
 import type MatchDto from "types/riot/MatchDto";
-import likelyTeam from "./likelyTeam";
+import closestMatch from "./closestMatch";
 
 /**
  * Converts the Riot API representation of a game result to the database representations of game, team, ban, and player results.
  * @param riot - The Riot API game result.
  * @param puuids - A map of the IDs of the teams in the match to the lists of the PUUIDS of the accounts of the players on those teams.
- * @returns The game result, the team game results, the team game result bans, and the player game results.
+ * @return The game result, the team game results, the team game result bans, and the player game results.
  * @public
  */
 export default function convertResult(
 	riot: MatchDto,
 	puuids?: Map<number, string[]>
 ): [
-	InsertGameResult,
-	InsertTeamGameResult[],
-	InsertTeamGameResultBan[],
-	InsertPlayerGameResult[]
+	typeof gameResultTable.$inferInsert,
+	(typeof teamGameResultTable.$inferInsert)[],
+	(typeof teamGameResultBanTable.$inferInsert)[],
+	(typeof playerGameResultTable.$inferInsert)[]
 ] {
 	const game = {
 		duration:
@@ -33,7 +35,7 @@ export default function convertResult(
 		tournamentCode: riot.info.tournamentCode,
 		type: riot.info.gameType,
 		version: riot.info.gameVersion
-	} satisfies InsertGameResult;
+	} satisfies typeof gameResultTable.$inferInsert;
 
 	const players = [];
 	for (const player of riot.info.participants) {
@@ -58,7 +60,7 @@ export default function convertResult(
 			summoner1Id: player.summoner1Id,
 			summoner2Id: player.summoner2Id,
 			teamId: player.teamId
-		} satisfies InsertPlayerGameResult);
+		} satisfies typeof playerGameResultTable.$inferInsert);
 	}
 
 	const teams = [];
@@ -70,13 +72,13 @@ export default function convertResult(
 			riotId: team.teamId,
 			teamId:
 				puuids &&
-				likelyTeam(
+				closestMatch(
 					players
 						.filter(({ teamId }) => teamId === team.teamId)
 						.map(({ puuid }) => puuid),
 					puuids
 				)
-		} satisfies InsertTeamGameResult);
+		} satisfies typeof teamGameResultTable.$inferInsert);
 
 		for (const ban of team.bans) {
 			bans.push({
@@ -84,7 +86,7 @@ export default function convertResult(
 				gameResultId: riot.info.gameId,
 				order: ban.pickTurn,
 				teamId: team.teamId
-			} satisfies InsertTeamGameResultBan);
+			} satisfies typeof teamGameResultBanTable.$inferInsert);
 		}
 	}
 

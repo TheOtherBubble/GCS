@@ -1,11 +1,13 @@
 import Form, { type FormProps } from "components/Form";
-import type { Player } from "types/db/Player";
+import type { JSX } from "react";
 import SkinList from "./SkinList";
 import Submit from "components/Submit";
+import db from "db/db";
+import { eq } from "drizzle-orm";
 import getFormField from "util/getFormField";
 import getPlayerUrl from "util/getPlayerUrl";
+import { playerTable } from "db/schema";
 import { revalidatePath } from "next/cache";
-import updatePlayers from "db/updatePlayers";
 
 /**
  * Properties that can be passed to an update skin form.
@@ -14,7 +16,7 @@ import updatePlayers from "db/updatePlayers";
 export interface UpdateSkinFormProps
 	extends Omit<FormProps, "action" | "children"> {
 	/** The current player. */
-	player: Player;
+	player: typeof playerTable.$inferSelect;
 
 	/** The current player's current background champion ID. */
 	backgroundChampionId: string;
@@ -23,14 +25,14 @@ export interface UpdateSkinFormProps
 /**
  * A form for updating a skin.
  * @param props - Properties to pass to the form.
- * @returns The form.
+ * @return The form.
  * @public
  */
 export default function UpdateSkinForm({
 	player,
 	backgroundChampionId,
 	...props
-}: UpdateSkinFormProps) {
+}: UpdateSkinFormProps): JSX.Element {
 	return (
 		<Form
 			action={async (form) => {
@@ -43,7 +45,10 @@ export default function UpdateSkinForm({
 					return;
 				}
 
-				await updatePlayers({ backgroundSkinNumber }, player.id);
+				await db
+					.update(playerTable)
+					.set({ backgroundSkinNumber })
+					.where(eq(playerTable.id, player.id));
 				revalidatePath(getPlayerUrl(player));
 			}}
 			{...props}

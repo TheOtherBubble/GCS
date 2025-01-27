@@ -1,8 +1,6 @@
-import type { Account } from "types/db/Account";
-import type { Game } from "types/db/Game";
+import type { accountTable, gameTable, teamTable } from "db/schema";
 import ImportResultsForm from "./admin/ImportResultsForm";
 import { type JSX } from "react";
-import type { Team } from "types/db/Team";
 
 /**
  * Properties that can be passed to an admin panel.
@@ -11,25 +9,25 @@ import type { Team } from "types/db/Team";
 export interface AdminPanelProps
 	extends Omit<JSX.IntrinsicElements["div"], "children"> {
 	/** The game to import results for. */
-	game: Game;
+	game: typeof gameTable.$inferSelect;
 
 	/** The blue team in the game's match. */
-	blueTeam?: Team | undefined;
+	blueTeam?: typeof teamTable.$inferSelect | undefined;
 
 	/** The accounts of the players on the blue team in the game's match. */
-	blueAccounts?: Account[] | undefined;
+	blueAccounts?: (typeof accountTable.$inferSelect)[] | undefined;
 
 	/** The red team in the game's match. */
-	redTeam?: Team | undefined;
+	redTeam?: typeof teamTable.$inferSelect | undefined;
 
 	/** The accounts of the players on the red team in the game's match. */
-	redAccounts?: Account[] | undefined;
+	redAccounts?: (typeof accountTable.$inferSelect)[] | undefined;
 }
 
 /**
  * A game page admin panel.
  * @param props - Properties to pass to the panel.
- * @returns The panel.
+ * @return The panel.
  * @public
  */
 export default function AdminPanel({
@@ -39,7 +37,7 @@ export default function AdminPanel({
 	redTeam,
 	redAccounts,
 	...props
-}: AdminPanelProps) {
+}: AdminPanelProps): JSX.Element {
 	return (
 		<div {...props}>
 			<header>

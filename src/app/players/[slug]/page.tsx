@@ -1,21 +1,30 @@
+import {
+	accountTable,
+	gameResultTable,
+	gameTable,
+	playerGameResultTable,
+	playerTable,
+	seasonTable,
+	teamGameResultTable,
+	teamPlayerTable,
+	teamTable
+} from "db/schema";
+import { and, desc, eq, or } from "drizzle-orm";
 import AccountCard from "components/AccountCard";
 import AdminPanel from "./AdminPanel";
 import GameCard from "components/GameCard";
 import Image from "components/Image";
+import type { JSX } from "react";
 import Markdown from "react-markdown";
 import type { Metadata } from "next";
 import type PageProps from "types/PageProps";
 import PlayerPanel from "./PlayerPanel";
 import UpdateAccountsForm from "./UpdateAccountsForm";
 import { auth } from "db/auth";
-import getAccountsByPlayers from "db/getAccountsByPlayers";
+import db from "db/db";
 import getBackgroundImageUrl from "util/getBackgroundImageUrl";
-import getGameResultsByPlayers from "db/getGameResultsByPlayers";
-import getLatestSeason from "db/getLatestSeason";
-import getPlayerBySlug from "db/getPlayerBySlug";
 import getPlayerUrl from "util/getPlayerUrl";
-import getPlayerUrlBySlug from "util/getPlayerUrlBySlug";
-import getTeamsBySeasons from "db/getTeamsBySeasons";
+import leftHierarchy from "util/leftHierarchy";
 import { redirect } from "next/navigation";
 import style from "./page.module.scss";
 
@@ -31,25 +40,97 @@ export interface PlayersPageParams {
 /**
  * A page that displays information about a player.
  * @param props - The properties that are passed to the page.
- * @returns The player page.
+ * @return The player page.
  * @public
  */
-export default async function Page(props: PageProps<PlayersPageParams>) {
+export default async function Page(
+	props: PageProps<PlayersPageParams>
+): Promise<JSX.Element> {
 	const { slug } = await props.params;
-	const player = await getPlayerBySlug(slug);
-	if (!player) {
+	const unfilteredRows = await db
+		.select()
+		.from(playerTable)
+		.leftJoin(accountTable, eq(playerTable.id, accountTable.playerId))
+		.leftJoin(
+			playerGameResultTable,
+			eq(accountTable.puuid, playerGameResultTable.puuid)
+		)
+		.leftJoin(
+			teamGameResultTable,
+			and(
+				eq(
+					playerGameResultTable.gameResultId,
+					teamGameResultTable.gameResultId
+				),
+				eq(playerGameResultTable.teamId, teamGameResultTable.riotId)
+			)
+		)
+		.leftJoin(
+			gameResultTable,
+			eq(teamGameResultTable.gameResultId, gameResultTable.id)
+		)
+		.leftJoin(
+			gameTable,
+			eq(gameResultTable.tournamentCode, gameTable.tournamentCode)
+		)
+		.where(or(eq(playerTable.displayName, slug), eq(playerTable.name, slug)));
+	const playerId = (
+		unfilteredRows.find(
+			({ player: { displayName } }) => displayName === slug
+		) ?? unfilteredRows.find(({ player: { name } }) => name === slug)
+	)?.player.id;
+	const rows = unfilteredRows.filter(({ player: { id } }) => id === playerId);
+	const [first] = rows;
+	if (!first) {
 		redirect("/players");
 	}
 
+	// Organize player and account data.
+	const { player } = first;
+	const accounts = leftHierarchy(rows, "account");
+	const backgroundImageUrl = getBackgroundImageUrl(player);
+	const games = rows
+		.filter(
+			({ game, gameResult, teamGameResult, playerGameResult }) =>
+				game && gameResult && teamGameResult && playerGameResult
+		)
+		.map(({ game, gameResult, teamGameResult, playerGameResult }) => {
+			if (!game || !gameResult || !teamGameResult || !playerGameResult) {
+				throw new Error("Something impossible happened.");
+			}
+
+			return {
+				game,
+				gameResult,
+				playerGameResult,
+				teamGameResult
+			};
+		});
+
+	// Get team player data.
+	const teamPlayers = await db
+		.select()
+		.from(teamPlayerTable)
+		.where(eq(teamPlayerTable.playerId, player.id));
+
+	// Get session user data.
 	const session = await auth();
 	const isAdmin = session?.user?.isAdministator ?? false;
 	const isPlayer = isAdmin || session?.user?.id === player.id;
 
-	const accounts = await getAccountsByPlayers(player.id);
-	const games = await getGameResultsByPlayers(player.id);
-	const backgroundImageUrl = getBackgroundImageUrl(player);
-	const latestSeason = isPlayer ? await getLatestSeason() : void 0;
-	const teams = latestSeason ? await getTeamsBySeasons(latestSeason.id) : [];
+	// Get latest season data.
+	const seasonRows = isPlayer
+		? await db
+				.select()
+				.from(seasonTable)
+				.leftJoin(teamTable, eq(seasonTable.id, teamTable.seasonId))
+				.orderBy(desc(seasonTable.startDate))
+		: [];
+	const latestSeason = seasonRows[0]?.season;
+	const latestSeasonRows = seasonRows.filter(
+		({ season: { id } }) => id === latestSeason?.id
+	);
+	const latestSeasonTeams = leftHierarchy(latestSeasonRows, "team");
 
 	return (
 		<div className={style["content"]}>
@@ -86,7 +167,8 @@ export default async function Page(props: PageProps<PlayersPageParams>) {
 					{isAdmin && (
 						<AdminPanel
 							player={player}
-							teams={teams}
+							teamPlayers={teamPlayers}
+							teams={latestSeasonTeams}
 							className={style["panel"]}
 						/>
 					)}
@@ -127,26 +209,33 @@ export default async function Page(props: PageProps<PlayersPageParams>) {
 /**
  * The player page's metadata.
  * @param props - The properties that are passed to the page.
- * @returns The metadata.
+ * @return The metadata.
  * @public
  */
-export const generateMetadata = async (props: PageProps<PlayersPageParams>) => {
+export const generateMetadata = async (
+	props: PageProps<PlayersPageParams>
+): Promise<Metadata> => {
 	const { slug } = await props.params;
-	const player = await getPlayerBySlug(slug);
-	return (
-		player
-			? {
-					description: `Gauntlet Championship Series player "${player.displayName ?? player.name}."`,
-					openGraph: {
-						images: getBackgroundImageUrl(player),
-						url: getPlayerUrl(player)
-					},
-					title: player.displayName ?? player.name
-				}
-			: {
-					description: "An unknown player in the Gauntlet Championship Series.",
-					openGraph: { url: getPlayerUrlBySlug(slug) },
-					title: "Unknown Player"
-				}
-	) satisfies Metadata;
+	const rows = await db
+		.select()
+		.from(playerTable)
+		.where(or(eq(playerTable.displayName, slug), eq(playerTable.name, slug)));
+	const player =
+		rows.find(({ displayName }) => displayName === slug) ??
+		rows.find(({ name }) => name === slug);
+
+	return player
+		? {
+				description: `Gauntlet Championship Series player "${player.displayName ?? player.name}."`,
+				openGraph: {
+					images: getBackgroundImageUrl(player),
+					url: getPlayerUrl(player)
+				},
+				title: player.displayName ?? player.name
+			}
+		: {
+				description: "An unknown player in the Gauntlet Championship Series.",
+				openGraph: { url: getPlayerUrl({ displayName: slug, name: "" }) },
+				title: "Unknown Player"
+			};
 };

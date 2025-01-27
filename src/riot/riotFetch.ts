@@ -5,14 +5,14 @@ import "util/env";
  * @param input - The request input.
  * @param init - The request initialization data.
  * @param key - The Riot API key to use, or `undefined` to automatically use `process.env.RIOT_API_KEY`.
- * @returns The response.
+ * @return The response.
  * @throws `Error` if the response has a bad status or if the Riot API key is missing.
  */
 export default async function riotFetch(
 	input: Request | RequestInfo | URL,
 	init?: RequestInit,
 	key?: string
-) {
+): Promise<Response> {
 	const realKey = key ?? process.env["RIOT_API_KEY"];
 	if (!realKey) {
 		throw new Error("Missing Riot API key.");

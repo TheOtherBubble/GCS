@@ -88,7 +88,7 @@ export interface YoutubeVideoProps
 /**
  * A YouTube video embed.
  * @param props - Properties to pass to the embed.
- * @returns The embed.
+ * @return The embed.
  * @public
  */
 export default function YoutubeVideo({
@@ -123,7 +123,7 @@ export default function YoutubeVideo({
 
 	// Remaining properties.
 	...props
-}: YoutubeVideoProps) {
+}: YoutubeVideoProps): JSX.Element {
 	const src = new URL(id, "https://www.youtube-nocookie.com/embed/");
 	if (typeof autoPlay === "boolean") {
 		src.searchParams.set("autoplay", autoPlay ? "1" : "0");
@@ -188,7 +188,6 @@ export default function YoutubeVideo({
 	if (widgetReferrer) {
 		src.searchParams.set("widget_referrer", widgetReferrer);
 	}
-	// Maybe doesn't exist?
 	if (typeof mute === "boolean") {
 		src.searchParams.set("mute", mute ? "1" : "0");
 	}

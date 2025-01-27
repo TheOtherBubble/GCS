@@ -1,15 +1,16 @@
 import Form, { type FormProps } from "components/Form";
-import type { Account } from "types/db/Account";
-import type { Player } from "types/db/Player";
+import { accountTable, type playerTable } from "db/schema";
+import type { JSX } from "react";
 import QueueType from "types/riot/QueueType";
 import Submit from "components/Submit";
+import db from "db/db";
+import { eq } from "drizzle-orm";
 import getAccountByPuuid from "riot/getAccountByPuuid";
 import getLeagueEntriesBySummonerId from "riot/getLeagueEntriesBySummonerId";
 import getPlayerUrl from "util/getPlayerUrl";
 import getSummonerByPuuid from "riot/getSummonerByPuuid";
 import hasRiotApiKey from "util/hasRiotApiKey";
 import { revalidatePath } from "next/cache";
-import updateAccounts from "db/updateAccounts";
 
 /**
  * Properties that can be passed to an update accounts form.
@@ -18,23 +19,23 @@ import updateAccounts from "db/updateAccounts";
 export interface UpdateAccountsFormProps
 	extends Omit<FormProps, "action" | "children"> {
 	/** The player to update the accounts of. */
-	player: Player;
+	player: typeof playerTable.$inferSelect;
 
 	/** The accounts to update. */
-	accounts: Account[];
+	accounts: (typeof accountTable.$inferSelect)[];
 }
 
 /**
  * A form for updating a player's accounts.
  * @param props - Properties to pass to the form.
- * @returns The form.
+ * @return The form.
  * @public
  */
 export default async function UpdateAccountsForm({
 	player,
 	accounts,
 	...props
-}: UpdateAccountsFormProps) {
+}: UpdateAccountsFormProps): Promise<JSX.Element> {
 	// Can't call methods on properties passed from the client to the server, so do it here instead.
 	const accountDatas = await Promise.all(
 		accounts.map(async (account) => {
@@ -67,8 +68,9 @@ export default async function UpdateAccountsForm({
 					const { account, platform, soloQueueDto, summonerDto } = accountData;
 
 					// eslint-disable-next-line no-await-in-loop
-					await updateAccounts(
-						{
+					await db
+						.update(accountTable)
+						.set({
 							cacheDate: new Date().toISOString().substring(0, 10),
 							// eslint-disable-next-line no-await-in-loop
 							gameNameCache: (await getAccountByPuuid(account.puuid)).gameName,
@@ -79,9 +81,8 @@ export default async function UpdateAccountsForm({
 							region: platform,
 							tagLineCache: account.tagLineCache,
 							tierCache: soloQueueDto?.tier
-						},
-						account.puuid
-					);
+						})
+						.where(eq(accountTable.puuid, account.puuid));
 				}
 				revalidatePath(getPlayerUrl(player));
 				return void 0;

@@ -1,10 +1,10 @@
 "use client";
 
+import { type JSX, useActionState } from "react";
 import NextForm, { type FormProps as NextFormProps } from "next/form";
 import isDev from "util/isDev";
 import multiclass from "util/multiclass";
 import style from "./styles/form.module.scss";
-import { useActionState } from "react";
 
 /**
  * Properties that can be passed to a form.
@@ -25,7 +25,7 @@ export interface FormProps extends Omit<NextFormProps, "action"> {
 /**
  * Create a form. Automatically displays the message of any error that is thrown during the form action.
  * @param props - The properties to pass to the form.
- * @returns The form.
+ * @return The form.
  * @public
  */
 export default function Form({
@@ -33,7 +33,7 @@ export default function Form({
 	children,
 	className,
 	...props
-}: FormProps) {
+}: FormProps): JSX.Element {
 	// If the action is a server function, wrap it to catch and display error messages.
 	const [state, dispatch] = useActionState(
 		async (_: string | undefined, payload: FormData) => {

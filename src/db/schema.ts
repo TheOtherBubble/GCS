@@ -443,7 +443,8 @@ export const gameTable = pgTable("game", {
 });
 
 /**
- * League of Legends platforms.
+ * League of Legends platform routing values.
+ * @see {@link https://developer.riotgames.com/docs/lol#routing-values_platform-routing-values | Platform Routing Values}
  * @public
  */
 export const platformEnum = pgEnum("platform", [
@@ -454,13 +455,17 @@ export const platformEnum = pgEnum("platform", [
 	"KR",
 	"LA1",
 	"LA2",
+	"ME1", // Not documented anywhere, but listed among various APIs' regions.
 	"NA1",
 	"OC1",
-	"TR1",
+	"PH2", // Not documented anywhere, but listed among various APIs' regions. Merged into `SG2`.
 	"RU",
-	"SG2",
+	"SG2", // Merged from `TH2` and `PH2`.
+	"TH2", // Not documented anywhere, but listed among various APIs' regions. Merged into `SG2`.
+	"TR1",
 	"TW2",
-	"VN2"
+	"VN2",
+	"PBE" // Not documented anywehre.
 ]);
 
 /**

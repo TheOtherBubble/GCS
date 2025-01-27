@@ -1,15 +1,17 @@
+import type { JSX } from "react";
 import Link from "components/Link";
 import type { Metadata } from "next";
-import getAllTeams from "db/getAllTeams";
+import db from "db/db";
 import getTeamUrl from "util/getTeamUrl";
+import { teamTable } from "db/schema";
 
 /**
  * The teams list page.
- * @returns The teams list page.
+ * @return The teams list page.
  * @public
  */
-export default async function Page() {
-	const teams = await getAllTeams();
+export default async function Page(): Promise<JSX.Element> {
+	const teams = await db.select().from(teamTable);
 	const collator = new Intl.Collator();
 
 	return (
@@ -20,9 +22,7 @@ export default async function Page() {
 					.sort(({ name: a }, { name: b }) => collator.compare(a, b))
 					.map((team) => (
 						<li key={team.id}>
-							<Link href={getTeamUrl(encodeURIComponent(team.vanityUrlSlug))}>
-								{team.name}
-							</Link>
+							<Link href={getTeamUrl(team)}>{team.name}</Link>
 						</li>
 					))}
 			</ol>

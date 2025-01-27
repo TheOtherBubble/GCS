@@ -6,10 +6,10 @@ import type {
 import NextAuth, { type NextAuthResult, type Session } from "next-auth";
 import { oauthTable, playerTable, sessionTable } from "./schema";
 import type { AppRouteHandlerFn } from "next/dist/server/route-modules/app-route/module";
+import type { BuiltInProviderType } from "next-auth/providers";
 import Discord from "next-auth/providers/discord";
 import { DrizzleAdapter } from "@auth/drizzle-adapter";
 import type { NextRequest } from "next/server";
-import type { Player } from "types/db/Player";
 import db from "./db";
 
 // Can't import `env.ts` here because `process.cwd` is not a function, but environment variables are available anyway. Note that these environment variables must be available during the build process.
@@ -37,7 +37,7 @@ provider.profile = (profile) => ({
  */
 export interface PlayerSession extends Session {
 	/** The logged-in user. */
-	user?: Player;
+	user?: typeof playerTable.$inferSelect;
 }
 
 /**
@@ -77,6 +77,28 @@ export type NextAuthResultAuth = ((
 	) => AppRouteHandlerFn);
 
 /**
+ * Equivalent to `NextAuthResult["signIn"]` from Auth.js. Necessary because Auth.js does not correctly export its typings.
+ * @public
+ */
+export type NextAuthResultSignIn = <R extends boolean = true>(
+	/** Provider to sign in to */
+	provider?: BuiltInProviderType | (string & {}), // See: https://github.com/microsoft/TypeScript/issues/29729
+	options?:
+		| FormData
+		| ({
+				/** The relative path to redirect to after signing in. By default, the user is redirected to the current page. */
+				redirectTo?: string;
+				/** If set to `false`, the `signIn` method will return the URL to redirect to instead of redirecting automatically. */
+				redirect?: R;
+		  } & Record<string, unknown>),
+	authorizationParams?:
+		| string[][]
+		| Record<string, string>
+		| string
+		| URLSearchParams
+) => Promise<R extends false ? unknown : never>;
+
+/**
  * Equivalent to `NextAuthResult` from Auth.js, but specifies that the session user matches the type in the database.
  * @public
  */
@@ -84,7 +106,7 @@ export interface NextAuthResultFixed {
 	/**
 	 * A universal method for interacting with Auth.js. Can be used as middleware or to get the current session.
 	 * @param args - The authentication context.
-	 * @returns The current session, or a route handler function if used as middleware.
+	 * @return The current session, or a route handler function if used as middleware.
 	 */
 	auth: NextAuthResultAuth;
 
@@ -96,7 +118,7 @@ export interface NextAuthResultFixed {
 	 * @param provider - The provider to sign in with, or `undefined` to redirect the user to the sign-in page.
 	 * @param options - The sign in options.
 	 */
-	signIn: NextAuthResult["signIn"];
+	signIn: NextAuthResultSignIn;
 
 	/**
 	 * Sign out the current user.

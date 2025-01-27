@@ -1,9 +1,11 @@
 import Form, { type FormProps } from "components/Form";
+import type { JSX } from "react";
 import Submit from "components/Submit";
-import createSeasons from "db/createSeasons";
+import db from "db/db";
 import getFormField from "util/getFormField";
 import hasRiotApiKey from "util/hasRiotApiKey";
 import makeTournament from "riot/makeTournament";
+import { seasonTable } from "db/schema";
 
 /**
  * Properties that can be passed to a create season form.
@@ -14,10 +16,12 @@ export type CreateSeasonFormProps = Omit<FormProps, "action" | "children">;
 /**
  * A form for creating a season.
  * @param props - Properties to pass to the form.
- * @returns The form.
+ * @return The form.
  * @public
  */
-export default function CreateSeasonForm(props: CreateSeasonFormProps) {
+export default function CreateSeasonForm(
+	props: CreateSeasonFormProps
+): JSX.Element {
 	return (
 		<Form
 			action={async (form) => {
@@ -27,7 +31,7 @@ export default function CreateSeasonForm(props: CreateSeasonFormProps) {
 				}
 
 				const name = getFormField(form, "name", true);
-				await createSeasons({
+				await db.insert(seasonTable).values({
 					id: await makeTournament(name),
 					name,
 					startDate: getFormField(form, "startDate"),

@@ -1,15 +1,17 @@
+import type { JSX } from "react";
 import Link from "components/Link";
 import type { Metadata } from "next";
-import getAllSeasons from "db/getAllSeasons";
+import db from "db/db";
 import getSeasonUrl from "util/getSeasonUrl";
+import { seasonTable } from "db/schema";
 
 /**
  * The seasons list page.
- * @returns The seasons list page.
+ * @return The seasons list page.
  * @public
  */
-export default async function Page() {
-	const seasons = await getAllSeasons();
+export default async function Page(): Promise<JSX.Element> {
+	const seasons = await db.select().from(seasonTable);
 
 	return (
 		<>
@@ -22,11 +24,7 @@ export default async function Page() {
 					)
 					.map((season) => (
 						<li key={season.id}>
-							<Link
-								href={getSeasonUrl(encodeURIComponent(season.vanityUrlSlug))}
-							>
-								{season.name}
-							</Link>
+							<Link href={getSeasonUrl(season)}>{season.name}</Link>
 						</li>
 					))}
 			</ol>

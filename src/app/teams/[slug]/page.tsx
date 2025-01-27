@@ -1,20 +1,28 @@
+import {
+	draftPlayerTable,
+	gameResultTable,
+	gameTable,
+	matchTable,
+	playerTable,
+	seasonTable,
+	teamGameResultTable,
+	teamPlayerTable,
+	teamTable
+} from "db/schema";
+import { eq, or } from "drizzle-orm";
 import AdminPanel from "./AdminPanel";
 import Image from "components/Image";
+import type { JSX } from "react";
 import Link from "components/Link";
 import MatchCard from "components/MatchCard";
 import type { Metadata } from "next";
 import type PageProps from "types/PageProps";
 import PlayerCard from "components/PlayerCard";
 import { auth } from "db/auth";
-import getDraftPlayersBySeasons from "db/getDraftPlayersBySeasons";
-import getMatchesByTeams from "db/getMatchesByTeams";
+import db from "db/db";
 import getPlayerUrl from "util/getPlayerUrl";
-import getPlayersByTeams from "db/getPlayersByTeams";
 import getSeasonUrl from "util/getSeasonUrl";
-import getSeasons from "db/getSeasons";
-import getTeamBySlug from "db/getTeamBySlug";
 import getTeamUrl from "util/getTeamUrl";
-import getTeamsBySeasons from "db/getTeamsBySeasons";
 import leftHierarchy from "util/leftHierarchy";
 import { redirect } from "next/navigation";
 import style from "./page.module.scss";
@@ -31,29 +39,57 @@ export interface TeamsPageParams {
 /**
  * A page that displays information about a team.
  * @param props - The properties that are passed to the page.
- * @returns The team page.
+ * @return The team page.
  * @public
  */
-export default async function Page(props: PageProps<TeamsPageParams>) {
+export default async function Page(
+	props: PageProps<TeamsPageParams>
+): Promise<JSX.Element> {
 	const { slug } = await props.params;
-	const team = await getTeamBySlug(slug);
-	if (!team) {
+	const seasonRows = await db
+		.select()
+		.from(seasonTable)
+		.innerJoin(teamTable, eq(seasonTable.id, teamTable.seasonId))
+		.leftJoin(teamPlayerTable, eq(teamTable.id, teamPlayerTable.teamId))
+		.leftJoin(playerTable, eq(teamPlayerTable.playerId, playerTable.id))
+		.where(eq(teamTable.vanityUrlSlug, decodeURIComponent(slug)));
+	const [first] = seasonRows;
+	if (!first) {
 		redirect("/teams");
 	}
 
-	const session = await auth();
-	const [season] = await getSeasons(team.seasonId);
-	const teams = season ? await getTeamsBySeasons(season.id) : [];
-	const players = await getPlayersByTeams(team.id);
-	const captain = players.find((player) => player.teamPlayer.isCaptain)?.player;
+	// Organize season, team, team player, and player data.
+	const { season, team } = first;
+	const teamPlayers = leftHierarchy(seasonRows, "teamPlayer");
+	const players = leftHierarchy(seasonRows, "player");
+	const captainId = teamPlayers.find(({ isCaptain }) => isCaptain)?.playerId;
+	const captain = players.find(({ id }) => id === captainId);
 
-	// Organize match data by match.
-	const matches = leftHierarchy(await getMatchesByTeams(team.id), [
+	// Organize (other) team, match, game, game result, and team game result data.
+	const matchRows = await db
+		.select()
+		.from(matchTable)
+		.leftJoin(gameTable, eq(matchTable.id, gameTable.matchId))
+		.leftJoin(
+			gameResultTable,
+			eq(gameTable.tournamentCode, gameResultTable.tournamentCode)
+		)
+		.leftJoin(
+			teamGameResultTable,
+			eq(gameResultTable.id, teamGameResultTable.gameResultId)
+		)
+		.leftJoin(teamTable, eq(teamGameResultTable.teamId, teamTable.id))
+		.where(
+			or(eq(matchTable.blueTeamId, team.id), eq(matchTable.redTeamId, team.id))
+		);
+	const teams = leftHierarchy(matchRows, "team");
+	const matches = leftHierarchy(
+		matchRows,
 		"match",
 		"game",
 		"gameResult",
 		"teamGameResult"
-	]);
+	);
 
 	return (
 		<div className={style["content"]}>
@@ -68,16 +104,10 @@ export default async function Page(props: PageProps<TeamsPageParams>) {
 				/>
 				<div>
 					<h1>{`${team.code} | ${team.name}`}</h1>
-					{season && (
-						<p>
-							<Link
-								href={getSeasonUrl(encodeURIComponent(season.vanityUrlSlug))}
-							>
-								{season.name}
-							</Link>
-							{`, Pool ${team.pool.toString()}`}
-						</p>
-					)}
+					<p>
+						<Link href={getSeasonUrl(season)}>{season.name}</Link>
+						{`, Pool ${team.pool.toString()}`}
+					</p>
 					{captain && (
 						<p>
 							{"Captain: "}
@@ -95,20 +125,27 @@ export default async function Page(props: PageProps<TeamsPageParams>) {
 							<h2>{"Players"}</h2>
 						</header>
 						<ul>
-							{players.map(({ player }) => (
+							{players.map((player) => (
 								<li key={player.id}>
 									<PlayerCard player={player} />
 								</li>
 							))}
 						</ul>
 					</div>
-					{session?.user?.isAdministator && (
+					{(await auth())?.user?.isAdministator && (
 						<AdminPanel
 							team={team}
-							teamPlayers={players.map(({ teamPlayer }) => teamPlayer)}
-							players={players.map(({ player }) => player)}
+							teamPlayers={teamPlayers}
+							players={players}
 							potentialPlayers={(
-								await getDraftPlayersBySeasons(team.seasonId)
+								await db
+									.select()
+									.from(draftPlayerTable)
+									.innerJoin(
+										playerTable,
+										eq(draftPlayerTable.playerId, playerTable.id)
+									)
+									.where(eq(draftPlayerTable.seasonId, season.id))
 							).map(({ player }) => player)}
 							otherTeams={teams}
 							className={style["admin"]}
@@ -159,26 +196,31 @@ export default async function Page(props: PageProps<TeamsPageParams>) {
 /**
  * The team page's metadata.
  * @param props - The properties that are passed to the page.
- * @returns The metadata.
+ * @return The metadata.
  * @public
  */
-export const generateMetadata = async (props: PageProps<TeamsPageParams>) => {
+export const generateMetadata = async (
+	props: PageProps<TeamsPageParams>
+): Promise<Metadata> => {
 	const { slug } = await props.params;
-	const team = await getTeamBySlug(slug);
-	return (
-		team
-			? {
-					description: `Gauntlet Championship Series team "${team.name}."`,
-					openGraph: {
-						images: team.logoUrl,
-						url: getTeamUrl(encodeURIComponent(team.vanityUrlSlug))
-					},
-					title: team.name
-				}
-			: {
-					description: "An unknown team in the Gauntlet Championship Series.",
-					openGraph: { url: getTeamUrl(slug) },
-					title: "Unknown Team"
-				}
-	) satisfies Metadata;
+	const vanityUrlSlug = decodeURIComponent(slug);
+	const [team] = await db
+		.select()
+		.from(teamTable)
+		.where(eq(teamTable.vanityUrlSlug, vanityUrlSlug))
+		.limit(1);
+	return team
+		? {
+				description: `Gauntlet Championship Series team "${team.name}."`,
+				openGraph: {
+					images: team.logoUrl,
+					url: getTeamUrl(team)
+				},
+				title: team.name
+			}
+		: {
+				description: "An unknown team in the Gauntlet Championship Series.",
+				openGraph: { url: getTeamUrl({ vanityUrlSlug }) },
+				title: "Unknown Team"
+			};
 };

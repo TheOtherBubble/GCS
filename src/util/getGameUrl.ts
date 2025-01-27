@@ -1,9 +1,13 @@
+import type { gameTable } from "db/schema";
+
 /**
- * Get the URL of the given game.
- * @param slug - The game's stringified ID.
- * @returns The URL.
+ * Get the URL for a game's page.
+ * @param game - The game.
+ * @return The URL for the game's page.
  * @public
  */
-export default function getGameUrl(slug: `${number}`) {
-	return `/games/${slug}`;
+export default function getGameUrl(
+	game: Pick<typeof gameTable.$inferSelect, "id">
+): `/games/${typeof game.id}` {
+	return `/games/${game.id.toString() as `${number}`}`;
 }

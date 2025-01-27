@@ -1,17 +1,22 @@
 import Form, { type FormProps } from "components/Form";
-import type { Account } from "types/db/Account";
-import type { Game } from "types/db/Game";
+import {
+	type accountTable,
+	gameResultTable,
+	gameTable,
+	playerGameResultTable,
+	teamGameResultBanTable,
+	teamGameResultTable,
+	type teamTable
+} from "db/schema";
+import type { JSX } from "react";
 import Submit from "components/Submit";
-import type { Team } from "types/db/Team";
 import convertResult from "util/convertResult";
-import createGameResults from "db/createGameResults";
-import createPlayerGameResults from "db/createPlayerGameResults";
-import createTeamGameResultBans from "db/createTeamGameResultBans";
-import createTeamGameResults from "db/createTeamGameResults";
+import db from "db/db";
+import { eq } from "drizzle-orm";
 import getFormField from "util/getFormField";
-import getMatchDtoByGameId from "util/getMatchDtoByGameId";
+import getMatchDto from "riot/getMatchDto";
 import hasRiotApiKey from "util/hasRiotApiKey";
-import updateGames from "db/updateGames";
+import makeMatchId from "util/makeMatchId";
 
 /**
  * Properties that can be passed to an import results form.
@@ -20,25 +25,25 @@ import updateGames from "db/updateGames";
 export interface ImportResultsFormProps
 	extends Omit<FormProps, "action" | "children"> {
 	/** The game to import results for. */
-	game: Game;
+	game: typeof gameTable.$inferSelect;
 
 	/** The blue team in the game's match. */
-	blueTeam: Team;
+	blueTeam: typeof teamTable.$inferSelect;
 
 	/** The accounts of the players on the blue team in the game's match. */
-	blueAccounts: Account[];
+	blueAccounts: (typeof accountTable.$inferSelect)[];
 
 	/** The red team in the game's match. */
-	redTeam: Team;
+	redTeam: typeof teamTable.$inferSelect;
 
 	/** The accounts of the players on the red team in the game's match. */
-	redAccounts: Account[];
+	redAccounts: (typeof accountTable.$inferSelect)[];
 }
 
 /**
  * A form for importing game results to the database.
  * @param props - Properties to pass to the form.
- * @returns The form.
+ * @return The form.
  * @public
  */
 export default function ImportResultsForm({
@@ -48,7 +53,7 @@ export default function ImportResultsForm({
 	redTeam,
 	redAccounts,
 	...props
-}: ImportResultsFormProps) {
+}: ImportResultsFormProps): JSX.Element {
 	const puuids = new Map([
 		[blueTeam.id, blueAccounts.map(({ puuid }) => puuid)],
 		[redTeam.id, redAccounts.map(({ puuid }) => puuid)]
@@ -63,19 +68,19 @@ export default function ImportResultsForm({
 				}
 
 				const [gameResult, teams, bans, players] = convertResult(
-					await getMatchDtoByGameId(
-						parseInt(getFormField(form, "gameId", true), 10)
+					await getMatchDto(
+						makeMatchId(getFormField(form, "gameId", true) as `${number}`)
 					),
 					puuids
 				);
-				await updateGames(
-					{ tournamentCode: gameResult.tournamentCode ?? void 0 },
-					game.id
-				);
-				await createGameResults(gameResult);
-				await createTeamGameResults(...teams);
-				await createTeamGameResultBans(...bans);
-				await createPlayerGameResults(...players);
+				await db
+					.update(gameTable)
+					.set({ tournamentCode: gameResult.tournamentCode ?? void 0 })
+					.where(eq(gameTable.id, game.id));
+				await db.insert(gameResultTable).values(gameResult);
+				await db.insert(teamGameResultTable).values(teams);
+				await db.insert(teamGameResultBanTable).values(bans);
+				await db.insert(playerGameResultTable).values(players);
 				return void 0;
 			}}
 			{...props}

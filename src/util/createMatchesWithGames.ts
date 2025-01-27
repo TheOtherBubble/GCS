@@ -1,8 +1,7 @@
+import { gameTable, matchTable } from "db/schema";
 import type Cluster from "types/riot/Cluster";
-import type { InsertMatch } from "types/db/Match";
 import type TournamentCodeParameters from "types/riot/TournamentCodeParameters";
-import createGames from "db/createGames";
-import createMatches from "db/createMatches";
+import db from "db/db";
 import makeTournamentCodes from "riot/makeTournamentCodes";
 
 /**
@@ -12,12 +11,12 @@ import makeTournamentCodes from "riot/makeTournamentCodes";
  * @param params - The parameters to use to generate tournament codes.
  * @param cluster - The cluster to execute the request to make tournament codes against.
  * @param key - The Riot API key, or `undefined` to pull one from the environment variables.
- * @returns When finished.
+ * @return When finished.
  * @throws `Error` if the response has a bad status, if the Riot API key is missing, or if there is a database error.
  * @public
  */
 export default async function createMatchesWithGames(
-	matches: InsertMatch[],
+	matches: (typeof matchTable.$inferInsert)[],
 	codes?: string[],
 	params?: TournamentCodeParameters,
 	cluster?: Cluster,
@@ -38,7 +37,10 @@ export default async function createMatchesWithGames(
 	}
 
 	// Create the matches.
-	const createdMatches = await createMatches(...matches);
+	const createdMatches = await db
+		.insert(matchTable)
+		.values(matches)
+		.returning();
 
 	// Build the games.
 	const games = [];
@@ -52,5 +54,5 @@ export default async function createMatchesWithGames(
 	}
 
 	// Create the games.
-	await createGames(...games);
+	await db.insert(gameTable).values(games);
 }

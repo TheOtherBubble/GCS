@@ -1,7 +1,8 @@
 import Form, { type FormProps } from "components/Form";
-import type { Match } from "types/db/Match";
+import { gameTable, type matchTable } from "db/schema";
+import type { JSX } from "react";
 import Submit from "components/Submit";
-import createGames from "db/createGames";
+import db from "db/db";
 import getMatchUrl from "util/getMatchUrl";
 import hasRiotApiKey from "util/hasRiotApiKey";
 import makeTournamentCodes from "riot/makeTournamentCodes";
@@ -14,19 +15,19 @@ import { revalidatePath } from "next/cache";
 export interface CreateGameFormProps
 	extends Omit<FormProps, "action" | "children"> {
 	/** The current match. */
-	match: Match;
+	match: typeof matchTable.$inferSelect;
 }
 
 /**
  * A form for creating a game.
  * @param props - Properties to pass to the form.
- * @returns The form.
+ * @return The form.
  * @public
  */
 export default function CreateGameForm({
 	match,
 	...props
-}: CreateGameFormProps) {
+}: CreateGameFormProps): JSX.Element {
 	return (
 		<Form
 			action={async () => {
@@ -44,8 +45,10 @@ export default function CreateGameForm({
 					return "Failed to create a tournament code.";
 				}
 
-				await createGames({ matchId: match.id, tournamentCode });
-				revalidatePath(getMatchUrl(match.id.toString() as `${number}`));
+				await db
+					.insert(gameTable)
+					.values({ matchId: match.id, tournamentCode });
+				revalidatePath(getMatchUrl(match));
 				return void 0;
 			}}
 			{...props}

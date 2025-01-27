@@ -1,6 +1,6 @@
 import type LeagueEntryDto from "types/riot/LeagueEntryDto";
-import type { Platform } from "types/db/Platform";
 import getRiotApiBaseUrl from "./getRiotApiBaseUrl";
+import type { platformEnum } from "db/schema";
 import riotFetch from "./riotFetch";
 
 /**
@@ -8,15 +8,15 @@ import riotFetch from "./riotFetch";
  * @param id - The summoner ID.
  * @param platform - The platform to use to make the request.
  * @param key - The Riot API key to use.
- * @returns The league entry.
+ * @return The league entry.
  * @throws `Error` if the response has a bad status or if the Riot API key is missing.
  * @public
  */
 export default async function getLeagueEntriesBySummonerId(
 	id: string,
-	platform: Platform = "NA1",
+	platform: (typeof platformEnum.enumValues)[number] = "NA1",
 	key: string | undefined = void 0
-) {
+): Promise<LeagueEntryDto[]> {
 	return (await (
 		await riotFetch(
 			new URL(

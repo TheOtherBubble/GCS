@@ -23,7 +23,7 @@ export interface LocalDateProps
 /**
  * Display a date in local time.
  * @param props - The properties to pass to the date display.
- * @returns The date display.
+ * @return The date display.
  * @public
  */
 export default function LocalDate({
@@ -31,7 +31,7 @@ export default function LocalDate({
 	locales,
 	options,
 	...props
-}: LocalDateProps) {
+}: LocalDateProps): JSX.Element {
 	const [hydrated, setHydrated] = useState(false);
 	useEffect(() => {
 		setHydrated(true);

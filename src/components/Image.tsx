@@ -1,4 +1,5 @@
 import NextImage, { type ImageProps as NextImageProps } from "next/image";
+import type { JSX } from "react";
 import defaultBlur from "./assets/default-blur.png";
 
 /**
@@ -16,10 +17,13 @@ export type ImageProps = Omit<NextImageProps, "children"> & {
 /**
  * Create an image. Automatically applies default styling and configuration.
  * @param props - The properties to pass to the image.
- * @returns The image.
+ * @return The image.
  * @public
  */
-export default function Image({ untrusted, ...props }: ImageProps) {
+export default function Image({
+	untrusted,
+	...props
+}: ImageProps): JSX.Element {
 	// Untrusted images must use a string `src` value.
 	if (untrusted) {
 		if (typeof props.src !== "string") {

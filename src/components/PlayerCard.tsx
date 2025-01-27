@@ -1,9 +1,12 @@
-import type { Account } from "types/db/Account";
+import type {
+	accountTable,
+	playerGameResultTable,
+	playerTable,
+	teamPlayerTable
+} from "db/schema";
+import type { JSX } from "react";
 import type { LinkProps } from "./Link";
-import type { Player } from "types/db/Player";
-import type { PlayerGameResult } from "types/db/PlayerGameResult";
 import RankedEmblem from "./RankedEmblem";
-import type { TeamPlayer } from "types/db/TeamPlayer";
 import getAverageKda from "util/getAverageKda";
 import getBackgroundImageUrl from "util/getBackgroundImageUrl";
 import getHighestRankedAccount from "util/getHighestRankedAccount";
@@ -17,22 +20,22 @@ import styles from "./styles/player-card.module.scss";
  */
 export interface PlayerCardProps extends Omit<LinkProps, "children" | "href"> {
 	/** The player that is represented by the card. */
-	player: Player;
+	player: typeof playerTable.$inferSelect;
 
 	/** The player's accounts. */
-	accounts?: Account[] | undefined;
+	accounts?: (typeof accountTable.$inferSelect)[] | undefined;
 
 	/** The player's game results. */
-	games?: PlayerGameResult[] | undefined;
+	games?: (typeof playerGameResultTable.$inferSelect)[] | undefined;
 
 	/** The player's teams. */
-	teams?: TeamPlayer[] | undefined;
+	teams?: (typeof teamPlayerTable.$inferSelect)[] | undefined;
 }
 
 /**
  * A card that displays information about a player.
  * @param props - The properties to pass to the player card.
- * @returns The player card.
+ * @return The player card.
  * @public
  */
 export default function PlayerCard({
@@ -43,7 +46,7 @@ export default function PlayerCard({
 	className,
 	style,
 	...props
-}: PlayerCardProps) {
+}: PlayerCardProps): JSX.Element {
 	const highestRankedAccount = accounts
 		? getHighestRankedAccount(...accounts)
 		: void 0;

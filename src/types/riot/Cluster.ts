@@ -12,8 +12,11 @@ enum Cluster {
 	/** Europe. */
 	EUROPE = "europe",
 
-	/** Southeast Asia. */
-	SEA = "sea"
+	/** Southeast Asia. Not usable with the account API. */
+	SEA = "sea",
+
+	/** Esports. Not documented anywhere, but listed among the account API regions. */
+	ESPORTS = "esports"
 }
 
 export default Cluster;

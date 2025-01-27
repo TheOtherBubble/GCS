@@ -1,10 +1,9 @@
 import Form, { type FormProps } from "components/Form";
-import type { Player } from "types/db/Player";
+import { and, eq, or } from "drizzle-orm";
+import { type playerTable, teamPlayerTable, type teamTable } from "db/schema";
+import type { JSX } from "react";
 import Submit from "components/Submit";
-import type { Team } from "types/db/Team";
-import type { TeamPlayer } from "types/db/TeamPlayer";
-import createTeamPlayers from "db/createTeamPlayers";
-import deleteTeamPlayers from "db/deleteTeamPlayers";
+import db from "db/db";
 import getFormField from "util/getFormField";
 import getTeamUrl from "util/getTeamUrl";
 import { revalidatePath } from "next/cache";
@@ -16,22 +15,22 @@ import { revalidatePath } from "next/cache";
 export interface AddPlayerFormProps
 	extends Omit<FormProps, "action" | "children"> {
 	/** The team to add the player to. */
-	team: Team;
+	team: typeof teamTable.$inferSelect;
 
 	/** The players already on the team. */
-	teamPlayers: TeamPlayer[];
+	teamPlayers: (typeof teamPlayerTable.$inferSelect)[];
 
 	/** The players that may be added to the team. */
-	players: Player[];
+	players: (typeof playerTable.$inferSelect)[];
 
 	/** The other teams in the team's season. */
-	otherTeams: Team[];
+	otherTeams: (typeof teamTable.$inferSelect)[];
 }
 
 /**
  * A form for adding a player to a team.
  * @param props - Properties to pass to the form.
- * @returns The form.
+ * @return The form.
  * @public
  */
 export default function AddPlayerForm({
@@ -40,35 +39,43 @@ export default function AddPlayerForm({
 	players,
 	otherTeams,
 	...props
-}: AddPlayerFormProps) {
+}: AddPlayerFormProps): JSX.Element {
 	const collator = new Intl.Collator();
 	const otherTeamIds = otherTeams.map(({ id }) => id);
+	const teamPlayerPlayerIds = teamPlayers.map(({ playerId }) => playerId);
 
 	return (
 		<Form
 			action={async (form) => {
 				"use server";
 				const playerId = getFormField(form, "playerId", true);
-				for (const teamPlayer of teamPlayers) {
-					// If the player is already part of the selected team, do nothing.
-					if (teamPlayer.playerId === playerId) {
-						return;
-					}
+
+				// If the player is already part of the selected team, do nothing.
+				if (teamPlayerPlayerIds.some((id) => id === playerId)) {
+					return;
 				}
 
 				// Remove the player from all other teams in the team's season.
-				await deleteTeamPlayers(playerId, ...otherTeamIds);
+				await db
+					.delete(teamPlayerTable)
+					.where(
+						and(
+							eq(teamPlayerTable.playerId, playerId),
+							or(...otherTeamIds.map((id) => eq(teamPlayerTable.teamId, id)))
+						)
+					);
 
-				// If the player is the first on the team, make them the captain. Must be `null` rather than `false` for non-captains in order to meet a database constraint.
-				const isCaptain = teamPlayers.length === 0 || null;
+				// If the team has no captain, make this player the captain. Must be `null` rather than `false` for non-captains in order to meet a database constraint.
+				const isCaptain =
+					!teamPlayers.some((teamPlayer) => teamPlayer.isCaptain) || null;
 
 				// Add the player to the team.
-				await createTeamPlayers({
+				await db.insert(teamPlayerTable).values({
 					isCaptain,
 					playerId,
 					teamId: team.id
 				});
-				revalidatePath(getTeamUrl(encodeURIComponent(team.vanityUrlSlug)));
+				revalidatePath(getTeamUrl(team));
 			}}
 			{...props}
 		>

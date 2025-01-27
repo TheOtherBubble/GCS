@@ -5,14 +5,14 @@ import shallowEquals from "./shallowEquals";
  * Organize the result of a left-joined query into a hierarchy.
  * @param rows - The result of the query.
  * @param keys - The order of the levels of the hierarchy.
- * @returns The organized result.
+ * @return The organized result.
  * @public
  */
 export default function leftHierarchy<
 	T extends object,
 	U extends keyof T,
 	V extends (keyof T)[]
->(rows: readonly T[], keys: readonly [U, ...V]): Tree<T, [U, ...V]>[] {
+>(rows: readonly T[], ...keys: readonly [U, ...V]): Tree<T, [U, ...V]>[] {
 	const out: Tree<T, [U, ...V]>[] = [];
 
 	// Recursive terminator.
@@ -55,7 +55,8 @@ export default function leftHierarchy<
 		out.push({
 			children: leftHierarchy(
 				rows.filter((other) => shallowEquals(value, other[key])),
-				[childKey, ...remainingKeys]
+				childKey,
+				...remainingKeys
 			),
 			value
 		} as Tree<T, [U, ...V]>);

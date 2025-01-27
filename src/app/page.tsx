@@ -1,4 +1,5 @@
 import { BsDiscord, BsTwitch, BsYoutube } from "react-icons/bs";
+import type { JSX } from "react";
 import Link from "components/Link";
 import type { Metadata } from "next";
 import YoutubeVideo from "components/YoutubeVideo";
@@ -6,10 +7,10 @@ import style from "./page.module.scss";
 
 /**
  * The landing page.
- * @returns The landing page.
+ * @return The landing page.
  * @public
  */
-export default function Page() {
+export default function Page(): JSX.Element {
 	return (
 		<article className={style["content"]}>
 			<header>

@@ -1,13 +1,11 @@
 import Form, { type FormProps } from "components/Form";
-import type { MatchFormat } from "types/db/MatchFormat";
-import type { Season } from "types/db/Season";
+import { matchFormatEnum, seasonTable, teamTable } from "db/schema";
+import type { JSX } from "react";
 import Submit from "components/Submit";
-import type { Team } from "types/db/Team";
 import createMatchesWithGames from "util/createMatchesWithGames";
 import getFormField from "util/getFormField";
 import getSeasonUrl from "util/getSeasonUrl";
 import hasRiotApiKey from "util/hasRiotApiKey";
-import { matchFormatEnum } from "db/schema";
 import { revalidatePath } from "next/cache";
 
 /**
@@ -17,23 +15,23 @@ import { revalidatePath } from "next/cache";
 export interface CreateMatchFormProps
 	extends Omit<FormProps, "action" | "children"> {
 	/** The current season. */
-	season: Season;
+	season: typeof seasonTable.$inferSelect;
 
 	/** The teams in the current season. */
-	teams: Team[];
+	teams: (typeof teamTable.$inferSelect)[];
 }
 
 /**
  * A form for creating a match.
  * @param props - Properties to pass to the form.
- * @returns The form.
+ * @return The form.
  * @public
  */
 export default function CreateMatchForm({
 	season,
 	teams,
 	...props
-}: CreateMatchFormProps) {
+}: CreateMatchFormProps): JSX.Element {
 	return (
 		<Form
 			action={async (form) => {
@@ -51,14 +49,18 @@ export default function CreateMatchForm({
 				await createMatchesWithGames([
 					{
 						blueTeamId,
-						format: getFormField(form, "format", true) as MatchFormat,
+						format: getFormField(
+							form,
+							"format",
+							true
+						) as (typeof matchFormatEnum.enumValues)[number],
 						redTeamId,
 						round: parseInt(getFormField(form, "round", true), 10),
 						seasonId: season.id,
 						timeSlot: parseInt(getFormField(form, "timeSlot", true), 10)
 					}
 				]);
-				revalidatePath(getSeasonUrl(encodeURIComponent(season.vanityUrlSlug)));
+				revalidatePath(getSeasonUrl(season));
 				return void 0;
 			}}
 			{...props}

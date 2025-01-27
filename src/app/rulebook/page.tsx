@@ -1,18 +1,24 @@
 import Document from "types/Document";
+import type { JSX } from "react";
 import Markdown from "react-markdown";
 import type { Metadata } from "next";
 import UpdateRulebookForm from "./UpdateRulebookForm";
 import { auth } from "db/auth";
-import getDocuments from "db/getDocuments";
+import db from "db/db";
+import { documentTable } from "db/schema";
+import { eq } from "drizzle-orm";
 import style from "./page.module.scss";
 
 /**
  * A page that displays the rulebook.
- * @returns The rulebook page.
+ * @return The rulebook page.
  * @public
  */
-export default async function Page() {
-	const [rulebook] = await getDocuments(Document.RULEBOOK);
+export default async function Page(): Promise<JSX.Element> {
+	const [rulebook] = await db
+		.select()
+		.from(documentTable)
+		.where(eq(documentTable.id, Document.RULEBOOK));
 
 	return (
 		<article className={style["content"]}>

@@ -1,8 +1,10 @@
 import Form, { type FormProps } from "components/Form";
-import type { Player } from "types/db/Player";
+import type { JSX } from "react";
 import Submit from "components/Submit";
+import db from "db/db";
+import { eq } from "drizzle-orm";
 import getFormField from "util/getFormField";
-import updatePlayers from "db/updatePlayers";
+import { playerTable } from "db/schema";
 
 /**
  * Properties that can be passed to a ban player form.
@@ -11,33 +13,33 @@ import updatePlayers from "db/updatePlayers";
 export interface BanPlayerFormProps
 	extends Omit<FormProps, "action" | "children"> {
 	/** The player to ban. */
-	player: Player;
+	player: typeof playerTable.$inferSelect;
 }
 
 /**
  * A form for banning a player.
  * @param props - Properties to pass to the form.
- * @returns The form.
+ * @return The form.
  * @public
  */
 export default function BanPlayerForm({
 	player,
 	...props
-}: BanPlayerFormProps) {
+}: BanPlayerFormProps): JSX.Element {
 	return (
 		<Form
 			action={async (form) => {
 				"use server";
-				await updatePlayers(
-					{
+				await db
+					.update(playerTable)
+					.set({
 						bannedUntilDate: getFormField(
 							form,
 							"bannedUntilDate",
 							true
 						).substring(0, 10)
-					},
-					player.id
-				);
+					})
+					.where(eq(playerTable.id, player.id));
 			}}
 			{...props}
 		>

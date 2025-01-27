@@ -1,12 +1,17 @@
-import type { PlayerGameResult } from "types/db/PlayerGameResult";
+import type { playerGameResultTable } from "db/schema";
 
 /**
  * Get a player's average kills plus assists per death ("KDA ratio" or "KDA").
  * @param games - The player game results to consider in the average.
- * @returns The player's KDA ratio.
+ * @return The player's KDA ratio.
  * @public
  */
-export default function getAverageKda(...games: PlayerGameResult[]) {
+export default function getAverageKda(
+	...games: Pick<
+		typeof playerGameResultTable.$inferSelect,
+		"kills" | "deaths" | "assists"
+	>[]
+): number {
 	let kills = 0;
 	let deaths = 0;
 	let assists = 0;

@@ -1,16 +1,15 @@
 import Form, { type FormProps } from "components/Form";
+import { playerRoleEnum, playerTable } from "db/schema";
 import ChampionList from "./ChampionList";
+import type { JSX } from "react";
 import Link from "components/Link";
-import type { Player } from "types/db/Player";
-import type { PlayerRole } from "types/db/PlayerRole";
 import Submit from "components/Submit";
+import db from "db/db";
+import { eq } from "drizzle-orm";
 import getFormField from "util/getFormField";
 import getPlayerUrl from "util/getPlayerUrl";
-import getPlayerUrlBySlug from "util/getPlayerUrlBySlug";
-import { playerRoleEnum } from "db/schema";
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
-import updatePlayers from "db/updatePlayers";
 
 /**
  * Properties that can be passed to an update player form.
@@ -19,42 +18,42 @@ import updatePlayers from "db/updatePlayers";
 export interface UpdatePlayerFormProps
 	extends Omit<FormProps, "action" | "children"> {
 	/** The current player. */
-	player: Player;
+	player: typeof playerTable.$inferSelect;
 }
 
 /**
  * A form for updating a player.
  * @param props - Properties to pass to the form.
- * @returns The form.
+ * @return The form.
  * @public
  */
 export default function UpdatePlayerForm({
 	player,
 	...props
-}: UpdatePlayerFormProps) {
+}: UpdatePlayerFormProps): JSX.Element {
 	return (
 		<Form
 			action={async (form) => {
 				"use server";
 				const displayName = getFormField(form, "displayName");
 				const backgroundChampionId = getFormField(form, "backgroundChampionId");
-				await updatePlayers(
-					{
+				await db
+					.update(playerTable)
+					.set({
 						backgroundChampionId,
 						backgroundSkinNumber: backgroundChampionId ? 0 : void 0,
 						biography: getFormField(form, "biography"),
 						displayName,
 						primaryRole: getFormField(form, "primaryRole") as
-							| PlayerRole
+							| (typeof playerRoleEnum.enumValues)[number]
 							| undefined,
 						secondaryRole: getFormField(form, "secondaryRole") as
-							| PlayerRole
+							| (typeof playerRoleEnum.enumValues)[number]
 							| undefined
-					},
-					player.id
-				);
+					})
+					.where(eq(playerTable.id, player.id));
 				if (displayName) {
-					redirect(getPlayerUrlBySlug(encodeURIComponent(displayName)));
+					redirect(getPlayerUrl({ displayName, name: "" }));
 				}
 
 				// If the vanity URL didn't change, just reload the page instead.

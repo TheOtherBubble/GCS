@@ -1,9 +1,8 @@
 "use client";
 
 import { type JSX, type Ref, useEffect, useRef } from "react";
+import type { matchTable, seasonTable } from "db/schema";
 import LocalDate from "components/LocalDate";
-import type { Match } from "types/db/Match";
-import type { Season } from "types/db/Season";
 import getMatchDateTime from "util/getMatchDateTime";
 
 /**
@@ -16,10 +15,10 @@ export interface RoundHeaderProps
 	round: number;
 
 	/** The first match in the round. */
-	match?: Match | undefined;
+	match?: typeof matchTable.$inferSelect | undefined;
 
 	/** The season of the round. */
-	season: Season;
+	season: typeof seasonTable.$inferSelect;
 
 	/** Whether or not to scroll to this round. */
 	doScrollTo: boolean;
@@ -36,7 +35,7 @@ export default function RoundHeader({
 	season,
 	doScrollTo,
 	...props
-}: RoundHeaderProps) {
+}: RoundHeaderProps): JSX.Element {
 	const ref: Ref<HTMLElement | null> = useRef(null);
 
 	useEffect(() => {

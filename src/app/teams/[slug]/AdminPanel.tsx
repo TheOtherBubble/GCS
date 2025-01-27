@@ -1,9 +1,7 @@
+import type { playerTable, teamPlayerTable, teamTable } from "db/schema";
 import AddPlayerForm from "./admin/AddPlayerForm";
 import { type JSX } from "react";
-import type { Player } from "types/db/Player";
 import RemovePlayerForm from "./admin/RemovePlayerForm";
-import type { Team } from "types/db/Team";
-import type { TeamPlayer } from "types/db/TeamPlayer";
 import UpdateTeamForm from "./admin/UpdateTeamForm";
 
 /**
@@ -13,25 +11,25 @@ import UpdateTeamForm from "./admin/UpdateTeamForm";
 export interface AdminPanelProps
 	extends Omit<JSX.IntrinsicElements["div"], "children"> {
 	/** The team to modify. */
-	team: Team;
+	team: typeof teamTable.$inferSelect;
 
 	/** The players on the team. */
-	teamPlayers: TeamPlayer[];
+	teamPlayers: (typeof teamPlayerTable.$inferSelect)[];
 
 	/** The players on the team. */
-	players: Player[];
+	players: (typeof playerTable.$inferSelect)[];
 
 	/** The players that may be added to the team. */
-	potentialPlayers: Player[];
+	potentialPlayers: (typeof playerTable.$inferSelect)[];
 
 	/** The other teams in the team's season. */
-	otherTeams: Team[];
+	otherTeams: (typeof teamTable.$inferSelect)[];
 }
 
 /**
  * A team page admin panel.
  * @param props - Properties to pass to the panel.
- * @returns The panel.
+ * @return The panel.
  * @public
  */
 export default function AdminPanel({
@@ -41,7 +39,7 @@ export default function AdminPanel({
 	potentialPlayers,
 	otherTeams,
 	...props
-}: AdminPanelProps) {
+}: AdminPanelProps): JSX.Element {
 	return (
 		<div {...props}>
 			<header>

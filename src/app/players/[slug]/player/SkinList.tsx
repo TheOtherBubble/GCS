@@ -13,14 +13,14 @@ export interface SkinListProps
 
 /**
  * A list of skin names mapped to their numbers.
- * @returns The list.
+ * @return The list.
  * @public
  */
 export default async function SkinList({
 	championId,
 	required,
 	...props
-}: SkinListProps) {
+}: SkinListProps): Promise<JSX.Element> {
 	return (
 		<select required={required} {...props}>
 			{!required && <option />}

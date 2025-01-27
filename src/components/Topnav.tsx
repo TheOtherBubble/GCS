@@ -17,10 +17,13 @@ export type TopnavProps = Omit<JSX.IntrinsicElements["nav"], "children">;
 /**
  * The site-wide top navigation bar.
  * @param props - The properties to pass to the navigation bar.
- * @returns The navigation bar.
+ * @return The navigation bar.
  * @public
  */
-export default async function Topnav({ className, ...props }: TopnavProps) {
+export default async function Topnav({
+	className,
+	...props
+}: TopnavProps): Promise<JSX.Element> {
 	const session = await auth();
 	return (
 		<nav className={multiclass(className, style["topnav"])} {...props}>

@@ -1,10 +1,15 @@
 import Form, { type FormProps } from "components/Form";
-import type { Account } from "types/db/Account";
-import type { Player } from "types/db/Player";
-import type { Season } from "types/db/Season";
+import {
+	type accountTable,
+	draftPlayerTable,
+	type playerTable,
+	type seasonTable
+} from "db/schema";
+import type { JSX } from "react";
 import Submit from "components/Submit";
-import createDraftPlayers from "db/createDraftPlayers";
+import db from "db/db";
 import getPlayerUrl from "util/getPlayerUrl";
+import hasRiotApiKey from "util/hasRiotApiKey";
 import { revalidatePath } from "next/cache";
 
 /**
@@ -14,29 +19,29 @@ import { revalidatePath } from "next/cache";
 export interface SignUpFormProps
 	extends Omit<FormProps, "action" | "children"> {
 	/** The player to sign up for the next season. */
-	player: Player;
+	player: typeof playerTable.$inferSelect;
 
 	/** The season to sign up for. */
-	season: Season;
+	season: typeof seasonTable.$inferSelect;
 
 	/** The player's accounts. */
-	accounts: Account[];
+	accounts: (typeof accountTable.$inferSelect)[];
 }
 
 /**
  * A form for signing a player up for the next season.
  * @param props - Properties to pass to the form.
- * @returns The form.
+ * @return The form.
  * @public
  */
 export default function SignUpForm({
 	player,
 	season,
-	// `accounts,`
+	accounts,
 	...props
-}: SignUpFormProps) {
+}: SignUpFormProps): JSX.Element {
 	// Can't call methods on properties passed from the client to the server, so do it here instead.
-	// `const anyAccountIsVerified = accounts.some((account) => account.isVerified);`
+	const anyAccountIsVerified = accounts.some((account) => account.isVerified);
 
 	return (
 		<Form
@@ -57,14 +62,13 @@ export default function SignUpForm({
 					return "You must select two distinct roles as your primary and secondary role to sign up.";
 				}
 
-				/*
-				// TODO: Uncomment once Riot gives us an API key.
-				if (!anyAccountIsVerified) {
+				if (hasRiotApiKey() && !anyAccountIsVerified) {
 					return "You must have at least one verified account to sign up.";
 				}
-				*/
 
-				await createDraftPlayers({ playerId: player.id, seasonId: season.id });
+				await db
+					.insert(draftPlayerTable)
+					.values({ playerId: player.id, seasonId: season.id });
 				revalidatePath(getPlayerUrl(player));
 				return void 0;
 			}}

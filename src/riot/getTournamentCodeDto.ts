@@ -8,7 +8,7 @@ import riotFetch from "./riotFetch";
  * @param code - The tournament code.
  * @param platform - The platform to use to make the request.
  * @param key - The Riot API key to use.
- * @returns The details about the tournament code.
+ * @return The details about the tournament code.
  * @throws `Error` if the response has a bad status or if the Riot API key is missing.
  * @public
  */
@@ -16,7 +16,7 @@ export default async function getTournamentCodeDto(
 	code: string,
 	cluster = Cluster.AMERICAS,
 	key: string | undefined = void 0
-) {
+): Promise<TournamentCodeDto> {
 	return (await (
 		await riotFetch(
 			new URL(

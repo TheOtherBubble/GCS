@@ -12,13 +12,13 @@ export type ChampionListProps = Omit<
 
 /**
  * A list of champion names mapped to their IDs.
- * @returns The list.
+ * @return The list.
  * @public
  */
 export default async function ChampionList({
 	required,
 	...props
-}: ChampionListProps) {
+}: ChampionListProps): Promise<JSX.Element> {
 	return (
 		<select required={required} {...props}>
 			{!required && <option />}

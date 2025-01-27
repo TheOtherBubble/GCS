@@ -1,6 +1,7 @@
 import type ParticipantDto from "./ParticipantDto";
-import type { Platform } from "types/db/Platform";
+import type Region from "./Region";
 import type TeamDto from "./TeamDto";
+import type { platformEnum } from "db/schema";
 
 /**
  * Information about a match.
@@ -35,7 +36,7 @@ export default interface InfoDto {
 	gameType: string;
 
 	/** The game's version. The first two parts can be used to determine the patch that the game was played on. */
-	gameVersion: string;
+	gameVersion: `${number}.${number}.${number}.${number}`;
 
 	/** The game's map's ID. */
 	mapId: number;
@@ -44,7 +45,7 @@ export default interface InfoDto {
 	participants: ParticipantDto[];
 
 	/** The platform where the match was played. */
-	platformId: Platform;
+	platformId: (typeof platformEnum.enumValues)[number];
 
 	/** The game's queue's ID. */
 	queueId: number;
@@ -53,5 +54,5 @@ export default interface InfoDto {
 	teams: TeamDto[];
 
 	/** The tournament code used to generate the match. Added in patch 11.13. */
-	tournamentCode?: string;
+	tournamentCode?: `${Region | "STUB"}${string}-${string}-${string}-${string}-${string}-${string}`;
 }

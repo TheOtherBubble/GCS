@@ -8,7 +8,7 @@ import riotFetch from "./riotFetch";
  * @param id - The match's ID.
  * @param platform - The platform to use to make the request.
  * @param key - The Riot API key to use.
- * @returns The match.
+ * @return The match.
  * @throws `Error` if the response has a bad status or if the Riot API key is missing.
  * @public
  */
@@ -16,7 +16,7 @@ export default async function getMatchDto(
 	id: string,
 	cluster = Cluster.AMERICAS,
 	key: string | undefined = void 0
-) {
+): Promise<MatchDto> {
 	return (await (
 		await riotFetch(
 			new URL(`/lol/match/v5/matches/${id}`, getRiotApiBaseUrl(cluster)).href,

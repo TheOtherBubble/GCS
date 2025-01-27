@@ -1,5 +1,6 @@
 import Image, { type ImageProps } from "components/Image";
-import type { AccountTier } from "types/db/AccountTier";
+import type { JSX } from "react";
+import type { accountTierEnum } from "db/schema";
 import bronze from "./assets/bronze.png";
 import challenger from "./assets/challenger.png";
 import diamond from "./assets/diamond.png";
@@ -22,16 +23,16 @@ export type RankedEmblemProps = Omit<
 	"src" | "alt" | "width" | "height" | "children"
 > & {
 	/** The ranked tier to be represented by the emblem image. */
-	tier: AccountTier;
+	tier: (typeof accountTierEnum.enumValues)[number];
 };
 
 /**
  * An image of the ranked emblem that corresponds to the given tier.
  * @param tier - The tier.
- * @returns The ranked emblem.
+ * @return The ranked emblem, or `undefined` if unranked.
  * @public
  */
-export default function RankedEmblem(props: RankedEmblemProps) {
+export default function RankedEmblem(props: RankedEmblemProps): JSX.Element {
 	switch (props.tier) {
 		case "IRON":
 			return <Image alt="Iron" src={iron} {...props} />;
@@ -53,7 +54,7 @@ export default function RankedEmblem(props: RankedEmblemProps) {
 			return <Image alt="Grandmaster" src={grandmaster} {...props} />;
 		case "CHALLENGER":
 			return <Image alt="Challenger" src={challenger} {...props} />;
-		default: // Unranked.
-			return void 0;
+		default:
+			return props.tier;
 	}
 }

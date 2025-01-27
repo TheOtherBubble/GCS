@@ -1,7 +1,9 @@
 import Form, { type FormProps } from "components/Form";
-import type { Player } from "types/db/Player";
+import type { JSX } from "react";
 import Submit from "components/Submit";
-import updatePlayers from "db/updatePlayers";
+import db from "db/db";
+import { eq } from "drizzle-orm";
+import { playerTable } from "db/schema";
 
 /**
  * Properties that can be passed to a make administrator form.
@@ -10,24 +12,27 @@ import updatePlayers from "db/updatePlayers";
 export interface MakeAdminFormProps
 	extends Omit<FormProps, "action" | "children"> {
 	/** The player to make an administrator. */
-	player: Player;
+	player: typeof playerTable.$inferSelect;
 }
 
 /**
  * A form for making a player an administrator.
  * @param props - Properties to pass to the form.
- * @returns The form.
+ * @return The form.
  * @public
  */
 export default function MakeAdminForm({
 	player,
 	...props
-}: MakeAdminFormProps) {
+}: MakeAdminFormProps): JSX.Element {
 	return (
 		<Form
 			action={async () => {
 				"use server";
-				await updatePlayers({ isAdministator: true }, player.id);
+				await db
+					.update(playerTable)
+					.set({ isAdministator: true })
+					.where(eq(playerTable.id, player.id));
 			}}
 			{...props}
 		>
