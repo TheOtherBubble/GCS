@@ -27,6 +27,7 @@ import getBackgroundImageUrl from "util/getBackgroundImageUrl";
 import getPlayerUrl from "util/getPlayerUrl";
 import leftHierarchy from "util/leftHierarchy";
 import { redirect } from "next/navigation";
+import sortAccountsByRank from "util/sortAccountsByRank";
 import style from "./page.module.scss";
 import ugg from "util/ugg";
 
@@ -160,13 +161,15 @@ export default async function Page(
 								)}
 							</h2>
 						</header>
-						<ul>
-							{accounts.map((account) => (
-								<li key={account.accountId}>
-									<AccountCard account={account} />
-								</li>
-							))}
-						</ul>
+						<ol>
+							{accounts
+								.sort((a, b) => -sortAccountsByRank(a, b))
+								.map((account) => (
+									<li key={account.accountId}>
+										<AccountCard account={account} />
+									</li>
+								))}
+						</ol>
 						<UpdateAccountsForm player={player} accounts={accounts} />
 					</div>
 					{isPlayer && (
