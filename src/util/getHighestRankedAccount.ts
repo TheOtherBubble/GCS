@@ -10,7 +10,7 @@ import sortAccountsByRank from "./sortAccountsByRank";
 export default function getHighestRankedAccount<
 	T extends Pick<typeof accountTable.$inferSelect, "tierCache" | "rankCache">[]
 >(...accounts: T): T[number] extends never ? undefined : T[number] {
-	return accounts.sort(
-		(a, b) => -sortAccountsByRank(a, b)
-	)[0] as T[number] extends never ? undefined : T[number];
+	return accounts
+		.sort(sortAccountsByRank)
+		.reverse()[0] as T[number] extends never ? undefined : T[number];
 }

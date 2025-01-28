@@ -163,7 +163,8 @@ export default async function Page(
 						</header>
 						<ol>
 							{accounts
-								.sort((a, b) => -sortAccountsByRank(a, b))
+								.sort(sortAccountsByRank)
+								.reverse()
 								.map((account) => (
 									<li key={account.accountId}>
 										<AccountCard account={account} />
