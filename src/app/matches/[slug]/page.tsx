@@ -89,6 +89,8 @@ export default async function Page(props: PageProps<MatchesPageParams>) {
 		.leftJoin(accountTable, eq(playerTable.id, accountTable.playerId))
 		.where(eq(matchTable.id, match.id));
 	const teamHierarchies = leftHierarchy(teamRows, "team", "player", "account");
+	const allPlayers = leftHierarchy(teamRows, "player");
+	const allAccounts = leftHierarchy(teamRows, "account");
 	const blueTeam = teamHierarchies.find(
 		({ value: { id } }) => id === match.blueTeamId
 	);
@@ -158,6 +160,8 @@ export default async function Page(props: PageProps<MatchesPageParams>) {
 								playerGameResults={gameResult?.children.flatMap(
 									({ children }) => children
 								)}
+								players={allPlayers}
+								accounts={allAccounts}
 							/>
 						))}
 				</ol>

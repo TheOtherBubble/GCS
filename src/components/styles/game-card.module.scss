@@ -12,8 +12,23 @@ a.not-done {
 // Finished game card.
 a.done {
 	@extend .card;
+	font-size: 1.5em;
 	display: grid;
-	grid-template-columns: 1fr 1fr;
-	gap: 10px;
+	grid-template-rows: 1fr 1fr 1fr 1fr 1fr;
+	grid-auto-flow: column;
 	place-items: center;
+
+	// Player row.
+	& > div {
+		width: 100%;
+		height: 100%;
+		display: flex;
+		gap: 10px;
+
+		// Champion icon.
+		& > img {
+			height: 100%;
+			width: auto;
+		}
+	}
 }

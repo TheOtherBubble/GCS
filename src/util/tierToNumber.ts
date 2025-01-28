@@ -6,11 +6,12 @@ const tierList = [
 	"SILVER",
 	"GOLD",
 	"PLATINUM",
+	"EMERALD",
 	"DIAMOND",
 	"MASTER",
 	"GRANDMASTER",
 	"CHALLENGER"
-];
+] satisfies (typeof accountTierEnum.enumValues)[number][];
 
 /**
  * Convert a tier string to a number that represents its order compared to other tiers (lower is worse).
