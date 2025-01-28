@@ -49,6 +49,7 @@ export default async function Page(
 	props: PageProps<PlayersPageParams>
 ): Promise<JSX.Element> {
 	const { slug } = await props.params;
+	const decoded = decodeURIComponent(slug);
 	const unfilteredRows = await db
 		.select()
 		.from(playerTable)
@@ -75,11 +76,13 @@ export default async function Page(
 			gameTable,
 			eq(gameResultTable.tournamentCode, gameTable.tournamentCode)
 		)
-		.where(or(eq(playerTable.displayName, slug), eq(playerTable.name, slug)));
+		.where(
+			or(eq(playerTable.displayName, decoded), eq(playerTable.name, decoded))
+		);
 	const playerId = (
 		unfilteredRows.find(
-			({ player: { displayName } }) => displayName === slug
-		) ?? unfilteredRows.find(({ player: { name } }) => name === slug)
+			({ player: { displayName } }) => displayName === decoded
+		) ?? unfilteredRows.find(({ player: { name } }) => name === decoded)
 	)?.player.id;
 	const rows = unfilteredRows.filter(({ player: { id } }) => id === playerId);
 	const [first] = rows;
@@ -226,13 +229,16 @@ export const generateMetadata = async (
 	props: PageProps<PlayersPageParams>
 ): Promise<Metadata> => {
 	const { slug } = await props.params;
+	const decoded = decodeURIComponent(slug);
 	const rows = await db
 		.select()
 		.from(playerTable)
-		.where(or(eq(playerTable.displayName, slug), eq(playerTable.name, slug)));
+		.where(
+			or(eq(playerTable.displayName, decoded), eq(playerTable.name, decoded))
+		);
 	const player =
-		rows.find(({ displayName }) => displayName === slug) ??
-		rows.find(({ name }) => name === slug);
+		rows.find(({ displayName }) => displayName === decoded) ??
+		rows.find(({ name }) => name === decoded);
 
 	return player
 		? {
@@ -245,7 +251,7 @@ export const generateMetadata = async (
 			}
 		: {
 				description: "An unknown player in the Gauntlet Championship Series.",
-				openGraph: { url: getPlayerUrl({ displayName: slug, name: "" }) },
+				openGraph: { url: getPlayerUrl({ displayName: decoded, name: "" }) },
 				title: "Unknown Player"
 			};
 };

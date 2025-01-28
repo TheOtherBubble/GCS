@@ -9,5 +9,5 @@ import type { playerTable } from "db/schema";
 export default function getPlayerUrl(
 	player: Pick<typeof playerTable.$inferSelect, "displayName" | "name">
 ): `/players/${typeof player.displayName | typeof player.name}` {
-	return `/players/${player.displayName ?? player.name}`;
+	return `/players/${encodeURIComponent(player.displayName ?? player.name)}`;
 }

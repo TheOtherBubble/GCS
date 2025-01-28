@@ -3,6 +3,7 @@ import {
 	gameTable,
 	matchTable,
 	playerTable,
+	seasonTable,
 	teamPlayerTable,
 	teamTable
 } from "db/schema";
@@ -39,12 +40,13 @@ export default async function Page(
 		.select()
 		.from(gameTable)
 		.leftJoin(matchTable, eq(gameTable.matchId, matchTable.id))
+		.leftJoin(seasonTable, eq(matchTable.seasonId, seasonTable.id))
 		.where(eq(gameTable.id, parseInt(slug, 10)));
 	if (!gameRow) {
 		return <p>{"Unknown game."}</p>;
 	}
 
-	const { game, match } = gameRow;
+	const { game, match, season } = gameRow;
 
 	// The tournament code is visible if the viewer is logged in and either the game isn't associated with a match or the viewer is on a team in the associated match.
 	const session = await auth();
@@ -103,6 +105,8 @@ export default async function Page(
 		adminPanel = (
 			<AdminPanel
 				game={game}
+				match={match ?? void 0}
+				season={season ?? void 0}
 				blueTeam={blueTeam}
 				blueAccounts={blueAccounts}
 				redTeam={redTeam}
