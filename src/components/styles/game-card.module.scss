@@ -1,7 +1,7 @@
 @use "card.module.scss";
 
-// Unfinished game card.
-a.not-done {
+// Incomplete or forfeited game card.
+a.simple {
 	@extend .card;
 	display: flex;
 	justify-content: center;
@@ -9,12 +9,36 @@ a.not-done {
 	text-align: center;
 }
 
-// Finished game card.
-a.done {
+// Player match history game result card.
+a.single {
+	@extend .card;
+	display: flex;
+	align-items: start;
+	gap: 5px;
+
+	& > div.info > * {
+		text-align: left;
+	}
+
+	& > div.items {
+		display: grid;
+		grid-template: 1fr 1fr / 1fr 1fr 1fr 1fr;
+		gap: 2px;
+	}
+
+	& > div.spells {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		gap: 2px;
+	}
+}
+
+// Normal game result card.
+a.complex {
 	@extend .card;
 	font-size: 1.5em;
 	display: grid;
-	grid-template-rows: 1fr 1fr 1fr 1fr 1fr;
+	grid-template: 1fr 1fr 1fr 1fr 1fr / 1fr 1fr;
 	grid-auto-flow: column;
 	place-items: center;
 

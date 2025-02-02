@@ -568,10 +568,7 @@ export const teamGameResultBanTable = pgTable(
 		// The Riot API ID of the team that these results correspond to.
 		teamId: integer().notNull()
 	},
-	(self) => [
-		unique().on(self.championKey, self.gameResultId),
-		unique().on(self.gameResultId, self.order, self.teamId)
-	]
+	(self) => [unique().on(self.gameResultId, self.order, self.teamId)]
 );
 
 /**

@@ -1,5 +1,5 @@
 import Form, { type FormProps } from "components/Form";
-import { and, eq, or } from "drizzle-orm";
+import { and, eq } from "drizzle-orm";
 import { type playerTable, teamPlayerTable, type teamTable } from "db/schema";
 import type { JSX } from "react";
 import Submit from "components/Submit";
@@ -47,19 +47,24 @@ export default function AddToTeamForm({
 				const teamId = parseInt(getFormField(form, "teamId", true), 10);
 
 				// If the player is already part of the selected team, do nothing.
-				if (teamPlayerTeamIds.some((id) => id === teamId)) {
-					return;
+				for (const id of teamPlayerTeamIds) {
+					if (id === teamId) {
+						return;
+					}
 				}
 
 				// Remove the player from all teams in the list.
-				await db
-					.delete(teamPlayerTable)
-					.where(
-						and(
-							eq(teamPlayerTable.playerId, player.id),
-							or(...teamIds.map((id) => eq(teamPlayerTable.teamId, id)))
-						)
-					);
+				for (const id of teamIds) {
+					// eslint-disable-next-line no-await-in-loop
+					await db
+						.delete(teamPlayerTable)
+						.where(
+							and(
+								eq(teamPlayerTable.playerId, player.id),
+								eq(teamPlayerTable.teamId, id)
+							)
+						);
+				}
 
 				// If the team doesn't have a captain, make this player the captain. Must be `null` rather than `false` for non-captains in order to meet a database constraint.
 				const isCaptain =

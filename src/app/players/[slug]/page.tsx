@@ -190,7 +190,7 @@ export default async function Page(
 						/>
 					)}
 				</div>
-				<div>
+				<div className={style["right"]}>
 					<div>
 						<header>
 							<h2>{"Game History"}</h2>
@@ -211,6 +211,8 @@ export default async function Page(
 												gameResult={gameResult}
 												teamGameResults={[teamGameResult]}
 												playerGameResults={[playerGameResult]}
+												players={[player]}
+												accounts={accounts}
 											/>
 										</li>
 									)
