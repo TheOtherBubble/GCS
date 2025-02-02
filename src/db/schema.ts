@@ -31,7 +31,14 @@ export const playerRoleEnum = pgEnum("playerRole", [
  * @public
  */
 export const playerTable = pgTable("player", {
+	// A UUID that represents the player. Supplied by Auth.js. Must be a `varchar` to make Auth.js happy, despite always being 36 characters.
+	id: varchar({ length: 36 })
+		.primaryKey()
+		.$defaultFn(() => crypto.randomUUID()),
+
 	// A player-selected champion to use as a background on player cards, stored as a champion ID.
+	// See drizzle-team/drizzle-orm#2157
+	// eslint-disable-next-line sort-keys
 	backgroundChampionId: varchar({ length: 0x20 }),
 
 	// A player-selected champion skin to use as a background on player cards, stored as a skin number.
@@ -54,11 +61,6 @@ export const playerTable = pgTable("player", {
 
 	// Required by Auth.js, but always null.
 	emailVerified: timestamp(),
-
-	// A UUID that represents the player. Supplied by Auth.js. Must be a `varchar` to make Auth.js happy, despite always being 36 characters.
-	id: varchar({ length: 36 })
-		.primaryKey()
-		.$defaultFn(() => crypto.randomUUID()),
 
 	// Required by Auth.js, but always null. Image is instead determined with `backgroundChampionId` and `backgroundSkinId`.
 	image: varchar({ length: 0x200 }),
@@ -89,8 +91,12 @@ export const playerTable = pgTable("player", {
 export const oauthTable = pgTable(
 	"oauth",
 	{
+		// The account's provider. Always `"discord"`.
+		provider: varchar({ length: 0x20 }).notNull(),
+
 		// The access token.
-		// eslint-disable-next-line camelcase
+		// See drizzle-team/drizzle-orm#2157
+		// eslint-disable-next-line camelcase, sort-keys
 		access_token: varchar({ length: 0x100 }),
 
 		// The epoch timestamp that the access token expires at.
@@ -100,9 +106,6 @@ export const oauthTable = pgTable(
 		// The ID token. Required by Auth.js, but always null.
 		// eslint-disable-next-line camelcase
 		id_token: varchar({ length: 0x100 }),
-
-		// The account's provider. Always `"discord"`.
-		provider: varchar({ length: 0x20 }).notNull(),
 
 		// The provider account ID. Equivalent to the user's Discord snowflake.
 		providerAccountId: varchar({ length: 0x100 }).notNull(),
@@ -317,9 +320,6 @@ export const teamTable = pgTable(
 export const teamPlayerTable = pgTable(
 	"teamPlayer",
 	{
-		// Whether or not the player is the captain of the team. Must be null for non-captains.
-		isCaptain: boolean(),
-
 		// The ID of the player.
 		playerId: varchar({ length: 36 })
 			.references(() => playerTable.id, {
@@ -327,6 +327,11 @@ export const teamPlayerTable = pgTable(
 				onUpdate: "cascade"
 			})
 			.notNull(),
+
+		// Whether or not the player is the captain of the team. Must be null for non-captains.
+		// See drizzle-team/drizzle-orm#2157
+		// eslint-disable-next-line sort-keys
+		isCaptain: boolean(),
 
 		// The ID of the team.
 		teamId: integer()
