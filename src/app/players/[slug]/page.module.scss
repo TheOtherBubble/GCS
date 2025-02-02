@@ -34,8 +34,7 @@ div.content {
 		overflow: hidden;
 
 		// Left column and right column.
-		& > div.left,
-		& > div.right {
+		& > div {
 			@extend .list;
 
 			// Column sections.
@@ -66,7 +65,7 @@ div.content {
 				grid-template-columns: 1fr 2fr;
 
 				// Admin and player panels.
-				& > div.left > div.panel {
+				& > div > div.panel {
 					display: flex;
 				}
 			}

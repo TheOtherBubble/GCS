@@ -148,7 +148,7 @@ export default async function Page(
 				{player.biography && <Markdown>{player.biography}</Markdown>}
 			</header>
 			<div>
-				<div className={style["left"]}>
+				<div>
 					<div>
 						<header>
 							<h2>
@@ -190,7 +190,7 @@ export default async function Page(
 						/>
 					)}
 				</div>
-				<div className={style["right"]}>
+				<div>
 					<div>
 						<header>
 							<h2>{"Game History"}</h2>
