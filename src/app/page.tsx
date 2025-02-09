@@ -5,6 +5,7 @@ import type { Metadata } from "next";
 import TwitchStream from "components/TwitchStream";
 import YoutubeVideo from "components/YoutubeVideo";
 import getStreams from "ttv/getStreams";
+import { raw } from "util/domain";
 import style from "./page.module.scss";
 
 /**
@@ -21,10 +22,7 @@ export default async function Page(): Promise<JSX.Element> {
 				<h1>{"Gauntlet Championship Series"}</h1>
 			</header>
 			{streamData ? (
-				<TwitchStream
-					parent="www.gcsleague.com"
-					channel={streamData.user_login}
-				/>
+				<TwitchStream parent={raw} channel={streamData.user_login} />
 			) : (
 				<YoutubeVideo
 					id="Kr7lWQ04mmM"
