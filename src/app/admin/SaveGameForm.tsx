@@ -29,7 +29,7 @@ export type SaveGameFormProps = Omit<FormProps, "action" | "children">;
 /**
  * A form for saving a game to the database.
  * @param props - Properties to pass to the form.
- * @return The form.
+ * @returns The form.
  * @public
  */
 export default function SaveGameForm(props: SaveGameFormProps): JSX.Element {

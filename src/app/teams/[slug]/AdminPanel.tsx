@@ -29,7 +29,7 @@ export interface AdminPanelProps
 /**
  * A team page admin panel.
  * @param props - Properties to pass to the panel.
- * @return The panel.
+ * @returns The panel.
  * @public
  */
 export default function AdminPanel({

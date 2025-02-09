@@ -21,7 +21,7 @@ export interface TeamCardProps extends Omit<LinkProps, "children" | "href"> {
 /**
  * A card that displays information about a team.
  * @param props - The properties to pass to the team card.
- * @return The team card.
+ * @returns The team card.
  * @public
  */
 export default function TeamCard({

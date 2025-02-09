@@ -40,7 +40,7 @@ export interface AdminPanelProps
 /**
  * A game page admin panel.
  * @param props - Properties to pass to the panel.
- * @return The panel.
+ * @returns The panel.
  * @public
  */
 export default function AdminPanel({

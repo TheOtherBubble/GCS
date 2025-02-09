@@ -106,7 +106,7 @@ export interface NextAuthResultFixed {
 	/**
 	 * A universal method for interacting with Auth.js. Can be used as middleware or to get the current session.
 	 * @param args - The authentication context.
-	 * @return The current session, or a route handler function if used as middleware.
+	 * @returns The current session, or a route handler function if used as middleware.
 	 */
 	auth: NextAuthResultAuth;
 

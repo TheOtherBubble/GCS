@@ -3,7 +3,7 @@ import getDataDragonVersion from "./getDataDragonVersion";
 /**
  * Get the given profile icon's URL.
  * @param id - The profile icon's ID.
- * @return The URL.
+ * @returns The URL.
  * @see {@link https://developer.riotgames.com/docs/lol#data-dragon_other | Other}
  * @public
  */

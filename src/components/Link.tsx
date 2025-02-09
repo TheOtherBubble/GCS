@@ -15,7 +15,7 @@ export type LinkProps = Omit<NextLinkProps, keyof JSX.IntrinsicElements["a"]> &
 /**
  * Create a hyperlink. Uses Next.js-style preloading for internal links and HTML anchor elements for external links.
  * @param props - The properties to pass to the link.
- * @return The link.
+ * @returns The link.
  * @public
  */
 export default function Link({

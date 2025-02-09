@@ -3,7 +3,7 @@ import domain from "util/domain";
 
 /**
  * The website's robots file.
- * @return The robots file.
+ * @returns The robots file.
  * @public
  */
 export default function robots(): MetadataRoute.Robots {

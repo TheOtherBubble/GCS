@@ -8,7 +8,7 @@ const SATURDAY = 6;
  * Get the date and time that a match should be started based on its round and time slot and its season's start date.
  * @param match - The match.
  * @param season - The match's season.
- * @return The game start date and time.
+ * @returns The game start date and time.
  * @public
  */
 export default function getMatchDateTime(

@@ -31,7 +31,7 @@ export interface SignUpFormProps
 /**
  * A form for signing a player up for the next season.
  * @param props - Properties to pass to the form.
- * @return The form.
+ * @returns The form.
  * @public
  */
 export default function SignUpForm({

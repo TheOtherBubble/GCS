@@ -11,7 +11,7 @@ import closestMatch from "./closestMatch";
  * Converts the Riot API representation of a game result to the database representations of game, team, ban, and player results.
  * @param riot - The Riot API game result.
  * @param puuids - A map of the IDs of the teams in the match to the lists of the PUUIDS of the accounts of the players on those teams.
- * @return The game result, the team game results, the team game result bans, and the player game results.
+ * @returns The game result, the team game results, the team game result bans, and the player game results.
  * @public
  */
 export default function convertResult(

@@ -12,7 +12,7 @@ export type SubmitProps = Omit<JSX.IntrinsicElements["input"], "type">;
 /**
  * A button for submitting a form. Automatically disables while the form is pending.
  * @param props - The properties to pass to the button.
- * @return The button.
+ * @returns The button.
  * @public
  */
 export default function Submit({

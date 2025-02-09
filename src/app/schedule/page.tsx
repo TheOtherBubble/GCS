@@ -8,7 +8,7 @@ import { seasonTable } from "db/schema";
 
 /**
  * The schedule page. Just redirects to the season page for the latest season.
- * @return The schedule page.
+ * @returns The schedule page.
  * @public
  */
 export default async function Page(): Promise<JSX.Element> {
@@ -27,7 +27,7 @@ export default async function Page(): Promise<JSX.Element> {
 
 /**
  * The schedule page's metadata. Designed to read as if it were the page being redirected to.
- * @return The metadata.
+ * @returns The metadata.
  * @public
  */
 export const metadata = {

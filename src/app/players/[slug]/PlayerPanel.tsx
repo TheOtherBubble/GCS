@@ -31,7 +31,7 @@ export interface PlayerPanelProps
 /**
  * A player page player panel.
  * @param props - Properties to pass to the panel.
- * @return The panel.
+ * @returns The panel.
  * @public
  */
 export default async function PlayerPanel({

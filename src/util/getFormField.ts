@@ -2,7 +2,7 @@
  * A convenience function for getting the data from a form field.
  * @param form - The form data.
  * @param name - The name of the field to get the data from.
- * @return The data in the field.
+ * @returns The data in the field.
  * @public
  */
 export default function getFormField(
@@ -15,7 +15,7 @@ export default function getFormField(
  * @param form - The form data.
  * @param name - The name of the field to get the data from.
  * @param required - Whether or not the field is required to have content.
- * @return The data in the field.
+ * @returns The data in the field.
  * @public
  */
 export default function getFormField(

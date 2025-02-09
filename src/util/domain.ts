@@ -5,5 +5,5 @@ import isDev from "./isDev";
  * @public
  */
 export default isDev
-	? `http://localhost:${process.env["PORT"] ?? "3000"}`
+	? `http://localhost:${process.env["PORT"] ?? "3000"}/`
 	: "https://www.gcsleague.com/";

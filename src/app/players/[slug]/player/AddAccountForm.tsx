@@ -29,7 +29,7 @@ export interface AddAccountFormProps
 /**
  * A form for adding an account.
  * @param props - Properties to pass to the form.
- * @return The form.
+ * @returns The form.
  * @public
  */
 export default function AddAccountForm({

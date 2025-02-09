@@ -4,7 +4,7 @@ import type { platformEnum } from "db/schema";
 /**
  * Get the regional routing value for a platform.
  * @param platform - The platform.
- * @return The regional routing value, or `undefined` if the regional routing value is unknown.
+ * @returns The regional routing value, or `undefined` if the regional routing value is unknown.
  * @see {@link https://developer.riotgames.com/docs/lol#routing-values_platform-routing-values | Platform Routing Values}
  * @public
  */

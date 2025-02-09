@@ -30,7 +30,7 @@ export interface AddPlayerFormProps
 /**
  * A form for adding a player to a team.
  * @param props - Properties to pass to the form.
- * @return The form.
+ * @returns The form.
  * @public
  */
 export default function AddPlayerForm({

@@ -43,7 +43,7 @@ export interface PlayersPageParams {
 /**
  * A page that displays information about a player.
  * @param props - The properties that are passed to the page.
- * @return The player page.
+ * @returns The player page.
  * @public
  */
 export default async function Page(
@@ -228,7 +228,7 @@ export default async function Page(
 /**
  * The player page's metadata.
  * @param props - The properties that are passed to the page.
- * @return The metadata.
+ * @returns The metadata.
  * @public
  */
 export const generateMetadata = async (

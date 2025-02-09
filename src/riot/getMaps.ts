@@ -2,7 +2,7 @@ import type Map from "types/riot/Map";
 
 /**
  * Get the list of maps.
- * @return The list of maps.
+ * @returns The list of maps.
  * @see {@link https://developer.riotgames.com/docs/lol#working-with-lol-apis_game-constants | Game Constants}
  * @public
  */

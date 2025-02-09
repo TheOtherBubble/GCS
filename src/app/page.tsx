@@ -2,30 +2,41 @@ import { BsDiscord, BsTwitch, BsYoutube } from "react-icons/bs";
 import type { JSX } from "react";
 import Link from "components/Link";
 import type { Metadata } from "next";
+import TwitchStream from "components/TwitchStream";
 import YoutubeVideo from "components/YoutubeVideo";
+import getStreams from "ttv/getStreams";
 import style from "./page.module.scss";
 
 /**
  * The landing page.
- * @return The landing page.
+ * @returns The landing page.
  * @public
  */
-export default function Page(): JSX.Element {
+export default async function Page(): Promise<JSX.Element> {
+	const [streamData] = (await getStreams("1056770764")).data;
+
 	return (
 		<article className={style["content"]}>
 			<header>
 				<h1>{"Gauntlet Championship Series"}</h1>
 			</header>
-			<YoutubeVideo
-				id="Kr7lWQ04mmM"
-				autoPlay
-				fs={false}
-				ivLoadPolicy={false}
-				relYt={false}
-				mute
-				sandbox="allow-popups allow-same-origin allow-scripts"
-				loading="lazy"
-			/>
+			{streamData ? (
+				<TwitchStream
+					parent="www.gcsleague.com"
+					channel={streamData.user_login}
+				/>
+			) : (
+				<YoutubeVideo
+					id="Kr7lWQ04mmM"
+					autoPlay
+					fs={false}
+					ivLoadPolicy={false}
+					relYt={false}
+					mute
+					sandbox="allow-popups allow-same-origin allow-scripts"
+					loading="lazy"
+				/>
+			)}
 			<div>
 				<Link href="https://discord.gg/gcsleague">
 					<BsDiscord />

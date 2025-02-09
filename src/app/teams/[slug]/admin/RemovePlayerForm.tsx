@@ -27,7 +27,7 @@ export interface RemovePlayerFormProps
 /**
  * A form for removing a player from a team.
  * @param props - Properties to pass to the form.
- * @return The form.
+ * @returns The form.
  * @public
  */
 export default function RemovePlayerForm({

@@ -19,7 +19,7 @@ export interface AccountCardProps extends Omit<LinkProps, "children" | "href"> {
 /**
  * A card that displays information about an account.
  * @param props - The properties to pass to the account card.
- * @return The account card.
+ * @returns The account card.
  * @public
  */
 export default async function AccountCard({

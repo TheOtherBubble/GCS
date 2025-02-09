@@ -2,7 +2,7 @@
  * Compare two semantic versions.
  * @param a - The first semantic version.
  * @param b - The second semantic version.
- * @return A negative number if `a` is less than `b`, zero if `a` and `b` are equal, or a positive number if `a` is greater than `b`.
+ * @returns A negative number if `a` is less than `b`, zero if `a` and `b` are equal, or a positive number if `a` is greater than `b`.
  * @see {@link https://semver.org/ | Semantic Versioning}
  * @public
  */

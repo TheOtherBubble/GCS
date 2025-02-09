@@ -8,7 +8,7 @@ import riotFetch from "./riotFetch";
  * @param id - The summoner ID.
  * @param platform - The platform to use to make the request.
  * @param key - The Riot API key to use.
- * @return The league entry.
+ * @returns The league entry.
  * @throws `Error` if the response has a bad status or if the Riot API key is missing.
  * @public
  */

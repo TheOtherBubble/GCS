@@ -29,7 +29,7 @@ export type RankedEmblemProps = Omit<
 /**
  * An image of the ranked emblem that corresponds to the given tier.
  * @param tier - The tier.
- * @return The ranked emblem, or `undefined` if unranked.
+ * @returns The ranked emblem, or `undefined` if unranked.
  * @public
  */
 export default function RankedEmblem(props: RankedEmblemProps): JSX.Element {

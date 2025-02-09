@@ -29,7 +29,7 @@ export interface GamesPageParams {
 /**
  * A page that displays information about a game.
  * @param props - The properties that are passed to the page.
- * @return The game page.
+ * @returns The game page.
  * @public
  */
 export default async function Page(
@@ -128,7 +128,7 @@ export default async function Page(
 /**
  * The game page's metadata.
  * @param props - The properties that are passed to the page.
- * @return The metadata.
+ * @returns The metadata.
  * @public
  */
 export const generateMetadata = async (

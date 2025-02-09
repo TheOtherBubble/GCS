@@ -1,6 +1,6 @@
 /**
  * Get the most recent version of Data Dragon.
- * @return The version.
+ * @returns The version.
  * @see {@link https://developer.riotgames.com/docs/lol#data-dragon_versions | Versions}
  * @public
  */

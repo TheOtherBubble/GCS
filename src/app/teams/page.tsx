@@ -7,7 +7,7 @@ import { teamTable } from "db/schema";
 
 /**
  * The teams list page.
- * @return The teams list page.
+ * @returns The teams list page.
  * @public
  */
 export default async function Page(): Promise<JSX.Element> {

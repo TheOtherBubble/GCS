@@ -5,7 +5,7 @@ import getPlatformForRegion from "./getPlatformForRegion";
 /**
  * Make a U.GG link for the given set of accounts.
  * @param accounts - The accounts to include in the U.GG link.
- * @return A U.GG link.
+ * @returns A U.GG link.
  * @public
  */
 export default function ugg(

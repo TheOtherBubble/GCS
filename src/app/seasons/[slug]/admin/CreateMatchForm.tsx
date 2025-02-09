@@ -24,7 +24,7 @@ export interface CreateMatchFormProps
 /**
  * A form for creating a match.
  * @param props - Properties to pass to the form.
- * @return The form.
+ * @returns The form.
  * @public
  */
 export default function CreateMatchForm({

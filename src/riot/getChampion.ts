@@ -5,7 +5,7 @@ import getDataDragonVersion from "./getDataDragonVersion";
 /**
  * Get the given champion.
  * @param id - The champion's ID.
- * @return The champion.
+ * @returns The champion.
  * @see {@link https://developer.riotgames.com/docs/lol#data-dragon_champions | Champions}
  * @public
  */

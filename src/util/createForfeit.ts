@@ -11,7 +11,7 @@ import getMatchDateTime from "./getMatchDateTime";
  * @param match - The match.
  * @param season - The season that the match is part of.
  * @param blueWon - Whether or not the match's blue team won the game.
- * @return The game result and team game results.
+ * @returns The game result and team game results.
  * @public
  */
 export default function createForfeit(

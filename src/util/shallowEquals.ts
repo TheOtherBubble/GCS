@@ -2,7 +2,7 @@
  * Determine whether or not two values are equivalent via a shallow comparison.
  * @param a - The first value.
  * @param b - The second value.
- * @return Whether or not the two values are shallowly equivalent.
+ * @returns Whether or not the two values are shallowly equivalent.
  * @public
  */
 export default function shallowEquals(a: unknown, b: unknown): boolean {

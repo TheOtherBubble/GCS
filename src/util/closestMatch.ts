@@ -2,7 +2,7 @@
  * Given a list of values, determine which of the mapped lists is the closest match and return its key.
  * @param list - The list of values to match.
  * @param map - A map of keys to lists of values.
- * @return The key of the closest-matching list of values, or `undefined` if no list of values matched at all.
+ * @returns The key of the closest-matching list of values, or `undefined` if no list of values matched at all.
  * @public
  */
 export default function closestMatch<T, U>(list: U[], map: Map<T, U[]>) {

@@ -25,7 +25,7 @@ export interface FormProps extends Omit<NextFormProps, "action"> {
 /**
  * Create a form. Automatically displays the message of any error that is thrown during the form action.
  * @param props - The properties to pass to the form.
- * @return The form.
+ * @returns The form.
  * @public
  */
 export default function Form({

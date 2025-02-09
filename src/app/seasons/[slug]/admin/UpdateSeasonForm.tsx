@@ -22,7 +22,7 @@ export interface UpdateSeasonFormProps
 /**
  * A form for updating a season.
  * @param props - Properties to pass to the form.
- * @return The form.
+ * @returns The form.
  * @public
  */
 export default function UpdateSeasonForm({

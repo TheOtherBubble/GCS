@@ -15,7 +15,7 @@ export interface CopyToClipboardButtonProps
 /**
  * A "copy to clipboard" button.
  * @param props - The properties to pass to the button.
- * @return The button.
+ * @returns The button.
  * @public
  */
 export default function CopyToClipboardButton({

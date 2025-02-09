@@ -6,7 +6,7 @@ import getMatchDateTime from "./getMatchDateTime";
  * Determine whether the given match is currently in-progress.
  * @param match - The match.
  * @param season - The match's season.
- * @return Whether or not the match is currently in progress.
+ * @returns Whether or not the match is currently in progress.
  * @public
  */
 export default function isMatchInProgress(

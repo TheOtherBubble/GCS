@@ -5,7 +5,7 @@ import shallowEquals from "./shallowEquals";
  * Organize the result of a left-joined query into a hierarchy.
  * @param rows - The result of the query.
  * @param keys - The order of the levels of the hierarchy.
- * @return The organized result.
+ * @returns The organized result.
  * @public
  */
 export default function leftHierarchy<

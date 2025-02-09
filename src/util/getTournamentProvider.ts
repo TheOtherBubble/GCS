@@ -6,7 +6,7 @@ import { tournamentProviderTable } from "db/schema";
 
 /**
  * Get the GCS tournament provider from the database or create it if it doesn't exist.
- * @return The GCS tournament provider.
+ * @returns The GCS tournament provider.
  * @throws `Error` if the response has a bad status, if the Riot API key is missing, or if there is a database error.
  * @public
  */

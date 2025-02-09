@@ -17,7 +17,7 @@ export type TopnavProps = Omit<JSX.IntrinsicElements["nav"], "children">;
 /**
  * The site-wide top navigation bar.
  * @param props - The properties to pass to the navigation bar.
- * @return The navigation bar.
+ * @returns The navigation bar.
  * @public
  */
 export default async function Topnav({

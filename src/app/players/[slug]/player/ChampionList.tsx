@@ -12,7 +12,7 @@ export type ChampionListProps = Omit<
 
 /**
  * A list of champion names mapped to their IDs.
- * @return The list.
+ * @returns The list.
  * @public
  */
 export default async function ChampionList({

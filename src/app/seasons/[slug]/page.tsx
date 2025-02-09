@@ -35,7 +35,7 @@ export interface SeasonsPageParams {
 /**
  * A page that displays information about a season.
  * @param props - The properties that are passed to the page.
- * @return The season page.
+ * @returns The season page.
  * @public
  */
 export default async function Page(
@@ -221,7 +221,7 @@ export default async function Page(
 /**
  * The season page's metadata.
  * @param props - The properties that are passed to the page.
- * @return The metadata.
+ * @returns The metadata.
  * @public
  */
 export const generateMetadata = async (

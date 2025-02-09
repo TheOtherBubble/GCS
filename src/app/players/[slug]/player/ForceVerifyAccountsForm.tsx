@@ -20,7 +20,7 @@ export interface ForceVerifyAccountsFormProps
 /**
  * A form for forcibly verifying a player's accounts.
  * @param props - Properties to pass to the form.
- * @return The form.
+ * @returns The form.
  * @public
  */
 export default function ForceVerifyAccountsForm({

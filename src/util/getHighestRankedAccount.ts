@@ -4,7 +4,7 @@ import sortAccountsByRank from "./sortAccountsByRank";
 /**
  * Return the highest-ranked account from the given list of accounts.
  * @param accounts - The accounts to order.
- * @return The highest-ranked account.
+ * @returns The highest-ranked account.
  * @public
  */
 export default function getHighestRankedAccount<

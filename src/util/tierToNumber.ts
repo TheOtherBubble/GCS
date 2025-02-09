@@ -16,7 +16,7 @@ const tierList = [
 /**
  * Convert a tier string to a number that represents its order compared to other tiers (lower is worse).
  * @param tier - The tier string.
- * @return The tier number.
+ * @returns The tier number.
  * @internal
  */
 export default function tierToNumber(

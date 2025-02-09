@@ -4,7 +4,7 @@ import getDataDragonVersion from "./getDataDragonVersion";
 
 /**
  * Get a list of champion data from Data Dragon.
- * @return A map of champion IDs to champion data.
+ * @returns A map of champion IDs to champion data.
  * @see {@link https://developer.riotgames.com/docs/lol#data-dragon_champions | Champions}
  * @public
  */

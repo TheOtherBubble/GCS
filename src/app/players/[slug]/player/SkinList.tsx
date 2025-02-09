@@ -13,7 +13,7 @@ export interface SkinListProps
 
 /**
  * A list of skin names mapped to their numbers.
- * @return The list.
+ * @returns The list.
  * @public
  */
 export default async function SkinList({

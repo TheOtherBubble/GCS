@@ -3,7 +3,7 @@ import type { playerTable } from "db/schema";
 /**
  * Get the URL of the image of the player's selected background skin.
  * @param player - The player.
- * @return The URL, or `undefined` if the player hasn't selected a background skin.
+ * @returns The URL, or `undefined` if the player hasn't selected a background skin.
  * @public
  */
 export default function getBackgroundImageUrl(

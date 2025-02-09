@@ -7,7 +7,7 @@ import { seasonTable } from "db/schema";
 
 /**
  * The seasons list page.
- * @return The seasons list page.
+ * @returns The seasons list page.
  * @public
  */
 export default async function Page(): Promise<JSX.Element> {

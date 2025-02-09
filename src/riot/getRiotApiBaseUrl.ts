@@ -4,7 +4,7 @@ import type { platformEnum } from "db/schema";
 /**
  * The base URL of Riot API endpoints.
  * @param cluster - The regional or platform routing value to use when executing the request.
- * @return The base URL.
+ * @returns The base URL.
  */
 export default function getRiotApiBaseUrl(
 	cluster: Cluster | (typeof platformEnum.enumValues)[number]

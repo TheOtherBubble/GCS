@@ -3,7 +3,7 @@ import type { matchFormatEnum } from "db/schema";
 /**
  * Get the minimum and maximum number of games for a given format.
  * @param format - The format.
- * @return The minimum and maximum number of games and the requisite number of wins to be determined the winner for the format, respectively.
+ * @returns The minimum and maximum number of games and the requisite number of wins to be determined the winner for the format, respectively.
  * @public
  */
 export default function getFormatGameCount(

@@ -17,7 +17,7 @@ export type ImageProps = Omit<NextImageProps, "children"> & {
 /**
  * Create an image. Automatically applies default styling and configuration.
  * @param props - The properties to pass to the image.
- * @return The image.
+ * @returns The image.
  * @public
  */
 export default function Image({

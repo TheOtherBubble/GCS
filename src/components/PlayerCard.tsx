@@ -35,7 +35,7 @@ export interface PlayerCardProps extends Omit<LinkProps, "children" | "href"> {
 /**
  * A card that displays information about a player.
  * @param props - The properties to pass to the player card.
- * @return The player card.
+ * @returns The player card.
  * @public
  */
 export default function PlayerCard({

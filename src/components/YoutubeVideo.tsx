@@ -88,7 +88,7 @@ export interface YoutubeVideoProps
 /**
  * A YouTube video embed.
  * @param props - Properties to pass to the embed.
- * @return The embed.
+ * @returns The embed.
  * @public
  */
 export default function YoutubeVideo({

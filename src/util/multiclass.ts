@@ -1,7 +1,7 @@
 /**
  * Combine multiple potential class names into one string to make class names more readable in JSX.
  * @param classNames - The list of class names. Non-string elements are skipped.
- * @return A combined class name string.
+ * @returns A combined class name string.
  * @public
  */
 export default function multiclass(...classNames: readonly unknown[]): string {

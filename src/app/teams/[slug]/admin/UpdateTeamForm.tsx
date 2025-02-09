@@ -22,7 +22,7 @@ export interface UpdateTeamFormProps
 /**
  * A form for updating a team.
  * @param props - Properties to pass to the form.
- * @return The form.
+ * @returns The form.
  * @public
  */
 export default function UpdateTeamForm({

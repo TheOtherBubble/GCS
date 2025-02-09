@@ -28,7 +28,7 @@ export interface UpdateAccountsFormProps
 /**
  * A form for updating a player's accounts.
  * @param props - Properties to pass to the form.
- * @return The form.
+ * @returns The form.
  * @public
  */
 export default async function UpdateAccountsForm({

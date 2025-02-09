@@ -37,7 +37,7 @@ export interface MatchesPageParams {
 /**
  * A page that displays information about a match.
  * @param props - The properties that are passed to the page.
- * @return The match page.
+ * @returns The match page.
  * @public
  */
 export default async function Page(props: PageProps<MatchesPageParams>) {
@@ -191,7 +191,7 @@ export default async function Page(props: PageProps<MatchesPageParams>) {
 /**
  * The match page's metadata.
  * @param props - The properties that are passed to the page.
- * @return The metadata.
+ * @returns The metadata.
  * @public
  */
 export const generateMetadata = async (

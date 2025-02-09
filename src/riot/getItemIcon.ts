@@ -3,7 +3,7 @@ import getDataDragonVersion from "./getDataDragonVersion";
 /**
  * Get the URl of a item's icon.
  * @param id - The item's ID.
- * @return The URL of the item's icon.
+ * @returns The URL of the item's icon.
  * @public
  */
 export default async function getItemIcon(

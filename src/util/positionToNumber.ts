@@ -11,7 +11,7 @@ const positionList = [
 /**
  * Convert a position string to a number that represents its standard order (top, jungle, middle, bottom, support).
  * @param position - The position string.
- * @return The position number.
+ * @returns The position number.
  * @internal
  */
 export default function positionToNumber(

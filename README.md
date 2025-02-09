@@ -11,3 +11,5 @@ Gauntlet Championship Series (formerly VeryLastNerve League) tooling.
 | `DISCORD_CLIENT_SECRET` | Taken from [the Discord Developer Portal](https://discord.com/developers/applications).         |
 | `POSTGRES_URL`          | The PostgreSQL database URL.                                                                    |
 | `RIOT_API_KEY`          | Taken from [the Riot Developer Portal](https://developer.riotgames.com/).                       |
+| `TWITCH_CLIENT_ID`      | Taken from [the Twitch Developer Portal](https://dev.twitch.tv/console).                        |
+| `TWITCH_CLIENT_SECRET`  | Taken from [the Twitch Developer Portal](https://dev.twitch.tv/console).                        |

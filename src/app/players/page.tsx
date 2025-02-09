@@ -7,7 +7,7 @@ import { playerTable } from "db/schema";
 
 /**
  * The players list page.
- * @return The players list page.
+ * @returns The players list page.
  * @public
  */
 export default async function Page(): Promise<JSX.Element> {

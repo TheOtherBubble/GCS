@@ -11,7 +11,7 @@ import style from "./page.module.scss";
 
 /**
  * A page that displays the rulebook.
- * @return The rulebook page.
+ * @returns The rulebook page.
  * @public
  */
 export default async function Page(): Promise<JSX.Element> {

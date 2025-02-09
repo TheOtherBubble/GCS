@@ -3,7 +3,7 @@ import domain from "util/domain";
 
 /**
  * The website's sitemap.
- * @return The sitemap.
+ * @returns The sitemap.
  * @public
  */
 export default function sitemap(): MetadataRoute.Sitemap {

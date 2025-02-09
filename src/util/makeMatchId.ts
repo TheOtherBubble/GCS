@@ -4,7 +4,7 @@ import type { platformEnum } from "db/schema";
  * Make a match ID from a platform routing value and a game ID.
  * @param gameId - The game ID.
  * @param platform - The platform routing value.
- * @return The match ID.
+ * @returns The match ID.
  * @public
  */
 export default function makeMatchId(

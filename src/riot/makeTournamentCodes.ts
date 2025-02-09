@@ -13,7 +13,7 @@ import riotFetch from "./riotFetch";
  * @param tournamentId - The ID of the tournament that is associated with the tournament codes.
  * @param cluster - The cluster to use to make the request.
  * @param key - The Riot API key to use.
- * @return The tournament ID.
+ * @returns The tournament ID.
  * @throws `Error` if the response has a bad status or if the Riot API key is missing.
  * @public
  */

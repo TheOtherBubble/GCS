@@ -4,7 +4,7 @@ import Region from "types/riot/Region";
 /**
  * Get the regional routing value for a region.
  * @param region - The region.
- * @return The regional routing value, or `undefined` if the regional routing value is unknown.
+ * @returns The regional routing value, or `undefined` if the regional routing value is unknown.
  * @see {@link https://developer.riotgames.com/docs/lol#routing-values_regional-routing-values | Regional Routing Values}
  * @public
  */

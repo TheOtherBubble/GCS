@@ -9,7 +9,7 @@ import riotFetch from "./riotFetch";
  * @param params - The provider registration parameters.
  * @param cluster - The cluster to use to make the request.
  * @param key - The Riot API key to use.
- * @return The tournament provider ID.
+ * @returns The tournament provider ID.
  * @throws `Error` if the response has a bad status or if the Riot API key is missing.
  * @public
  */

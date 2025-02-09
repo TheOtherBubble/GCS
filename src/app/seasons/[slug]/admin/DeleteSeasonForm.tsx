@@ -21,7 +21,7 @@ export interface DeleteSeasonFormProps
 /**
  * A form for deleting a season.
  * @param props - Properties to pass to the form.
- * @return The form.
+ * @returns The form.
  * @public
  */
 export default function DeleteSeasonForm({

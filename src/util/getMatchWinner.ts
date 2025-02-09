@@ -6,7 +6,7 @@ import getMatchScore from "./getMatchScore";
  * Get the team that won a match.
  * @param match - The match.
  * @param results - The team game results in the match.
- * @return The ID of the team that won the match, or `undefined` if no team has won the match.
+ * @returns The ID of the team that won the match, or `undefined` if no team has won the match.
  * @public
  */
 export default function getMatchWinner<

@@ -3,7 +3,7 @@ import type { playerGameResultTable } from "db/schema";
 /**
  * Get a player's average kills plus assists per death ("KDA ratio" or "KDA").
  * @param games - The player game results to consider in the average.
- * @return The player's KDA ratio.
+ * @returns The player's KDA ratio.
  * @public
  */
 export default function getAverageKda(

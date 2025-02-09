@@ -45,7 +45,7 @@ export interface GameCardProps extends Omit<LinkProps, "children" | "href"> {
 /**
  * A card that displays information about a game.
  * @param props - The properties to pass to the game card.
- * @return The game card.
+ * @returns The game card.
  * @public
  */
 export default async function GameCard({

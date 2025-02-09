@@ -8,7 +8,7 @@ import riotFetch from "./riotFetch";
  * @param code - The tournament code.
  * @param platform - The platform to use to make the request.
  * @param key - The Riot API key to use.
- * @return The tournament code's games.
+ * @returns The tournament code's games.
  * @throws `Error` if the response has a bad status or if the Riot API key is missing.
  * @public
  */

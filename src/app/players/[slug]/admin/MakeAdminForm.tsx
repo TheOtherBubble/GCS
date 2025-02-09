@@ -18,7 +18,7 @@ export interface MakeAdminFormProps
 /**
  * A form for making a player an administrator.
  * @param props - Properties to pass to the form.
- * @return The form.
+ * @returns The form.
  * @public
  */
 export default function MakeAdminForm({

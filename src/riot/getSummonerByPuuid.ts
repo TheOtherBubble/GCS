@@ -8,7 +8,7 @@ import riotFetch from "./riotFetch";
  * @param puuid - The PUUID.
  * @param platform - The platform to use to make the request.
  * @param key - The Riot API key to use.
- * @return The summoner.
+ * @returns The summoner.
  * @throws `Error` if the response has a bad status or if the Riot API key is missing.
  * @public
  */

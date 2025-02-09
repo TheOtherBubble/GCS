@@ -2,7 +2,7 @@ import type Queue from "types/riot/Queue";
 
 /**
  * Get the list of queues.
- * @return The list of queues.
+ * @returns The list of queues.
  * @see {@link https://developer.riotgames.com/docs/lol#working-with-lol-apis_game-constants | Game Constants}
  * @public
  */

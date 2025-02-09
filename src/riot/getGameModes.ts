@@ -2,7 +2,7 @@ import type GameMode from "types/riot/GameMode";
 
 /**
  * Get the list of game modes.
- * @return The list of game modes.
+ * @returns The list of game modes.
  * @see {@link https://developer.riotgames.com/docs/lol#working-with-lol-apis_game-constants | Game Constants}
  * @public
  */

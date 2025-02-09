@@ -8,7 +8,7 @@ import riotFetch from "./riotFetch";
  * @param puuid - The PUUID.
  * @param cluster - The cluster to use to make the request.
  * @param key - The Riot API key to use.
- * @return The account.
+ * @returns The account.
  * @throws `Error` if the response has a bad status or if the Riot API key is missing.
  * @public
  */

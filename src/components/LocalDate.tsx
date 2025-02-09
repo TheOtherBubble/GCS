@@ -23,7 +23,7 @@ export interface LocalDateProps
 /**
  * Display a date in local time.
  * @param props - The properties to pass to the date display.
- * @return The date display.
+ * @returns The date display.
  * @public
  */
 export default function LocalDate({

@@ -21,7 +21,7 @@ export interface CreateGameFormProps
 /**
  * A form for creating a game.
  * @param props - Properties to pass to the form.
- * @return The form.
+ * @returns The form.
  * @public
  */
 export default function CreateGameForm({

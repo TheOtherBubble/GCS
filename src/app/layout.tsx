@@ -11,7 +11,7 @@ import style from "./layout.module.scss";
 /**
  * The root layout.
  * @param params - The parameters passed to the layout.
- * @return The root layout.
+ * @returns The root layout.
  * @public
  */
 export default function Layout({ children }: LayoutProps): JSX.Element {
