@@ -22,7 +22,7 @@ export default async function Page(): Promise<JSX.Element> {
 				<h1>{"Gauntlet Championship Series"}</h1>
 			</header>
 			{streamData ? (
-				<TwitchStream parent={raw} channel={streamData.user_login} />
+				<TwitchStream parent={raw} channel={streamData.user_login} muted />
 			) : (
 				<YoutubeVideo
 					id="Kr7lWQ04mmM"
