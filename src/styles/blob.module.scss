@@ -9,8 +9,8 @@
 	padding: 5px;
 
 	// Use more padding on desktop devices.
-	@include mixins.is-not-mobile using ($is-not-mobile) {
-		@if $is-not-mobile {
+	@include mixins.gt-mobile using ($gt-mobile) {
+		@if $gt-mobile {
 			padding: 16px;
 		}
 	}

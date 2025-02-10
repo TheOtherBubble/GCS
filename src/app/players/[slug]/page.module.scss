@@ -60,8 +60,8 @@ div.content {
 			}
 		}
 
-		@include mixins.is-not-mobile using ($is-not-mobile) {
-			@if $is-not-mobile {
+		@include mixins.gt-wide using ($gt-wide) {
+			@if $gt-wide {
 				grid-template-columns: 1fr 2fr;
 
 				// Admin and player panels.

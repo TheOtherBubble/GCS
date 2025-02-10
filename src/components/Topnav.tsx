@@ -43,6 +43,11 @@ export default async function Topnav({
 						<span>{"Rulebook"}</span>
 					</Link>
 				</li>
+				<li className={style["hide-on-medium"]}>
+					<Link href="/leaderboards">
+						<span>{"Leaderboards"}</span>
+					</Link>
+				</li>
 				{session?.user ? (
 					<>
 						<li className={style["right"]}>

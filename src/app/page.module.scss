@@ -39,8 +39,8 @@ article.content {
 		}
 	}
 
-	@include mixins.is-not-mobile using ($is-not-mobile) {
-		@if $is-not-mobile {
+	@include mixins.gt-mobile using ($gt-mobile) {
+		@if $gt-mobile {
 			display: grid;
 			$column-max: 65ch;
 			grid-template-columns: 1fr min($column-max, 100%) 1fr;

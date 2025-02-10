@@ -1,5 +1,17 @@
-// Standard mobile breakpoint; the width of an iPad in the portrait orientation.
+// Non-standard "minimum-sized" breakpoint; 4:3 SVGA height.
+$minimum-breakpoint: 600px;
+
+// Standard mobile breakpoint; 4:3 XGA height.
 $mobile-breakpoint: 768px;
+
+// Non-standard "medium-sized" screen breakpoint; 4:3 XGA width.
+$medium-breakpoint: 1024px;
+
+// Non-standard "wide-sized" screen breakpoint; 16:9 HD width.
+$wide-breakpoint: 1366px;
+
+// Non-standard "full-sized" screen breakpoint; 16:9 FHD width.
+$full-breakpoint: 1920px;
 
 // Color palette.
 $black: #050505; // Dark background.

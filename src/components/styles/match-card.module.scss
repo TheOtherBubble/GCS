@@ -14,8 +14,8 @@ a.match-card {
 		display: none;
 	}
 
-	@include mixins.is-not-mobile using ($is-not-mobile) {
-		@if $is-not-mobile {
+	@include mixins.gt-mobile using ($gt-mobile) {
+		@if $gt-mobile {
 			$fd-size: 1rem;
 			grid-template-rows: $fd-size 1fr $fd-size;
 			row-gap: 2px;

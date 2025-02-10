@@ -53,30 +53,19 @@ div.content {
 		@extend .clean-list;
 	}
 
-	@include mixins.is-not-mobile using ($is-not-mobile) {
-		@if $is-not-mobile {
+	@include mixins.gt-mobile using ($gt-mobile) {
+		@if $gt-mobile {
 			display: grid;
-			grid-template-columns: 1fr 2fr 1fr;
+			grid-template-columns: 2fr 1fr;
 			gap: 10px;
 
-			// Admin panel.
-			& > div.info > div {
-				display: flex;
-			}
-
-			// Information and leaderboards columns.
-			& > div.info,
+			// Leaderboards column.
 			& > div.leaderboards {
 				display: block;
 				position: sticky;
 				top: calc(layout.$top + layout.$margin);
 				height: calc(100vh - layout.$top - layout.$margin * 2);
 				overflow: auto;
-			}
-
-			// Leaderboards column.
-			& > div.leaderboards {
-				display: block;
 
 				// Leaderboards.
 				& > ol > li {
@@ -84,6 +73,26 @@ div.content {
 					text-wrap: nowrap;
 					overflow: auto;
 				}
+			}
+		}
+	}
+
+	@include mixins.gt-wide using ($gt-wide) {
+		@if $gt-wide {
+			grid-template-columns: 1fr 2fr 1fr;
+
+			// Admin panel.
+			& > div.info > div {
+				display: flex;
+			}
+
+			// Information column.
+			& > div.info {
+				display: block;
+				position: sticky;
+				top: calc(layout.$top + layout.$margin);
+				height: calc(100vh - layout.$top - layout.$margin * 2);
+				overflow: auto;
 			}
 		}
 	}

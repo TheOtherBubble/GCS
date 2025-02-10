@@ -34,8 +34,8 @@ div.content {
 		}
 	}
 
-	@include mixins.is-not-mobile using ($is-not-mobile) {
-		@if $is-not-mobile {
+	@include mixins.gt-wide using ($gt-wide) {
+		@if $gt-wide {
 			display: grid;
 			grid-template-columns: 2fr 3fr 2fr;
 			gap: 10px;

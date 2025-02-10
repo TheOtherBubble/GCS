@@ -70,8 +70,8 @@ div.content {
 			}
 		}
 
-		@include mixins.is-not-mobile using ($is-not-mobile) {
-			@if $is-not-mobile {
+		@include mixins.gt-medium using ($gt-medium) {
+			@if $gt-medium {
 				grid-template-columns: 1fr 2fr;
 
 				& > div > div.admin {

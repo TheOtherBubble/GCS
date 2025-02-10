@@ -1,4 +1,5 @@
 @use "card.module.scss";
+@use "../../styles/mixins";
 
 // Incomplete or forfeited game card.
 a.simple {
@@ -12,35 +13,67 @@ a.simple {
 // Player match history game result card.
 a.single {
 	@extend .card;
-	display: flex;
-	align-items: flex-start;
+	display: grid;
+	grid: 1fr 1fr / max-content 1fr max-content max-content max-content max-content;
 	gap: 5px;
 
-	& > div.info > * {
-		text-align: left;
+	font-size: 0.75em;
+
+	@include mixins.gt-mobile using ($gt-mobile) {
+		@if $gt-mobile {
+			font-size: 1.5em;
+		}
 	}
 
-	& > div.items {
-		display: grid;
-		grid-template: 1fr 1fr / 1fr 1fr 1fr 1fr;
-		gap: 2px;
+	@include mixins.gt-medium using ($gt-medium) {
+		@if $gt-medium {
+			font-size: 2em;
+		}
 	}
 
-	& > div.spells {
-		display: grid;
-		grid-template-columns: 1fr 1fr;
-		gap: 2px;
+	// Information box.
+	& > div {
+		grid-row: 1 / 3;
+
+		// Information.
+		& > * {
+			text-align: left;
+		}
+	}
+
+	// Champion and item icons.
+	& > img {
+		width: auto;
+		height: 100%;
+
+		// Champion icon.
+		&.champion {
+			max-height: 128px;
+			grid-row: 1 / 3;
+		}
 	}
 }
 
 // Normal game result card.
 a.complex {
 	@extend .card;
-	font-size: 1.5em;
+	font-size: 0.75em;
 	display: grid;
 	grid-template: 1fr 1fr 1fr 1fr 1fr / 1fr 1fr;
 	grid-auto-flow: column;
 	place-items: center;
+
+	@include mixins.gt-mobile using ($gt-mobile) {
+		@if $gt-mobile {
+			font-size: 1em;
+		}
+	}
+
+	@include mixins.gt-full using ($gt-full) {
+		@if $gt-full {
+			font-size: 1.5em;
+		}
+	}
 
 	// Player row.
 	& > div {

@@ -138,9 +138,10 @@ export default async function GameCard({
 						src={championIcon}
 						width={128}
 						height={128}
+						className={style["champion"]}
 					/>
 				)}
-				<div className={style["info"]}>
+				<div>
 					{player ? (
 						<h3>{player.displayName ?? player.name}</h3>
 					) : (
@@ -151,30 +152,22 @@ export default async function GameCard({
 					<p>{`Level: ${result.level.toString()}`}</p>
 					<p>{`Position: ${result.position}`}</p>
 				</div>
-				<div className={style["items"]}>
-					{[
-						result.item0Id,
-						result.item1Id,
-						result.item2Id,
-						result.item6Id,
-						result.item3Id,
-						result.item4Id,
-						result.item5Id
-					].map(async (itemId, i) => {
-						const src = itemId && (await getItemIcon(itemId));
-						return src ? (
-							<Image
-								key={i}
-								alt="Item icon."
-								src={src}
-								width={64}
-								height={64}
-							/>
-						) : (
-							<span /> // Grid placeholder.
-						);
-					})}
-				</div>
+				{[
+					result.item0Id,
+					result.item1Id,
+					result.item2Id,
+					result.item6Id,
+					result.item3Id,
+					result.item4Id,
+					result.item5Id
+				].map(async (itemId, i) => {
+					const src = itemId && (await getItemIcon(itemId));
+					return src ? (
+						<Image key={i} alt="Item icon." src={src} width={64} height={64} />
+					) : (
+						<span /> // Grid placeholder.
+					);
+				})}
 			</a>
 		);
 	}

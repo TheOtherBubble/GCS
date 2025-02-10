@@ -19,20 +19,92 @@
 	}
 }
 
-// An implementation of `media-query-boolean` specifically for checking if the viewport is mobile-sized.
-@mixin is-mobile {
-	@include media-query-boolean("(max-width: #{variables.$mobile-breakpoint})")
-		using ($is-mobile) {
-		@content ($is-mobile);
+// An implementation of `media-query-boolean` specifically for checking if the viewport is at most minimum-sized.
+@mixin lte-minimum {
+	@include media-query-boolean("(max-width: #{variables.$minimum-breakpoint})")
+		using ($lte-minimum) {
+		@content ($lte-minimum);
 	}
 }
 
-// An implementation of `media-query-boolean` specifically for checking if the viewport is not mobile-sized. This is recommended over `is-mobile` for mobile-first design.
-@mixin is-not-mobile {
+// An implementation of `media-query-boolean` specifically for checking if the viewport is greater than minimum-sized. This is recommended over `lte-minimum` for mobile-first design.
+@mixin gt-minimum {
+	@include media-query-boolean(
+			"(min-width: #{variables.$minimum-breakpoint + 1px})"
+		)
+		using ($gt-minimum) {
+		@content ($gt-minimum);
+	}
+}
+
+// An implementation of `media-query-boolean` specifically for checking if the viewport is at most mobile-sized.
+@mixin lte-mobile {
+	@include media-query-boolean("(max-width: #{variables.$mobile-breakpoint})")
+		using ($lte-mobile) {
+		@content ($lte-mobile);
+	}
+}
+
+// An implementation of `media-query-boolean` specifically for checking if the viewport is greater than mobile-sized. This is recommended over `lte-mobile` for mobile-first design.
+@mixin gt-mobile {
 	@include media-query-boolean(
 			"(min-width: #{variables.$mobile-breakpoint + 1px})"
 		)
-		using ($is-not-mobile) {
-		@content ($is-not-mobile);
+		using ($gt-mobile) {
+		@content ($gt-mobile);
+	}
+}
+
+// An implementation of `media-query-boolean` specifically for checking if the viewport is at most medium-sized.
+@mixin lte-medium {
+	@include media-query-boolean("(max-width: #{variables.$medium-breakpoint})")
+		using ($lte-medium) {
+		@content ($lte-medium);
+	}
+}
+
+// An implementation of `media-query-boolean` specifically for checking if the viewport is greater than medium-sized. This is recommended over `lte-medium` for mobile-first design.
+@mixin gt-medium {
+	@include media-query-boolean(
+			"(min-width: #{variables.$medium-breakpoint + 1px})"
+		)
+		using ($gt-medium) {
+		@content ($gt-medium);
+	}
+}
+
+// An implementation of `media-query-boolean` specifically for checking if the viewport is at most wide-sized.
+@mixin lte-wide {
+	@include media-query-boolean("(max-width: #{variables.$wide-breakpoint})")
+		using ($lte-wide) {
+		@content ($lte-wide);
+	}
+}
+
+// An implementation of `media-query-boolean` specifically for checking if the viewport is greater than wide-sized. This is recommended over `lte-wide` for mobile-first design.
+@mixin gt-wide {
+	@include media-query-boolean(
+			"(min-width: #{variables.$wide-breakpoint + 1px})"
+		)
+		using ($gt-wide) {
+		@content ($gt-wide);
+	}
+}
+
+// An implementation of `media-query-boolean` specifically for checking if the viewport is at most full-sized.
+@mixin lte-full {
+	@include media-query-boolean("(max-width: #{variables.$full-breakpoint})")
+		using ($lte-full) {
+		@content ($lte-full);
+	}
+}
+
+// An implementation of `media-query-boolean` specifically for checking if the viewport is greater than full-sized. This is recommended over `lte-full` for mobile-first design.
+@mixin gt-full {
+	@include media-query-boolean(
+			"(min-width: #{variables.$full-breakpoint + 1px})"
+		)
+		using ($gt-full) {
+		@content ($gt-full);
 	}
 }

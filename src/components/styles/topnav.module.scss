@@ -42,8 +42,19 @@ nav.topnav {
 			&.hide-on-mobile {
 				display: none;
 
-				@include mixins.is-not-mobile using ($is-not-mobile) {
-					@if $is-not-mobile {
+				@include mixins.gt-mobile using ($gt-mobile) {
+					@if $gt-mobile {
+						display: block;
+					}
+				}
+			}
+
+			// Wide desktop-only top navigation bar item.
+			&.hide-on-medium {
+				display: none;
+
+				@include mixins.gt-medium using ($gt-medium) {
+					@if $gt-medium {
 						display: block;
 					}
 				}
