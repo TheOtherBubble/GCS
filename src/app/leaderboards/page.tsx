@@ -94,7 +94,7 @@ export default async function Page(): Promise<JSX.Element> {
 								games: results.length,
 								player
 							}))
-							.sort(({ damage: a }, { damage: b }) => b - a)
+							.sort((a, b) => b.damage / b.games - a.damage / a.games)
 							.slice(0, 10)
 							.map(({ damage, games, player }) => (
 								<li key={player.id}>
