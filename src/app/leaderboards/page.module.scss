@@ -1,0 +1,18 @@
+@use "../../styles/blob.module.scss";
+
+// Leaderboard list.
+div.leaderboards {
+	@extend .list;
+	flex-direction: row;
+	flex-wrap: wrap;
+
+	// Leaderboard.
+	& > div {
+		@extend .blob;
+
+		// Leaderboard listing.
+		& > ol {
+			font-size: 1.5em;
+		}
+	}
+}

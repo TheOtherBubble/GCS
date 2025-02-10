@@ -8,6 +8,7 @@ import domain from "util/domain";
  */
 export default function sitemap(): MetadataRoute.Sitemap {
 	return [
+		{ url: new URL("/leaderboards", domain).href },
 		{ url: new URL("/players", domain).href },
 		{ url: new URL("/rulebook", domain).href },
 		{ url: new URL("/schedule", domain).href },

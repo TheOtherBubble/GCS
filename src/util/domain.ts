@@ -2,6 +2,7 @@ import isDev from "./isDev";
 
 /**
  * The raw domain name to use when not in development mode.
+ * @public
  */
 export const raw = "www.gcsleague.com";
 
