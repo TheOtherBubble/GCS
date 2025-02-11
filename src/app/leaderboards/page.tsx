@@ -82,7 +82,7 @@ export default async function Page(): Promise<JSX.Element> {
 				</div>
 				<div>
 					<header>
-						<h2>{"Damage (Average)"}</h2>
+						<h2>{"Damage (Per Game)"}</h2>
 					</header>
 					<ol>
 						{resultsByPlayer
@@ -102,6 +102,38 @@ export default async function Page(): Promise<JSX.Element> {
 										{player.displayName ?? player.name}
 									</Link>
 									{` - ${Math.floor(damage / games).toLocaleString()}`}
+								</li>
+							))}
+					</ol>
+				</div>
+				<div>
+					<header>
+						<h2>{"Damage (Per Minute)"}</h2>
+					</header>
+					<ol>
+						{resultsByPlayer
+							.map(({ value: player, children: results }) => ({
+								damage: results.reduce(
+									(total, { championDamage }) => total + championDamage,
+									0
+								),
+								ms: results.reduce(
+									(total, result) =>
+										total +
+										(rows.find((row) => row.playerGameResult.id === result.id)
+											?.gameResult.duration ?? 0),
+									0
+								),
+								player
+							}))
+							.sort((a, b) => b.damage / b.ms - a.damage / a.ms)
+							.slice(0, 10)
+							.map(({ damage, ms, player }) => (
+								<li key={player.id}>
+									<Link href={getPlayerUrl(player)}>
+										{player.displayName ?? player.name}
+									</Link>
+									{` - ${Math.floor(damage / (ms / 1000 / 60)).toLocaleString()}`}
 								</li>
 							))}
 					</ol>
@@ -134,7 +166,7 @@ export default async function Page(): Promise<JSX.Element> {
 				</div>
 				<div>
 					<header>
-						<h2>{"Deaths (Average)"}</h2>
+						<h2>{"Deaths (Per Game)"}</h2>
 					</header>
 					<ol>
 						{resultsByPlayer
