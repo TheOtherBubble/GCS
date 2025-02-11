@@ -48,7 +48,7 @@ export default async function Page(): Promise<JSX.Element> {
 			<div className={style["leaderboards"]}>
 				<div>
 					<header>
-						<h2>{"KDA Ratio"}</h2>
+						<h2>{"KDA (Average)"}</h2>
 					</header>
 					<ol>
 						{resultsByPlayer
@@ -82,7 +82,7 @@ export default async function Page(): Promise<JSX.Element> {
 				</div>
 				<div>
 					<header>
-						<h2>{"Average Champion Damage"}</h2>
+						<h2>{"Damage (Average)"}</h2>
 					</header>
 					<ol>
 						{resultsByPlayer
@@ -108,7 +108,7 @@ export default async function Page(): Promise<JSX.Element> {
 				</div>
 				<div>
 					<header>
-						<h2>{"Champion Damage (Single Game)"}</h2>
+						<h2>{"Damage (Single Game)"}</h2>
 					</header>
 					<ol>
 						{rows
@@ -125,6 +125,58 @@ export default async function Page(): Promise<JSX.Element> {
 										{player.displayName ?? player.name}
 									</Link>
 									{` - ${playerGameResult.championDamage.toLocaleString()} - `}
+									<Link
+										href={getGameUrl(game)}
+									>{`Game #${game.id.toString()}`}</Link>
+								</li>
+							))}
+					</ol>
+				</div>
+				<div>
+					<header>
+						<h2>{"Deaths (Average)"}</h2>
+					</header>
+					<ol>
+						{resultsByPlayer
+							.map(({ value: player, children: results }) => ({
+								deaths: results.reduce(
+									(total, { deaths }) => total + deaths,
+									0
+								),
+								games: results.length,
+								player
+							}))
+							.sort((a, b) => b.deaths / b.games - a.deaths / a.games)
+							.slice(0, 10)
+							.map(({ deaths, games, player }) => (
+								<li key={player.id}>
+									<Link href={getPlayerUrl(player)}>
+										{player.displayName ?? player.name}
+									</Link>
+									{` - ${(deaths / games).toFixed(2)}`}
+								</li>
+							))}
+					</ol>
+				</div>
+				<div>
+					<header>
+						<h2>{"Deaths (Single Game)"}</h2>
+					</header>
+					<ol>
+						{rows
+							.sort(
+								(
+									{ playerGameResult: { deaths: a } },
+									{ playerGameResult: { deaths: b } }
+								) => b - a
+							)
+							.slice(0, 10)
+							.map(({ game, player, playerGameResult }) => (
+								<li key={playerGameResult.id}>
+									<Link href={getPlayerUrl(player)}>
+										{player.displayName ?? player.name}
+									</Link>
+									{` - ${playerGameResult.deaths.toString()} - `}
 									<Link
 										href={getGameUrl(game)}
 									>{`Game #${game.id.toString()}`}</Link>
