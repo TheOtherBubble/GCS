@@ -82,6 +82,28 @@ export default async function Page(): Promise<JSX.Element> {
 				</div>
 				<div>
 					<header>
+						<h2>{"Games Played"}</h2>
+					</header>
+					<ol>
+						{resultsByPlayer
+							.map(({ value: player, children: results }) => ({
+								games: results.length,
+								player
+							}))
+							.sort(({ games: a }, { games: b }) => b - a)
+							.slice(0, 10)
+							.map(({ games, player }) => (
+								<li key={player.id}>
+									<Link href={getPlayerUrl(player)}>
+										{player.displayName ?? player.name}
+									</Link>
+									{` - ${games.toLocaleString()}`}
+								</li>
+							))}
+					</ol>
+				</div>
+				<div>
+					<header>
 						<h2>{"Damage (Per Game)"}</h2>
 					</header>
 					<ol>
