@@ -1,0 +1,89 @@
+@use "../styles/variables";
+@use "../styles/mixins";
+@use "../styles/clean-list.module.scss";
+
+// Top navigation bar.
+nav.topnav {
+	height: 100%;
+	font-size: 1.5em;
+
+	// Top navigation bar element list.
+	& > ul {
+		@extend .clean-list;
+		height: 100%;
+		display: flex;
+
+		// Top navigation bar item.
+		& > li {
+			display: block;
+			height: 100%;
+
+			// Top navigation bar item hover.
+			&:hover {
+				background-color: variables.$fg-color;
+			}
+
+			$padding: 0px 16px;
+
+			// Top navigation bar item content.
+			& > * {
+				height: 100%;
+				padding: $padding;
+				display: flex;
+				align-items: center;
+			}
+
+			// Right-aligned top navigation bar item.
+			&.right {
+				margin-left: auto;
+			}
+
+			// Desktop-only top navigation bar item.
+			&.hide-on-mobile {
+				display: none;
+
+				@include mixins.gt-mobile using ($gt-mobile) {
+					@if $gt-mobile {
+						display: block;
+					}
+				}
+			}
+
+			// Wide desktop-only top navigation bar item.
+			&.hide-on-medium {
+				display: none;
+
+				@include mixins.gt-medium using ($gt-medium) {
+					@if $gt-medium {
+						display: block;
+					}
+				}
+			}
+
+			// Top navigation bar item link.
+			& > a {
+				text-decoration: none;
+				color: variables.$text-color;
+
+				// Top navigation bar item link logo.
+				& > svg {
+					height: 80%;
+				}
+			}
+
+			// Sign in and sign out forms.
+			& > form {
+				padding: 0px;
+
+				// Sign in and sign out buttons.
+				& > input {
+					height: 100%;
+					padding: $padding;
+					border: none;
+					background-color: inherit;
+					cursor: pointer;
+				}
+			}
+		}
+	}
+}
