@@ -39,13 +39,15 @@ export default async function UpdateAccountsForm({
 	// Can't call methods on properties passed from the client to the server, so do it here instead.
 	const accountDatas = await Promise.all(
 		accounts.map(async (account) => {
-			const platform = "NA1";
 			try {
-				const summonerDto = await getSummonerByPuuid(account.puuid, platform);
+				const summonerDto = await getSummonerByPuuid(
+					account.puuid,
+					account.region
+				);
 				const soloQueueDto = (
-					await getLeagueEntriesBySummonerId(summonerDto.id, platform)
+					await getLeagueEntriesBySummonerId(summonerDto.id, account.region)
 				).find((leagueEntry) => leagueEntry.queueType === QueueType.SOLO);
-				return { account, platform, soloQueueDto, summonerDto };
+				return { account, soloQueueDto, summonerDto };
 			} catch {
 				return void 0;
 			}
@@ -65,7 +67,7 @@ export default async function UpdateAccountsForm({
 						continue;
 					}
 
-					const { account, platform, soloQueueDto, summonerDto } = accountData;
+					const { account, soloQueueDto, summonerDto } = accountData;
 
 					// eslint-disable-next-line no-await-in-loop
 					await db
@@ -78,7 +80,7 @@ export default async function UpdateAccountsForm({
 								account.isVerified ||
 								summonerDto.profileIconId === account.profileIconIdToVerify,
 							rankCache: soloQueueDto?.rank,
-							region: platform,
+							region: account.region,
 							tagLineCache: account.tagLineCache,
 							tierCache: soloQueueDto?.tier
 						})

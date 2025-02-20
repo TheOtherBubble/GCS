@@ -183,6 +183,32 @@ export const accountTierEnum = pgEnum("accountTier", [
 export const accountRankEnum = pgEnum("accountRank", ["I", "II", "III", "IV"]);
 
 /**
+ * League of Legends platform routing values.
+ * @see {@link https://developer.riotgames.com/docs/lol#routing-values_platform-routing-values | Platform Routing Values}
+ * @public
+ */
+export const platformEnum = pgEnum("platform", [
+	"BR1",
+	"EUN1",
+	"EUW1",
+	"JP1",
+	"KR",
+	"LA1",
+	"LA2",
+	"ME1", // Not documented anywhere, but listed among various APIs' regions.
+	"NA1",
+	"OC1",
+	"PH2", // Not documented anywhere, but listed among various APIs' regions. Merged into `SG2`.
+	"RU",
+	"SG2", // Merged from `TH2` and `PH2`.
+	"TH2", // Not documented anywhere, but listed among various APIs' regions. Merged into `SG2`.
+	"TR1",
+	"TW2",
+	"VN2",
+	"PBE" // Not documented anywehre.
+]);
+
+/**
  * The table of Riot accounts. Each Riot account is linked to one player. Riot account game names and tag lines are cached to reduce calls to the Riot API.
  * @public
  */
@@ -222,7 +248,7 @@ export const accountTable = pgTable(
 		rankCache: accountRankEnum().notNull(),
 
 		// The account's platform (region) ID (i.e. `"NA1"` for North America).
-		region: varchar({ length: 4 }).notNull(),
+		region: platformEnum().notNull(),
 
 		// The account's summoner ID. 63 character maximum length.
 		summonerId: varchar({ length: 63 }).notNull(),
@@ -446,32 +472,6 @@ export const gameTable = pgTable("game", {
 	// The tournament code that players in the game use to join the game.
 	tournamentCode: varchar({ length: 0x40 }).notNull()
 });
-
-/**
- * League of Legends platform routing values.
- * @see {@link https://developer.riotgames.com/docs/lol#routing-values_platform-routing-values | Platform Routing Values}
- * @public
- */
-export const platformEnum = pgEnum("platform", [
-	"BR1",
-	"EUN1",
-	"EUW1",
-	"JP1",
-	"KR",
-	"LA1",
-	"LA2",
-	"ME1", // Not documented anywhere, but listed among various APIs' regions.
-	"NA1",
-	"OC1",
-	"PH2", // Not documented anywhere, but listed among various APIs' regions. Merged into `SG2`.
-	"RU",
-	"SG2", // Merged from `TH2` and `PH2`.
-	"TH2", // Not documented anywhere, but listed among various APIs' regions. Merged into `SG2`.
-	"TR1",
-	"TW2",
-	"VN2",
-	"PBE" // Not documented anywehre.
-]);
 
 /**
  * The table of game results, which represent the players and statistics in a completed game. A game result may not correspond to a game if the game result isn't part of a tournament or inhouse (such as games that are just pulled from the Riot API to collect statistics).
