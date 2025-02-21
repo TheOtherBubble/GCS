@@ -1,3 +1,5 @@
+@use "../../styles/variables";
+@use "../../styles/mixins";
 @use "../../styles/blob.module.scss";
 
 // Leaderboard list.
@@ -6,13 +8,50 @@ div.leaderboards {
 	flex-direction: row;
 	flex-wrap: wrap;
 
+	// Big leaderboards list.
+	&.big {
+		@include mixins.gt-medium using ($gt-medium) {
+			@if $gt-medium {
+				display: grid;
+				grid-template-columns: 1fr 1fr 1fr;
+				justify-items: center;
+
+				// Leaderboard.
+				& > div {
+					width: 80%;
+					overflow: hidden;
+				}
+			}
+		}
+
+		// Leaderboard.
+		& > div {
+			border: 1px solid variables.$theme-color;
+
+			// Leaderboard header.
+			& > header {
+				font-size: 1.5em;
+
+				// Leaderboard header content.
+				& > * {
+					color: variables.$hl-color;
+				}
+			}
+		}
+	}
+
 	// Leaderboard.
 	& > div {
 		@extend .blob;
+		border-radius: 0px;
 
 		// Leaderboard listing.
 		& > ol {
-			font-size: 1.5em;
+			@include mixins.gt-mobile using ($gt-mobile) {
+				@if $gt-mobile {
+					font-size: 1.5em;
+				}
+			}
 		}
 	}
 }
