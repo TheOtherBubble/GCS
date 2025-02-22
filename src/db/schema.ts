@@ -15,15 +15,15 @@ import {
 import type { AdapterAccountType } from "next-auth/adapters";
 
 /**
- * Roles that a player can play.
+ * League of Legends positions.
  * @public
  */
-export const playerRoleEnum = pgEnum("playerRole", [
-	"Top",
-	"Jungle",
-	"Middle",
-	"Bottom",
-	"Support"
+export const positionEnum = pgEnum("position", [
+	"TOP",
+	"JUNGLE",
+	"MIDDLE",
+	"BOTTOM",
+	"UTILITY"
 ]);
 
 /**
@@ -31,7 +31,7 @@ export const playerRoleEnum = pgEnum("playerRole", [
  * @public
  */
 export const playerTable = pgTable("player", {
-	// A UUID that represents the player. Supplied by Auth.js. Must be a `varchar` to make Auth.js happy, despite always being 36 characters.
+	// A UUID that represents the player. Supplied by Auth.js. Must be a `varchar` to make Auth.js happy, despite always being a 36-character UUIDv4.
 	id: varchar({ length: 36 })
 		.primaryKey()
 		.$defaultFn(() => crypto.randomUUID()),
@@ -72,10 +72,10 @@ export const playerTable = pgTable("player", {
 	name: varchar({ length: 0x20 }).notNull(),
 
 	// The player's primary role. Must be set for the player to be able to sign up for a season.
-	primaryRole: playerRoleEnum(),
+	primaryRole: positionEnum(),
 
 	// The player's secondary role. Must be set and not equal to the player's primary role for the player to be able to sign up for a season.
-	secondaryRole: playerRoleEnum(),
+	secondaryRole: positionEnum(),
 
 	// The player's Twitch ID.
 	twitchId: varchar({ length: 0x40 }),
@@ -575,18 +575,6 @@ export const teamGameResultBanTable = pgTable(
 	},
 	(self) => [unique().on(self.gameResultId, self.order, self.teamId)]
 );
-
-/**
- * League of Legends positions.
- * @public
- */
-export const positionEnum = pgEnum("position", [
-	"TOP",
-	"JUNGLE",
-	"MIDDLE",
-	"BOTTOM",
-	"UTILITY"
-]);
 
 /**
  * A player in a team game result. This is just cached data from the Riot API. Always corresponds to a team game result, but may not always correspond to a player (such as for game results that are just pulled from the Riot API to collect statistics).

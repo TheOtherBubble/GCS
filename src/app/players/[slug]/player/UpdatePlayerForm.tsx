@@ -1,5 +1,5 @@
 import Form, { type FormProps } from "components/Form";
-import { playerRoleEnum, playerTable } from "db/schema";
+import { playerTable, positionEnum } from "db/schema";
 import ChampionList from "./ChampionList";
 import type { JSX } from "react";
 import Link from "components/Link";
@@ -45,10 +45,10 @@ export default function UpdatePlayerForm({
 						biography: getFormField(form, "biography"),
 						displayName,
 						primaryRole: getFormField(form, "primaryRole") as
-							| (typeof playerRoleEnum.enumValues)[number]
+							| (typeof positionEnum.enumValues)[number]
 							| undefined,
 						secondaryRole: getFormField(form, "secondaryRole") as
-							| (typeof playerRoleEnum.enumValues)[number]
+							| (typeof positionEnum.enumValues)[number]
 							| undefined
 					})
 					.where(eq(playerTable.id, player.id));
@@ -86,7 +86,7 @@ export default function UpdatePlayerForm({
 					{"Primary role"}
 					<select name="primaryRole">
 						<option />
-						{playerRoleEnum.enumValues.map((role) => (
+						{positionEnum.enumValues.map((role) => (
 							<option value={role} key={role}>
 								{role}
 							</option>
@@ -99,7 +99,7 @@ export default function UpdatePlayerForm({
 					{"Secondary role"}
 					<select name="secondaryRole">
 						<option />
-						{playerRoleEnum.enumValues.map((role) => (
+						{positionEnum.enumValues.map((role) => (
 							<option value={role} key={role}>
 								{role}
 							</option>

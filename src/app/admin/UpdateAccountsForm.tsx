@@ -107,7 +107,7 @@ export default function UpdateAccountsForm(
 								summonerDto.profileIconId === account.profileIconIdToVerify,
 							rankCache: soloQueueDto?.rank,
 							region: account.region,
-							tagLineCache: account.tagLineCache,
+							tagLineCache: newAccount.tagLine,
 							tierCache: soloQueueDto?.tier
 						})
 						.where(eq(accountTable.puuid, account.puuid));
