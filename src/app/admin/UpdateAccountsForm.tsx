@@ -1,14 +1,10 @@
 import Form, { type FormProps } from "components/Form";
 import type { JSX } from "react";
-import QueueType from "types/riot/QueueType";
 import Submit from "components/Submit";
 import { accountTable } from "db/schema";
 import db from "db/db";
-import { eq } from "drizzle-orm";
-import getAccountByPuuid from "riot/getAccountByPuuid";
-import getLeagueEntriesBySummonerId from "riot/getLeagueEntriesBySummonerId";
-import getSummonerByPuuid from "riot/getSummonerByPuuid";
 import hasRiotApiKey from "util/hasRiotApiKey";
+import updateAccount from "util/updateAccount";
 
 /**
  * Properties that can be passed to an update accounts form.
@@ -77,40 +73,8 @@ export default function UpdateAccountsForm(
 						reqsThisSec = requestsPerLoop;
 					}
 
-					// Make Riot API calls.
 					// eslint-disable-next-line no-await-in-loop
-					const summonerDto = await getSummonerByPuuid(
-						account.puuid,
-						account.region
-					);
-					// eslint-disable-next-line no-await-in-loop
-					const leagueEntries = await getLeagueEntriesBySummonerId(
-						summonerDto.id,
-						account.region
-					);
-					// eslint-disable-next-line no-await-in-loop
-					const newAccount = await getAccountByPuuid(account.puuid);
-
-					// Get the solo queue league entry.
-					const soloQueueDto = leagueEntries.find(
-						(leagueEntry) => leagueEntry.queueType === QueueType.SOLO
-					);
-
-					// eslint-disable-next-line no-await-in-loop
-					await db
-						.update(accountTable)
-						.set({
-							cacheDate: new Date().toISOString().substring(0, 10),
-							gameNameCache: newAccount.gameName,
-							isVerified:
-								account.isVerified ||
-								summonerDto.profileIconId === account.profileIconIdToVerify,
-							rankCache: soloQueueDto?.rank,
-							region: account.region,
-							tagLineCache: newAccount.tagLine,
-							tierCache: soloQueueDto?.tier
-						})
-						.where(eq(accountTable.puuid, account.puuid));
+					await updateAccount(account);
 				}
 
 				return void 0;

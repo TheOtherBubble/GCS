@@ -35,6 +35,18 @@ export default function Page(): JSX.Element {
 				<Link href={new URL("/api/players/schema", domain).href}>{"here"}</Link>
 				{"."}
 			</p>
+			<h2>
+				<Link href={new URL("/api/player/id", domain).href}>
+					<code>{"/player/[id]"}</code>
+				</Link>
+			</h2>
+			<p>
+				{
+					"This endpoint returns more details about a specific GCS player. Each player has one Discord account and a non-negative number of Riot accounts. Each player may play in any non-negative number of seasons. Each player will be a member of exactly one team per season in which they participate. The schema for this endpoint can be found "
+				}
+				<Link href={new URL("/api/player/schema", domain).href}>{"here"}</Link>
+				{"."}
+			</p>
 		</article>
 	);
 }

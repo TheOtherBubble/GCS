@@ -1,16 +1,11 @@
 import Form, { type FormProps } from "components/Form";
 import { accountTable, type playerTable } from "db/schema";
 import type { JSX } from "react";
-import QueueType from "types/riot/QueueType";
 import Submit from "components/Submit";
-import db from "db/db";
-import { eq } from "drizzle-orm";
-import getAccountByPuuid from "riot/getAccountByPuuid";
-import getLeagueEntriesBySummonerId from "riot/getLeagueEntriesBySummonerId";
 import getPlayerUrl from "util/getPlayerUrl";
-import getSummonerByPuuid from "riot/getSummonerByPuuid";
 import hasRiotApiKey from "util/hasRiotApiKey";
 import { revalidatePath } from "next/cache";
+import updateAccount from "util/updateAccount";
 
 /**
  * Properties that can be passed to an update accounts form.
@@ -31,29 +26,11 @@ export interface UpdateAccountsFormProps
  * @returns The form.
  * @public
  */
-export default async function UpdateAccountsForm({
+export default function UpdateAccountsForm({
 	player,
 	accounts,
 	...props
-}: UpdateAccountsFormProps): Promise<JSX.Element> {
-	// Can't call methods on properties passed from the client to the server, so do it here instead.
-	const accountDatas = await Promise.all(
-		accounts.map(async (account) => {
-			try {
-				const summonerDto = await getSummonerByPuuid(
-					account.puuid,
-					account.region
-				);
-				const soloQueueDto = (
-					await getLeagueEntriesBySummonerId(summonerDto.id, account.region)
-				).find((leagueEntry) => leagueEntry.queueType === QueueType.SOLO);
-				return { account, soloQueueDto, summonerDto };
-			} catch {
-				return void 0;
-			}
-		})
-	);
-
+}: UpdateAccountsFormProps): JSX.Element {
 	return (
 		<Form
 			action={async () => {
@@ -62,30 +39,11 @@ export default async function UpdateAccountsForm({
 					return "Missing Riot API key.";
 				}
 
-				for (const accountData of accountDatas) {
-					if (!accountData) {
-						continue;
-					}
-
-					const { account, soloQueueDto, summonerDto } = accountData;
-
+				for (const account of accounts) {
 					// eslint-disable-next-line no-await-in-loop
-					await db
-						.update(accountTable)
-						.set({
-							cacheDate: new Date().toISOString().substring(0, 10),
-							// eslint-disable-next-line no-await-in-loop
-							gameNameCache: (await getAccountByPuuid(account.puuid)).gameName,
-							isVerified:
-								account.isVerified ||
-								summonerDto.profileIconId === account.profileIconIdToVerify,
-							rankCache: soloQueueDto?.rank,
-							region: account.region,
-							tagLineCache: account.tagLineCache,
-							tierCache: soloQueueDto?.tier
-						})
-						.where(eq(accountTable.puuid, account.puuid));
+					await updateAccount(account);
 				}
+
 				revalidatePath(getPlayerUrl(player));
 				return void 0;
 			}}

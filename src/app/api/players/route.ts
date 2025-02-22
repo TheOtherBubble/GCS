@@ -1,3 +1,4 @@
+import { NextResponse } from "next/server";
 import db from "db/db";
 import { playerTable } from "db/schema";
 
@@ -5,21 +6,13 @@ import { playerTable } from "db/schema";
  * Get a list of player IDs.
  * @public
  */
-export const GET = async () =>
-	Response.json(
+export const GET = async (): Promise<NextResponse> =>
+	NextResponse.json(
 		await db
 			.select({
-				bgChamp: playerTable.backgroundChampionId,
-				bgSkin: playerTable.backgroundSkinNumber,
-				bio: playerTable.biography,
 				discordId: playerTable.discordId,
 				discordName: playerTable.name,
-				displayName: playerTable.displayName,
-				id: playerTable.id,
-				role1: playerTable.primaryRole,
-				role2: playerTable.secondaryRole,
-				twitchId: playerTable.twitchId,
-				youtubeId: playerTable.youtubeId
+				id: playerTable.id
 			})
 			.from(playerTable)
 	);

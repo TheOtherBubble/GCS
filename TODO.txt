@@ -1,11 +1,13 @@
 Core functionality, necessary before the season starts:
-- Administrator tool for modifying team captains.
-- Administrator tool for modifying games' tournament codes.
-- Track victory points.
+- Administrator tool for modifying draftable players' point values.
+- API.
+- Show game results on game pages.
 - Link to match on game pages.
+- Administrator tool for modifying games' tournament codes.
 - Show the tournament code of the game to players on teams in the game on game pages.
 - Show the tournament code of the next game to players on teams in the match on match pages.
-- Show game results on game pages.
+- Track victory points.
+- Administrator tool for modifying team captains.
 - Administrator tool for deleting teams.
 - Administrator tool for deleting matches.
 - Administrator tool for deleting games.
@@ -16,7 +18,6 @@ Core functionality, waiting on Riot to give us an API key:
 - API endpoint for receiving and storing game results and creating games when necessary.
 
 Core functionality, necessary before the next season:
-- Administrator tool for modifying draftable players' point values.
 - Add a page for captains to draft.
 
 Extra features to add after everything else is done (or when waiting on other people):
@@ -50,4 +51,59 @@ Extra features to add after everything else is done (or when waiting on other pe
 - Discord app integration.
 - Inhouse integration.
 - Display player non-GCS match history on player pages.
-- API.
+
+API TODOs:
+
+/account/[id]
+- gameName
+- isPrimary
+- playerId
+- id
+- region
+- tagLine
+
+/seasons
+- id
+- name
+
+/season/[id]
+- id
+- name
+- startDate
+- vanityUrlSlug
+- teamIds
+- players
+ - id
+ - pv
+- matchIds
+
+/teams/[id]
+- code
+- color
+- id
+- isWinner
+- logoUrl
+- name
+- pool
+- seasonId
+- vanityUrlSlug
+- playerIds
+- captainId
+
+/matches/[id]
+- format
+- id
+- round
+- seasonId
+- team1Id
+- team2Id
+- timeslot
+- gameIds
+
+/games/[id]
+- id
+- matchId
+- gameId
+- region
+- winnerTeamId
+- loserTeamId

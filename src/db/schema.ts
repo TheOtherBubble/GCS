@@ -215,7 +215,7 @@ export const platformEnum = pgEnum("platform", [
 export const accountTable = pgTable(
 	"account",
 	{
-		// The Riot account ID of the account. 56 character maximum length.
+		// The encrypted Riot account ID of the account. 56 character maximum length.
 		accountId: varchar({ length: 56 }).notNull(),
 
 		// The date and time that the account was last cached.
@@ -241,7 +241,7 @@ export const accountTable = pgTable(
 		// The ID of the profile icon that the account must select in order to verify that the associated player owns it. Randomly selected from icons in the starter pack (IDs 0 through 28), which every player owns.
 		profileIconIdToVerify: integer().notNull(),
 
-		// The Player Universally Unique ID (PUUID) of the account. PUUIDs are always 78 characters long.
+		// The encrypted Player Universally Unique ID (PUUID) of the account. PUUIDs are always 78 characters long.
 		puuid: char({ length: 78 }).primaryKey(),
 
 		// The solo/duo rank (within a tier) of the account at the last time that the account was cached.
@@ -250,7 +250,7 @@ export const accountTable = pgTable(
 		// The account's platform (region) ID (i.e. `"NA1"` for North America).
 		region: platformEnum().notNull(),
 
-		// The account's summoner ID. 63 character maximum length.
+		// The encrypted account's summoner ID. 63 character maximum length.
 		summonerId: varchar({ length: 63 }).notNull(),
 
 		// The tag line of the account at the last time that the account was cached. The longest allowed tag line is 5 characters.
