@@ -16,6 +16,7 @@ import RoundHeader from "./RoundHeader";
 import { auth } from "db/auth";
 import db from "db/db";
 import { eq } from "drizzle-orm";
+import getFormatGameCount from "util/getFormatGameCount";
 import getMatchDateTime from "util/getMatchDateTime";
 import getSeasonUrl from "util/getSeasonUrl";
 import getTeamUrl from "util/getTeamUrl";
@@ -101,21 +102,47 @@ export default async function Page(
 		.select()
 		.from(teamTable)
 		.where(eq(teamTable.seasonId, season.id));
-	const teamScores = teams.map((team) => ({ losses: 0, team, wins: 0 }));
-	for (const teamGameResult of leftHierarchy(seasonRows, "teamGameResult")) {
-		const team = teamScores.find(
-			({ team: value }) => value.id === teamGameResult.teamId
+	const teamScores = teams.map((team) => ({ team, victoryPoints: 0 }));
+	for (const matchTeamGameResults of leftHierarchy(
+		seasonRows,
+		"match",
+		"teamGameResult"
+	)) {
+		const matchTeamScores = new Map<number, [number, number]>();
+		for (const teamGameResult of matchTeamGameResults.children) {
+			if (!teamGameResult.teamId) {
+				continue;
+			}
+
+			let matchTeamScore = matchTeamScores.get(teamGameResult.teamId);
+			if (!matchTeamScore) {
+				matchTeamScore = [0, 0];
+				matchTeamScores.set(teamGameResult.teamId, matchTeamScore);
+			}
+
+			if (teamGameResult.isWinner) {
+				matchTeamScore[0]++;
+				continue;
+			}
+
+			matchTeamScore[1]++;
+		}
+
+		const [, , scoreToWin] = getFormatGameCount(
+			matchTeamGameResults.value.format
 		);
-		if (!team) {
-			continue;
-		}
 
-		if (teamGameResult.isWinner) {
-			team.wins++;
-			continue;
-		}
+		for (const [teamId, matchScore] of matchTeamScores) {
+			const teamScore = teamScores.find(({ team: { id } }) => id === teamId);
+			if (!teamScore) {
+				continue;
+			}
 
-		team.losses++;
+			teamScore.victoryPoints +=
+				matchScore[0] < scoreToWin
+					? matchScore[0]
+					: matchScore[0] + (scoreToWin - 1 - matchScore[1]);
+		}
 	}
 
 	const poolScores = new Map<number, typeof teamScores>();
@@ -202,11 +229,11 @@ export default async function Page(
 								</header>
 								<ol>
 									{scores
-										.sort((a, b) => b.wins - a.wins || a.losses - b.losses)
-										.map(({ team, wins, losses }) => (
+										.sort(({ victoryPoints: a }, { victoryPoints: b }) => b - a)
+										.map(({ team, victoryPoints }) => (
 											<li key={team.id}>
 												<Link href={getTeamUrl(team)}>{team.name}</Link>
-												{` ${wins.toString()}-${losses.toString()}`}
+												{` ${victoryPoints.toString()}`}
 											</li>
 										))}
 								</ol>
