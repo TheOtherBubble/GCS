@@ -1,4 +1,4 @@
-import type { playerGameResultTable, positionEnum } from "db/schema";
+import type { playerGameResultTable } from "db/schema";
 import positionToNumber from "./positionToNumber";
 
 /**
@@ -9,11 +9,8 @@ import positionToNumber from "./positionToNumber";
  * @public
  */
 export default function sortPlayersStandard(
-	a: Pick<typeof playerGameResultTable.$inferSelect, "position">,
-	b: Pick<typeof playerGameResultTable.$inferSelect, "position">
+	{ position: a }: Pick<typeof playerGameResultTable.$inferSelect, "position">,
+	{ position: b }: Pick<typeof playerGameResultTable.$inferSelect, "position">
 ): number {
-	return (
-		positionToNumber(a.position as (typeof positionEnum.enumValues)[number]) -
-		positionToNumber(b.position as (typeof positionEnum.enumValues)[number])
-	);
+	return positionToNumber(a) - positionToNumber(b);
 }

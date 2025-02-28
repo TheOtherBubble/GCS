@@ -83,11 +83,7 @@ export default function UpdateAccountsForm(
 		>
 			<header>
 				<h3>{"Update All Accounts"}</h3>
-				<p>
-					{
-						"Will take several minutes. Makes Riot API calls at the development rate limit."
-					}
-				</p>
+				<p>{"Will take several minutes."}</p>
 			</header>
 			<p>
 				<Submit value="Update" />

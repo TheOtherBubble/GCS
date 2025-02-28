@@ -33,11 +33,10 @@ export default function BanPlayerForm({
 				await db
 					.update(playerTable)
 					.set({
-						bannedUntilDate: getFormField(
-							form,
-							"bannedUntilDate",
-							true
-						).substring(0, 10)
+						bannedUntil: getFormField(form, "bannedUntil", true).substring(
+							0,
+							10
+						)
 					})
 					.where(eq(playerTable.id, player.id));
 			}}
@@ -50,7 +49,7 @@ export default function BanPlayerForm({
 			<p>
 				<label>
 					{"Banned until"}
-					<input type="date" name="bannedUntilDate" required />
+					<input type="date" name="bannedUntil" required />
 				</label>
 			</p>
 			<p>

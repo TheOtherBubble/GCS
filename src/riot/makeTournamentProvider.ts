@@ -20,8 +20,7 @@ export default async function makeTournamentProvider(
 ): Promise<number> {
 	return (await (
 		await riotFetch(
-			new URL("/lol/tournament-stub/v5/providers", getRiotApiBaseUrl(cluster))
-				.href,
+			new URL("/lol/tournament/v5/providers", getRiotApiBaseUrl(cluster)).href,
 			{ body: JSON.stringify(params), method: "POST" },
 			key
 		)

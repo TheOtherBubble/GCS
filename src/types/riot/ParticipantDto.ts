@@ -154,7 +154,7 @@ export default interface ParticipantDto {
 	/** The participant's kill count. */
 	kills: number;
 
-	/** An undocumented value. */
+	/** The lane in which the participant played. */
 	lane: Lane;
 
 	/** The participant's largest critical strike damage. */

@@ -89,7 +89,8 @@ export default async function Page(): Promise<JSX.Element> {
 						{resultsByPlayer
 							.map(({ value: player, children: results }) => ({
 								damage: results.reduce(
-									(total, { championDamage }) => total + championDamage,
+									(total, { champDmg: championDamage }) =>
+										total + championDamage,
 									0
 								),
 								ms: results.reduce(
@@ -172,7 +173,8 @@ export default async function Page(): Promise<JSX.Element> {
 						{resultsByPlayer
 							.map(({ value: player, children: results }) => ({
 								damage: results.reduce(
-									(total, { championDamage }) => total + championDamage,
+									(total, { champDmg: championDamage }) =>
+										total + championDamage,
 									0
 								),
 								games: results.length,
@@ -198,8 +200,8 @@ export default async function Page(): Promise<JSX.Element> {
 						{rows
 							.sort(
 								(
-									{ playerGameResult: { championDamage: a } },
-									{ playerGameResult: { championDamage: b } }
+									{ playerGameResult: { champDmg: a } },
+									{ playerGameResult: { champDmg: b } }
 								) => b - a
 							)
 							.slice(0, 10)
@@ -208,7 +210,7 @@ export default async function Page(): Promise<JSX.Element> {
 									<Link href={getPlayerUrl(player)}>
 										{player.displayName ?? player.name}
 									</Link>
-									{` - ${playerGameResult.championDamage.toLocaleString()} - `}
+									{` - ${playerGameResult.champDmg.toLocaleString()} - `}
 									<Link
 										href={getGameUrl(game)}
 									>{`Game #${game.id.toString()}`}</Link>

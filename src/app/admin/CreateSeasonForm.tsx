@@ -34,8 +34,8 @@ export default function CreateSeasonForm(
 				await db.insert(seasonTable).values({
 					id: await makeTournament(name),
 					name,
-					startDate: getFormField(form, "startDate"),
-					vanityUrlSlug: getFormField(form, "vanityUrlSlug", true)
+					slug: getFormField(form, "vanityUrlSlug", true),
+					startDate: getFormField(form, "startDate")
 				});
 				return void 0;
 			}}

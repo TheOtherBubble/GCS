@@ -18,7 +18,7 @@ export default async function Page(): Promise<JSX.Element> {
 		unauthorized();
 	}
 
-	if (!session.user.isAdministator) {
+	if (!session.user.isAdmin) {
 		forbidden();
 	}
 

@@ -10,11 +10,11 @@ import tierToNumber from "./tierToNumber";
  * @public
  */
 export default function sortAccountsByRank(
-	a: Pick<typeof accountTable.$inferSelect, "tierCache" | "rankCache">,
-	b: Pick<typeof accountTable.$inferSelect, "tierCache" | "rankCache">
+	a: Pick<typeof accountTable.$inferSelect, "tier" | "rank">,
+	b: Pick<typeof accountTable.$inferSelect, "tier" | "rank">
 ): number {
 	return (
-		tierToNumber(a.tierCache) - tierToNumber(b.tierCache) ||
-		rankToNumber(a.rankCache) - rankToNumber(b.rankCache)
+		tierToNumber(a.tier) - tierToNumber(b.tier) ||
+		rankToNumber(a.rank) - rankToNumber(b.rank)
 	);
 }

@@ -6,8 +6,8 @@ import type { seasonTable } from "db/schema";
  * @returns The URL for the season's page.
  * @public
  */
-export default function getSeasonUrl(
-	season: Pick<typeof seasonTable.$inferSelect, "vanityUrlSlug">
-): `/seasons/${string}` {
-	return `/seasons/${encodeURIComponent(season.vanityUrlSlug)}`;
+export default function getSeasonUrl({
+	slug
+}: Pick<typeof seasonTable.$inferSelect, "slug">): `/seasons/${string}` {
+	return `/seasons/${encodeURIComponent(slug)}`;
 }

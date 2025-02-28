@@ -66,7 +66,7 @@ export default async function Page(
 					playerGameResultTable.gameResultId,
 					teamGameResultTable.gameResultId
 				),
-				eq(playerGameResultTable.teamId, teamGameResultTable.riotId)
+				eq(playerGameResultTable.team, teamGameResultTable.team)
 			)
 		)
 		.leftJoin(
@@ -121,7 +121,7 @@ export default async function Page(
 
 	// Get session user data.
 	const session = await auth();
-	const isAdmin = session?.user?.isAdministator ?? false;
+	const isAdmin = session?.user?.isAdmin ?? false;
 	const isPlayer = isAdmin || session?.user?.id === player.id;
 
 	// Get latest season data.
@@ -145,7 +145,7 @@ export default async function Page(
 			)}
 			<header>
 				<h1>{player.displayName ?? player.name}</h1>
-				{player.biography && <Markdown>{player.biography}</Markdown>}
+				{player.bio && <Markdown>{player.bio}</Markdown>}
 			</header>
 			<div>
 				<div>

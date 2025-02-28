@@ -58,9 +58,9 @@ export const GET = async (
 					accountIds: player.children
 						.filter(({ value }) => value.isVerified)
 						.map(({ value: { puuid: id } }) => id),
-					bgChamp: player.value.backgroundChampionId,
-					bgSkin: player.value.backgroundSkinNumber,
-					bio: player.value.biography,
+					bgChamp: player.value.bgChamp,
+					bgSkin: player.value.bgSkin,
+					bio: player.value.bio,
 					discordId: player.value.discordId,
 					discordName: player.value.name,
 					displayName: player.value.displayName,

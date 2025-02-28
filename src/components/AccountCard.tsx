@@ -6,6 +6,7 @@ import type { accountTable } from "db/schema";
 import getProfileIconUrl from "riot/getProfileIconUrl";
 import multiclass from "util/multiclass";
 import style from "./styles/account-card.module.scss";
+import ugg from "util/ugg";
 
 /**
  * Properties that can be passed to an account card.
@@ -27,19 +28,15 @@ export default async function AccountCard({
 	className,
 	...props
 }: AccountCardProps): Promise<JSX.Element> {
-	const ugg = `https://u.gg/lol/profile/${account.region}/${account.gameNameCache}-${account.tagLineCache}/overview`;
-
 	if (!account.isVerified) {
-		const profileIconUrl = await getProfileIconUrl(
-			account.profileIconIdToVerify
-		);
+		const profileIconUrl = await getProfileIconUrl(account.verifyIcon);
 		if (!profileIconUrl) {
 			throw new Error("Failed to get profile icon URL.");
 		}
 
 		return (
 			<Link
-				href={ugg}
+				href={ugg(account)}
 				className={multiclass(className, style["account-card"])}
 				{...props}
 			>
@@ -50,7 +47,7 @@ export default async function AccountCard({
 					height={128}
 				/>
 				<div>
-					<h3>{`${account.gameNameCache}#${account.tagLineCache}`}</h3>
+					<h3>{`${account.name}#${account.tagLine}`}</h3>
 					<p>{"Change to the shown profile icon and update to verify."}</p>
 				</div>
 			</Link>
@@ -59,14 +56,14 @@ export default async function AccountCard({
 
 	return (
 		<Link
-			href={ugg}
+			href={ugg(account)}
 			className={multiclass(className, style["account-card"])}
 			{...props}
 		>
-			<RankedEmblem tier={account.tierCache} />
+			<RankedEmblem tier={account.tier} />
 			<div>
-				<h3>{`${account.gameNameCache}#${account.tagLineCache}`}</h3>
-				<p>{`${account.tierCache} ${account.rankCache}`}</p>
+				<h3>{`${account.name}#${account.tagLine}`}</h3>
+				<p>{`${account.tier} ${account.rank}`}</p>
 				{account.isPrimary && <p>{"Primary Account"}</p>}
 			</div>
 		</Link>

@@ -8,7 +8,7 @@ import sortAccountsByRank from "./sortAccountsByRank";
  * @public
  */
 export default function getHighestRankedAccount<
-	T extends Pick<typeof accountTable.$inferSelect, "tierCache" | "rankCache">[]
+	T extends Pick<typeof accountTable.$inferSelect, "tier" | "rank">[]
 >(...accounts: T): T[number] extends never ? undefined : T[number] {
 	return accounts
 		.sort(sortAccountsByRank)

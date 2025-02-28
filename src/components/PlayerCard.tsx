@@ -69,7 +69,7 @@ export default function PlayerCard({
 				<h3>
 					{player.displayName ?? player.name}
 					{highestRankedAccount && (
-						<RankedEmblem tier={highestRankedAccount.tierCache} />
+						<RankedEmblem tier={highestRankedAccount.tier} />
 					)}
 				</h3>
 				{games && <p>{`KDA: ${getAverageKda(...games).toFixed(2)}`}</p>}

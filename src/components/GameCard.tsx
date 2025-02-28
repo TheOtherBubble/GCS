@@ -74,10 +74,10 @@ export default async function GameCard({
 	const blueColor = "#00008d";
 	const redColor = "#550000";
 	const backgroundColor = teamGameResults.find(
-		({ isWinner, riotId }) => isWinner && riotId === 100
+		({ isWinner, team }) => isWinner && team === 100
 	)
 		? blueColor
-		: teamGameResults.find(({ isWinner, riotId }) => isWinner && riotId === 200)
+		: teamGameResults.find(({ isWinner, team }) => isWinner && team === 200)
 			? redColor
 			: void 0;
 
@@ -112,12 +112,12 @@ export default async function GameCard({
 		}
 
 		const playerBackgroundColor = teamGameResults.find(
-			({ isWinner, riotId }) => isWinner && riotId === result.teamId
+			({ isWinner, team }) => isWinner && team === result.team
 		)
 			? blueColor
 			: redColor;
 
-		const champion = championsByKey.get(result.championKey);
+		const champion = championsByKey.get(result.champ);
 		const championIcon = champion && (await getChampionIcon(champion.id));
 
 		const player = players?.find(
@@ -148,20 +148,20 @@ export default async function GameCard({
 						<h3>{result.name}</h3>
 					)}
 					<p>{`${result.kills.toString()}/${result.deaths.toString()}/${result.assists.toString()}`}</p>
-					<p>{`Damage: ${result.championDamage.toLocaleString()}`}</p>
+					<p>{`Damage: ${result.champDmg.toLocaleString()}`}</p>
 					<p>{`Level: ${result.level.toString()}`}</p>
 					<p>{`Position: ${result.position}`}</p>
 				</div>
 				{[
-					result.item0Id,
-					result.item1Id,
-					result.item2Id,
-					result.item6Id,
-					result.item3Id,
-					result.item4Id,
-					result.item5Id
-				].map(async (itemId, i) => {
-					const src = itemId && (await getItemIcon(itemId));
+					result.item0,
+					result.item1,
+					result.item2,
+					result.item6,
+					result.item3,
+					result.item4,
+					result.item5
+				].map(async (item, i) => {
+					const src = item && (await getItemIcon(item));
 					return src ? (
 						<Image key={i} alt="Item icon." src={src} width={64} height={64} />
 					) : (
@@ -181,9 +181,9 @@ export default async function GameCard({
 			{...props}
 		>
 			{playerGameResults
-				.sort((a, b) => a.teamId - b.teamId || sortPlayersStandard(a, b))
+				.sort((a, b) => a.team - b.team || sortPlayersStandard(a, b))
 				.map(async (result) => {
-					const champion = championsByKey.get(result.championKey);
+					const champion = championsByKey.get(result.champ);
 					const championIcon = champion && (await getChampionIcon(champion.id));
 					const player = players?.find(
 						({ id }) =>

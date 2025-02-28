@@ -69,7 +69,7 @@ export default async function Page(
 			).length > 0);
 
 	let adminPanel: JSX.Element | undefined = void 0;
-	if (session?.user?.isAdministator) {
+	if (session?.user?.isAdmin) {
 		const teams =
 			match &&
 			(await db

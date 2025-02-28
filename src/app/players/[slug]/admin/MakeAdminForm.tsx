@@ -31,7 +31,7 @@ export default function MakeAdminForm({
 				"use server";
 				await db
 					.update(playerTable)
-					.set({ isAdministator: true })
+					.set({ isAdmin: true })
 					.where(eq(playerTable.id, player.id));
 			}}
 			{...props}

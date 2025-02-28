@@ -12,23 +12,26 @@ import getSummonerByPuuid from "riot/getSummonerByPuuid";
  * @returns When finished.
  * @public
  */
-export default async function updateAccount(
-	account: Pick<
-		typeof accountTable.$inferSelect,
-		"puuid" | "region" | "isVerified" | "profileIconIdToVerify"
-	>
-): Promise<void> {
+export default async function updateAccount({
+	puuid,
+	region,
+	isVerified,
+	verifyIcon
+}: Pick<
+	typeof accountTable.$inferSelect,
+	"puuid" | "region" | "isVerified" | "verifyIcon"
+>): Promise<void> {
 	// Make Riot API calls.
-	const summonerDto = await getSummonerByPuuid(account.puuid, account.region);
+	const summonerDto = await getSummonerByPuuid(puuid, region);
 	const leagueEntries = await getLeagueEntriesBySummonerId(
 		summonerDto.id,
-		account.region
+		region
 	);
-	const newAccount = await getAccountByPuuid(account.puuid);
+	const newAccount = await getAccountByPuuid(puuid);
 
 	// Get the solo queue league entry.
 	const soloQueueDto = leagueEntries.find(
-		(leagueEntry) => leagueEntry.queueType === QueueType.SOLO
+		({ queueType }) => queueType === QueueType.SOLO
 	);
 
 	// Update the data in the database.
@@ -36,14 +39,12 @@ export default async function updateAccount(
 		.update(accountTable)
 		.set({
 			cacheDate: new Date().toISOString().substring(0, 10),
-			gameNameCache: newAccount.gameName,
-			isVerified:
-				account.isVerified ||
-				summonerDto.profileIconId === account.profileIconIdToVerify,
-			rankCache: soloQueueDto?.rank,
-			region: account.region,
-			tagLineCache: newAccount.tagLine,
-			tierCache: soloQueueDto?.tier
+			isVerified: isVerified || summonerDto.profileIconId === verifyIcon,
+			name: newAccount.gameName,
+			rank: soloQueueDto?.rank,
+			region,
+			tagLine: newAccount.tagLine,
+			tier: soloQueueDto?.tier
 		})
-		.where(eq(accountTable.puuid, account.puuid));
+		.where(eq(accountTable.puuid, puuid));
 }

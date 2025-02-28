@@ -47,11 +47,8 @@ export default async function PlayerPanel({
 			</header>
 			<AddAccountForm player={player} accounts={accounts} />
 			<UpdatePlayerForm player={player} />
-			{player.backgroundChampionId && (
-				<UpdateSkinForm
-					player={player}
-					backgroundChampionId={player.backgroundChampionId}
-				/>
+			{player.bgChamp && (
+				<UpdateSkinForm player={player} backgroundChampionId={player.bgChamp} />
 			)}
 			{latestSeason &&
 				(

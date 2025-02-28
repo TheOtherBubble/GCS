@@ -39,7 +39,7 @@ export default function CreateTeamForm({
 					name: getFormField(form, "name", true),
 					pool: parseInt(getFormField(form, "pool", true), 10),
 					seasonId: season.id,
-					vanityUrlSlug: getFormField(form, "vanityUrlSlug", true)
+					slug: getFormField(form, "slug", true)
 				});
 				revalidatePath(getSeasonUrl(season));
 			}}
@@ -86,8 +86,8 @@ export default function CreateTeamForm({
 			</p>
 			<p>
 				<label>
-					{"Vanity URL slug"}
-					<input type="text" name="vanityUrlSlug" maxLength={0x20} required />
+					{"Slug"}
+					<input type="text" name="slug" maxLength={0x20} required />
 				</label>
 			</p>
 			<p>

@@ -77,9 +77,9 @@ export default function GenerateRegularSeasonForm({
 								}
 
 								matches.push({
-									blueTeamId: blueTeam.id,
+									blueTeamId: i % 2 === 0 ? blueTeam.id : redTeam.id,
 									format,
-									redTeamId: redTeam.id,
+									redTeamId: i % 2 === 0 ? redTeam.id : blueTeam.id,
 									round: i * l + j + 1, // One-based in database.
 									seasonId: season.id,
 									timeSlot: Math.floor((2 * k) / matchesInRound) + 1 // One-based in database.

@@ -1,22 +1,26 @@
-Core functionality, necessary before the season starts:
+Migration to-do list:
+- Update and convert all accounts.
+- Update and convert all existing game data.
+- Generate tournament codes for upcoming games.
+- Update to use the tournament API instead of the tournament stub API.
+- Add the production key to the live website's environment variables.
+- API endpoint for receiving and storing game results and creating games when necessary.
+
+Core functionality:
+- Swap match sides per round robin.
+- Show the tournament code of the game to players on teams in the game on game pages.
+- Show the tournament code of the next game to players on teams in the match on match pages.
 - Show the playoffs bracket once the playoffs stage begins.
 - Sign-up page.
 - Administrator tool for modifying draftable players' point values.
 - API.
 - Show game results on game pages.
 - Link to match on game pages.
-- Administrator tool for modifying games' tournament codes.
-- Show the tournament code of the game to players on teams in the game on game pages.
-- Show the tournament code of the next game to players on teams in the match on match pages.
 - Administrator tool for modifying team captains.
 - Administrator tool for deleting teams.
 - Administrator tool for deleting matches.
 - Administrator tool for deleting games.
 - Administrator tool for creating games without matches.
-
-Core functionality, waiting on Riot to give us an API key:
-- Update to use the tournament API instead of the tournament stub API.
-- API endpoint for receiving and storing game results and creating games when necessary.
 
 Core functionality, necessary before the next season:
 - Add a page for captains to draft.

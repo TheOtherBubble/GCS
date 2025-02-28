@@ -35,10 +35,10 @@ export default function createForfeit(
 		{
 			duration: 0,
 			id,
-			mapId: 11,
+			map: 11,
 			mode: "CLASSIC",
-			platformId: "NA1",
-			queueId: 0,
+			queue: 0,
+			region: "NA1",
 			startTimestamp: getMatchDateTime(match, season).valueOf(),
 			tournamentCode: `FF-${now.toString(16)}`,
 			type: "CUSTOM_GAME",
@@ -48,13 +48,13 @@ export default function createForfeit(
 			{
 				gameResultId: id,
 				isWinner: blueWon,
-				riotId: 100,
+				team: 100,
 				teamId: match.blueTeamId
 			},
 			{
 				gameResultId: id,
 				isWinner: !blueWon,
-				riotId: 200,
+				team: 200,
 				teamId: match.redTeamId
 			}
 		]

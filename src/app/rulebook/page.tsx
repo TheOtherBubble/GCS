@@ -23,7 +23,7 @@ export default async function Page(): Promise<JSX.Element> {
 	return (
 		<article className={style["content"]}>
 			{rulebook?.text && <Markdown>{rulebook.text}</Markdown>}
-			{(await auth())?.user?.isAdministator && (
+			{(await auth())?.user?.isAdmin && (
 				<UpdateRulebookForm text={rulebook?.text ?? void 0} />
 			)}
 		</article>

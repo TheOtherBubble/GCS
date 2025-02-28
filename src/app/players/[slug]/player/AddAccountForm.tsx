@@ -94,26 +94,23 @@ export default function AddAccountForm({
 
 				// Ensure that the profile icon ID to verify the account is not the summoner's current profile icon ID.
 				const starterPackMaxId = 28;
-				let profileIconIdToVerify = Math.floor(
-					Math.random() * (starterPackMaxId + 1)
-				);
-				if (profileIconIdToVerify === summonerDto.profileIconId) {
-					profileIconIdToVerify =
-						(profileIconIdToVerify + 1) % starterPackMaxId;
+				let verifyIcon = Math.floor(Math.random() * (starterPackMaxId + 1));
+				if (verifyIcon === summonerDto.profileIconId) {
+					verifyIcon = (verifyIcon + 1) % starterPackMaxId;
 				}
 
 				await db.insert(accountTable).values({
 					accountId: summonerDto.accountId,
-					gameNameCache: accountDto.gameName,
 					isPrimary: accounts.length ? void 0 : true,
+					name: accountDto.gameName,
 					playerId: player.id,
-					profileIconIdToVerify,
 					puuid: summonerDto.puuid,
-					rankCache: soloLeagueEntry?.rank ?? "IV",
+					rank: soloLeagueEntry?.rank ?? "IV",
 					region: platform,
 					summonerId: summonerDto.id,
-					tagLineCache: accountDto.tagLine,
-					tierCache: soloLeagueEntry?.tier ?? "IRON"
+					tagLine: accountDto.tagLine,
+					tier: soloLeagueEntry?.tier ?? "IRON",
+					verifyIcon
 				});
 				revalidatePath(getPlayerUrl(player));
 				return void 0;

@@ -6,8 +6,8 @@ import type { gameTable } from "db/schema";
  * @returns The URL for the game's page.
  * @public
  */
-export default function getGameUrl(
-	game: Pick<typeof gameTable.$inferSelect, "id">
-): `/games/${typeof game.id}` {
-	return `/games/${game.id.toString() as `${number}`}`;
+export default function getGameUrl({
+	id
+}: Pick<typeof gameTable.$inferSelect, "id">): `/games/${typeof id}` {
+	return `/games/${id.toString() as `${typeof id}`}`;
 }

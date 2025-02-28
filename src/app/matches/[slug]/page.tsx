@@ -63,7 +63,7 @@ export default async function Page(props: PageProps<MatchesPageParams>) {
 					teamGameResultTable.gameResultId,
 					playerGameResultTable.gameResultId
 				),
-				eq(teamGameResultTable.riotId, playerGameResultTable.teamId)
+				eq(teamGameResultTable.team, playerGameResultTable.team)
 			)
 		)
 		.where(eq(matchTable.id, parseInt(slug, 10)));
@@ -165,7 +165,7 @@ export default async function Page(props: PageProps<MatchesPageParams>) {
 							/>
 						))}
 				</ol>
-				{(await auth())?.user?.isAdministator && <AdminPanel match={match} />}
+				{(await auth())?.user?.isAdmin && <AdminPanel match={match} />}
 			</div>
 			<div className={style["team"]}>
 				<header>

@@ -27,10 +27,10 @@ export default function convertResult(
 		duration:
 			riot.info.gameDuration * ("gameEndTimestamp" in riot.info ? 1000 : 1),
 		id: riot.info.gameId,
-		mapId: riot.info.mapId,
+		map: riot.info.mapId,
 		mode: riot.info.gameMode,
-		platformId: riot.info.platformId,
-		queueId: riot.info.queueId,
+		queue: riot.info.queueId,
+		region: riot.info.platformId,
 		startTimestamp: riot.info.gameStartTimestamp,
 		tournamentCode: riot.info.tournamentCode,
 		type: riot.info.gameType,
@@ -40,26 +40,34 @@ export default function convertResult(
 	const players = [];
 	for (const player of riot.info.participants) {
 		players.push({
+			allyJgCs: player.totalAllyJungleMinionsKilled,
 			assists: player.assists,
-			championDamage: player.totalDamageDealtToChampions,
-			championKey: player.championId,
+			champ: player.championId,
+			champDmg: player.totalDamageDealtToChampions,
 			deaths: player.deaths,
+			enemyJgCs: player.totalEnemyJungleMinionsKilled,
 			gameResultId: riot.info.gameId,
-			item0Id: player.item0,
-			item1Id: player.item1,
-			item2Id: player.item2,
-			item3Id: player.item3,
-			item4Id: player.item4,
-			item5Id: player.item5,
-			item6Id: player.item6,
+			item0: player.item0,
+			item1: player.item1,
+			item2: player.item2,
+			item3: player.item3,
+			item4: player.item4,
+			item5: player.item5,
+			item6: player.item6,
 			kills: player.kills,
+			laneCs: player.totalMinionsKilled,
 			level: player.champLevel,
 			name: player.riotIdGameName,
+			neutralCs: player.neutralMinionsKilled,
+			objectivesStolen: player.objectivesStolen,
+			pentakills: player.pentaKills,
 			position: player.teamPosition,
 			puuid: player.puuid,
-			summoner1Id: player.summoner1Id,
-			summoner2Id: player.summoner2Id,
-			teamId: player.teamId
+			summoner1: player.summoner1Id,
+			summoner2: player.summoner2Id,
+			team: player.teamId,
+			towerDmg: player.damageDealtToTurrets,
+			wardCs: player.wardsKilled
 		} satisfies typeof playerGameResultTable.$inferInsert);
 	}
 
@@ -69,12 +77,12 @@ export default function convertResult(
 		teams.push({
 			gameResultId: riot.info.gameId,
 			isWinner: team.win,
-			riotId: team.teamId,
+			team: team.teamId,
 			teamId:
 				puuids &&
 				closestMatch(
 					players
-						.filter(({ teamId }) => teamId === team.teamId)
+						.filter((player) => player.team === team.teamId)
 						.map(({ puuid }) => puuid),
 					puuids
 				)
@@ -82,10 +90,10 @@ export default function convertResult(
 
 		for (const ban of team.bans) {
 			bans.push({
-				championKey: ban.championId,
+				champ: ban.championId,
 				gameResultId: riot.info.gameId,
 				order: ban.pickTurn,
-				teamId: team.teamId
+				team: team.teamId
 			} satisfies typeof teamGameResultBanTable.$inferInsert);
 		}
 	}

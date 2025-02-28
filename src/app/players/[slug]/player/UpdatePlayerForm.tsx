@@ -36,13 +36,13 @@ export default function UpdatePlayerForm({
 			action={async (form) => {
 				"use server";
 				const displayName = getFormField(form, "displayName");
-				const backgroundChampionId = getFormField(form, "backgroundChampionId");
+				const bgChamp = getFormField(form, "bgChamp");
 				await db
 					.update(playerTable)
 					.set({
-						backgroundChampionId,
-						backgroundSkinNumber: backgroundChampionId ? 0 : void 0,
-						biography: getFormField(form, "biography"),
+						bgChamp,
+						bgSkin: bgChamp ? 0 : void 0,
+						bio: getFormField(form, "bio"),
 						displayName,
 						primaryRole: getFormField(form, "primaryRole") as
 							| (typeof positionEnum.enumValues)[number]
@@ -78,7 +78,7 @@ export default function UpdatePlayerForm({
 			<p>
 				<label>
 					{"Biography"}
-					<textarea name="biography" maxLength={0x100} />
+					<textarea name="bio" maxLength={0x100} />
 				</label>
 			</p>
 			<p>
@@ -110,7 +110,7 @@ export default function UpdatePlayerForm({
 			<p>
 				<label>
 					{"Background champion"}
-					<ChampionList name="backgroundChampionId" />
+					<ChampionList name="bgChamp" />
 				</label>
 			</p>
 			<p>

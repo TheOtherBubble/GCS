@@ -33,17 +33,17 @@ export default function UpdateSeasonForm({
 		<Form
 			action={async (form) => {
 				"use server";
-				const vanityUrlSlug = getFormField(form, "vanityUrlSlug");
+				const slug = getFormField(form, "slug");
 				await db
 					.update(seasonTable)
 					.set({
 						name: getFormField(form, "name"),
-						startDate: getFormField(form, "startDate"),
-						vanityUrlSlug
+						slug,
+						startDate: getFormField(form, "startDate")
 					})
 					.where(eq(seasonTable.id, season.id));
-				if (vanityUrlSlug) {
-					redirect(getSeasonUrl({ vanityUrlSlug }));
+				if (slug) {
+					redirect(getSeasonUrl({ slug }));
 				}
 
 				// If the vanity URL didn't change, just reload the page instead.
@@ -68,8 +68,8 @@ export default function UpdateSeasonForm({
 			</p>
 			<p>
 				<label>
-					{"Vanity URL slug"}
-					<input type="text" name="vanityUrlSlug" />
+					{"Slug"}
+					<input type="text" name="slug" />
 				</label>
 			</p>
 			<p>

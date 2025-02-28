@@ -37,17 +37,14 @@ export default function UpdateSkinForm({
 		<Form
 			action={async (form) => {
 				"use server";
-				const backgroundSkinNumber = parseInt(
-					getFormField(form, "backgroundSkinNumber", true),
-					10
-				);
-				if (backgroundSkinNumber === player.backgroundSkinNumber) {
+				const bgSkin = parseInt(getFormField(form, "bgSkin", true), 10);
+				if (bgSkin === player.bgSkin) {
 					return;
 				}
 
 				await db
 					.update(playerTable)
-					.set({ backgroundSkinNumber })
+					.set({ bgSkin })
 					.where(eq(playerTable.id, player.id));
 				revalidatePath(getPlayerUrl(player));
 			}}
@@ -61,8 +58,8 @@ export default function UpdateSkinForm({
 					{"Background skin"}
 					<SkinList
 						championId={backgroundChampionId}
-						name="backgroundSkinNumber"
-						defaultValue={player.backgroundSkinNumber ?? 0}
+						name="bgSkin"
+						defaultValue={player.bgSkin ?? 0}
 						required
 					/>
 				</label>

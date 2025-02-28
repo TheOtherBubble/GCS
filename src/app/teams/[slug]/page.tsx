@@ -55,7 +55,7 @@ export default async function Page(
 		.leftJoin(teamPlayerTable, eq(teamTable.id, teamPlayerTable.teamId))
 		.leftJoin(playerTable, eq(teamPlayerTable.playerId, playerTable.id))
 		.leftJoin(accountTable, eq(playerTable.id, accountTable.playerId))
-		.where(eq(teamTable.vanityUrlSlug, decodeURIComponent(slug)));
+		.where(eq(teamTable.slug, decodeURIComponent(slug)));
 	const [first] = seasonRows;
 	if (!first) {
 		redirect("/teams");
@@ -152,7 +152,7 @@ export default async function Page(
 							))}
 						</ul>
 					</div>
-					{(await auth())?.user?.isAdministator && (
+					{(await auth())?.user?.isAdmin && (
 						<AdminPanel
 							team={team}
 							teamPlayers={teamPlayers}
@@ -222,12 +222,12 @@ export default async function Page(
 export const generateMetadata = async (
 	props: PageProps<TeamsPageParams>
 ): Promise<Metadata> => {
-	const { slug } = await props.params;
-	const vanityUrlSlug = decodeURIComponent(slug);
+	const { slug: encoded } = await props.params;
+	const slug = decodeURIComponent(encoded);
 	const [team] = await db
 		.select()
 		.from(teamTable)
-		.where(eq(teamTable.vanityUrlSlug, vanityUrlSlug))
+		.where(eq(teamTable.slug, slug))
 		.limit(1);
 	return team
 		? {
@@ -240,7 +240,7 @@ export const generateMetadata = async (
 			}
 		: {
 				description: "An unknown team in the Gauntlet Championship Series.",
-				openGraph: { url: getTeamUrl({ vanityUrlSlug }) },
+				openGraph: { url: getTeamUrl({ slug }) },
 				title: "Unknown Team"
 			};
 };

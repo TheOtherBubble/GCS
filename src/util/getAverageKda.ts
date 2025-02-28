@@ -12,14 +12,14 @@ export default function getAverageKda(
 		"kills" | "deaths" | "assists"
 	>[]
 ): number {
-	let kills = 0;
-	let deaths = 0;
-	let assists = 0;
-	for (const game of games) {
-		kills += game.kills;
-		deaths += game.deaths;
-		assists += game.assists;
+	let k = 0;
+	let d = 0;
+	let a = 0;
+	for (const { kills, deaths, assists } of games) {
+		k += kills;
+		d += deaths;
+		a += assists;
 	}
 
-	return (kills + assists) / deaths; // JavaScript automatically returns `Infinity` for divisions by zero.
+	return (k + a) / d; // JavaScript automatically returns `Infinity` for divisions by zero.
 }

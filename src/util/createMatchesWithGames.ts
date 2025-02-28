@@ -44,13 +44,13 @@ export default async function createMatchesWithGames(
 
 	// Build the games.
 	const games = [];
-	for (const match of createdMatches) {
+	for (const { id: matchId } of createdMatches) {
 		const tournamentCode = tournamentCodes.pop();
 		if (!tournamentCode) {
 			throw new Error("Not enough tournament codes!");
 		}
 
-		games.push({ matchId: match.id, tournamentCode });
+		games.push({ matchId, tournamentCode });
 	}
 
 	// Create the games.

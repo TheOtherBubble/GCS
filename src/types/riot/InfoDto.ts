@@ -54,5 +54,7 @@ export default interface InfoDto {
 	teams: TeamDto[];
 
 	/** The tournament code used to generate the match. Added in patch 11.13. */
-	tournamentCode?: `${Region | "STUB"}${string}-${string}-${string}-${string}-${string}-${string}`;
+	tournamentCode?:
+		| `${Region | "STUB"}${string}-${string}-${string}-${string}-${string}-${string}`
+		| ""; // Empty string for games without tournament codes.
 }

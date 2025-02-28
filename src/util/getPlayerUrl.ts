@@ -6,8 +6,12 @@ import type { playerTable } from "db/schema";
  * @returns The URL for the player's page.
  * @public
  */
-export default function getPlayerUrl(
-	player: Pick<typeof playerTable.$inferSelect, "displayName" | "name">
-): `/players/${typeof player.displayName | typeof player.name}` {
-	return `/players/${encodeURIComponent(player.displayName ?? player.name)}`;
+export default function getPlayerUrl({
+	displayName,
+	name
+}: Pick<
+	typeof playerTable.$inferSelect,
+	"displayName" | "name"
+>): `/players/${typeof displayName | typeof name}` {
+	return `/players/${encodeURIComponent(displayName ?? name)}`;
 }

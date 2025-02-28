@@ -56,7 +56,7 @@ export default async function Page(
 			teamGameResultTable,
 			eq(gameResultTable.id, teamGameResultTable.gameResultId)
 		)
-		.where(eq(seasonTable.vanityUrlSlug, decodeURIComponent(slug)));
+		.where(eq(seasonTable.slug, decodeURIComponent(slug)));
 	const [first] = seasonRows;
 	if (!first) {
 		redirect("/seasons");
@@ -163,7 +163,7 @@ export default async function Page(
 					<h1>{season.name}</h1>
 					<hr />
 				</header>
-				{(await auth())?.user?.isAdministator && (
+				{(await auth())?.user?.isAdmin && (
 					<AdminPanel season={season} teams={teams} />
 				)}
 			</div>
@@ -254,12 +254,12 @@ export default async function Page(
 export const generateMetadata = async (
 	props: PageProps<SeasonsPageParams>
 ): Promise<Metadata> => {
-	const { slug } = await props.params;
-	const vanityUrlSlug = decodeURIComponent(slug);
+	const { slug: encoded } = await props.params;
+	const slug = decodeURIComponent(encoded);
 	const [season] = await db
 		.select()
 		.from(seasonTable)
-		.where(eq(seasonTable.vanityUrlSlug, vanityUrlSlug))
+		.where(eq(seasonTable.slug, slug))
 		.limit(1);
 	return season
 		? {
@@ -272,7 +272,7 @@ export const generateMetadata = async (
 		: {
 				description: "An unknown season of the Gauntlet Championship Series.",
 				openGraph: {
-					url: getSeasonUrl({ vanityUrlSlug })
+					url: getSeasonUrl({ slug })
 				},
 				title: "Unknown Season"
 			};

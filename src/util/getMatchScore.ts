@@ -8,7 +8,10 @@ import type { matchTable, teamGameResultTable } from "db/schema";
  * @public
  */
 export default function getMatchScore(
-	match: Pick<typeof matchTable.$inferSelect, "blueTeamId" | "redTeamId">,
+	{
+		blueTeamId,
+		redTeamId
+	}: Pick<typeof matchTable.$inferSelect, "blueTeamId" | "redTeamId">,
 	results: Pick<
 		typeof teamGameResultTable.$inferSelect,
 		"isWinner" | "teamId"
@@ -16,16 +19,16 @@ export default function getMatchScore(
 ): [number, number] {
 	let blue = 0;
 	let red = 0;
-	for (const result of results) {
-		if (!result.isWinner) {
+	for (const { isWinner, teamId } of results) {
+		if (!isWinner) {
 			continue;
 		}
 
-		switch (result.teamId) {
-			case match.blueTeamId:
+		switch (teamId) {
+			case blueTeamId:
 				blue++;
 				continue;
-			case match.redTeamId:
+			case redTeamId:
 				red++;
 				continue;
 			default:

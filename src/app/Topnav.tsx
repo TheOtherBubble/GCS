@@ -55,7 +55,7 @@ export default async function Topnav({
 								<span>{session.user.displayName ?? session.user.name}</span>
 							</Link>
 						</li>
-						{session.user.isAdministator && (
+						{session.user.isAdmin && (
 							<li className={style["hide-on-mobile"]}>
 								<Link href="/admin">
 									<span>{"Admin"}</span>

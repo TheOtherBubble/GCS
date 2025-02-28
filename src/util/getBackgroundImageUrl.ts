@@ -6,16 +6,13 @@ import type { playerTable } from "db/schema";
  * @returns The URL, or `undefined` if the player hasn't selected a background skin.
  * @public
  */
-export default function getBackgroundImageUrl(
-	player: Pick<
-		typeof playerTable.$inferSelect,
-		"backgroundChampionId" | "backgroundSkinNumber"
-	>
-):
+export default function getBackgroundImageUrl({
+	bgChamp,
+	bgSkin
+}: Pick<typeof playerTable.$inferSelect, "bgChamp" | "bgSkin">):
 	| `https://ddragon.leagueoflegends.com/cdn/img/champion/splash/${string}_${string}.jpg`
 	| undefined {
-	return player.backgroundChampionId &&
-		typeof player.backgroundSkinNumber === "number"
-		? `https://ddragon.leagueoflegends.com/cdn/img/champion/splash/${player.backgroundChampionId}_${player.backgroundSkinNumber.toString()}.jpg`
+	return bgChamp && typeof bgSkin === "number"
+		? `https://ddragon.leagueoflegends.com/cdn/img/champion/splash/${bgChamp}_${bgSkin.toString()}.jpg`
 		: void 0;
 }

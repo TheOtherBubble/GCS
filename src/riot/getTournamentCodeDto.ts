@@ -19,10 +19,8 @@ export default async function getTournamentCodeDto(
 ): Promise<TournamentCodeDto> {
 	return (await (
 		await riotFetch(
-			new URL(
-				`/lol/tournament-stub/v5/codes/${code}`,
-				getRiotApiBaseUrl(cluster)
-			).href,
+			new URL(`/lol/tournament/v5/codes/${code}`, getRiotApiBaseUrl(cluster))
+				.href,
 			void 0,
 			key
 		)

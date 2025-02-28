@@ -33,7 +33,7 @@ export default function UpdateTeamForm({
 		<Form
 			action={async (form) => {
 				"use server";
-				const vanityUrlSlug = getFormField(form, "vanityUrlSlug");
+				const slug = getFormField(form, "slug");
 				const poolString = getFormField(form, "pool");
 				await db
 					.update(teamTable)
@@ -43,11 +43,11 @@ export default function UpdateTeamForm({
 						logoUrl: getFormField(form, "logoUrl"),
 						name: getFormField(form, "name"),
 						pool: poolString ? parseInt(poolString, 10) : void 0,
-						vanityUrlSlug
+						slug
 					})
 					.where(eq(teamTable.id, team.id));
-				if (vanityUrlSlug) {
-					redirect(getTeamUrl({ vanityUrlSlug }));
+				if (slug) {
+					redirect(getTeamUrl({ slug }));
 				}
 
 				// If the vanity URL didn't change, just reload the page instead.
@@ -90,8 +90,8 @@ export default function UpdateTeamForm({
 			</p>
 			<p>
 				<label>
-					{"Vanity URL slug"}
-					<input type="text" name="vanityUrlSlug" maxLength={0x20} />
+					{"Slug"}
+					<input type="text" name="slug" maxLength={0x20} />
 				</label>
 			</p>
 			<p>

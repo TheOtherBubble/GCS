@@ -48,8 +48,8 @@ export default function SignUpForm({
 			action={async () => {
 				"use server";
 				if (
-					player.bannedUntilDate &&
-					new Date(player.bannedUntilDate).valueOf() - Date.now() > 0
+					player.bannedUntil &&
+					new Date(player.bannedUntil).valueOf() - Date.now() > 0
 				) {
 					return "You may not sign up while you are banned.";
 				}

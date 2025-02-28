@@ -14,6 +14,8 @@ import {
 } from "drizzle-orm/pg-core";
 import type { AdapterAccountType } from "next-auth/adapters";
 
+// Columns are occasionally ordered strangely due to drizzle-team/drizzle-orm#2157.
+
 /**
  * League of Legends positions.
  * @public
@@ -25,139 +27,6 @@ export const positionEnum = pgEnum("position", [
 	"BOTTOM",
 	"UTILITY"
 ]);
-
-/**
- * The table of players. Players are linked to one Discord account and any number of Riot accounts, and may participate in any number of seasons on any number of teams.
- * @public
- */
-export const playerTable = pgTable("player", {
-	// A UUID that represents the player. Supplied by Auth.js. Must be a `varchar` to make Auth.js happy, despite always being a 36-character UUIDv4.
-	id: varchar({ length: 36 })
-		.primaryKey()
-		.$defaultFn(() => crypto.randomUUID()),
-
-	// A player-selected champion to use as a background on player cards, stored as a champion ID.
-	// See drizzle-team/drizzle-orm#2157
-	// eslint-disable-next-line sort-keys
-	backgroundChampionId: varchar({ length: 0x20 }),
-
-	// A player-selected champion skin to use as a background on player cards, stored as a skin number.
-	backgroundSkinNumber: integer(),
-
-	// The date that the user is banned until.
-	bannedUntilDate: date(),
-
-	// A player-defined biography.
-	biography: varchar({ length: 0x100 }),
-
-	// A Discord snowflake (64-bit integer) stored as a string.
-	discordId: varchar({ length: 0x40 }).notNull(),
-
-	// The player's display name. Passed through `encodeURIComponent` and then used as a slug to make the player's URL. If not set, the player's Discord name is used instead. If neither the display name nor the Discord name is set, the player's ID is used instead.
-	displayName: varchar({ length: 0x20 }).unique(),
-
-	// The user's email address. Used by Auth.js to link OAuth accounts to users.
-	email: varchar({ length: 0x40 }),
-
-	// Required by Auth.js, but always null.
-	emailVerified: timestamp(),
-
-	// Required by Auth.js, but always null. Image is instead determined with `backgroundChampionId` and `backgroundSkinId`.
-	image: varchar({ length: 0x200 }),
-
-	// Whether or not this user is an administrator.
-	isAdministator: boolean().notNull().default(false),
-
-	// The player's Discord name at the time when the account was created.
-	name: varchar({ length: 0x20 }).notNull(),
-
-	// The player's primary role. Must be set for the player to be able to sign up for a season.
-	primaryRole: positionEnum(),
-
-	// The player's secondary role. Must be set and not equal to the player's primary role for the player to be able to sign up for a season.
-	secondaryRole: positionEnum(),
-
-	// The player's Twitch ID.
-	twitchId: varchar({ length: 0x40 }),
-
-	// The player's YouTube ID.
-	youtubeId: varchar({ length: 0x40 })
-});
-
-/**
- * The table of OAuth accounts. Used by Auth.js.
- * @public
- */
-export const oauthTable = pgTable(
-	"oauth",
-	{
-		// The account's provider. Always `"discord"`.
-		provider: varchar({ length: 0x20 }).notNull(),
-
-		// The access token.
-		// See drizzle-team/drizzle-orm#2157
-		// eslint-disable-next-line camelcase, sort-keys
-		access_token: varchar({ length: 0x100 }),
-
-		// The epoch timestamp that the access token expires at.
-		// eslint-disable-next-line camelcase
-		expires_at: integer(),
-
-		// The ID token. Required by Auth.js, but always null.
-		// eslint-disable-next-line camelcase
-		id_token: varchar({ length: 0x100 }),
-
-		// The provider account ID. Equivalent to the user's Discord snowflake.
-		providerAccountId: varchar({ length: 0x100 }).notNull(),
-
-		// The refresh token.
-		// eslint-disable-next-line camelcase
-		refresh_token: varchar({ length: 0x100 }),
-
-		// The token's scope.
-		scope: varchar({ length: 0x100 }),
-
-		// The session's state. Required by Auth.js, but always null.
-		// eslint-disable-next-line camelcase
-		session_state: varchar({ length: 0x100 }),
-
-		// The type of the token.
-		// eslint-disable-next-line camelcase
-		token_type: varchar({ length: 0x20 }),
-
-		// The account's type.
-		type: varchar({ length: 0x20 }).$type<AdapterAccountType>().notNull(),
-
-		// The ID of the associated player.
-		userId: varchar({ length: 36 })
-			.notNull()
-			.references(() => playerTable.id, {
-				onDelete: "cascade",
-				onUpdate: "cascade"
-			})
-	},
-	(self) => [primaryKey({ columns: [self.provider, self.providerAccountId] })]
-);
-
-/**
- * An OAuth session for a player.
- * @public
- */
-export const sessionTable = pgTable("session", {
-	// The timestamp that the session expires at.
-	expires: timestamp().notNull(),
-
-	// The session token.
-	sessionToken: varchar({ length: 0x100 }).primaryKey(),
-
-	// The player that the session belongs to.
-	userId: varchar({ length: 36 })
-		.notNull()
-		.references(() => playerTable.id, {
-			onDelete: "cascade",
-			onUpdate: "cascade"
-		})
-});
 
 /**
  * Tiers that an account can be.
@@ -209,6 +78,149 @@ export const platformEnum = pgEnum("platform", [
 ]);
 
 /**
+ * Formats that a match can take.
+ * @public
+ */
+export const matchFormatEnum = pgEnum("matchFormat", [
+	"Block of 1",
+	"Block of 3",
+	"Best of 3",
+	"Best of 5",
+	"Best of 7"
+]);
+
+/**
+ * The table of players. Players are linked to one Discord account and any number of Riot accounts, and may participate in any number of seasons on any number of teams.
+ * @public
+ */
+export const playerTable = pgTable("player", {
+	// A UUID that represents the player. Supplied by Auth.js. Must be a `varchar` to make Auth.js happy, despite always being a 36-character UUIDv4.
+	id: varchar({ length: 36 })
+		.primaryKey()
+		.$defaultFn(() => crypto.randomUUID()),
+
+	// The date that the user is banned until.
+	// eslint-disable-next-line sort-keys
+	bannedUntil: date(),
+
+	// A player-selected champion to use as a background on player cards, stored as a champion ID.
+	bgChamp: varchar({ length: 0x20 }),
+
+	// A player-selected champion skin to use as a background on player cards, stored as a skin number.
+	bgSkin: integer(),
+
+	// A player-defined biography.
+	bio: varchar({ length: 0x100 }),
+
+	// A Discord snowflake (64-bit integer) stored as a string.
+	discordId: varchar({ length: 0x40 }).notNull().unique(),
+
+	// The player's display name. Passed through `encodeURIComponent` and then used as a slug to make the player's URL. If not set, the player's Discord name is used instead. If neither the display name nor the Discord name is set, the player's ID is used instead.
+	displayName: varchar({ length: 0x20 }).unique(),
+
+	// The user's email address. Used by Auth.js to link OAuth accounts to users.
+	email: varchar({ length: 0x40 }).unique(),
+
+	// Required by Auth.js, but always null.
+	emailVerified: timestamp(),
+
+	// Required by Auth.js, but always null. Background image is instead determined with `backgroundChampionId` and `backgroundSkinId`.
+	image: varchar({ length: 0x200 }),
+
+	// Whether or not this user is an administrator.
+	isAdmin: boolean().notNull().default(false),
+
+	// The player's Discord name at the time when the account was created.
+	name: varchar({ length: 0x20 }).notNull().unique(),
+
+	// The player's primary role. Must be set for the player to be able to sign up for a season.
+	primaryRole: positionEnum(),
+
+	// The player's secondary role. Must be set and not equal to the player's primary role for the player to be able to sign up for a season.
+	secondaryRole: positionEnum(),
+
+	// The player's Twitch ID.
+	twitchId: varchar({ length: 0x40 }).unique(),
+
+	// The player's YouTube ID.
+	youtubeId: varchar({ length: 0x40 }).unique()
+});
+
+/**
+ * The table of OAuth accounts. Used by Auth.js.
+ * @public
+ */
+export const oauthTable = pgTable(
+	"oauth",
+	{
+		// The access token.
+		// eslint-disable-next-line camelcase
+		access_token: varchar({ length: 0x100 }).unique().notNull(),
+
+		// The epoch timestamp that the access token expires at.
+		// eslint-disable-next-line camelcase
+		expires_at: integer().notNull(),
+
+		// The ID token. Required by Auth.js, but always null.
+		// eslint-disable-next-line camelcase
+		id_token: varchar({ length: 0x100 }).unique(),
+
+		// The account's provider. Always `"discord"`.
+		provider: varchar({ length: 0x20 }).notNull(),
+
+		// The provider account ID. Equivalent to the user's Discord snowflake.
+		providerAccountId: varchar({ length: 0x100 }).notNull(),
+
+		// The refresh token.
+		// eslint-disable-next-line camelcase
+		refresh_token: varchar({ length: 0x100 }).notNull().unique(),
+
+		// The token's scope.
+		scope: varchar({ length: 0x100 }).notNull(),
+
+		// The session's state. Required by Auth.js, but always null.
+		// eslint-disable-next-line camelcase
+		session_state: varchar({ length: 0x100 }),
+
+		// The type of the token.
+		// eslint-disable-next-line camelcase
+		token_type: varchar({ length: 0x20 }).notNull(),
+
+		// The account's type.
+		type: varchar({ length: 0x20 }).$type<AdapterAccountType>().notNull(),
+
+		// The ID of the associated player.
+		userId: varchar({ length: 36 })
+			.notNull()
+			.references(() => playerTable.id, {
+				onDelete: "cascade",
+				onUpdate: "cascade"
+			})
+	},
+	(self) => [primaryKey({ columns: [self.provider, self.providerAccountId] })]
+);
+
+/**
+ * An OAuth session for a player.
+ * @public
+ */
+export const sessionTable = pgTable("session", {
+	// The timestamp that the session expires at.
+	expires: timestamp().notNull(),
+
+	// The session token.
+	sessionToken: varchar({ length: 0x100 }).primaryKey(),
+
+	// The player that the session belongs to.
+	userId: varchar({ length: 36 })
+		.notNull()
+		.references(() => playerTable.id, {
+			onDelete: "cascade",
+			onUpdate: "cascade"
+		})
+});
+
+/**
  * The table of Riot accounts. Each Riot account is linked to one player. Riot account game names and tag lines are cached to reduce calls to the Riot API.
  * @public
  */
@@ -221,14 +233,14 @@ export const accountTable = pgTable(
 		// The date and time that the account was last cached.
 		cacheDate: date().notNull().defaultNow(),
 
-		// The game name of the account at the last time that the account was cached. The longest allowed game name is 16 characters.
-		gameNameCache: varchar({ length: 16 }).notNull(),
-
 		// Whether or not this account is the primary account of the associated player. Must be null for non-primary accounts.
 		isPrimary: boolean(),
 
 		// Whether or not the associated player has verified ownership of this account.
 		isVerified: boolean().notNull().default(false),
+
+		// The game name of the account at the last time that the account was cached. The longest allowed game name is 16 characters.
+		name: varchar({ length: 16 }).notNull(),
 
 		// The ID of the player that the account is linked to.
 		playerId: varchar({ length: 36 })
@@ -238,14 +250,11 @@ export const accountTable = pgTable(
 			})
 			.notNull(),
 
-		// The ID of the profile icon that the account must select in order to verify that the associated player owns it. Randomly selected from icons in the starter pack (IDs 0 through 28), which every player owns.
-		profileIconIdToVerify: integer().notNull(),
-
 		// The encrypted Player Universally Unique ID (PUUID) of the account. PUUIDs are always 78 characters long.
 		puuid: char({ length: 78 }).primaryKey(),
 
 		// The solo/duo rank (within a tier) of the account at the last time that the account was cached.
-		rankCache: accountRankEnum().notNull(),
+		rank: accountRankEnum().notNull(),
 
 		// The account's platform (region) ID (i.e. `"NA1"` for North America).
 		region: platformEnum().notNull(),
@@ -254,13 +263,17 @@ export const accountTable = pgTable(
 		summonerId: varchar({ length: 63 }).notNull(),
 
 		// The tag line of the account at the last time that the account was cached. The longest allowed tag line is 5 characters.
-		tagLineCache: varchar({ length: 5 }).notNull(),
+		tagLine: varchar({ length: 5 }).notNull(),
 
 		// The solo/duo tier of the account at the last time that the account was cached.
-		tierCache: accountTierEnum().notNull()
+		tier: accountTierEnum().notNull(),
+
+		// The ID of the profile icon that the account must select in order to verify that the associated player owns it. Randomly selected from icons in the starter pack (IDs 0 through 28), which every player owns.
+		verifyIcon: integer().notNull()
 	},
 	(self) => [
 		unique().on(self.accountId, self.region),
+		unique().on(self.name, self.tagLine),
 		unique().on(self.isPrimary, self.playerId),
 		unique().on(self.region, self.summonerId)
 	]
@@ -286,11 +299,11 @@ export const seasonTable = pgTable("season", {
 	// The season's name.
 	name: varchar({ length: 0x40 }).notNull().unique(),
 
-	// The season's start date.
-	startDate: date().notNull().defaultNow(),
-
 	// The season's vanity URL slug. Passed through `encodeURIComponent` and then used as a slug to make the season's URL.
-	vanityUrlSlug: varchar({ length: 0x20 }).notNull().unique()
+	slug: varchar({ length: 0x20 }).notNull().unique(),
+
+	// The season's start date.
+	startDate: date().notNull().defaultNow()
 });
 
 /**
@@ -330,7 +343,7 @@ export const teamTable = pgTable(
 			.notNull(),
 
 		// The team's vanity URL slug. Passed through `encodeURIComponent` and then used as a slug to make the team's URL.
-		vanityUrlSlug: varchar({ length: 0x20 }).notNull().unique()
+		slug: varchar({ length: 0x20 }).notNull().unique()
 	},
 	(self) => [
 		unique().on(self.code, self.seasonId),
@@ -355,7 +368,6 @@ export const teamPlayerTable = pgTable(
 			.notNull(),
 
 		// Whether or not the player is the captain of the team. Must be null for non-captains.
-		// See drizzle-team/drizzle-orm#2157
 		// eslint-disable-next-line sort-keys
 		isCaptain: boolean(),
 
@@ -403,18 +415,6 @@ export const draftPlayerTable = pgTable(
 );
 
 /**
- * Formats that a match can take.
- * @public
- */
-export const matchFormatEnum = pgEnum("matchFormat", [
-	"Block of 1",
-	"Block of 3",
-	"Best of 3",
-	"Best of 5",
-	"Best of 7"
-]);
-
-/**
  * The table of matches. Each match belongs to a week of a season, is played between two teams, and may be composed of any number of games (depending on the match's format).
  * @public
  */
@@ -457,7 +457,7 @@ export const matchTable = pgTable("match", {
 });
 
 /**
- * The table of games, regardless of whether they are upcoming, in progress, or completed. Games may (in the case of stage games) or may not be (in the case of inhouses) be part of a match.
+ * The table of games, regardless of whether they are upcoming, in progress, or completed. Games may (in the case of stage games) or may not (in the case of inhouses) be part of a match.
  * @public
  */
 export const gameTable = pgTable("game", {
@@ -466,11 +466,12 @@ export const gameTable = pgTable("game", {
 
 	// The ID of the match that the game is part of.
 	matchId: integer().references(() => matchTable.id, {
-		onDelete: "set null"
+		onDelete: "set null",
+		onUpdate: "cascade"
 	}),
 
 	// The tournament code that players in the game use to join the game.
-	tournamentCode: varchar({ length: 0x40 }).notNull()
+	tournamentCode: varchar({ length: 0x40 }).notNull().unique()
 });
 
 /**
@@ -485,16 +486,16 @@ export const gameResultTable = pgTable("gameResult", {
 	id: bigint({ mode: "number" }).primaryKey(),
 
 	// The ID of the map that the game was played on.
-	mapId: integer().notNull(),
+	map: integer().notNull(),
 
 	// The game's mode.
 	mode: varchar({ length: 0x20 }).notNull(),
 
-	// The ID of the platform that the game was played on. Can be joined with the game ID by an underscore to make the match ID.
-	platformId: platformEnum().notNull(),
-
 	// The ID of the queue that the game was in.
-	queueId: integer().notNull(),
+	queue: integer().notNull(),
+
+	// The ID of the platform that the game was played on. Can be joined with the game ID by an underscore to make the match ID.
+	region: platformEnum().notNull(),
 
 	// The Unix timestamp of the date that the game was started on the game server.
 	startTimestamp: bigint({ mode: "number" }).notNull(),
@@ -531,7 +532,7 @@ export const teamGameResultTable = pgTable(
 		isWinner: boolean().notNull(),
 
 		// The ID of the team within the Riot API.
-		riotId: integer().notNull(),
+		team: integer().notNull(),
 
 		// The ID of the team, if any. May be null if the game result isn't part of a tournament or inhouse (such as games that are just pulled from the Riot API to collect statistics).
 		teamId: integer().references(() => teamTable.id, {
@@ -541,7 +542,7 @@ export const teamGameResultTable = pgTable(
 	},
 	(self) => [
 		unique().on(self.gameResultId, self.isWinner),
-		unique().on(self.gameResultId, self.riotId),
+		unique().on(self.gameResultId, self.team),
 		unique().on(self.gameResultId, self.teamId)
 	]
 );
@@ -554,7 +555,7 @@ export const teamGameResultBanTable = pgTable(
 	"teamGameResultBan",
 	{
 		// The key of the champion that was banned. Referred to as the champion's ID in the Riot API.
-		championKey: integer().notNull(),
+		champ: integer().notNull(),
 
 		// The ID of the game result that these results correspond to.
 		gameResultId: bigint({ mode: "number" })
@@ -571,9 +572,9 @@ export const teamGameResultBanTable = pgTable(
 		order: integer().notNull(),
 
 		// The Riot API ID of the team that these results correspond to.
-		teamId: integer().notNull()
+		team: integer().notNull()
 	},
-	(self) => [unique().on(self.gameResultId, self.order, self.teamId)]
+	(self) => [unique().on(self.gameResultId, self.order, self.team)]
 );
 
 /**
@@ -583,17 +584,23 @@ export const teamGameResultBanTable = pgTable(
 export const playerGameResultTable = pgTable(
 	"playerGameResult",
 	{
+		// The participant's total number of monsters killed in their own side of the jungle.
+		allyJgCs: integer().notNull(),
+
 		// The number of assists that the player got.
 		assists: integer().notNull(),
 
-		// The amount of damage that the player dealt to champions.
-		championDamage: integer().notNull(),
-
 		// The key of the champion that the player played. Referred to as the champion's ID in the Riot API.
-		championKey: integer().notNull(),
+		champ: integer().notNull(),
+
+		// The amount of damage that the player dealt to champions.
+		champDmg: integer().notNull(),
 
 		// The number of deaths that the player has.
 		deaths: integer().notNull(),
+
+		// The participant's total number of monsters killed in their enemy's side of the jungle.
+		enemyJgCs: integer().notNull(),
 
 		// The ID of the game result that these results correspond to.
 		gameResultId: bigint({ mode: "number" })
@@ -607,28 +614,31 @@ export const playerGameResultTable = pgTable(
 		id: integer().primaryKey().generatedAlwaysAsIdentity(),
 
 		// The ID of the item in the player's first item slot at the end of the game.
-		item0Id: integer().notNull(),
+		item0: integer().notNull(),
 
 		// The ID of the item in the player's second item slot at the end of the game.
-		item1Id: integer().notNull(),
+		item1: integer().notNull(),
 
 		// The ID of the item in the player's third item slot at the end of the game.
-		item2Id: integer().notNull(),
+		item2: integer().notNull(),
 
 		// The ID of the item in the player's fourth item slot at the end of the game.
-		item3Id: integer().notNull(),
+		item3: integer().notNull(),
 
 		// The ID of the item in the player's fifth item slot at the end of the game.
-		item4Id: integer().notNull(),
+		item4: integer().notNull(),
 
 		// The ID of the item in the player's sixth item slot at the end of the game.
-		item5Id: integer().notNull(),
+		item5: integer().notNull(),
 
 		// The ID of the item in the player's seventh item slot at the end of the game.
-		item6Id: integer().notNull(),
+		item6: integer().notNull(),
 
 		// The number of kills that the player got.
 		kills: integer().notNull(),
+
+		// The participant's total number of minions killed, including team minions, melee lane minions, super lane minions, ranged lane minions, and siege lane minions.
+		laneCs: integer().notNull(),
 
 		// The player's champion level at the end of the game.
 		level: integer().notNull(),
@@ -636,23 +646,38 @@ export const playerGameResultTable = pgTable(
 		// The game name of the player at the point when this player game result was cached.
 		name: varchar({ length: 16 }).notNull(),
 
+		// The participant's number of neutral minions killed, including pets and jungle monsters.
+		neutralCs: integer().notNull(),
+
+		// The number of objectives that the player stole.
+		objectivesStolen: integer().notNull(),
+
+		// The number of pentakills that the player got.
+		pentakills: integer().notNull(),
+
 		// The position that the player most likely played, as determined by the Riot API.
-		position: varchar({ length: 0x20 }).notNull(),
+		position: positionEnum().notNull(),
 
 		// The PUUID of the player. Can be used to link player game results to accounts (and, by extension, players).
 		puuid: char({ length: 78 }).notNull(),
 
 		// The ID of the player's first summoner spell.
-		summoner1Id: integer().notNull(),
+		summoner1: integer().notNull(),
 
 		// The ID of the player's second summoner spell.
-		summoner2Id: integer().notNull(),
+		summoner2: integer().notNull(),
 
 		// The Riot API ID of the team that these results correspond to.
-		teamId: integer().notNull()
+		team: integer().notNull(),
+
+		// The amount of damage that the player dealt to turrets.
+		towerDmg: integer().notNull(),
+
+		// The participant's number of wards killed.
+		wardCs: integer().notNull()
 	},
 	(self) => [
-		unique().on(self.gameResultId, self.position, self.teamId),
+		unique().on(self.gameResultId, self.position, self.team),
 		unique().on(self.gameResultId, self.puuid)
 	]
 );

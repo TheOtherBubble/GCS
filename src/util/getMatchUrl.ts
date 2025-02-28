@@ -6,8 +6,8 @@ import type { matchTable } from "db/schema";
  * @returns The URL for the match's page.
  * @public
  */
-export default function getMatchUrl(
-	match: Pick<typeof matchTable.$inferSelect, "id">
-): `/matches/${typeof match.id}` {
-	return `/matches/${match.id.toString() as `${number}`}`;
+export default function getMatchUrl({
+	id
+}: Pick<typeof matchTable.$inferSelect, "id">): `/matches/${typeof id}` {
+	return `/matches/${id.toString() as `${typeof id}`}`;
 }

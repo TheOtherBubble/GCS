@@ -47,7 +47,7 @@ export default function AdminPanel({
 				/>
 			)}
 			<BanPlayerForm player={player} />
-			{!player.isAdministator && <MakeAdminForm player={player} />}
+			{!player.isAdmin && <MakeAdminForm player={player} />}
 		</div>
 	);
 }

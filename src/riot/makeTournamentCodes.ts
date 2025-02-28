@@ -24,10 +24,7 @@ export default async function makeTournamentCodes(
 	cluster: Cluster = Cluster.AMERICAS,
 	key: string | undefined = void 0
 ): Promise<string[]> {
-	const url = new URL(
-		"/lol/tournament-stub/v5/codes",
-		getRiotApiBaseUrl(cluster)
-	);
+	const url = new URL("/lol/tournament/v5/codes", getRiotApiBaseUrl(cluster));
 
 	if (count) {
 		url.searchParams.append("count", count.toString());
