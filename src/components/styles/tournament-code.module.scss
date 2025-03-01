@@ -1,0 +1,23 @@
+@use "../../styles/variables";
+@use "../../styles/blob.module.scss";
+
+// Tournament code display.
+div.tournament-code {
+	@extend .blob;
+
+	display: flex;
+	justify-content: center;
+	gap: 10px;
+	font-size: 1.5em;
+
+	// Tournament code text display.
+	& > samp {
+		background-color: variables.$mg-color;
+		padding: 10px;
+	}
+
+	// Copy to clipboard button.
+	& > button {
+		font-size: 1em;
+	}
+}

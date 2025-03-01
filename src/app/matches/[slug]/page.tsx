@@ -18,6 +18,7 @@ import type { Metadata } from "next";
 import type PageProps from "types/PageProps";
 import PlayerCard from "components/PlayerCard";
 import TeamCard from "components/TeamCard";
+import TournamentCode from "components/TournamentCode";
 import { auth } from "db/auth";
 import db from "db/db";
 import getMatchDateTime from "util/getMatchDateTime";
@@ -110,6 +111,18 @@ export default async function Page(props: PageProps<MatchesPageParams>) {
 		"playerGameResult"
 	);
 
+	// Get the next unfinished game.
+	const [nextGame] = gameHierarchies
+		.filter(({ children }) => children.length === 0)
+		.map(({ value }) => value)
+		.sort(({ id: a }, { id: b }) => a - b);
+
+	// The tournament code is visible if the viewer is logged in and either the viewer is an administrator or the viewer is on a team in the match.
+	const session = await auth();
+	const canViewTournamentCode =
+		session?.user &&
+		(session.user.isAdmin || allPlayers.includes(session.user));
+
 	return (
 		<div className={style["content"]}>
 			<div className={style["team"]}>
@@ -146,6 +159,9 @@ export default async function Page(props: PageProps<MatchesPageParams>) {
 						/>
 						{` - ${match.format}`}
 					</h2>
+					{nextGame && canViewTournamentCode && (
+						<TournamentCode tournamentCode={nextGame.tournamentCode} />
+					)}
 					<h2>{"Games"}</h2>
 				</header>
 				<ol>

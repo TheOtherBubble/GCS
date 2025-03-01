@@ -5,7 +5,7 @@
 
 // Match page.
 div.content {
-	// Columns
+	// Columns.
 	& > div {
 		@extend .list;
 		height: calc(100vh - layout.$top - layout.$margin * 2);

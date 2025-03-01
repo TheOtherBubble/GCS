@@ -1,14 +1,29 @@
+@use "../../../styles/mixins";
+@use "../../../styles/clean-list.module.scss";
 @use "../../../styles/blob.module.scss";
 
 // Game page.
 div.content {
-	// Admin panel.
+	// Columns.
 	& > div {
-		@extend .blob-section;
+		@extend .list;
 
-		// Admin form.
-		& > form {
-			@extend .blob;
+		// Admin panel.
+		& > div.admin {
+			@extend .blob-section;
+
+			// Admin panel form.
+			& > form {
+				@extend .blob;
+			}
+		}
+	}
+
+	@include mixins.gt-wide using ($gt-wide) {
+		@if $gt-wide {
+			display: grid;
+			grid-template-columns: 2fr 3fr 2fr;
+			gap: 10px;
 		}
 	}
 }

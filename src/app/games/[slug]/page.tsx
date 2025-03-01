@@ -1,20 +1,27 @@
 import {
 	accountTable,
+	gameResultTable,
 	gameTable,
 	matchTable,
+	playerGameResultTable,
 	playerTable,
 	seasonTable,
+	teamGameResultTable,
 	teamPlayerTable,
 	teamTable
 } from "db/schema";
 import { and, eq, or } from "drizzle-orm";
 import AdminPanel from "./AdminPanel";
 import type { JSX } from "react";
+import Link from "components/Link";
 import type { Metadata } from "next";
 import type PageProps from "types/PageProps";
+import TournamentCode from "components/TournamentCode";
 import { auth } from "db/auth";
 import db from "db/db";
 import getGameUrl from "util/getGameUrl";
+import getMatchUrl from "util/getMatchUrl";
+import leftHierarchy from "util/leftHierarchy";
 import style from "./page.module.scss";
 
 /**
@@ -48,11 +55,26 @@ export default async function Page(
 
 	const { game, match, season } = gameRow;
 
-	// The tournament code is visible if the viewer is logged in and either the game isn't associated with a match or the viewer is on a team in the associated match.
+	const teams = match
+		? await db
+				.select()
+				.from(teamTable)
+				.where(
+					or(
+						eq(teamTable.id, match.blueTeamId),
+						or(eq(teamTable.id, match.redTeamId))
+					)
+				)
+		: [];
+	const blueTeam = teams.find(({ id }) => id === match?.blueTeamId);
+	const redTeam = teams.find(({ id }) => id === match?.redTeamId);
+
+	// The tournament code is visible if the viewer is logged in and either the user is an administrator, the game isn't associated with a match, or the viewer is on a team in the associated match.
 	const session = await auth();
 	const canViewTournamentCode =
 		session?.user &&
-		(!match ||
+		(session.user.isAdmin ||
+			!match ||
 			(
 				await db
 					.select()
@@ -70,40 +92,34 @@ export default async function Page(
 
 	let adminPanel: JSX.Element | undefined = void 0;
 	if (session?.user?.isAdmin) {
-		const teams =
-			match &&
-			(await db
-				.select()
-				.from(teamTable)
-				.where(
-					or(
-						eq(teamTable.id, match.blueTeamId),
-						or(eq(teamTable.id, match.redTeamId))
-					)
-				));
-		const blueTeam = teams?.find(({ id }) => id === match?.blueTeamId);
-		const redTeam = teams?.find(({ id }) => id === match?.redTeamId);
 		const accounts =
-			blueTeam &&
-			redTeam &&
-			(await db
-				.select()
-				.from(teamTable)
-				.innerJoin(teamPlayerTable, eq(teamTable.id, teamPlayerTable.teamId))
-				.innerJoin(playerTable, eq(teamPlayerTable.playerId, playerTable.id))
-				.innerJoin(accountTable, eq(playerTable.id, accountTable.playerId))
-				.where(
-					or(eq(teamTable.id, blueTeam.id), eq(teamTable.id, redTeam.id))
-				));
+			blueTeam && redTeam
+				? await db
+						.select()
+						.from(teamTable)
+						.innerJoin(
+							teamPlayerTable,
+							eq(teamTable.id, teamPlayerTable.teamId)
+						)
+						.innerJoin(
+							playerTable,
+							eq(teamPlayerTable.playerId, playerTable.id)
+						)
+						.innerJoin(accountTable, eq(playerTable.id, accountTable.playerId))
+						.where(
+							or(eq(teamTable.id, blueTeam.id), eq(teamTable.id, redTeam.id))
+						)
+				: [];
 		const blueAccounts = accounts
-			?.filter(({ teamPlayer: { teamId } }) => teamId === match?.blueTeamId)
+			.filter(({ teamPlayer: { teamId } }) => teamId === match?.blueTeamId)
 			.map(({ account }) => account);
 		const redAccounts = accounts
-			?.filter(({ teamPlayer: { teamId } }) => teamId === match?.redTeamId)
+			.filter(({ teamPlayer: { teamId } }) => teamId === match?.redTeamId)
 			.map(({ account }) => account);
 
 		adminPanel = (
 			<AdminPanel
+				className={style["admin"]}
 				game={game}
 				match={match ?? void 0}
 				season={season ?? void 0}
@@ -111,16 +127,76 @@ export default async function Page(
 				blueAccounts={blueAccounts}
 				redTeam={redTeam}
 				redAccounts={redAccounts}
-				style={{ maxWidth: 512 }} // TODO: Temporary until the page gets an actual format.
 			/>
+		);
+	}
+
+	const [results] = leftHierarchy(
+		await db
+			.select()
+			.from(gameResultTable)
+			.leftJoin(
+				teamGameResultTable,
+				eq(gameResultTable.id, teamGameResultTable.gameResultId)
+			)
+			.leftJoin(
+				playerGameResultTable,
+				and(
+					eq(
+						teamGameResultTable.gameResultId,
+						playerGameResultTable.gameResultId
+					),
+					eq(teamGameResultTable.team, playerGameResultTable.team)
+				)
+			)
+			.where(eq(gameResultTable.tournamentCode, game.tournamentCode)),
+		"gameResult",
+		"teamGameResult",
+		"playerGameResult"
+	);
+
+	if (!results) {
+		return (
+			<div className={style["content"]}>
+				<div />
+				<div className={style["main"]}>
+					<h1>{`Game #${game.id.toString()}${blueTeam && redTeam ? ` - ${blueTeam.name} vs ${redTeam.name}` : ""}`}</h1>
+					{canViewTournamentCode && (
+						<TournamentCode tournamentCode={game.tournamentCode} />
+					)}
+					{match && (
+						<p>
+							{"Part of "}
+							<Link
+								href={getMatchUrl(match)}
+							>{`match #${match.id.toString()}`}</Link>
+							{". This game has not yet concluded."}
+						</p>
+					)}
+					{adminPanel}
+				</div>
+				<div />
+			</div>
 		);
 	}
 
 	return (
 		<div className={style["content"]}>
-			<p>{"Coming soon..."}</p>
-			{canViewTournamentCode && <p>{"You belong to a team in this match."}</p>}
-			{adminPanel}
+			<div />
+			<div className={style["main"]}>
+				<h1>{`Game #${game.id.toString()}${blueTeam && redTeam ? ` - ${blueTeam.name} vs ${redTeam.name}` : ""}`}</h1>
+				{match && (
+					<p>
+						{"Part of "}
+						<Link
+							href={getMatchUrl(match)}
+						>{`match #${match.id.toString()}`}</Link>
+						{". Game result data coming soon..."}
+					</p>
+				)}
+				{adminPanel}
+			</div>
+			<div />
 		</div>
 	);
 }
