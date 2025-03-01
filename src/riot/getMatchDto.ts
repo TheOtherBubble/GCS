@@ -6,7 +6,7 @@ import riotFetch from "./riotFetch";
 /**
  * Get a match in the Riot API.
  * @param id - The match's ID.
- * @param platform - The platform to use to make the request.
+ * @param cluster - The cluster to use to make the request.
  * @param key - The Riot API key to use.
  * @returns The match.
  * @throws `Error` if the response has a bad status or if the Riot API key is missing.
