@@ -119,7 +119,7 @@ export const playerTable = pgTable("player", {
 	displayName: varchar({ length: 0x20 }).unique(),
 
 	// The user's email address. Used by Auth.js to link OAuth accounts to users.
-	email: varchar({ length: 0x40 }).unique(),
+	email: varchar({ length: 0x40 }).notNull().unique(),
 
 	// Required by Auth.js, but always null.
 	emailVerified: timestamp(),

@@ -44,5 +44,8 @@ export default function Image({
 		props.blurDataURL ??= defaultBlur.blurDataURL;
 	}
 
+	// Default to unoptimized so that the website still works when over Vercel usage limits.
+	props.unoptimized ??= true;
+
 	return <NextImage {...props} />;
 }

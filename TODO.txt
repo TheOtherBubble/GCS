@@ -7,7 +7,6 @@ Migration to-do list:
 - API endpoint for receiving and storing game results and creating games when necessary.
 
 Core functionality:
-- Swap match sides per round robin.
 - Show the tournament code of the game to players on teams in the game on game pages.
 - Show the tournament code of the next game to players on teams in the match on match pages.
 - Show the playoffs bracket once the playoffs stage begins.
@@ -21,6 +20,7 @@ Core functionality:
 - Administrator tool for deleting matches.
 - Administrator tool for deleting games.
 - Administrator tool for creating games without matches.
+- Remove temporary forms.
 
 Core functionality, necessary before the next season:
 - Add a page for captains to draft.
@@ -55,6 +55,7 @@ Extra features to add after everything else is done (or when waiting on other pe
 - Discord app integration.
 - Inhouse integration.
 - Display player non-GCS match history on player pages.
+- Optimize images (look into reducing usage then re-enable optimization).
 
 API TODOs:
 

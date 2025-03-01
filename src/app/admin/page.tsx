@@ -3,7 +3,6 @@ import CreateSeasonForm from "./CreateSeasonForm";
 import type { JSX } from "react";
 import type { Metadata } from "next";
 import SaveGameForm from "./SaveGameForm";
-import UpdateAccountsForm from "./UpdateAccountsForm";
 import { auth } from "db/auth";
 import style from "./page.module.scss";
 
@@ -31,7 +30,6 @@ export default async function Page(): Promise<JSX.Element> {
 			<div className={style["widgets"]}>
 				<CreateSeasonForm />
 				<SaveGameForm />
-				<UpdateAccountsForm />
 			</div>
 		</>
 	);
