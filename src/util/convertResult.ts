@@ -32,7 +32,10 @@ export default function convertResult(
 		queue: riot.info.queueId,
 		region: riot.info.platformId,
 		startTimestamp: riot.info.gameStartTimestamp,
-		tournamentCode: riot.info.tournamentCode,
+		tournamentCode:
+			riot.info.tournamentCode === ""
+				? `FAKE-${Date.now().toString(16)}`
+				: riot.info.tournamentCode,
 		type: riot.info.gameType,
 		version: riot.info.gameVersion
 	} satisfies typeof gameResultTable.$inferInsert;
