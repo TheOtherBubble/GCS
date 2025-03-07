@@ -35,7 +35,7 @@ export default async function Page(): Promise<JSX.Element> {
 					loading="lazy"
 				/>
 			)}
-			<div>
+			<ul>
 				<Link href="https://discord.gg/gcsleague">
 					<BsDiscord />
 					{"Discord"}
@@ -48,7 +48,7 @@ export default async function Page(): Promise<JSX.Element> {
 					<BsYoutube />
 					{"YouTube"}
 				</Link>
-			</div>
+			</ul>
 			<h2>{"Welcome to the Gauntlet Championship Series"}</h2>
 			<p>
 				{

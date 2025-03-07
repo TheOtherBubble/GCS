@@ -1,5 +1,6 @@
 @use "../styles/mixins";
 @use "../styles/variables";
+@use "../styles/clean-list.module.scss";
 
 // Landing page.
 article.content {
@@ -11,7 +12,9 @@ article.content {
 	}
 
 	// Social links section.
-	& > div {
+	& > ul {
+		@extend .clean-list;
+
 		display: flex;
 		justify-content: space-around;
 

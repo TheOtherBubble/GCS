@@ -50,9 +50,12 @@ h6 {
 	text-align: center;
 }
 
-// Inherit fonts in forms. This is not done by default in most browsers.
+// See https://developer.mozilla.org/en-US/docs/Learn_web_development/Extensions/Forms/Styling_web_forms#fonts_and_text.
+button,
 input,
-textarea,
-select {
-	font: inherit;
+select,
+textarea {
+	color: inherit;
+	font-family: inherit;
+	font-size: inherit;
 }

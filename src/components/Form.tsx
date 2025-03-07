@@ -64,7 +64,7 @@ export default function Form({
 			{children}
 			{state && (
 				<footer>
-					<p>{state}</p>
+					<output>{state}</output>
 				</footer>
 			)}
 		</NextForm>
