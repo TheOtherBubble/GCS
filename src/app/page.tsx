@@ -35,7 +35,7 @@ export default async function Page(): Promise<JSX.Element> {
 					loading="lazy"
 				/>
 			)}
-			<ul>
+			<ul className={style["socials"]}>
 				<Link href="https://discord.gg/gcsleague">
 					<BsDiscord />
 					{"Discord"}

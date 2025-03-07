@@ -12,7 +12,7 @@ article.content {
 	}
 
 	// Social links section.
-	& > ul {
+	& > ul.socials {
 		@extend .clean-list;
 
 		display: flex;
