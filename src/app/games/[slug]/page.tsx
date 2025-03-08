@@ -11,7 +11,7 @@ import {
 	teamTable
 } from "db/schema";
 import { and, eq, or } from "drizzle-orm";
-import AdminPanel from "./AdminPanel";
+import CaptainPanel from "./CaptainPanel";
 import type { JSX } from "react";
 import Link from "components/Link";
 import type { Metadata } from "next";
@@ -90,8 +90,8 @@ export default async function Page(
 					)
 			).length > 0);
 
-	let adminPanel: JSX.Element | undefined = void 0;
-	if (session?.user?.isAdmin) {
+	let captainPanel: JSX.Element | undefined = void 0;
+	if (session?.user) {
 		const accounts =
 			blueTeam && redTeam
 				? await db
@@ -110,6 +110,18 @@ export default async function Page(
 							or(eq(teamTable.id, blueTeam.id), eq(teamTable.id, redTeam.id))
 						)
 				: [];
+		const isBlueCaptain = accounts.some(
+			({ teamPlayer: { playerId, isCaptain, teamId } }) =>
+				isCaptain &&
+				teamId === match?.blueTeamId &&
+				playerId === session.user?.id
+		);
+		const isRedCaptain = accounts.some(
+			({ teamPlayer: { playerId, isCaptain, teamId } }) =>
+				isCaptain &&
+				teamId === match?.redTeamId &&
+				playerId === session.user?.id
+		);
 		const blueAccounts = accounts
 			.filter(({ teamPlayer: { teamId } }) => teamId === match?.blueTeamId)
 			.map(({ account }) => account);
@@ -117,18 +129,23 @@ export default async function Page(
 			.filter(({ teamPlayer: { teamId } }) => teamId === match?.redTeamId)
 			.map(({ account }) => account);
 
-		adminPanel = (
-			<AdminPanel
-				className={style["admin"]}
-				game={game}
-				match={match ?? void 0}
-				season={season ?? void 0}
-				blueTeam={blueTeam}
-				blueAccounts={blueAccounts}
-				redTeam={redTeam}
-				redAccounts={redAccounts}
-			/>
-		);
+		captainPanel =
+			session.user.isAdmin || isBlueCaptain || isRedCaptain ? (
+				<CaptainPanel
+					className={style["captain"]}
+					game={game}
+					match={match ?? void 0}
+					season={season ?? void 0}
+					isBlueCaptain={session.user.isAdmin || isBlueCaptain}
+					blueTeam={blueTeam}
+					blueAccounts={blueAccounts}
+					isRedCaptain={session.user.isAdmin || isRedCaptain}
+					redTeam={redTeam}
+					redAccounts={redAccounts}
+				/>
+			) : (
+				void 0
+			);
 	}
 
 	const [results] = leftHierarchy(
@@ -173,7 +190,7 @@ export default async function Page(
 							{". This game has not yet concluded."}
 						</p>
 					)}
-					{adminPanel}
+					{captainPanel}
 				</div>
 				<div />
 			</div>
@@ -194,7 +211,7 @@ export default async function Page(
 						{". Game result data coming soon..."}
 					</p>
 				)}
-				{adminPanel}
+				{session?.user?.isAdmin && captainPanel}
 			</div>
 			<div />
 		</div>

@@ -121,7 +121,8 @@ export default async function Page(props: PageProps<MatchesPageParams>) {
 	const session = await auth();
 	const canViewTournamentCode =
 		session?.user &&
-		(session.user.isAdmin || allPlayers.includes(session.user));
+		(session.user.isAdmin ||
+			allPlayers.some(({ id }) => id === session.user?.id));
 
 	return (
 		<div className={style["content"]}>

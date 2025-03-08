@@ -28,11 +28,13 @@ export default function DeleteSeasonForm({
 	season,
 	...props
 }: DeleteSeasonFormProps): JSX.Element {
+	const safeguardText = "CONFIRM";
+
 	return (
 		<Form
 			action={async (form) => {
 				"use server";
-				if (getFormField(form, "safeguard") !== "CONFIRM") {
+				if (getFormField(form, "safeguard") !== safeguardText) {
 					return "Invalid safeguard.";
 				}
 
@@ -48,7 +50,12 @@ export default function DeleteSeasonForm({
 			<p>
 				<label>
 					{"Safeguard"}
-					<input type="text" name="safeguard" placeholder="CONFIRM" required />
+					<input
+						type="text"
+						name="safeguard"
+						placeholder={safeguardText}
+						required
+					/>
 				</label>
 			</p>
 			<p>

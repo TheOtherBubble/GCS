@@ -4,23 +4,19 @@ import {
 	gameResultTable,
 	gameTable,
 	matchTable,
-	playerGameResultTable,
 	playerTable,
-	teamGameResultBanTable,
 	teamGameResultTable,
 	teamPlayerTable,
 	teamTable
 } from "db/schema";
-import { eq, or } from "drizzle-orm";
+import { and, eq, or } from "drizzle-orm";
 import type TournamentGames from "types/riot/TournamentGames";
-import convertResult from "util/convertResult";
 import db from "db/db";
-import getClusterForRegion from "util/getClusterForRegion";
 import getFormatGameCount from "util/getFormatGameCount";
-import getMatchDto from "riot/getMatchDto";
+import getPlatformForRegion from "util/getPlatformForRegion";
 import leftHierarchy from "util/leftHierarchy";
-import makeMatchId from "util/makeMatchId";
 import makeTournamentCodes from "riot/makeTournamentCodes";
+import saveGame from "util/saveGame";
 
 /**
  * Receive a tournament code game callback.
@@ -59,11 +55,8 @@ export const POST = async (request: NextRequest): Promise<NextResponse> => {
 			.where(eq(gameTable.tournamentCode, game.shortCode));
 
 		// Convert and store game results.
-		const [gameResult, teams, bans, players] = convertResult(
-			await getMatchDto(
-				makeMatchId(game.gameId),
-				getClusterForRegion(game.region)
-			),
+		await saveGame(
+			game.gameId,
 			new Map(
 				leftHierarchy(rows, "team", "account").map(
 					({ value: { id }, children: accounts }) => [
@@ -71,12 +64,10 @@ export const POST = async (request: NextRequest): Promise<NextResponse> => {
 						accounts.map(({ puuid }) => puuid)
 					]
 				)
-			)
+			),
+			void 0,
+			getPlatformForRegion(game.region)
 		);
-		await db.insert(gameResultTable).values(gameResult);
-		await db.insert(teamGameResultTable).values(teams);
-		await db.insert(teamGameResultBanTable).values(bans);
-		await db.insert(playerGameResultTable).values(players);
 
 		// Get the match that the game belongs to.
 		const [match] = leftHierarchy(rows, "match");
@@ -85,7 +76,7 @@ export const POST = async (request: NextRequest): Promise<NextResponse> => {
 		}
 
 		// Count the number of wins that each team has.
-		const teamGameResults = leftHierarchy(
+		const winningTeamGameResults = leftHierarchy(
 			await db
 				.select()
 				.from(matchTable)
@@ -98,12 +89,17 @@ export const POST = async (request: NextRequest): Promise<NextResponse> => {
 					teamGameResultTable,
 					eq(gameResultTable.id, teamGameResultTable.gameResultId)
 				)
-				.where(eq(matchTable.id, match.id)),
+				.where(
+					and(
+						eq(matchTable.id, match.id),
+						eq(teamGameResultTable.isWinner, true)
+					)
+				),
 			"teamGameResult"
 		);
 		const wins = new Map<number, number>();
-		for (const teamGameResult of teamGameResults) {
-			wins.set(teamGameResult.team, (wins.get(teamGameResult.team) ?? 0) + 1);
+		for (const result of winningTeamGameResults) {
+			wins.set(result.team, (wins.get(result.team) ?? 0) + 1);
 		}
 
 		// Check if another game needs to be made.
@@ -113,7 +109,11 @@ export const POST = async (request: NextRequest): Promise<NextResponse> => {
 		}
 
 		// Make a new tournament code for the next game.
-		const [tournamentCode] = await makeTournamentCodes();
+		const [tournamentCode] = await makeTournamentCodes(
+			void 0,
+			1,
+			match.seasonId
+		);
 		if (!tournamentCode) {
 			return new NextResponse(void 0, { status: 200 });
 		}

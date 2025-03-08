@@ -32,10 +32,16 @@ export default function GenerateRegularSeasonForm({
 	teams,
 	...props
 }: SeedSeasonFormProps): JSX.Element {
+	const safeguardText = "CONFIRM";
+
 	return (
 		<Form
 			action={async (form) => {
 				"use server";
+				if (getFormField(form, "safeguard") !== safeguardText) {
+					return "Invalid safeguard.";
+				}
+
 				if (!hasRiotApiKey()) {
 					return "Missing Riot API key.";
 				}
@@ -118,6 +124,17 @@ export default function GenerateRegularSeasonForm({
 						name="rounds"
 						min={1}
 						defaultValue={2}
+						required
+					/>
+				</label>
+			</p>
+			<p>
+				<label>
+					{"Safeguard"}
+					<input
+						type="text"
+						name="safeguard"
+						placeholder={safeguardText}
 						required
 					/>
 				</label>

@@ -1,24 +1,18 @@
 import Form, { type FormProps } from "components/Form";
 import {
 	accountTable,
-	gameResultTable,
-	playerGameResultTable,
 	playerTable,
-	teamGameResultBanTable,
-	teamGameResultTable,
 	teamPlayerTable,
 	teamTable
 } from "db/schema";
 import type { JSX } from "react";
 import Submit from "components/Submit";
-import convertResult from "util/convertResult";
 import db from "db/db";
 import { eq } from "drizzle-orm";
 import getFormField from "util/getFormField";
-import getMatchDto from "riot/getMatchDto";
 import hasRiotApiKey from "util/hasRiotApiKey";
 import leftHierarchy from "util/leftHierarchy";
-import makeMatchId from "util/makeMatchId";
+import saveGame from "util/saveGame";
 
 /**
  * Properties that can be passed to a save game form.
@@ -41,10 +35,8 @@ export default function SaveGameForm(props: SaveGameFormProps): JSX.Element {
 					return "Missing Riot API key.";
 				}
 
-				const [game, teams, bans, players] = convertResult(
-					await getMatchDto(
-						makeMatchId(getFormField(form, "gameId", true) as `${number}`)
-					),
+				await saveGame(
+					getFormField(form, "gameId", true) as `${number}`,
 					leftHierarchy(
 						await db
 							.select()
@@ -77,10 +69,6 @@ export default function SaveGameForm(props: SaveGameFormProps): JSX.Element {
 						return previousValue;
 					}, new Map<number, string[]>())
 				);
-				await db.insert(gameResultTable).values(game);
-				await db.insert(teamGameResultTable).values(teams);
-				await db.insert(teamGameResultBanTable).values(bans);
-				await db.insert(playerGameResultTable).values(players);
 				return void 0;
 			}}
 			{...props}
