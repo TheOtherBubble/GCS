@@ -101,7 +101,11 @@ export default function ForfeitForm({
 				);
 				const wins = new Map<number, number>();
 				for (const result of winningTeamGameResults) {
-					wins.set(result.team, (wins.get(result.team) ?? 0) + 1);
+					if (!result.teamId) {
+						continue;
+					}
+
+					wins.set(result.teamId, (wins.get(result.teamId) ?? 0) + 1);
 				}
 
 				// Make another game if necessary.

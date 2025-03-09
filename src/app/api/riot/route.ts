@@ -99,7 +99,11 @@ export const POST = async (request: NextRequest): Promise<NextResponse> => {
 		);
 		const wins = new Map<number, number>();
 		for (const result of winningTeamGameResults) {
-			wins.set(result.team, (wins.get(result.team) ?? 0) + 1);
+			if (!result.teamId) {
+				continue;
+			}
+
+			wins.set(result.teamId, (wins.get(result.teamId) ?? 0) + 1);
 		}
 
 		// Check if another game needs to be made.
