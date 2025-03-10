@@ -13,6 +13,7 @@ import {
 import { and, eq, or } from "drizzle-orm";
 import AdminPanel from "./AdminPanel";
 import GameCard from "components/GameCard";
+import Link from "components/Link";
 import LocalDate from "components/LocalDate";
 import type { Metadata } from "next";
 import type PageProps from "types/PageProps";
@@ -23,6 +24,7 @@ import { auth } from "db/auth";
 import db from "db/db";
 import getMatchDateTime from "util/getMatchDateTime";
 import getMatchUrl from "util/getMatchUrl";
+import getSeasonUrl from "util/getSeasonUrl";
 import leftHierarchy from "util/leftHierarchy";
 import style from "./page.module.scss";
 
@@ -160,6 +162,10 @@ export default async function Page(props: PageProps<MatchesPageParams>) {
 						/>
 						{` - ${match.format}`}
 					</h2>
+					<h3>
+						<Link href={getSeasonUrl(season)}>{season.name}</Link>
+						{`, round ${match.round.toString()}, time slot ${match.timeSlot.toString()}.`}
+					</h3>
 					{nextGame && canViewTournamentCode && (
 						<TournamentCode tournamentCode={nextGame.tournamentCode} />
 					)}
