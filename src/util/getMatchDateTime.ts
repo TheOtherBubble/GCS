@@ -4,6 +4,12 @@ import { TIME_SLOT_DURATION } from "./const";
 /** The numeric value of Saturday for `Date.prototype.getDay` and `Date.prototype.getUTCDay`. */
 const SATURDAY = 6;
 
+/** The numeric value of March for `Date.prototype.getMonth` and `Date.prototype.getUTCMonth`. */
+const MARCH = 2;
+
+/** The numeric value of November for `Date.prototype.getMonth` and `Date.prototype.getUTCMonth`. */
+const NOVEMBER = 10;
+
 /**
  * Get the date and time that a match should be started based on its round and time slot and its season's start date.
  * @param match - The match.
@@ -40,6 +46,17 @@ export default function getMatchDateTime(
 	date.setUTCHours(
 		date.getUTCHours() + TIME_SLOT_DURATION * (sunday + timeSlot0)
 	);
+
+	// If the game is between March 9 and November 2 (inclusive), move it back one hour to account for daylight savings time in the United States and Canada.
+	const month = date.getUTCMonth();
+	const day = date.getUTCDate();
+	if (
+		(month === MARCH && day >= 9) ||
+		(month > MARCH && month < NOVEMBER) ||
+		(month === NOVEMBER && day <= 2)
+	) {
+		date.setUTCHours(date.getUTCHours() - 1);
+	}
 
 	return date;
 }
