@@ -299,6 +299,12 @@ export const seasonTable = pgTable("season", {
 	// The season's name.
 	name: varchar({ length: 0x40 }).notNull().unique(),
 
+	// The stage ID of the playoffs bracket on Toornament.
+	playoffsStageId: varchar({ length: 0x20 }),
+
+	// The tournament ID of the playoffs bracket on Toornament.
+	playoffsTourneyId: varchar({ length: 0x20 }),
+
 	// The season's vanity URL slug. Passed through `encodeURIComponent` and then used as a slug to make the season's URL.
 	slug: varchar({ length: 0x20 }).notNull().unique(),
 
@@ -432,6 +438,9 @@ export const matchTable = pgTable("match", {
 
 	// Unique identifier.
 	id: integer().primaryKey().generatedAlwaysAsIdentity(),
+
+	// Whether or not the match is part of playoffs.
+	isPlayoffs: boolean().default(false),
 
 	// The ID of the red team.
 	redTeamId: integer()
