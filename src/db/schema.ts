@@ -440,7 +440,7 @@ export const matchTable = pgTable("match", {
 	id: integer().primaryKey().generatedAlwaysAsIdentity(),
 
 	// Whether or not the match is part of playoffs.
-	isPlayoffs: boolean().default(false),
+	isPlayoffs: boolean().default(false).notNull(),
 
 	// The ID of the red team.
 	redTeamId: integer()
