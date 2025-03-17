@@ -108,6 +108,11 @@ export default async function Page(
 		"match",
 		"teamGameResult"
 	)) {
+		// Don't count playoffs games in regular season standings.
+		if (matchTeamGameResults.value.isPlayoffs) {
+			continue;
+		}
+
 		const matchTeamScores = new Map<number, [number, number]>();
 		for (const teamGameResult of matchTeamGameResults.children) {
 			if (!teamGameResult.teamId) {
@@ -217,7 +222,7 @@ export default async function Page(
 			</div>
 			<div className={style["leaderboards"]}>
 				<header>
-					<h2>{"Standings"}</h2>
+					<h2>{"Regular Season Standings"}</h2>
 				</header>
 				<ol>
 					{Array.from(poolScores)

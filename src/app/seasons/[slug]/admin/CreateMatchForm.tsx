@@ -54,6 +54,7 @@ export default function CreateMatchForm({
 							"format",
 							true
 						) as (typeof matchFormatEnum.enumValues)[number],
+						isPlayoffs: Boolean(getFormField(form, "isPlayoffs")),
 						redTeamId,
 						round: parseInt(getFormField(form, "round", true), 10),
 						seasonId: season.id,
@@ -120,6 +121,12 @@ export default function CreateMatchForm({
 						defaultValue={1}
 						required
 					/>
+				</label>
+			</p>
+			<p>
+				<label>
+					{"Playoffs match?"}
+					<input type="checkbox" name="isPlayoffs" />
 				</label>
 			</p>
 			<p>
