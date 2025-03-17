@@ -38,6 +38,8 @@ export default function UpdateSeasonForm({
 					.update(seasonTable)
 					.set({
 						name: getFormField(form, "name"),
+						playoffsStageId: getFormField(form, "playoffsStageId"),
+						playoffsTourneyId: getFormField(form, "playoffsTourneyId"),
 						slug,
 						startDate: getFormField(form, "startDate")
 					})
@@ -70,6 +72,18 @@ export default function UpdateSeasonForm({
 				<label>
 					{"Slug"}
 					<input type="text" name="slug" />
+				</label>
+			</p>
+			<p>
+				<label>
+					{"Toornament Tournament ID"}
+					<input type="text" name="playoffsTourneyId" />
+				</label>
+			</p>
+			<p>
+				<label>
+					{"Toornament Stage ID"}
+					<input type="text" name="playoffsStageId" />
 				</label>
 			</p>
 			<p>

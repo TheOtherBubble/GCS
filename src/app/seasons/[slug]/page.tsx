@@ -221,9 +221,12 @@ export default async function Page(
 				</ol>
 			</div>
 			<div className={style["leaderboards"]}>
-				<header>
-					<h2>{"Regular Season Standings"}</h2>
-				</header>
+				{season.playoffsTourneyId && season.playoffsStageId && (
+					<iframe
+						src={`https://widget.toornament.com/tournaments/${season.playoffsTourneyId}/stages/${season.playoffsStageId}/`}
+					/>
+				)}
+				<h2>{"Regular Season Standings"}</h2>
 				<ol>
 					{Array.from(poolScores)
 						.sort(([a], [b]) => a - b)

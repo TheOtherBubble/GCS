@@ -48,9 +48,19 @@ div.content {
 		display: none;
 	}
 
-	// Leaderboards list.
-	& > div.leaderboards > ol {
-		@extend .clean-list;
+	// Leaderboards column.
+	& > div.leaderboards {
+		// Playoffs bracket embed.
+		& > iframe {
+			aspect-ratio: 1 / 1;
+			border: none;
+			width: 100%;
+		}
+
+		// Leaderboards list.
+		& > ol {
+			@extend .clean-list;
+		}
 	}
 
 	@include mixins.gt-mobile using ($gt-mobile) {
