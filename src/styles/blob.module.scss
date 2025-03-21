@@ -39,28 +39,22 @@ form.blob {
 	}
 
 	// Create a grid with labels on the left and input elements on the right.
-	& > p > label {
-		display: grid;
-		grid-template-columns: 1fr 2fr;
-		gap: 5px;
+	& > p {
+		& > label {
+			display: grid;
+			grid-template-columns: 1fr 2fr;
+			gap: 5px;
 
-		// Position labels on the left and float them towards the center.
-		text-align: right;
+			// Position labels on the left and float them towards the center.
+			text-align: right;
+		}
 
-		// Position input elements on the right.
+		// Allow unlabeled input elements to span the entire form width.
 		& > input,
 		& > select,
 		& > textarea {
-			// Add back the default padding on input elements that was removed above.
-			padding: revert;
+			width: 100%;
 		}
-	}
-
-	// Allow unlabeled input elements to span the entire form width.
-	& > p > input,
-	& > p > select,
-	& > p > textarea {
-		width: 100%;
 	}
 }
 
