@@ -11,6 +11,7 @@ import {
 	teamTable
 } from "db/schema";
 import { and, eq, or } from "drizzle-orm";
+import AdminPanel from "./AdminPanel";
 import CaptainPanel from "./CaptainPanel";
 import type { JSX } from "react";
 import Link from "components/Link";
@@ -132,7 +133,7 @@ export default async function Page(
 		captainPanel =
 			session.user.isAdmin || isBlueCaptain || isRedCaptain ? (
 				<CaptainPanel
-					className={style["captain"]}
+					className={style["panel"]}
 					game={game}
 					match={match ?? void 0}
 					season={season ?? void 0}
@@ -191,6 +192,9 @@ export default async function Page(
 						</p>
 					)}
 					{captainPanel}
+					{session?.user?.isAdmin && (
+						<AdminPanel className={style["panel"]} game={game} />
+					)}
 				</div>
 				<div />
 			</div>
@@ -212,6 +216,9 @@ export default async function Page(
 					</p>
 				)}
 				{session?.user?.isAdmin && captainPanel}
+				{session?.user?.isAdmin && (
+					<AdminPanel className={style["panel"]} game={game} />
+				)}
 			</div>
 			<div />
 		</div>

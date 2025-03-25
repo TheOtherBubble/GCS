@@ -42,7 +42,7 @@ export interface ForfeitFormProps
 }
 
 /**
- * A form for forfeiting for a game.
+ * A form for forfeiting a game.
  * @param props - Properties to pass to the form.
  * @returns The form.
  * @public

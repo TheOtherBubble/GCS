@@ -8,8 +8,8 @@ div.content {
 	& > div {
 		@extend .list;
 
-		// Captain panel.
-		& > div.captain {
+		// Captain and admin panels.
+		& > div.panel {
 			@extend .blob-section;
 
 			// Captain panel form.
