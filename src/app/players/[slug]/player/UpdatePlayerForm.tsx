@@ -72,19 +72,31 @@ export default function UpdatePlayerForm({
 			<p>
 				<label>
 					{"Display name"}
-					<input type="text" name="displayName" maxLength={0x20} />
+					<input
+						type="text"
+						name="displayName"
+						maxLength={0x20}
+						defaultValue={player.displayName ?? void 0}
+					/>
 				</label>
 			</p>
 			<p>
 				<label>
 					{"Biography"}
-					<textarea name="bio" maxLength={0x100} />
+					<textarea
+						name="bio"
+						maxLength={0x100}
+						defaultValue={player.bio ?? void 0}
+					/>
 				</label>
 			</p>
 			<p>
 				<label>
 					{"Primary role"}
-					<select name="primaryRole">
+					<select
+						name="primaryRole"
+						defaultValue={player.primaryRole ?? void 0}
+					>
 						<option />
 						{positionEnum.enumValues.map((role) => (
 							<option value={role} key={role}>
@@ -97,7 +109,10 @@ export default function UpdatePlayerForm({
 			<p>
 				<label>
 					{"Secondary role"}
-					<select name="secondaryRole">
+					<select
+						name="secondaryRole"
+						defaultValue={player.secondaryRole ?? void 0}
+					>
 						<option />
 						{positionEnum.enumValues.map((role) => (
 							<option value={role} key={role}>
@@ -110,7 +125,10 @@ export default function UpdatePlayerForm({
 			<p>
 				<label>
 					{"Background champion"}
-					<ChampionList name="bgChamp" />
+					<ChampionList
+						name="bgChamp"
+						defaultValue={player.bgChamp ?? void 0}
+					/>
 				</label>
 			</p>
 			<p>

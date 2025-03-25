@@ -59,31 +59,39 @@ export default function UpdateSeasonForm({
 			<p>
 				<label>
 					{"Start date"}
-					<input type="date" name="startDate" />
+					<input type="date" name="startDate" defaultValue={season.startDate} />
 				</label>
 			</p>
 			<p>
 				<label>
 					{"Name"}
-					<input type="text" name="name" />
+					<input type="text" name="name" defaultValue={season.name} />
 				</label>
 			</p>
 			<p>
 				<label>
 					{"Slug"}
-					<input type="text" name="slug" />
+					<input type="text" name="slug" defaultValue={season.slug} />
 				</label>
 			</p>
 			<p>
 				<label>
 					{"Toornament Tournament ID"}
-					<input type="text" name="playoffsTourneyId" />
+					<input
+						type="text"
+						name="playoffsTourneyId"
+						defaultValue={season.playoffsTourneyId ?? void 0}
+					/>
 				</label>
 			</p>
 			<p>
 				<label>
 					{"Toornament Stage ID"}
-					<input type="text" name="playoffsStageId" />
+					<input
+						type="text"
+						name="playoffsStageId"
+						defaultValue={season.playoffsStageId ?? void 0}
+					/>
 				</label>
 			</p>
 			<p>

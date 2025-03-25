@@ -59,7 +59,7 @@ export default function UpdateSkinForm({
 					<SkinList
 						championId={backgroundChampionId}
 						name="bgSkin"
-						defaultValue={player.bgSkin ?? 0}
+						defaultValue={player.bgSkin ?? void 0}
 						required
 					/>
 				</label>

@@ -2,7 +2,6 @@ import { forbidden, unauthorized } from "next/navigation";
 import CreateSeasonForm from "./CreateSeasonForm";
 import type { JSX } from "react";
 import type { Metadata } from "next";
-import SaveGameForm from "./SaveGameForm";
 import { auth } from "db/auth";
 import style from "./page.module.scss";
 
@@ -29,7 +28,6 @@ export default async function Page(): Promise<JSX.Element> {
 			</header>
 			<div className={style["widgets"]}>
 				<CreateSeasonForm />
-				<SaveGameForm />
 			</div>
 		</>
 	);
