@@ -22,6 +22,9 @@ export interface RoundHeaderProps
 
 	/** Whether or not to scroll to this round. */
 	doScrollTo: boolean;
+
+	/** Whether or not to show the round number. */
+	doShowRound: boolean;
 }
 
 /**
@@ -34,6 +37,7 @@ export default function RoundHeader({
 	match,
 	season,
 	doScrollTo,
+	doShowRound,
 	...props
 }: RoundHeaderProps): JSX.Element {
 	const ref: Ref<HTMLElement | null> = useRef(null);
@@ -58,6 +62,7 @@ export default function RoundHeader({
 							weekday: "long"
 						}}
 					/>
+					{doShowRound && ` - Round ${round.toString()}`}
 				</h3>
 			) : (
 				<h3>{`Round ${round.toString()}`}</h3>

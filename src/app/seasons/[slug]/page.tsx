@@ -165,6 +165,8 @@ export default async function Page(
 		pool.push(teamScore);
 	}
 
+	const isAdmin = (await auth())?.user?.isAdmin ?? false;
+
 	return (
 		<div className={style["content"]}>
 			<div className={style["info"]}>
@@ -172,9 +174,7 @@ export default async function Page(
 					<h1>{season.name}</h1>
 					<hr />
 				</header>
-				{(await auth())?.user?.isAdmin && (
-					<AdminPanel season={season} teams={teams} />
-				)}
+				{isAdmin && <AdminPanel season={season} teams={teams} />}
 			</div>
 			<div className={style["schedule"]}>
 				<header>
@@ -193,6 +193,7 @@ export default async function Page(
 									match={roundMatches[0]?.value}
 									season={season}
 									doScrollTo={round === upcomingRound}
+									doShowRound={isAdmin}
 								/>
 								<ol>
 									{roundMatches
