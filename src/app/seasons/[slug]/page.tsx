@@ -20,6 +20,7 @@ import getFormatGameCount from "util/getFormatGameCount";
 import getMatchDateTime from "util/getMatchDateTime";
 import getSeasonUrl from "util/getSeasonUrl";
 import getTeamUrl from "util/getTeamUrl";
+import isMatchOver from "util/isMatchOver";
 import leftHierarchy from "util/leftHierarchy";
 import { redirect } from "next/navigation";
 import style from "./page.module.scss";
@@ -78,6 +79,9 @@ export default async function Page(
 		);
 		return previousValue;
 	}, new Map<number, (typeof matches)[number][]>());
+	const isPlayoffsInProgress = matches.some(
+		({ value: match }) => match.isPlayoffs && !isMatchOver(match, season)
+	);
 
 	// Determine the next upcoming round.
 	let upcomingRound = 0;
@@ -178,6 +182,9 @@ export default async function Page(
 				</header>
 				<ol>
 					{Array.from(rounds)
+						.filter(
+							([, [match]]) => !isPlayoffsInProgress || match?.value.isPlayoffs
+						)
 						.sort(([a], [b]) => a - b)
 						.map(([round, roundMatches]) => (
 							<li key={round}>
