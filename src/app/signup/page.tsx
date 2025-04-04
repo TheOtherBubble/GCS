@@ -90,7 +90,7 @@ export default async function Page(): Promise<JSX.Element> {
 			)
 		)
 		.limit(1);
-	if (draftPlayer && player.displayName !== "Lakuna") {
+	if (draftPlayer) {
 		return (
 			<article className={style["content"]}>
 				<header>
