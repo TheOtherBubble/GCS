@@ -1,0 +1,41 @@
+@use "../../styles/blob.module.scss";
+@use "../../styles/clean-list.module.scss";
+
+// Sign up page.
+article.content {
+	display: grid;
+	grid-template-columns: 1fr min(1024px, 100%) 1fr;
+	font-size: 1.2em;
+
+	// All content.
+	& > * {
+		grid-column: 2 / 3;
+		overflow: auto hidden;
+	}
+
+	// Sign up page header.
+	& > header {
+		text-align: center;
+	}
+
+	// Update player form.
+	& > form {
+		@extend .blob;
+	}
+
+	// Accounts section.
+	& > div {
+		@extend .blob-section;
+
+		// Accounts list.
+		& > ol {
+			@extend .clean-list;
+			@extend .list;
+		}
+
+		// Update and add accounts forms.
+		& > form {
+			@extend .blob;
+		}
+	}
+}

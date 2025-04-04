@@ -14,6 +14,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
 		{ url: new URL("/rulebook", domain).href },
 		{ url: new URL("/schedule", domain).href },
 		{ url: new URL("/seasons", domain).href },
+		{ url: new URL("/signup", domain).href },
 		{ url: new URL("/teams", domain).href },
 		{ url: new URL("/", domain).href }
 	];

@@ -46,7 +46,7 @@ export default function UpdateTeamForm({
 						slug
 					})
 					.where(eq(teamTable.id, team.id));
-				if (slug) {
+				if (slug && slug !== team.slug) {
 					redirect(getTeamUrl({ slug }));
 				}
 

@@ -44,7 +44,7 @@ export default function UpdateSeasonForm({
 						startDate: getFormField(form, "startDate")
 					})
 					.where(eq(seasonTable.id, season.id));
-				if (slug) {
+				if (slug && slug !== season.slug) {
 					redirect(getSeasonUrl({ slug }));
 				}
 

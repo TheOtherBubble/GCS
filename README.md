@@ -7,6 +7,7 @@ Gauntlet Championship Series (formerly VeryLastNerve League) tooling.
 | Name                    | Description                                                                                     |
 | ----------------------- | ----------------------------------------------------------------------------------------------- |
 | `AUTH_SECRET`           | See [Installing Auth.js](https://authjs.dev/getting-started/installation) for more information. |
+| `DISCORD_BOT_TOKEN`     | Taken from [the Discord Developer Portal](https://discord.com/developers/applications).         |
 | `DISCORD_CLIENT_ID`     | Taken from [the Discord Developer Portal](https://discord.com/developers/applications).         |
 | `DISCORD_CLIENT_SECRET` | Taken from [the Discord Developer Portal](https://discord.com/developers/applications).         |
 | `POSTGRES_URL`          | The PostgreSQL database URL.                                                                    |

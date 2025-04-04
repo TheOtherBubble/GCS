@@ -50,6 +50,12 @@ h6 {
 	text-align: center;
 }
 
+// Manually apply default (Firefox 137) header sizing and spacing so that header size remains consistent within articles.
+h1 {
+	font-size: 2em;
+	margin: 0.67em;
+}
+
 // See https://developer.mozilla.org/en-US/docs/Learn_web_development/Extensions/Forms/Styling_web_forms#fonts_and_text.
 button,
 input,

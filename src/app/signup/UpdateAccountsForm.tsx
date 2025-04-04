@@ -1,8 +1,7 @@
 import Form, { type FormProps } from "components/Form";
-import type { accountTable, playerTable } from "db/schema";
 import type { JSX } from "react";
 import Submit from "components/Submit";
-import getPlayerUrl from "util/getPlayerUrl";
+import type { accountTable } from "db/schema";
 import hasRiotApiKey from "util/hasRiotApiKey";
 import { revalidatePath } from "next/cache";
 import updateAccount from "util/updateAccount";
@@ -13,9 +12,6 @@ import updateAccount from "util/updateAccount";
  */
 export interface UpdateAccountsFormProps
 	extends Omit<FormProps, "action" | "children"> {
-	/** The player to update the accounts of. */
-	player: typeof playerTable.$inferSelect;
-
 	/** The accounts to update. */
 	accounts: (typeof accountTable.$inferSelect)[];
 }
@@ -27,7 +23,6 @@ export interface UpdateAccountsFormProps
  * @public
  */
 export default function UpdateAccountsForm({
-	player,
 	accounts,
 	...props
 }: UpdateAccountsFormProps): JSX.Element {
@@ -44,7 +39,7 @@ export default function UpdateAccountsForm({
 					await updateAccount(account);
 				}
 
-				revalidatePath(getPlayerUrl(player));
+				revalidatePath("/signup");
 				return void 0;
 			}}
 			{...props}

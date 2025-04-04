@@ -8,7 +8,6 @@ import {
 import type { JSX } from "react";
 import Submit from "components/Submit";
 import db from "db/db";
-import getPlayerUrl from "util/getPlayerUrl";
 import hasRiotApiKey from "util/hasRiotApiKey";
 import { revalidatePath } from "next/cache";
 
@@ -69,7 +68,7 @@ export default function SignUpForm({
 				await db
 					.insert(draftPlayerTable)
 					.values({ playerId: player.id, seasonId: season.id });
-				revalidatePath(getPlayerUrl(player));
+				revalidatePath("/signup");
 				return void 0;
 			}}
 			{...props}
