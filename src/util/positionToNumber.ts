@@ -1,12 +1,12 @@
-import type { positionEnum } from "db/schema";
+import Position from "types/riot/Position";
 
 const positionList = [
-	"TOP",
-	"JUNGLE",
-	"MIDDLE",
-	"BOTTOM",
-	"UTILITY"
-] satisfies (typeof positionEnum.enumValues)[number][];
+	Position.TOP,
+	Position.JUNGLE,
+	Position.MIDDLE,
+	Position.BOTTOM,
+	Position.UTILITY
+];
 
 /**
  * Convert a position string to a number that represents its standard order (top, jungle, middle, bottom, support).
@@ -14,8 +14,6 @@ const positionList = [
  * @returns The position number.
  * @internal
  */
-export default function positionToNumber(
-	rank: (typeof positionEnum.enumValues)[number]
-): number {
-	return positionList.indexOf(rank);
+export default function positionToNumber(position: Position): number {
+	return positionList.indexOf(position);
 }

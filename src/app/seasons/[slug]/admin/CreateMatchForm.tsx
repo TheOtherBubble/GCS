@@ -1,6 +1,7 @@
 import Form, { type FormProps } from "components/Form";
 import { matchFormatEnum, seasonTable, teamTable } from "db/schema";
 import type { JSX } from "react";
+import type MatchFormat from "types/MatchFormat";
 import Submit from "components/Submit";
 import createMatchesWithGames from "util/createMatchesWithGames";
 import getFormField from "util/getFormField";
@@ -49,11 +50,7 @@ export default function CreateMatchForm({
 				await createMatchesWithGames([
 					{
 						blueTeamId,
-						format: getFormField(
-							form,
-							"format",
-							true
-						) as (typeof matchFormatEnum.enumValues)[number],
+						format: getFormField(form, "format", true) as MatchFormat,
 						isPlayoffs: Boolean(getFormField(form, "isPlayoffs")),
 						redTeamId,
 						round: parseInt(getFormField(form, "round", true), 10),

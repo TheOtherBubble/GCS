@@ -6,12 +6,10 @@ import type { NextConfig } from "next";
  * @internal
  */
 export default {
-	experimental: {
-		authInterrupts: true,
-		turbo: { rules: { "*.svg": { as: "*.js", loaders: ["@svgr/webpack"] } } }
-	},
+	experimental: { authInterrupts: true },
 	images: { remotePatterns: [{ hostname: "ddragon.leagueoflegends.com" }] },
 	pageExtensions: ["ts", "tsx"],
+	turbopack: { rules: { "*.svg": { as: "*.js", loaders: ["@svgr/webpack"] } } },
 	webpack: (config: Configuration) => {
 		// Find the existing rule that handles SVG imports.
 		const fileLoaderRule = config.module?.rules?.find(

@@ -1,6 +1,9 @@
 import Form, { type FormProps } from "components/Form";
 import { accountTable, type playerTable } from "db/schema";
+import AccountRank from "types/riot/AccountRank";
+import AccountTier from "types/riot/AccountTier";
 import type { JSX } from "react";
+import Platform from "types/riot/Platform";
 import QueueType from "types/riot/QueueType";
 import Submit from "components/Submit";
 import db from "db/db";
@@ -83,7 +86,7 @@ export default function AddAccountForm({
 				}
 
 				// Get summoner details from Riot.
-				const platform = "NA1";
+				const platform = Platform.NA1;
 				const summonerDto = await getSummonerByPuuid(
 					accountDto.puuid,
 					platform
@@ -105,11 +108,11 @@ export default function AddAccountForm({
 					name: accountDto.gameName,
 					playerId: player.id,
 					puuid: summonerDto.puuid,
-					rank: soloLeagueEntry?.rank ?? "IV",
+					rank: soloLeagueEntry?.rank ?? AccountRank.IV,
 					region: platform,
 					summonerId: summonerDto.id,
 					tagLine: accountDto.tagLine,
-					tier: soloLeagueEntry?.tier ?? "IRON",
+					tier: soloLeagueEntry?.tier ?? AccountTier.IRON,
 					verifyIcon
 				});
 				revalidatePath(getPlayerUrl(player));

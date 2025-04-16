@@ -1,4 +1,4 @@
-import type { matchFormatEnum } from "db/schema";
+import MatchFormat from "types/MatchFormat";
 
 /**
  * Get the minimum and maximum number of games for a given format.
@@ -7,18 +7,18 @@ import type { matchFormatEnum } from "db/schema";
  * @public
  */
 export default function getFormatGameCount(
-	format: (typeof matchFormatEnum.enumValues)[number]
+	format: MatchFormat
 ): [number, number, number] {
 	switch (format) {
-		case "Best of 3":
+		case MatchFormat.BEST_OF_3:
 			return [2, 3, 2];
-		case "Best of 5":
+		case MatchFormat.BEST_OF_5:
 			return [3, 5, 3];
-		case "Best of 7":
+		case MatchFormat.BEST_OF_7:
 			return [4, 7, 4];
-		case "Block of 1":
+		case MatchFormat.BLOCK_OF_1:
 			return [1, 1, 1];
-		case "Block of 3":
+		case MatchFormat.BLOCK_OF_3:
 			return [3, 3, 2];
 		default:
 			return format;

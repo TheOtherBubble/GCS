@@ -1,5 +1,5 @@
 import Cluster from "types/riot/Cluster";
-import type { platformEnum } from "db/schema";
+import Platform from "types/riot/Platform";
 
 /**
  * Get the regional routing value for a platform.
@@ -8,31 +8,29 @@ import type { platformEnum } from "db/schema";
  * @see {@link https://developer.riotgames.com/docs/lol#routing-values_platform-routing-values | Platform Routing Values}
  * @public
  */
-export default function getClusterForPlatform(
-	platform: (typeof platformEnum.enumValues)[number]
-): Cluster {
+export default function getClusterForPlatform(platform: Platform): Cluster {
 	switch (platform) {
-		case "BR1":
-		case "LA1":
-		case "LA2":
-		case "NA1":
-		case "PBE": // Just use Americas cluster for PBE.
+		case Platform.BR1:
+		case Platform.LA1:
+		case Platform.LA2:
+		case Platform.NA1:
+		case Platform.PBE: // Just use Americas cluster for PBE.
 			return Cluster.AMERICAS;
-		case "EUN1":
-		case "EUW1":
-		case "ME1":
-		case "RU":
-		case "TR1":
+		case Platform.EUN1:
+		case Platform.EUW1:
+		case Platform.ME1:
+		case Platform.RU:
+		case Platform.TR1:
 			return Cluster.EUROPE;
-		case "JP1":
-		case "KR":
+		case Platform.JP1:
+		case Platform.KR:
 			return Cluster.ASIA;
-		case "OC1":
-		case "PH2":
-		case "SG2":
-		case "TH2":
-		case "TW2":
-		case "VN2":
+		case Platform.OC1:
+		case Platform.PH2:
+		case Platform.SG2:
+		case Platform.TH2:
+		case Platform.TW2:
+		case Platform.VN2:
 			return Cluster.SEA;
 		default:
 			return platform;

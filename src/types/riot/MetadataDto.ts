@@ -1,4 +1,4 @@
-import type { platformEnum } from "db/schema";
+import type Platform from "./Platform";
 
 /**
  * Match metadata.
@@ -9,7 +9,7 @@ export default interface MetadataDto {
 	dataVersion: `${number}`;
 
 	/** Match ID. */
-	matchId: `${(typeof platformEnum.enumValues)[number]}_${number}`;
+	matchId: `${Platform}_${number}`;
 
 	/** A list of participant PUUIDs. */
 	participants: string[];

@@ -1,6 +1,7 @@
 import Form, { type FormProps } from "components/Form";
 import { playerTable, positionEnum } from "db/schema";
 import type { JSX } from "react";
+import type Position from "types/riot/Position";
 import Submit from "components/Submit";
 import db from "db/db";
 import { eq } from "drizzle-orm";
@@ -37,10 +38,10 @@ export default function UpdatePlayerForm({
 					.set({
 						displayName,
 						primaryRole: getFormField(form, "primaryRole") as
-							| (typeof positionEnum.enumValues)[number]
+							| Position
 							| undefined,
 						secondaryRole: getFormField(form, "secondaryRole") as
-							| (typeof positionEnum.enumValues)[number]
+							| Position
 							| undefined
 					})
 					.where(eq(playerTable.id, player.id));

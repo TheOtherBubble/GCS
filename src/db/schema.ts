@@ -12,7 +12,12 @@ import {
 	unique,
 	varchar
 } from "drizzle-orm/pg-core";
+import AccountRank from "types/riot/AccountRank";
+import AccountTier from "types/riot/AccountTier";
 import type { AdapterAccountType } from "next-auth/adapters";
+import MatchFormat from "types/MatchFormat";
+import Platform from "types/riot/Platform";
+import Position from "types/riot/Position";
 
 // Columns are occasionally ordered strangely due to drizzle-team/drizzle-orm#2157.
 
@@ -20,74 +25,32 @@ import type { AdapterAccountType } from "next-auth/adapters";
  * League of Legends positions.
  * @public
  */
-export const positionEnum = pgEnum("position", [
-	"TOP",
-	"JUNGLE",
-	"MIDDLE",
-	"BOTTOM",
-	"UTILITY"
-]);
+export const positionEnum = pgEnum("position", Position);
 
 /**
  * Tiers that an account can be.
  * @public
  */
-export const accountTierEnum = pgEnum("accountTier", [
-	"IRON",
-	"BRONZE",
-	"SILVER",
-	"GOLD",
-	"PLATINUM",
-	"EMERALD",
-	"DIAMOND",
-	"MASTER",
-	"GRANDMASTER",
-	"CHALLENGER"
-]);
+export const accountTierEnum = pgEnum("accountTier", AccountTier);
 
 /**
  * Ranks that an account can be within a tier.
  * @public
  */
-export const accountRankEnum = pgEnum("accountRank", ["I", "II", "III", "IV"]);
+export const accountRankEnum = pgEnum("accountRank", AccountRank);
 
 /**
  * League of Legends platform routing values.
  * @see {@link https://developer.riotgames.com/docs/lol#routing-values_platform-routing-values | Platform Routing Values}
  * @public
  */
-export const platformEnum = pgEnum("platform", [
-	"BR1",
-	"EUN1",
-	"EUW1",
-	"JP1",
-	"KR",
-	"LA1",
-	"LA2",
-	"ME1", // Not documented anywhere, but listed among various APIs' regions.
-	"NA1",
-	"OC1",
-	"PH2", // Not documented anywhere, but listed among various APIs' regions. Merged into `SG2`.
-	"RU",
-	"SG2", // Merged from `TH2` and `PH2`.
-	"TH2", // Not documented anywhere, but listed among various APIs' regions. Merged into `SG2`.
-	"TR1",
-	"TW2",
-	"VN2",
-	"PBE" // Not documented anywehre.
-]);
+export const platformEnum = pgEnum("platform", Platform);
 
 /**
  * Formats that a match can take.
  * @public
  */
-export const matchFormatEnum = pgEnum("matchFormat", [
-	"Block of 1",
-	"Block of 3",
-	"Best of 3",
-	"Best of 5",
-	"Best of 7"
-]);
+export const matchFormatEnum = pgEnum("matchFormat", MatchFormat);
 
 /**
  * The table of players. Players are linked to one Discord account and any number of Riot accounts, and may participate in any number of seasons on any number of teams.

@@ -4,6 +4,7 @@ import type {
 	seasonTable,
 	teamGameResultTable
 } from "db/schema";
+import Platform from "types/riot/Platform";
 import getMatchDateTime from "./getMatchDateTime";
 
 /**
@@ -38,7 +39,7 @@ export default function createForfeit(
 			map: 11,
 			mode: "CLASSIC",
 			queue: 0,
-			region: "NA1",
+			region: Platform.NA1,
 			startTimestamp: getMatchDateTime(match, season).valueOf(),
 			tournamentCode: `FF-${now.toString(16)}`,
 			type: "CUSTOM_GAME",

@@ -1,4 +1,5 @@
-import type { accountRankEnum, accountTierEnum } from "db/schema";
+import type AccountRank from "./AccountRank";
+import type AccountTier from "./AccountTier";
 import type MiniSeriesDto from "./MiniSeriesDto";
 import type QueueType from "./QueueType";
 
@@ -17,10 +18,10 @@ export default interface LeagueEntryDto {
 	queueType: QueueType;
 
 	/** The summoner's tier. */
-	tier: (typeof accountTierEnum.enumValues)[number];
+	tier: AccountTier;
 
 	/** The summoner's rank. */
-	rank: (typeof accountRankEnum.enumValues)[number];
+	rank: AccountRank;
 
 	/** The player's league points (LP). */
 	leaguePoints: number;

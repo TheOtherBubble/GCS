@@ -1,11 +1,11 @@
 import {
 	gameResultTable,
 	gameTable,
-	type platformEnum,
 	playerGameResultTable,
 	teamGameResultBanTable,
 	teamGameResultTable
 } from "db/schema";
+import Platform from "types/riot/Platform";
 import convertResult from "./convertResult";
 import db from "db/db";
 import { eq } from "drizzle-orm";
@@ -26,7 +26,7 @@ export default async function saveGame(
 	id: number | `${number}`,
 	puuids?: Map<number, string[]>,
 	game?: Pick<typeof gameTable.$inferSelect, "tournamentCode" | "id">,
-	platform: (typeof platformEnum.enumValues)[number] = "NA1"
+	platform: Platform = Platform.NA1
 ): Promise<void> {
 	// Determine the match ID and cluster.
 	const matchId = makeMatchId(id, platform);

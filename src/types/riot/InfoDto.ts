@@ -1,7 +1,7 @@
 import type ParticipantDto from "./ParticipantDto";
+import type Platform from "./Platform";
 import type Region from "./Region";
 import type TeamDto from "./TeamDto";
-import type { platformEnum } from "db/schema";
 
 /**
  * Information about a match.
@@ -45,7 +45,7 @@ export default interface InfoDto {
 	participants: ParticipantDto[];
 
 	/** The platform where the match was played. */
-	platformId: (typeof platformEnum.enumValues)[number];
+	platformId: Platform;
 
 	/** The game's queue's ID. */
 	queueId: number;

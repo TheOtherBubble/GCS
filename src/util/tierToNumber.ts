@@ -1,17 +1,17 @@
-import type { accountTierEnum } from "db/schema";
+import AccountTier from "types/riot/AccountTier";
 
 const tierList = [
-	"IRON",
-	"BRONZE",
-	"SILVER",
-	"GOLD",
-	"PLATINUM",
-	"EMERALD",
-	"DIAMOND",
-	"MASTER",
-	"GRANDMASTER",
-	"CHALLENGER"
-] satisfies (typeof accountTierEnum.enumValues)[number][];
+	AccountTier.IRON,
+	AccountTier.BRONZE,
+	AccountTier.SILVER,
+	AccountTier.GOLD,
+	AccountTier.PLATINUM,
+	AccountTier.EMERALD,
+	AccountTier.DIAMOND,
+	AccountTier.MASTER,
+	AccountTier.GRANDMASTER,
+	AccountTier.CHALLENGER
+];
 
 /**
  * Convert a tier string to a number that represents its order compared to other tiers (lower is worse).
@@ -19,8 +19,6 @@ const tierList = [
  * @returns The tier number.
  * @internal
  */
-export default function tierToNumber(
-	tier: (typeof accountTierEnum.enumValues)[number]
-): number {
+export default function tierToNumber(tier: AccountTier): number {
 	return tierList.indexOf(tier);
 }

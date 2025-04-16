@@ -1,4 +1,4 @@
-import type { platformEnum } from "db/schema";
+import Platform from "types/riot/Platform";
 
 /**
  * Make a match ID from a platform routing value and a game ID.
@@ -9,7 +9,7 @@ import type { platformEnum } from "db/schema";
  */
 export default function makeMatchId(
 	gameId: number | `${number}`,
-	platform: (typeof platformEnum.enumValues)[number] = "NA1"
-): `${(typeof platformEnum.enumValues)[number]}_${number}` {
+	platform: Platform = Platform.NA1
+): `${Platform}_${number}` {
 	return `${platform}_${gameId.toString() as `${number}`}`;
 }

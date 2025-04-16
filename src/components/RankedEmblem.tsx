@@ -1,6 +1,6 @@
 import Image, { type ImageProps } from "components/Image";
+import AccountTier from "types/riot/AccountTier";
 import type { JSX } from "react";
-import type { accountTierEnum } from "db/schema";
 import bronze from "./assets/bronze.png";
 import challenger from "./assets/challenger.png";
 import diamond from "./assets/diamond.png";
@@ -23,7 +23,7 @@ export type RankedEmblemProps = Omit<
 	"src" | "alt" | "width" | "height" | "children"
 > & {
 	/** The ranked tier to be represented by the emblem image. */
-	tier: (typeof accountTierEnum.enumValues)[number];
+	tier: AccountTier;
 };
 
 /**
@@ -34,25 +34,25 @@ export type RankedEmblemProps = Omit<
  */
 export default function RankedEmblem(props: RankedEmblemProps): JSX.Element {
 	switch (props.tier) {
-		case "IRON":
+		case AccountTier.IRON:
 			return <Image alt="Iron" src={iron} {...props} />;
-		case "BRONZE":
+		case AccountTier.BRONZE:
 			return <Image alt="Bronze" src={bronze} {...props} />;
-		case "SILVER":
+		case AccountTier.SILVER:
 			return <Image alt="Silver" src={silver} {...props} />;
-		case "GOLD":
+		case AccountTier.GOLD:
 			return <Image alt="Gold" src={gold} {...props} />;
-		case "PLATINUM":
+		case AccountTier.PLATINUM:
 			return <Image alt="Platinum" src={platinum} {...props} />;
-		case "EMERALD":
+		case AccountTier.EMERALD:
 			return <Image alt="Emerald" src={emerald} {...props} />;
-		case "DIAMOND":
+		case AccountTier.DIAMOND:
 			return <Image alt="Diamond" src={diamond} {...props} />;
-		case "MASTER":
+		case AccountTier.MASTER:
 			return <Image alt="Master" src={master} {...props} />;
-		case "GRANDMASTER":
+		case AccountTier.GRANDMASTER:
 			return <Image alt="Grandmaster" src={grandmaster} {...props} />;
-		case "CHALLENGER":
+		case AccountTier.CHALLENGER:
 			return <Image alt="Challenger" src={challenger} {...props} />;
 		default:
 			return props.tier;
