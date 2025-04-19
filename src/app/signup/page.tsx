@@ -212,7 +212,7 @@ export default async function Page(): Promise<JSX.Element> {
 							</li>
 						))}
 				</ol>
-				<UpdateAccountsForm accounts={accounts} />
+				{accounts.length > 0 && <UpdateAccountsForm accounts={accounts} />}
 				<AddAccountForm player={player} accounts={accounts} />
 			</div>
 			<SignUpForm player={player} season={season} accounts={accounts} />

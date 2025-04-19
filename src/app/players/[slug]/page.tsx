@@ -171,7 +171,9 @@ export default async function Page(
 									</li>
 								))}
 						</ol>
-						<UpdateAccountsForm player={player} accounts={accounts} />
+						{accounts.length > 0 && (
+							<UpdateAccountsForm player={player} accounts={accounts} />
+						)}
 					</div>
 					{isPlayer && (
 						<PlayerPanel

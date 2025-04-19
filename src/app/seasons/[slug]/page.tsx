@@ -1,4 +1,6 @@
+import { and, eq } from "drizzle-orm";
 import {
+	draftPlayerTable,
 	gameResultTable,
 	gameTable,
 	matchTable,
@@ -15,7 +17,6 @@ import type PageProps from "types/PageProps";
 import RoundHeader from "./RoundHeader";
 import { auth } from "db/auth";
 import db from "db/db";
-import { eq } from "drizzle-orm";
 import getFormatGameCount from "util/getFormatGameCount";
 import getMatchDateTime from "util/getMatchDateTime";
 import getSeasonUrl from "util/getSeasonUrl";
@@ -165,13 +166,35 @@ export default async function Page(
 		pool.push(teamScore);
 	}
 
-	const isAdmin = (await auth())?.user?.isAdmin ?? false;
+	const session = await auth();
+	const isAdmin = session?.user?.isAdmin ?? false;
+	const isSignedUp = session?.user
+		? (
+				await db
+					.select()
+					.from(draftPlayerTable)
+					.where(
+						and(
+							eq(draftPlayerTable.playerId, session.user.id),
+							eq(draftPlayerTable.seasonId, season.id)
+						)
+					)
+			).length > 0
+		: false;
 
 	return (
 		<div className={style["content"]}>
 			<div className={style["info"]}>
 				<header>
-					<h1>{season.name}</h1>
+					<h1>
+						{season.name}
+						{!isSignedUp && (
+							<>
+								{" - "}
+								<Link href="/signup">{"Sign Up"}</Link>
+							</>
+						)}
+					</h1>
 					<hr />
 				</header>
 				{isAdmin && <AdminPanel season={season} teams={teams} />}
