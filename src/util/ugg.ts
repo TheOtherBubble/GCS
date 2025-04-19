@@ -18,5 +18,5 @@ export default function ugg(
 		return `https://u.gg/lol/profile/${account.region}/${encodeURIComponent(account.name)}-${encodeURIComponent(account.tagLine)}`;
 	}
 
-	return `https://u.gg/multisearch?summoners=${accounts.map(({ name, tagLine }) => `${encodeURIComponent(name)}-${encodeURIComponent(tagLine)}`).join(",")}&region=${account.region.toLowerCase()}`;
+	return `https://u.gg/lol/multisearch?summoners=${accounts.map(({ name, tagLine }) => `${encodeURIComponent(name)}-${encodeURIComponent(tagLine)}`).join(",")}&region=${account.region.toLowerCase()}`;
 }

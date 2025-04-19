@@ -4,7 +4,9 @@ import CreateTeamForm from "./admin/CreateTeamForm";
 import DeleteSeasonForm from "./admin/DeleteSeasonForm";
 import GenerateRegularSeasonForm from "./admin/GenerateRegularSeasonForm";
 import { type JSX } from "react";
+import Link from "components/Link";
 import UpdateSeasonForm from "./admin/UpdateSeasonForm";
+import getSeasonUrl from "util/getSeasonUrl";
 
 /**
  * Properties that can be passed to an admin panel.
@@ -35,11 +37,14 @@ export default function AdminPanel({
 			<header>
 				<h2>{"Admin Panel"}</h2>
 			</header>
+			<Link href={`${getSeasonUrl(season)}/players`}>
+				{"View players and assign point values."}
+			</Link>
 			<UpdateSeasonForm season={season} />
-			<DeleteSeasonForm season={season} />
 			<CreateTeamForm season={season} />
 			<CreateMatchForm season={season} teams={teams} />
 			<GenerateRegularSeasonForm season={season} teams={teams} />
+			<DeleteSeasonForm season={season} />
 		</div>
 	);
 }

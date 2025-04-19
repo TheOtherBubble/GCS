@@ -48,7 +48,7 @@ export default function PlayerCard({
 	...props
 }: PlayerCardProps): JSX.Element {
 	const highestRankedAccount = accounts
-		? getHighestRankedAccount(...accounts)
+		? getHighestRankedAccount(accounts)
 		: void 0;
 	const backgroundImageUrl = getBackgroundImageUrl(player);
 	let finalStyle = style;

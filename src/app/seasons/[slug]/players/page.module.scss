@@ -1,0 +1,12 @@
+@use "../../../../styles/blob.module.scss";
+
+div.widgets {
+	@extend .list;
+	flex-direction: row;
+	flex-wrap: wrap;
+
+	// Player widget.
+	& > form {
+		@extend .blob;
+	}
+}
