@@ -194,7 +194,7 @@ export const accountTable = pgTable(
 		accountId: varchar({ length: 56 }).notNull(),
 
 		// The date and time that the account was last cached.
-		cacheDate: date().notNull().defaultNow(),
+		cacheDate: timestamp().notNull().defaultNow(),
 
 		// Whether or not this account is the primary account of the associated player. Must be null for non-primary accounts.
 		isPrimary: boolean(),
@@ -288,6 +288,9 @@ export const teamTable = pgTable(
 		// The red-green-blue hexadecimal triplet of the team's theme color.
 		color: char({ length: 6 }).notNull(),
 
+		// The team's pick order in the player draft.
+		draftOrder: integer().notNull().default(0),
+
 		// Unique identifier.
 		id: integer().primaryKey().generatedAlwaysAsIdentity(),
 
@@ -368,6 +371,13 @@ export const draftPlayerTable = pgTable(
 				onUpdate: "cascade"
 			})
 			.notNull(),
+
+		// The date and time at which the player was drafted to their team.
+		// eslint-disable-next-line sort-keys
+		draftedAt: timestamp(),
+
+		// Additional notes about this player's registration, potentially including details about availability, playstyle, experience, et cetera.
+		notes: text(),
 
 		// The point value of the player in the season. Null for players that have signed up but have not been accepted into the season by a tournament administrator.
 		pointValue: integer(),

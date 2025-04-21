@@ -9,6 +9,7 @@ import DraftPlayerForm from "./DraftPlayerForm";
 import type { JSX } from "react";
 import type { Metadata } from "next";
 import type PageProps from "types/PageProps";
+import type { SeasonsPageParams } from "app/seasons/[slug]/page";
 import { auth } from "db/auth";
 import db from "db/db";
 import { eq } from "drizzle-orm";
@@ -17,22 +18,13 @@ import leftHierarchy from "util/leftHierarchy";
 import style from "./page.module.scss";
 
 /**
- * Parameters that are passed to a season players page.
- * @public
- */
-export interface SeasonPlayersPageParams {
-	/** The season's encoded vanity URL slug. */
-	slug: string;
-}
-
-/**
  * A page that displays information about a season's players.
  * @param props - The properties that are passed to the page.
  * @returns The season players page.
  * @public
  */
 export default async function Page(
-	props: PageProps<SeasonPlayersPageParams>
+	props: PageProps<SeasonsPageParams>
 ): Promise<JSX.Element> {
 	const session = await auth();
 	if (!session?.user) {
@@ -93,7 +85,7 @@ export default async function Page(
  * @public
  */
 export const generateMetadata = async (
-	props: PageProps<SeasonPlayersPageParams>
+	props: PageProps<SeasonsPageParams>
 ): Promise<Metadata> => {
 	const { slug: encoded } = await props.params;
 	const slug = decodeURIComponent(encoded);

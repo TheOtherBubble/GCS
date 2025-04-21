@@ -38,7 +38,7 @@ export default async function updateAccount({
 	await db
 		.update(accountTable)
 		.set({
-			cacheDate: new Date().toISOString().substring(0, 10),
+			cacheDate: new Date(),
 			isVerified: isVerified || summonerDto.profileIconId === verifyIcon,
 			name: newAccount.gameName,
 			rank: soloQueueDto?.rank,
