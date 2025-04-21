@@ -1,5 +1,5 @@
 import type { Tree } from "types/Tree";
-import shallowEquals from "./shallowEquals";
+import deepEquals from "./deepEquals";
 
 /**
  * Organize the result of a left-joined query into a hierarchy.
@@ -26,7 +26,7 @@ export default function leftHierarchy<
 			}
 
 			// Skip the row if the value has already been added.
-			if (out.some((other) => shallowEquals(value, other))) {
+			if (out.some((other) => deepEquals(value, other))) {
 				continue;
 			}
 
@@ -46,7 +46,7 @@ export default function leftHierarchy<
 
 		// Skip the row if the value has already been added.
 		if (
-			out.some((other) => "value" in other && shallowEquals(value, other.value))
+			out.some((other) => "value" in other && deepEquals(value, other.value))
 		) {
 			continue;
 		}
@@ -54,7 +54,7 @@ export default function leftHierarchy<
 		// Otherwise, add the value and its children recursively.
 		out.push({
 			children: leftHierarchy(
-				rows.filter((other) => shallowEquals(value, other[key])),
+				rows.filter((other) => deepEquals(value, other[key])),
 				childKey,
 				...remainingKeys
 			),

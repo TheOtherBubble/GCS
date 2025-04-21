@@ -52,6 +52,8 @@ export const GET = async (
 		"game"
 	);
 
+	// TODO: Add `draftPlayer` results so that users can query for point values.
+
 	return NextResponse.json(
 		player
 			? {

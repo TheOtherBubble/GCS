@@ -61,7 +61,12 @@ export default function UpdateTeamForm({
 			<p>
 				<label>
 					{"Code"}
-					<input type="text" name="code" maxLength={4} />
+					<input
+						type="text"
+						name="code"
+						maxLength={4}
+						defaultValue={team.code}
+					/>
 				</label>
 			</p>
 			<p>
@@ -72,26 +77,51 @@ export default function UpdateTeamForm({
 			</p>
 			<p>
 				<label>
+					{"Draft order"}
+					<input
+						type="number"
+						name="draftOrder"
+						defaultValue={team.draftOrder}
+					/>
+				</label>
+			</p>
+			<p>
+				<label>
 					{"Logo URL"}
-					<input type="url" name="logoUrl" maxLength={0x800} />
+					<input
+						type="url"
+						name="logoUrl"
+						maxLength={0x800}
+						defaultValue={team.logoUrl}
+					/>
 				</label>
 			</p>
 			<p>
 				<label>
 					{"Name"}
-					<input type="text" name="name" maxLength={0x40} />
+					<input
+						type="text"
+						name="name"
+						maxLength={0x40}
+						defaultValue={team.name}
+					/>
 				</label>
 			</p>
 			<p>
 				<label>
 					{"Pool"}
-					<input type="number" name="pool" min={1} />
+					<input type="number" name="pool" min={1} defaultValue={team.pool} />
 				</label>
 			</p>
 			<p>
 				<label>
 					{"Slug"}
-					<input type="text" name="slug" maxLength={0x20} />
+					<input
+						type="text"
+						name="slug"
+						maxLength={0x20}
+						defaultValue={team.slug}
+					/>
 				</label>
 			</p>
 			<p>

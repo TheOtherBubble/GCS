@@ -7,7 +7,10 @@ import type { accountTable } from "db/schema";
  * @public
  */
 export default function ugg(
-	...accounts: (typeof accountTable.$inferSelect)[]
+	...accounts: Pick<
+		typeof accountTable.$inferSelect,
+		"name" | "tagLine" | "region"
+	>[]
 ): string {
 	const [account] = accounts;
 	if (!account) {
