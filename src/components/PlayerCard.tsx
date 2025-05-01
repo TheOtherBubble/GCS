@@ -1,5 +1,6 @@
 import type {
 	accountTable,
+	draftPlayerTable,
 	playerGameResultTable,
 	playerTable,
 	teamPlayerTable
@@ -13,8 +14,6 @@ import getHighestRankedAccount from "util/getHighestRankedAccount";
 import getPlayerUrl from "util/getPlayerUrl";
 import multiclass from "util/multiclass";
 import styles from "./styles/player-card.module.scss";
-
-// TODO: Roles and PVs on player cards.
 
 /**
  * Properties that can be passed to a player card.
@@ -32,6 +31,9 @@ export interface PlayerCardProps extends Omit<LinkProps, "children" | "href"> {
 
 	/** The player's teams. */
 	teams?: (typeof teamPlayerTable.$inferSelect)[] | undefined;
+
+	/** The player's registration for the relevant season. */
+	draftPlayer?: typeof draftPlayerTable.$inferSelect | undefined;
 }
 
 /**
@@ -45,6 +47,7 @@ export default function PlayerCard({
 	accounts,
 	games,
 	teams,
+	draftPlayer,
 	className,
 	style,
 	...props
@@ -74,6 +77,10 @@ export default function PlayerCard({
 						<RankedEmblem tier={highestRankedAccount.tier} />
 					)}
 				</h3>
+				<p>
+					{`${player.primaryRole ?? "?"}/${player.secondaryRole ?? "?"}`}
+					{draftPlayer && ` - ${(draftPlayer.pointValue ?? 0).toString()} PV`}
+				</p>
 				{games && <p>{`KDA: ${getAverageKda(...games).toFixed(2)}`}</p>}
 				{teams && <p>{`Seasons: ${teams.length.toString()}`}</p>}
 			</div>

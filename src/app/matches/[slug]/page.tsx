@@ -136,11 +136,7 @@ export default async function Page(props: PageProps<MatchesPageParams>) {
 				<ul>
 					{blueTeam.children.map(({ value: player, children: accounts }) => (
 						<li key={player.id}>
-							<PlayerCard
-								player={player}
-								accounts={accounts}
-								// TODO: Player teams and KDAs.
-							/>
+							<PlayerCard player={player} accounts={accounts} />
 						</li>
 					))}
 				</ul>
@@ -198,11 +194,7 @@ export default async function Page(props: PageProps<MatchesPageParams>) {
 				<ul>
 					{redTeam.children.map(({ value: player, children: accounts }) => (
 						<li key={player.id}>
-							<PlayerCard
-								player={player}
-								accounts={accounts}
-								// TODO: Player teams and KDAs.
-							/>
+							<PlayerCard player={player} accounts={accounts} />
 						</li>
 					))}
 				</ul>

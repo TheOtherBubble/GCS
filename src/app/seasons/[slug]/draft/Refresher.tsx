@@ -224,6 +224,7 @@ export default function Refresher({
 								key={player.id}
 								player={player}
 								accounts={remainder.flatMap(({ children }) => children)}
+								draftPlayer={remainder[0]?.value}
 							/>
 						))}
 				</ul>
