@@ -14,6 +14,8 @@ import getPlayerUrl from "util/getPlayerUrl";
 import multiclass from "util/multiclass";
 import styles from "./styles/player-card.module.scss";
 
+// TODO: Roles and PVs on player cards.
+
 /**
  * Properties that can be passed to a player card.
  * @public

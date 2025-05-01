@@ -62,6 +62,18 @@ export default function CreateTeamForm({
 			</p>
 			<p>
 				<label>
+					{"Draft order"}
+					<input
+						type="number"
+						name="draftOrder"
+						min={1}
+						defaultValue={1}
+						required
+					/>
+				</label>
+			</p>
+			<p>
+				<label>
 					{"Logo URL"}
 					<input
 						type="url"

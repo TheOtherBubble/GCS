@@ -2,17 +2,15 @@ import Form, { type FormProps } from "components/Form";
 import {
 	type accountTable,
 	draftPlayerTable,
-	type playerTable
+	type playerTable,
+	teamTable
 } from "db/schema";
-import { and, eq } from "drizzle-orm";
 import type { JSX } from "react";
 import Link from "components/Link";
 import Submit from "components/Submit";
-import db from "db/db";
-import getFormField from "util/getFormField";
+import draftPlayerAction from "./draftPlayerAction";
 import getHighestRankedAccount from "util/getHighestRankedAccount";
 import getPlayerUrl from "util/getPlayerUrl";
-import { revalidatePath } from "next/cache";
 import ugg from "util/ugg";
 
 /**
@@ -29,6 +27,12 @@ export interface DraftPlayerFormProps
 
 	/** The player's accounts. */
 	accounts: (typeof accountTable.$inferSelect)[];
+
+	/** The team to draft the player to. */
+	team?: typeof teamTable.$inferSelect | undefined;
+
+	/** The viewer of the form. */
+	sessionUser?: typeof playerTable.$inferSelect | undefined;
 }
 
 /**
@@ -41,28 +45,18 @@ export default function DraftPlayerForm({
 	draftPlayer,
 	player,
 	accounts,
+	team,
+	sessionUser,
 	...props
 }: DraftPlayerFormProps): JSX.Element {
 	const highestRankedAccount = getHighestRankedAccount(accounts);
 
+	// TODO: Ensure that the viewer is the captain of the team whose turn it is to pick.
+	const enabled = Boolean(team && sessionUser);
+
 	return (
 		<Form
-			action={async (form) => {
-				"use server";
-				const pointValueString = getFormField(form, "pointValue");
-				await db
-					.update(draftPlayerTable)
-					.set({
-						pointValue: pointValueString ? parseInt(pointValueString, 10) : null
-					})
-					.where(
-						and(
-							eq(draftPlayerTable.playerId, draftPlayer.playerId),
-							eq(draftPlayerTable.seasonId, draftPlayer.seasonId)
-						)
-					);
-				revalidatePath("");
-			}}
+			action={async () => await draftPlayerAction(enabled, player, team)}
 			{...props}
 		>
 			<header>
@@ -71,33 +65,16 @@ export default function DraftPlayerForm({
 						{player.displayName ?? player.name}
 					</Link>
 				</h3>
-				{highestRankedAccount ? (
+				<p>{`${draftPlayer.pointValue?.toString() ?? "?"} PV ${player.primaryRole ?? "?"}/${player.secondaryRole ?? "?"}`}</p>
+				{highestRankedAccount && (
 					<p>
 						{`${highestRankedAccount.tier} ${highestRankedAccount.rank} - `}
-						{player.primaryRole && player.secondaryRole && (
-							<span>{`${player.primaryRole}/${player.secondaryRole} - `}</span>
-						)}
 						<Link href={ugg(...accounts)}>{"U.GG"}</Link>
 					</p>
-				) : (
-					player.primaryRole &&
-					player.secondaryRole && (
-						<p>{`${player.primaryRole}/${player.secondaryRole}`}</p>
-					)
 				)}
 			</header>
 			<p>
-				<label>
-					{"Point value"}
-					<input
-						type="number"
-						name="pointValue"
-						defaultValue={draftPlayer.pointValue ?? void 0}
-					/>
-				</label>
-			</p>
-			<p>
-				<Submit value="Update" />
+				<Submit value="Draft" disabled={!enabled} />
 			</p>
 		</Form>
 	);

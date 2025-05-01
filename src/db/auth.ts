@@ -6,10 +6,10 @@ import type {
 import NextAuth, { type NextAuthResult, type Session } from "next-auth";
 import { oauthTable, playerTable, sessionTable } from "./schema";
 import type { AppRouteHandlerFn } from "next/dist/server/route-modules/app-route/module";
-import type { BuiltInProviderType } from "next-auth/providers";
 import Discord from "next-auth/providers/discord";
 import { DrizzleAdapter } from "@auth/drizzle-adapter";
 import type { NextRequest } from "next/server";
+import type { ProviderId } from "next-auth/providers";
 import db from "./db";
 
 // Can't import `env.ts` here because `process.cwd` is not a function, but environment variables are available anyway. Note that these environment variables must be available during the build process.
@@ -80,9 +80,13 @@ export type NextAuthResultAuth = ((
  * Equivalent to `NextAuthResult["signIn"]` from Auth.js. Necessary because Auth.js does not correctly export its typings.
  * @public
  */
-export type NextAuthResultSignIn = <R extends boolean = true>(
+export type NextAuthResultSignIn = <
+	// eslint-disable-next-line @typescript-eslint/no-unnecessary-type-parameters
+	P extends ProviderId,
+	R extends boolean = true
+>(
 	/** Provider to sign in to */
-	provider?: BuiltInProviderType | (string & {}), // See: https://github.com/microsoft/TypeScript/issues/29729
+	provider?: P, // See: https://github.com/microsoft/TypeScript/issues/29729
 	options?:
 		| FormData
 		| ({

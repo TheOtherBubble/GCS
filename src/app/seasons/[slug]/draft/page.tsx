@@ -1,20 +1,13 @@
-import {
-	accountTable,
-	draftPlayerTable,
-	playerTable,
-	seasonTable,
-	teamPlayerTable,
-	teamTable
-} from "db/schema";
 import { type JSX } from "react";
 import type { Metadata } from "next";
 import type PageProps from "types/PageProps";
+import Refresher from "./Refresher";
 import type { SeasonsPageParams } from "app/seasons/[slug]/page";
+import { auth } from "db/auth";
 import db from "db/db";
 import { eq } from "drizzle-orm";
 import getSeasonUrl from "util/getSeasonUrl";
-import { redirect } from "next/navigation";
-import style from "./page.module.scss";
+import { seasonTable } from "db/schema";
 
 /**
  * A page that displays information about a season's players.
@@ -25,40 +18,9 @@ import style from "./page.module.scss";
 export default async function Page(
 	props: PageProps<SeasonsPageParams>
 ): Promise<JSX.Element> {
-	const { slug } = await props.params;
+	const params = await props.params;
 
-	// Get drafted players.
-	const seasonRows = await db
-		.select()
-		.from(seasonTable)
-		.leftJoin(teamTable, eq(seasonTable.id, teamTable.seasonId))
-		.leftJoin(teamPlayerTable, eq(teamTable.id, teamPlayerTable.teamId))
-		.leftJoin(playerTable, eq(teamPlayerTable.playerId, playerTable.id))
-		.leftJoin(draftPlayerTable, eq(playerTable.id, draftPlayerTable.playerId))
-		.leftJoin(
-			accountTable,
-			eq(draftPlayerTable.playerId, accountTable.playerId)
-		)
-		.where(eq(seasonTable.slug, decodeURIComponent(slug)));
-	const [first] = seasonRows;
-	if (!first) {
-		redirect("/seasons");
-	}
-
-	// Organize season, team, and drafted player data.
-	const { season } = first;
-	// TODO
-
-	// Only care about players that have been signed up and assigned point values.
-	const draftablePlayersRows = await db
-		.select()
-		.from(draftPlayerTable)
-		.innerJoin(playerTable, eq(draftPlayerTable.playerId, playerTable.id))
-		.leftJoin(accountTable, eq(playerTable.id, accountTable.playerId))
-		.where(eq(draftPlayerTable.seasonId, season.id));
-	void draftablePlayersRows; // TODO
-
-	return <div className={style["content"]}></div>; // TODO
+	return <Refresher slug={params.slug} session={await auth()} />;
 }
 
 /**

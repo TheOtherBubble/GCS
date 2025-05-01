@@ -1,6 +1,94 @@
+@use "../../../../styles/mixins";
+@use "../../../../styles/blob.module.scss";
+@use "../../../../styles/clean-list.module.scss";
+@use "../../../layout.module.scss" as layout;
+
+// Season draft page.
 div.content {
 	// Columns.
 	& > div {
 		overflow: auto;
+	}
+
+	// Team column.
+	& > div.team {
+		@extend .blob-section;
+		display: none;
+
+		// Team members list and log items.
+		& > ul {
+			@extend .clean-list;
+			@extend .list;
+			font-size: 0.5em;
+		}
+	}
+
+	// Draft column.
+	& > div.draft {
+		@extend .list;
+		display: none;
+
+		// Draft role list container.
+		& > div {
+			display: grid;
+			grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+			gap: 5px;
+
+			// Draft role lists.
+			& > div {
+				@extend .blob-section;
+
+				// Role player lists.
+				& > ol {
+					@extend .clean-list;
+					@extend .list;
+
+					// Draft player forms.
+					& > form {
+						@extend .blob;
+					}
+				}
+			}
+		}
+	}
+
+	// Log column.
+	& > div.log {
+		@extend .blob-section;
+
+		// Log list.
+		& > ol {
+			@extend .clean-list;
+			@extend .list;
+
+			// Log items.
+			& > div {
+				@extend .blob;
+			}
+		}
+	}
+
+	@include mixins.gt-mobile using ($gt-mobile) {
+		@if $gt-mobile {
+			display: grid;
+			grid-template-columns: 400px 1fr 400px;
+			gap: 10px;
+
+			// Team and draft columns.
+			& > div.team,
+			& > div.draft {
+				display: flex;
+			}
+
+			// Team and log columns.
+			& > div.team,
+			& > div.log {
+				$padding: 10px;
+				padding: $padding;
+				position: sticky;
+				top: calc(layout.$top + layout.$margin + $padding);
+				height: calc(100vh - layout.$top - layout.$margin * 2 - $padding * 2);
+			}
+		}
 	}
 }
