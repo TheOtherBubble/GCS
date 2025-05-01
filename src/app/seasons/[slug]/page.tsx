@@ -186,17 +186,21 @@ export default async function Page(
 		<div className={style["content"]}>
 			<div className={style["info"]}>
 				<header>
-					<h1>
-						{season.name}
-						{!isSignedUp && (
-							<>
-								{" - "}
-								<Link href="/signup">{"Sign Up"}</Link>
-							</>
-						)}
-					</h1>
+					<h1>{season.name}</h1>
 					<hr />
 				</header>
+				{!isSignedUp && (
+					<p>
+						<Link href="/signup">{`Register for ${season.name}.`}</Link>
+					</p>
+				)}
+				{!matches.length && (
+					<p>
+						<Link href={`${getSeasonUrl(season)}/draft`}>
+							{"View live draft."}
+						</Link>
+					</p>
+				)}
 				{isAdmin && <AdminPanel season={season} teams={teams} />}
 			</div>
 			<div className={style["schedule"]}>
