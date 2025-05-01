@@ -1,6 +1,7 @@
 import { type NextRequest, NextResponse } from "next/server";
 import {
 	accountTable,
+	draftPlayerTable,
 	gameResultTable,
 	gameTable,
 	playerGameResultTable,
@@ -52,8 +53,6 @@ export const GET = async (
 		"game"
 	);
 
-	// TODO: Add `draftPlayer` results so that users can query for point values.
-
 	return NextResponse.json(
 		player
 			? {
@@ -73,6 +72,16 @@ export const GET = async (
 					id: player.value.id,
 					role1: player.value.primaryRole,
 					role2: player.value.secondaryRole,
+					seasons: (
+						await db
+							.select()
+							.from(draftPlayerTable)
+							.where(eq(draftPlayerTable.playerId, player.value.id))
+					).map(({ notes, pointValue: pv, seasonId }) => ({
+						notes,
+						pv,
+						seasonId
+					})),
 					teamIds: (
 						await db
 							.select()

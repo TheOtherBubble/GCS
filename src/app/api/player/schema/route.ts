@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import Position from "types/riot/Position";
 import domain from "util/domain";
 
 /**
@@ -64,14 +65,40 @@ export const GET = (): NextResponse =>
 				type: "string"
 			},
 			role1: {
-				description:
-					'The player\'s selected primary role. Must be one of `"TOP"`, `"JUNGLE"`, `"MIDDLE"`, `"BOTTOM"`, or `"UTILITY"`.',
+				description: "The player's selected primary role.",
+				enum: [...Object.keys(Position), null],
 				type: ["string", "null"]
 			},
 			role2: {
-				description:
-					'The player\'s selected secondary role. Must be one of `"TOP"`, `"JUNGLE"`, `"MIDDLE"`, `"BOTTOM"`, or `"UTILITY"`.',
+				description: "The player's selected secondary role.",
+				enum: [...Object.keys(Position), null],
 				type: ["string", "null"]
+			},
+			seasons: {
+				description: "Seasons that this player has registered for.",
+				items: {
+					description: "A player's registration for a season.",
+					properties: {
+						notes: {
+							description:
+								"Notes written by the player about their registration.",
+							type: ["string", "null"]
+						},
+						pv: {
+							description:
+								"The player's point value for the season. For players who signed up but weren't accepted into the season by the tournament organizers, this will be `null`.",
+							type: ["number", "null"]
+						},
+						seasonId: {
+							description: "The ID of the season that the registration is for.",
+							type: "number"
+						}
+					},
+					required: ["notes", "pv", "seasonId"],
+					type: "object"
+				},
+				type: "array",
+				uniqueItems: true
 			},
 			teamIds: {
 				description: "Unique IDs of this player's teams.",
@@ -104,6 +131,7 @@ export const GET = (): NextResponse =>
 			"id",
 			"role1",
 			"role2",
+			"seasons",
 			"teamIds",
 			"twitchId",
 			"youtubeId"
