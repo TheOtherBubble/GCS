@@ -94,10 +94,13 @@ export default async function Page(
 		"gameResult",
 		"teamGameResult"
 	);
-	const teams = await db
+	const teamRows = await db
 		.select()
 		.from(teamTable)
+		.leftJoin(teamPlayerTable, eq(teamTable.id, teamPlayerTable.teamId))
 		.where(eq(teamTable.seasonId, team.seasonId));
+	const teams = leftHierarchy(teamRows, "team");
+	const allTeamPlayers = leftHierarchy(teamRows, "teamPlayer");
 	return (
 		<div className={style["content"]}>
 			<header>
@@ -166,7 +169,14 @@ export default async function Page(
 										eq(draftPlayerTable.playerId, playerTable.id)
 									)
 									.where(eq(draftPlayerTable.seasonId, season.id))
-							).map(({ player }) => player)}
+							)
+								.filter(
+									({ player }) =>
+										!allTeamPlayers.find(
+											({ playerId }) => playerId === player.id
+										)
+								)
+								.map(({ player }) => player)}
 							otherTeams={teams}
 							className={style["admin"]}
 						/>

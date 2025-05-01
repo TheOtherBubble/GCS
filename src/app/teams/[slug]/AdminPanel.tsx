@@ -2,6 +2,7 @@ import type { playerTable, teamPlayerTable, teamTable } from "db/schema";
 import AddPlayerForm from "./admin/AddPlayerForm";
 import { type JSX } from "react";
 import RemovePlayerForm from "./admin/RemovePlayerForm";
+import SetCaptainForm from "./admin/SetCaptainForm";
 import UpdateTeamForm from "./admin/UpdateTeamForm";
 
 /**
@@ -57,6 +58,7 @@ export default function AdminPanel({
 				teamPlayers={teamPlayers}
 				players={players}
 			/>
+			<SetCaptainForm team={team} teamPlayers={teamPlayers} players={players} />
 		</div>
 	);
 }

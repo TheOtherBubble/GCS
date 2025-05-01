@@ -40,6 +40,7 @@ export default function UpdateTeamForm({
 					.set({
 						code: getFormField(form, "code"),
 						color: getFormField(form, "color")?.substring(1), // Cut off pound.
+						isWinner: Boolean(getFormField(form, "isWinner")),
 						logoUrl: getFormField(form, "logoUrl"),
 						name: getFormField(form, "name"),
 						pool: poolString ? parseInt(poolString, 10) : void 0,
@@ -82,6 +83,16 @@ export default function UpdateTeamForm({
 						type="number"
 						name="draftOrder"
 						defaultValue={team.draftOrder}
+					/>
+				</label>
+			</p>
+			<p>
+				<label>
+					{"Is winner?"}
+					<input
+						type="checkbox"
+						name="isWinner"
+						defaultChecked={team.isWinner ?? void 0}
 					/>
 				</label>
 			</p>
