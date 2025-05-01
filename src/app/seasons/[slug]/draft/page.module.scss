@@ -64,6 +64,11 @@ div.content {
 			// Log items.
 			& > div {
 				@extend .blob;
+
+				// Log item contents.
+				& > * {
+					margin: 0px;
+				}
 			}
 		}
 	}

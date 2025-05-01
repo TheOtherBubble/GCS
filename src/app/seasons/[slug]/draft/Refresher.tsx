@@ -5,6 +5,7 @@ import {
 	accountTable,
 	draftPlayerTable,
 	playerTable,
+	teamPlayerTable,
 	teamTable
 } from "db/schema";
 import DraftPlayerForm from "./DraftPlayerForm";
@@ -13,8 +14,10 @@ import LocalDate from "components/LocalDate";
 import PlayerCard from "components/PlayerCard";
 import { type PlayerSession } from "db/auth";
 import Position from "types/riot/Position";
+import { TEAM_SIZE } from "util/const";
 import type { Tree } from "types/Tree";
 import getDraftablePlayersRows from "./getDraftablePlayersRows";
+import getDraftedPlayersRows from "./getDraftedPlayersRows";
 import getSeasonRows from "./getSeasonRows";
 import getTeamUrl from "util/getTeamUrl";
 import leftHierarchy from "util/leftHierarchy";
@@ -48,14 +51,23 @@ export default function Refresher({
 		| Tree<
 				{
 					team: typeof teamTable.$inferSelect;
+					teamPlayer: typeof teamPlayerTable.$inferSelect;
 					player: typeof playerTable.$inferSelect;
 					draftPlayer: typeof draftPlayerTable.$inferSelect;
 					account: typeof accountTable.$inferSelect;
 				},
-				["team", "player", "draftPlayer", "account"]
+				["team", "teamPlayer", "player", "draftPlayer", "account"]
 		  >
 		| undefined
 	>(void 0);
+	const [draftedPlayers, setDraftedPlayers] = useState<
+		{
+			draftPlayer: typeof draftPlayerTable.$inferSelect;
+			player: typeof playerTable.$inferSelect;
+			teamPlayer: typeof teamPlayerTable.$inferSelect;
+			team: typeof teamTable.$inferSelect;
+		}[]
+	>([]);
 	const [draftablePlayers, setDraftablePlayers] = useState<
 		Tree<
 			{
@@ -66,6 +78,7 @@ export default function Refresher({
 			["draftPlayer", "player", "account"]
 		>[]
 	>([]);
+	const [canDraft, setCanDraft] = useState(false);
 	const [lastUpdate, setLastUpdate] = useState(new Date());
 
 	// Update state periodically.
@@ -84,17 +97,18 @@ export default function Refresher({
 					const teams = leftHierarchy(
 						seasonRows,
 						"team",
+						"teamPlayer",
 						"player",
 						"draftPlayer",
 						"account"
 					);
-					setTeam(
-						teams.find(({ children: players }) =>
-							players.some(
-								({ value: player }) => player.id === session?.user?.id
-							)
+					const innerTeam = teams.find(({ children: players }) =>
+						players.some(
+							({ value: teamPlayer }) =>
+								teamPlayer.playerId === session?.user?.id
 						)
 					);
+					setTeam(innerTeam);
 
 					// Only show players that have signed up, been assigned point values, and not already been drafted to a team.
 					const draftablePlayersRows = await getDraftablePlayersRows(season.id);
@@ -110,12 +124,56 @@ export default function Refresher({
 								!teams.some(({ children: teamPlayers }) =>
 									teamPlayers.some(({ value: teamPlayer }) =>
 										players.some(
-											({ value: player }) => player.id === teamPlayer.id
+											({ value: player }) => player.id === teamPlayer.playerId
 										)
 									)
 								)
 						)
 					);
+
+					// Get recently-drafted players.
+					const innerDraftedPlayers = await getDraftedPlayersRows(season.id);
+					setDraftedPlayers(innerDraftedPlayers);
+
+					// Determine whether the viewer is the next captain in line to draft a player.
+					if (
+						!session?.user ||
+						!innerTeam ||
+						innerTeam.children.length >= TEAM_SIZE ||
+						!innerTeam.children.find(
+							({ value: teamPlayer }) =>
+								teamPlayer.playerId === session.user?.id
+						)?.value.isCaptain
+					) {
+						setCanDraft(false);
+					} else {
+						const [mostRecentDraft] = innerDraftedPlayers.sort(
+							(
+								{ draftPlayer: { draftedAt: a } },
+								{ draftPlayer: { draftedAt: b } }
+							) => (b?.valueOf() ?? 0) - (a?.valueOf() ?? 0)
+						);
+						const teamsByDraftOrder = teams.sort(
+							({ value: { draftOrder: a } }, { value: { draftOrder: b } }) =>
+								a - b
+						);
+						const nextIndex =
+							(teamsByDraftOrder.findIndex(
+								({ value: { id } }) => id === mostRecentDraft?.team.id
+							) +
+								1) %
+							(teamsByDraftOrder.length * 2);
+						const nextTeam =
+							teamsByDraftOrder[
+								nextIndex < teamsByDraftOrder.length
+									? nextIndex
+									: teamsByDraftOrder.length -
+										1 -
+										(nextIndex - teamsByDraftOrder.length)
+							];
+
+						setCanDraft(nextTeam?.value.id === innerTeam.value.id);
+					}
 
 					setLastUpdate(new Date());
 				})
@@ -133,7 +191,7 @@ export default function Refresher({
 		return () => {
 			clearInterval(interval);
 		};
-	}, [session?.user?.id, slug]);
+	}, [session?.user, slug]);
 
 	return (
 		<div className={style["content"]}>
@@ -144,10 +202,13 @@ export default function Refresher({
 							<>
 								<Link href={getTeamUrl(team.value)}>{team.value.name}</Link>
 								{` - ${team.children
-									.reduce((previousValue, currentValue) => {
-										const [draftPlayer] = currentValue.children;
-										return previousValue + (draftPlayer?.value.pointValue ?? 0);
-									}, 0)
+									.reduce(
+										(previousValue, currentValue) =>
+											previousValue +
+											(currentValue.children[0]?.children[0]?.value
+												.pointValue ?? 0),
+										0
+									)
 									.toString()} PV`}
 							</>
 						) : (
@@ -156,13 +217,15 @@ export default function Refresher({
 					</h2>
 				</header>
 				<ul>
-					{team?.children.map(({ value: player, children: remainder }) => (
-						<PlayerCard
-							key={player.id}
-							player={player}
-							accounts={remainder.flatMap(({ children }) => children)}
-						/>
-					))}
+					{team?.children
+						.flatMap(({ children }) => children)
+						.map(({ value: player, children: remainder }) => (
+							<PlayerCard
+								key={player.id}
+								player={player}
+								accounts={remainder.flatMap(({ children }) => children)}
+							/>
+						))}
 				</ul>
 			</div>
 			<div className={style["draft"]}>
@@ -208,7 +271,7 @@ export default function Refresher({
 												player={player}
 												accounts={accounts}
 												team={team?.value}
-												sessionUser={session?.user}
+												enabled={canDraft}
 											/>
 										);
 									})}
@@ -225,7 +288,23 @@ export default function Refresher({
 						<LocalDate date={lastUpdate} options={{ timeStyle: "medium" }} />
 					</p>
 				</header>
-				<ol></ol>
+				<ol>
+					{draftedPlayers
+						.sort(
+							(
+								{ draftPlayer: { draftedAt: a } },
+								{ draftPlayer: { draftedAt: b } }
+							) => (b?.valueOf() ?? 0) - (a?.valueOf() ?? 0)
+						)
+						.map((draftedPlayer) => (
+							<div key={draftedPlayer.player.id}>
+								<h3>{`${draftedPlayer.player.displayName ?? draftedPlayer.player.name} -> ${draftedPlayer.team.code}`}</h3>
+								<p>
+									{`${draftedPlayer.draftPlayer.pointValue?.toString() ?? "?"} PV - ${draftedPlayer.player.primaryRole ?? "?"}/${draftedPlayer.player.secondaryRole ?? "?"}`}
+								</p>
+							</div>
+						))}
+				</ol>
 			</div>
 		</div>
 	);

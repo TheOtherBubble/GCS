@@ -31,8 +31,8 @@ export interface DraftPlayerFormProps
 	/** The team to draft the player to. */
 	team?: typeof teamTable.$inferSelect | undefined;
 
-	/** The viewer of the form. */
-	sessionUser?: typeof playerTable.$inferSelect | undefined;
+	/** Whether or not the viewer of the form may submit the form. */
+	enabled?: boolean | undefined;
 }
 
 /**
@@ -46,17 +46,16 @@ export default function DraftPlayerForm({
 	player,
 	accounts,
 	team,
-	sessionUser,
+	enabled,
 	...props
 }: DraftPlayerFormProps): JSX.Element {
 	const highestRankedAccount = getHighestRankedAccount(accounts);
 
-	// TODO: Ensure that the viewer is the captain of the team whose turn it is to pick.
-	const enabled = Boolean(team && sessionUser);
-
 	return (
 		<Form
-			action={async () => await draftPlayerAction(enabled, player, team)}
+			action={async () =>
+				await draftPlayerAction(enabled ?? false, player, team)
+			}
 			{...props}
 		>
 			<header>
