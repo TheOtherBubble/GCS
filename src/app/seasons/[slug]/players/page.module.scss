@@ -1,9 +1,12 @@
 @use "../../../../styles/blob.module.scss";
+@use "../../../../styles/clean-list.module.scss";
 
-div.widgets {
-	@extend .list;
-	flex-direction: row;
-	flex-wrap: wrap;
+ol.widgets {
+	@extend .clean-list;
+
+	display: grid;
+	gap: 10px;
+	grid-template-columns: repeat(auto-fill, minmax(400px, max-content));
 
 	// Player widget.
 	& > form {

@@ -50,6 +50,7 @@ export default async function Page(
 
 	const { season } = first;
 	const players = leftHierarchy(seasonRows, "draftPlayer", "player", "account");
+	const collator = new Intl.Collator();
 
 	return (
 		<>
@@ -57,23 +58,27 @@ export default async function Page(
 				<h1>{`${season.name} Players`}</h1>
 				<hr />
 			</header>
-			<div className={style["widgets"]}>
-				{players.map(({ value: draftPlayer, children: rest }) => {
-					const [player] = rest;
-					if (!player) {
-						return void 0;
-					}
+			<ol className={style["widgets"]}>
+				{players
+					.sort(({ value: { playerId: a } }, { value: { playerId: b } }) =>
+						collator.compare(a, b)
+					)
+					.map(({ value: draftPlayer, children: rest }) => {
+						const [player] = rest;
+						if (!player) {
+							return void 0;
+						}
 
-					return (
-						<DraftPlayerForm
-							draftPlayer={draftPlayer}
-							player={player.value}
-							accounts={player.children}
-							key={draftPlayer.playerId}
-						/>
-					);
-				})}
-			</div>
+						return (
+							<DraftPlayerForm
+								draftPlayer={draftPlayer}
+								player={player.value}
+								accounts={player.children}
+								key={draftPlayer.playerId}
+							/>
+						);
+					})}
+			</ol>
 		</>
 	);
 }
