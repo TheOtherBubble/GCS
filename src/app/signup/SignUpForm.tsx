@@ -6,8 +6,10 @@ import {
 	type seasonTable
 } from "db/schema";
 import type { JSX } from "react";
+import Markdown from "react-markdown";
 import Submit from "components/Submit";
 import db from "db/db";
+import getFormField from "util/getFormField";
 import hasRiotApiKey from "util/hasRiotApiKey";
 import { revalidatePath } from "next/cache";
 
@@ -25,6 +27,9 @@ export interface SignUpFormProps
 
 	/** The player's accounts. */
 	accounts: (typeof accountTable.$inferSelect)[];
+
+	/** Questions to ask the player as they sign up. */
+	questions?: string | undefined;
 }
 
 /**
@@ -37,6 +42,7 @@ export default function SignUpForm({
 	player,
 	season,
 	accounts,
+	questions,
 	...props
 }: SignUpFormProps): JSX.Element {
 	// Can't call methods on properties passed from the client to the server, so do it here instead.
@@ -44,7 +50,7 @@ export default function SignUpForm({
 
 	return (
 		<Form
-			action={async () => {
+			action={async (form) => {
 				"use server";
 				if (
 					player.bannedUntil &&
@@ -65,9 +71,11 @@ export default function SignUpForm({
 					return "You must have at least one verified account to sign up.";
 				}
 
-				await db
-					.insert(draftPlayerTable)
-					.values({ playerId: player.id, seasonId: season.id });
+				await db.insert(draftPlayerTable).values({
+					notes: getFormField(form, "notes", true),
+					playerId: player.id,
+					seasonId: season.id
+				});
 				revalidatePath("/signup");
 				return void 0;
 			}}
@@ -75,7 +83,11 @@ export default function SignUpForm({
 		>
 			<header>
 				<h3>{`Register for ${season.name}`}</h3>
+				{questions && <Markdown>{questions}</Markdown>}
 			</header>
+			<p>
+				<textarea name="notes" required />
+			</p>
 			<p>
 				<Submit value="Register" />
 			</p>

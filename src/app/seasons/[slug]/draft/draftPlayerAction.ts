@@ -17,7 +17,6 @@ export default async function draftPlayerAction(
 	player: typeof playerTable.$inferSelect,
 	team?: typeof teamTable.$inferSelect
 ): Promise<string | undefined> {
-	// TODO: Ensure that the viewer is the captain of the team whose turn it is to pick.
 	if (!enabled || !team) {
 		return "You aren't the drafting captain!";
 	}

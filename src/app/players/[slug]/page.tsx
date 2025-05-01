@@ -179,7 +179,6 @@ export default async function Page(
 						<PlayerPanel
 							player={player}
 							accounts={accounts}
-							latestSeason={latestSeason}
 							className={style["panel"]}
 						/>
 					)}

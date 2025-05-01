@@ -1,7 +1,13 @@
-import { accountTable, draftPlayerTable, seasonTable } from "db/schema";
+import {
+	accountTable,
+	documentTable,
+	draftPlayerTable,
+	seasonTable
+} from "db/schema";
 import { and, desc, eq } from "drizzle-orm";
 import AccountCard from "components/AccountCard";
 import AddAccountForm from "./AddAccountForm";
+import Document from "types/Document";
 import type { JSX } from "react";
 import Link from "components/Link";
 import type { Metadata } from "next";
@@ -184,6 +190,11 @@ export default async function Page(): Promise<JSX.Element> {
 		);
 	}
 
+	const [signUpQuestions] = await db
+		.select()
+		.from(documentTable)
+		.where(eq(documentTable.id, Document.SIGN_UP_QUESTIONS));
+
 	return (
 		<article className={style["content"]}>
 			<header>
@@ -215,7 +226,12 @@ export default async function Page(): Promise<JSX.Element> {
 				{accounts.length > 0 && <UpdateAccountsForm accounts={accounts} />}
 				<AddAccountForm player={player} accounts={accounts} />
 			</div>
-			<SignUpForm player={player} season={season} accounts={accounts} />
+			<SignUpForm
+				player={player}
+				season={season}
+				accounts={accounts}
+				questions={signUpQuestions?.text ?? void 0}
+			/>
 		</article>
 	);
 }

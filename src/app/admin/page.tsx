@@ -1,8 +1,13 @@
 import { forbidden, unauthorized } from "next/navigation";
 import CreateSeasonForm from "./CreateSeasonForm";
+import Document from "types/Document";
 import type { JSX } from "react";
 import type { Metadata } from "next";
+import UpdateSignUpQuestionsForm from "./UpdateSignUpQuestionsForm";
 import { auth } from "db/auth";
+import db from "db/db";
+import { documentTable } from "db/schema";
+import { eq } from "drizzle-orm";
 import style from "./page.module.scss";
 
 /**
@@ -20,6 +25,11 @@ export default async function Page(): Promise<JSX.Element> {
 		forbidden();
 	}
 
+	const [signUpQuestions] = await db
+		.select()
+		.from(documentTable)
+		.where(eq(documentTable.id, Document.SIGN_UP_QUESTIONS));
+
 	return (
 		<>
 			<header>
@@ -28,6 +38,7 @@ export default async function Page(): Promise<JSX.Element> {
 			</header>
 			<div className={style["widgets"]}>
 				<CreateSeasonForm />
+				<UpdateSignUpQuestionsForm text={signUpQuestions?.text ?? void 0} />
 			</div>
 		</>
 	);

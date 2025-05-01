@@ -1,16 +1,8 @@
-import {
-	type accountTable,
-	draftPlayerTable,
-	type playerTable,
-	type seasonTable
-} from "db/schema";
-import { and, eq } from "drizzle-orm";
+import { type accountTable, type playerTable } from "db/schema";
 import AddAccountForm from "./player/AddAccountForm";
 import { type JSX } from "react";
-import SignUpForm from "./player/SignUpForm";
 import UpdatePlayerForm from "./player/UpdatePlayerForm";
 import UpdateSkinForm from "./player/UpdateSkinForm";
-import db from "db/db";
 
 /**
  * Properties that can be passed to a player panel.
@@ -23,9 +15,6 @@ export interface PlayerPanelProps
 
 	/** The player's accounts. */
 	accounts: (typeof accountTable.$inferSelect)[];
-
-	/** The latest season. */
-	latestSeason?: typeof seasonTable.$inferSelect | undefined;
 }
 
 /**
@@ -34,12 +23,11 @@ export interface PlayerPanelProps
  * @returns The panel.
  * @public
  */
-export default async function PlayerPanel({
+export default function PlayerPanel({
 	player,
 	accounts,
-	latestSeason,
 	...props
-}: PlayerPanelProps): Promise<JSX.Element> {
+}: PlayerPanelProps): JSX.Element {
 	return (
 		<div {...props}>
 			<header>
@@ -50,24 +38,6 @@ export default async function PlayerPanel({
 			{player.bgChamp && (
 				<UpdateSkinForm player={player} backgroundChampionId={player.bgChamp} />
 			)}
-			{latestSeason &&
-				(
-					await db
-						.select()
-						.from(draftPlayerTable)
-						.where(
-							and(
-								eq(draftPlayerTable.playerId, player.id),
-								eq(draftPlayerTable.seasonId, latestSeason.id)
-							)
-						)
-				).length === 0 && (
-					<SignUpForm
-						player={player}
-						season={latestSeason}
-						accounts={accounts}
-					/>
-				)}
 		</div>
 	);
 }
