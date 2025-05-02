@@ -1,5 +1,6 @@
 import type { playerTable, teamPlayerTable, teamTable } from "db/schema";
 import AddPlayerForm from "./admin/AddPlayerForm";
+import DeleteTeamForm from "./admin/DeleteTeamForm";
 import { type JSX } from "react";
 import RemovePlayerForm from "./admin/RemovePlayerForm";
 import SetCaptainForm from "./admin/SetCaptainForm";
@@ -59,6 +60,7 @@ export default function AdminPanel({
 				players={players}
 			/>
 			<SetCaptainForm team={team} teamPlayers={teamPlayers} players={players} />
+			<DeleteTeamForm team={team} />
 		</div>
 	);
 }
