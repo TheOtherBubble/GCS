@@ -18,9 +18,14 @@ article.content {
 		text-align: center;
 	}
 
-	// Update player form.
+	// Update player and register forms.
 	& > form {
 		@extend .blob;
+
+		// Notes field.
+		& > p > textarea {
+			height: 200px;
+		}
 	}
 
 	// Accounts section.
