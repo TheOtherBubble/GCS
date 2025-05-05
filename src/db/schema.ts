@@ -382,6 +382,9 @@ export const draftPlayerTable = pgTable(
 		// The point value of the player in the season. Null for players that have signed up but have not been accepted into the season by a tournament administrator.
 		pointValue: integer(),
 
+		// The date and time at which the player registered for the season.
+		registeredAt: timestamp().notNull().defaultNow(),
+
 		// The ID of the season.
 		seasonId: integer()
 			.references(() => seasonTable.id, {
