@@ -102,7 +102,7 @@ export default async function Page(): Promise<JSX.Element> {
 				<header>
 					<h1>{"Sign Up"}</h1>
 					<p>
-						{`You are already registered for ${season.name} of the Gauntlet Championship Series.`}
+						{`You are registered for ${season.name} of the Gauntlet Championship Series.`}
 					</p>
 				</header>
 			</article>
