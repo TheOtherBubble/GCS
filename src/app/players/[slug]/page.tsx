@@ -12,6 +12,7 @@ import {
 import { and, desc, eq, or } from "drizzle-orm";
 import AccountCard from "components/AccountCard";
 import AdminPanel from "./AdminPanel";
+import { BsDiscord } from "react-icons/bs";
 import GameCard from "components/GameCard";
 import Image from "components/Image";
 import type { JSX } from "react";
@@ -145,6 +146,12 @@ export default async function Page(
 			)}
 			<header>
 				<h1>{player.displayName ?? player.name}</h1>
+				<ul>
+					<span>
+						<BsDiscord />
+						{player.name}
+					</span>
+				</ul>
 				{player.bio && <Markdown>{player.bio}</Markdown>}
 			</header>
 			<div>
