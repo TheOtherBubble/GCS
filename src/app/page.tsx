@@ -1,9 +1,16 @@
 import { BsDiscord, BsTwitch, BsYoutube } from "react-icons/bs";
+import Document from "types/Document";
 import type { JSX } from "react";
 import Link from "components/Link";
+import Markdown from "react-markdown";
 import type { Metadata } from "next";
 import TwitchStream from "components/TwitchStream";
+import UpdateBlurbForm from "./UpdateBlurbForm";
 import YoutubeVideo from "components/YoutubeVideo";
+import { auth } from "db/auth";
+import db from "db/db";
+import { documentTable } from "db/schema";
+import { eq } from "drizzle-orm";
 import getStreams from "ttv/getStreams";
 import { raw } from "util/domain";
 import style from "./page.module.scss";
@@ -15,6 +22,10 @@ import style from "./page.module.scss";
  */
 export default async function Page(): Promise<JSX.Element> {
 	const [streamData] = (await getStreams("1056770764")).data;
+	const [blurb] = await db
+		.select()
+		.from(documentTable)
+		.where(eq(documentTable.id, Document.LANDING_BLURB));
 
 	return (
 		<article className={style["content"]}>
@@ -49,30 +60,7 @@ export default async function Page(): Promise<JSX.Element> {
 					{"YouTube"}
 				</Link>
 			</ul>
-			<h2>{"Welcome to the Gauntlet Championship Series"}</h2>
-			<p>
-				{
-					"The Gauntlet Championship Series (GCS) is a League of Legends tournament and online community that puts an emphasis on uniting like-minded players of all skill levels together in a competitive environment. It is through this process that we are able to not only ensure that you will make friends in our community, but also improve as you play with us."
-				}
-			</p>
-			<h2>{"What is GCS?"}</h2>
-			<p>
-				{
-					"GCS is an organization that hosts draft tournaments for League of Legends. Our emphasis is on ensuring that, as you compete, you become united with your team, playing the game at the highest level of team play possible. Our approach to this is twofold:"
-				}
-			</p>
-			<ul>
-				<li>
-					{
-						"Ensure that teams get enough time in the regular season to come together and form a team identity."
-					}
-				</li>
-				<li>
-					{
-						"Ensure that enough teams make it to playoffs that all have a chance at victory, regardless of how rocky the season starts may be."
-					}
-				</li>
-			</ul>
+			{blurb?.text && <Markdown>{blurb.text}</Markdown>}
 			<hr />
 			<p>
 				{
@@ -86,6 +74,9 @@ export default async function Page(): Promise<JSX.Element> {
 					"This competition is not affiliated with or sponsored by Riot Games, Inc. or League of Legends Esports."
 				}
 			</p>
+			{(await auth())?.user?.isAdmin && (
+				<UpdateBlurbForm text={blurb?.text ?? void 0} />
+			)}
 		</article>
 	);
 }

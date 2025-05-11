@@ -1,6 +1,7 @@
 @use "../styles/mixins";
 @use "../styles/variables";
 @use "../styles/clean-list.module.scss";
+@use "../styles/blob.module.scss";
 
 // Landing page.
 article.content {
@@ -39,6 +40,16 @@ article.content {
 				padding: 4px;
 				vertical-align: middle;
 			}
+		}
+	}
+
+	// Update blurb form.
+	& > form {
+		@extend .blob;
+
+		// Update blurb form text area.
+		& > p > textarea {
+			height: 20lh;
 		}
 	}
 
