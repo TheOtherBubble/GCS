@@ -74,6 +74,13 @@ export default async function Page(): Promise<JSX.Element> {
 					"This competition is not affiliated with or sponsored by Riot Games, Inc. or League of Legends Esports."
 				}
 			</p>
+			<p>
+				<Link href="/api">{"API"}</Link>
+				{" | "}
+				<Link href="https://github.com/Lakuna/GCS/issues">
+					{"Report a Bug or Request a Feature"}
+				</Link>
+			</p>
 			{(await auth())?.user?.isAdmin && (
 				<UpdateBlurbForm text={blurb?.text ?? void 0} />
 			)}
