@@ -40,7 +40,7 @@ export default function UpdateTeamForm({
 					.set({
 						code: getFormField(form, "code"),
 						color: getFormField(form, "color")?.substring(1), // Cut off pound.
-						isWinner: Boolean(getFormField(form, "isWinner")),
+						isWinner: Boolean(getFormField(form, "isWinner")) || null,
 						logoUrl: getFormField(form, "logoUrl"),
 						name: getFormField(form, "name"),
 						pool: poolString ? parseInt(poolString, 10) : void 0,
