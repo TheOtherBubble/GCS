@@ -85,7 +85,6 @@ export default function DraftPlayerForm({
 						<p>{`${player.primaryRole}/${player.secondaryRole}`}</p>
 					)
 				)}
-				{draftPlayer.notes && <p>{`Notes: ${draftPlayer.notes}`}</p>}
 			</header>
 			<p>
 				<label>
