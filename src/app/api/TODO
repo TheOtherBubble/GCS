@@ -1,0 +1,132 @@
+Learn OpenAPI: https://learn.openapis.org/
+
+player
+- id
+- bannedUntil
+- bgChamp
+- bgSkin
+- bio
+- discordId
+- displayName
+- isAdmin
+- name
+- primaryRole
+- secondaryRole
+- twitchId
+- youtubeId
+- accounts (account.puuid)
+- teams
+ - id (teamPlayer.teamId)
+ - isCaptain (teamPlayer.isCaptain)
+- seasons
+ - draftedAt (draftPlayer.draftedAt)
+ - notes (draftPlayer.notes)
+ - pv (draftPlayer.pointValue)
+ - registeredAt (draftPlayer.registeredAt)
+ - id (draftPlayer.seasonId)
+
+account
+- cacheDate
+- isPrimary
+- isVerified
+- name
+- playerId
+- puuid
+- rank
+- region
+- tagLine
+- tier
+
+season
+- id
+- name
+- playoffsStageId
+- playoffsTourneyId
+- slug
+- startDate
+- teams (team.id)
+- players
+ - id (draftPlayer.playerId)
+ - draftedAt (draftPlayer.draftedAt)
+ - notes (draftPlayer.notes)
+ - pv (draftPlayer.pointValue)
+ - registeredAt (draftPlayer.registeredAt)
+- matches (match.id)
+
+team
+- code
+- color
+- draftOrder
+- id
+- isWinner
+- logoUrl
+- name
+- pool
+- seasonId
+- slug
+- players
+ - id (teamPlayer.playerId)
+ - isCaptain (teamPlayer.isCaptain)
+
+match
+- blueTeamId
+- format
+- id
+- isPlayoffs
+- redTeamId
+- round
+- seasonId
+- timeslot
+- games (game.id)
+
+game
+- id
+- matchId
+- tournamentCode
+- duration (gameResult.duration)
+- riotId (gameResult.id)
+- map (gameResult.map)
+- mode (gameResult.mode)
+- queue (gameResult.queue)
+- region (gameResult.region)
+- startTimestamp (gameResult.startTimestamp)
+- type (gameResult.type)
+- version (gameResult.version)
+- teams
+ - isWinner (teamGameResult.isWinner)
+ - riotTeam (teamGameResult.team)
+ - teamId (teamGameResult.teamId)
+ - bans
+  - champ (teamGameResultBan.champ)
+  - order (teamGameResultBan.order)
+ - players
+  - allyJgCs (teamGameResultPlayer.allyJgCs)
+  - assists (teamGameResultPlayer.assists)
+  - champ (teamGameResultPlayer.champ)
+  - champDmg (teamGameResultPlayer.champDmg)
+  - deaths (teamGameResultPlayer.deaths)
+  - enemyJgCs (teamGameResultPlayer.enemyJgCs)
+  - item0 (teamGameResultPlayer.item0)
+  - item1 (teamGameResultPlayer.item1)
+  - item2 (teamGameResultPlayer.item2)
+  - item3 (teamGameResultPlayer.item3)
+  - item4 (teamGameResultPlayer.item4)
+  - item5 (teamGameResultPlayer.item5)
+  - item6 (teamGameResultPlayer.item6)
+  - kills (teamGameResultPlayer.kills)
+  - laneCs (teamGameResultPlayer.laneCs)
+  - level (teamGameResultPlayer.level)
+  - name (teamGameResultPlayer.name)
+  - neutralCs (teamGameResultPlayer.neutralCs)
+  - objectivesStolen (teamGameResultPlayer.objectivesStolen)
+  - pentakills (teamGameResultPlayer.pentakills)
+  - position (teamGameResultPlayer.position)
+  - puuid (teamGameResultPlayer.puuid)
+  - summoner1 (teamGameResultPlayer.summoner1)
+  - summoner2 (teamGameResultPlayer.summoner2)
+  - towerDmg (teamGameResultPlayer.towerDmg)
+  - wardCs (teamGameResultPlayer.wardCs)
+
+document
+- id
+- text
