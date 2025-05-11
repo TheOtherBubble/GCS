@@ -71,7 +71,6 @@ export default function DraftPlayerForm({
 						<Link href={ugg(...accounts)}>{"U.GG"}</Link>
 					</p>
 				)}
-				{draftPlayer.notes && <p>{`Notes: ${draftPlayer.notes}`}</p>}
 			</header>
 			<p>
 				<Submit value="Draft" disabled={!enabled} />
