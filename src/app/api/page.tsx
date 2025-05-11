@@ -1,4 +1,5 @@
 import type { JSX } from "react";
+import Link from "components/Link";
 import type { Metadata } from "next";
 import style from "./page.module.scss";
 
@@ -10,7 +11,13 @@ export default function Page(): JSX.Element {
 	return (
 		<article className={style["content"]}>
 			<h1>{"API Documentation"}</h1>
-			<p>{"OpenAPI coming soon!"}</p>
+			<p>
+				{
+					"The GCS REST API conforms to the OpenAPI Specification v3.1.1. The entry document is located "
+				}
+				<Link href="/api/openapi.json">{"here"}</Link>
+				{"."}
+			</p>
 		</article>
 	);
 }

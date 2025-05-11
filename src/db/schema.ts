@@ -102,6 +102,9 @@ export const playerTable = pgTable("player", {
 	// The player's secondary role. Must be set and not equal to the player's primary role for the player to be able to sign up for a season.
 	secondaryRole: positionEnum(),
 
+	// The player's vanity URL slug.
+	slug: varchar({ length: 0x20 }).unique(),
+
 	// The player's Twitch ID.
 	twitchId: varchar({ length: 0x40 }).unique(),
 

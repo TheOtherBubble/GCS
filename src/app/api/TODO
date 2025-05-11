@@ -1,29 +1,6 @@
 Learn OpenAPI: https://learn.openapis.org/
-
-player
-- id
-- bannedUntil
-- bgChamp
-- bgSkin
-- bio
-- discordId
-- displayName
-- isAdmin
-- name
-- primaryRole
-- secondaryRole
-- twitchId
-- youtubeId
-- accounts (account.puuid)
-- teams
- - id (teamPlayer.teamId)
- - isCaptain (teamPlayer.isCaptain)
-- seasons
- - draftedAt (draftPlayer.draftedAt)
- - notes (draftPlayer.notes)
- - pv (draftPlayer.pointValue)
- - registeredAt (draftPlayer.registeredAt)
- - id (draftPlayer.seasonId)
+Swagger editor: https://editor-next.swagger.io/
+Generate documentation with Swagger UI: https://swagger.io/tools/swagger-ui/
 
 account
 - cacheDate
@@ -37,47 +14,9 @@ account
 - tagLine
 - tier
 
-season
+document
 - id
-- name
-- playoffsStageId
-- playoffsTourneyId
-- slug
-- startDate
-- teams (team.id)
-- players
- - id (draftPlayer.playerId)
- - draftedAt (draftPlayer.draftedAt)
- - notes (draftPlayer.notes)
- - pv (draftPlayer.pointValue)
- - registeredAt (draftPlayer.registeredAt)
-- matches (match.id)
-
-team
-- code
-- color
-- draftOrder
-- id
-- isWinner
-- logoUrl
-- name
-- pool
-- seasonId
-- slug
-- players
- - id (teamPlayer.playerId)
- - isCaptain (teamPlayer.isCaptain)
-
-match
-- blueTeamId
-- format
-- id
-- isPlayoffs
-- redTeamId
-- round
-- seasonId
-- timeslot
-- games (game.id)
+- text
 
 game
 - id
@@ -94,8 +33,8 @@ game
 - version (gameResult.version)
 - teams
  - isWinner (teamGameResult.isWinner)
- - riotTeam (teamGameResult.team)
- - teamId (teamGameResult.teamId)
+ - riotId (teamGameResult.team)
+ - id (teamGameResult.teamId)
  - bans
   - champ (teamGameResultBan.champ)
   - order (teamGameResultBan.order)
@@ -127,6 +66,71 @@ game
   - towerDmg (teamGameResultPlayer.towerDmg)
   - wardCs (teamGameResultPlayer.wardCs)
 
-document
+match
+- blueTeamId
+- format
 - id
-- text
+- isPlayoffs
+- redTeamId
+- round
+- seasonId
+- timeslot
+- games (game.id)
+
+player
+- id
+- bannedUntil
+- bgChamp
+- bgSkin
+- bio
+- discordId
+- displayName
+- isAdmin
+- name
+- primaryRole
+- secondaryRole
+- slug
+- twitchId
+- youtubeId
+- accounts (account.puuid)
+- teams
+ - id (teamPlayer.teamId)
+ - isCaptain (teamPlayer.isCaptain)
+- seasons
+ - draftedAt (draftPlayer.draftedAt)
+ - notes (draftPlayer.notes)
+ - pv (draftPlayer.pointValue)
+ - registeredAt (draftPlayer.registeredAt)
+ - id (draftPlayer.seasonId)
+
+season
+- id
+- name
+- playoffsStageId
+- playoffsTourneyId
+- slug
+- startDate
+- teams (team.id)
+- players
+ - id (draftPlayer.playerId)
+ - draftedAt (draftPlayer.draftedAt)
+ - notes (draftPlayer.notes)
+ - pv (draftPlayer.pointValue)
+ - registeredAt (draftPlayer.registeredAt)
+- matches (match.id)
+
+team
+- code
+- color
+- draftOrder
+- id
+- isWinner
+- logoUrl
+- name
+- pool
+- seasonId
+- slug
+- players
+ - id (teamPlayer.playerId)
+ - isCaptain (teamPlayer.isCaptain)
+- matches (match.id)
