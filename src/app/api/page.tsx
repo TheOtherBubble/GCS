@@ -16,7 +16,11 @@ export default function Page(): JSX.Element {
 					"The GCS REST API conforms to the OpenAPI Specification v3.1.1. The entry document is located "
 				}
 				<Link href="/api/openapi.json">{"here"}</Link>
-				{"."}
+				{". You can generate up-to-date documentation for the API with "}
+				<Link href="https://editor-next.swagger.io/">{"SwaggerEditor"}</Link>
+				{
+					" or any other documentation generation tool that conforms to the OpenAPI Specification v3.1.1."
+				}
 			</p>
 		</article>
 	);
