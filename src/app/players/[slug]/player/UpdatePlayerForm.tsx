@@ -11,6 +11,7 @@ import getFormField from "util/getFormField";
 import getPlayerUrl from "util/getPlayerUrl";
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
+import slugify from "util/slugify";
 
 /**
  * Properties that can be passed to an update player form.
@@ -38,6 +39,8 @@ export default function UpdatePlayerForm({
 				"use server";
 				const displayName = getFormField(form, "displayName");
 				const bgChamp = getFormField(form, "bgChamp");
+				const rawSlug = getFormField(form, "slug");
+				const slug = rawSlug && slugify(rawSlug);
 				await db
 					.update(playerTable)
 					.set({
@@ -50,11 +53,12 @@ export default function UpdatePlayerForm({
 							| undefined,
 						secondaryRole: getFormField(form, "secondaryRole") as
 							| Position
-							| undefined
+							| undefined,
+						slug
 					})
 					.where(eq(playerTable.id, player.id));
-				if (displayName && displayName !== player.displayName) {
-					redirect(getPlayerUrl({ displayName, name: "" }));
+				if (slug && slug !== player.slug) {
+					redirect(getPlayerUrl({ id: player.id, slug }));
 				}
 
 				// If the vanity URL didn't change, just reload the page instead.
@@ -78,6 +82,17 @@ export default function UpdatePlayerForm({
 						name="displayName"
 						maxLength={0x20}
 						defaultValue={player.displayName ?? void 0}
+					/>
+				</label>
+			</p>
+			<p>
+				<label>
+					{"Slug"}
+					<input
+						type="text"
+						name="slug"
+						maxLength={0x20}
+						defaultValue={player.slug ?? void 0}
 					/>
 				</label>
 			</p>

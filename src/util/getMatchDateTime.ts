@@ -1,5 +1,5 @@
+import { SEASON_ONE_ID, TIME_SLOT_DURATION } from "./const";
 import type { matchTable, seasonTable } from "db/schema";
-import { TIME_SLOT_DURATION } from "./const";
 
 /** The numeric value of Saturday for `Date.prototype.getDay` and `Date.prototype.getUTCDay`. */
 const SATURDAY = 6;
@@ -20,8 +20,9 @@ const NOVEMBER = 10;
 export default function getMatchDateTime(
 	{
 		round,
+		seasonId,
 		timeSlot
-	}: Pick<typeof matchTable.$inferSelect, "round" | "timeSlot">,
+	}: Pick<typeof matchTable.$inferSelect, "round" | "seasonId" | "timeSlot">,
 	{ startDate }: Pick<typeof seasonTable.$inferSelect, "startDate">
 ): Date {
 	// Use noon CST (6:00 PM UTC) on the Saturday after the season start date as the base date and time.
@@ -43,9 +44,12 @@ export default function getMatchDateTime(
 	date.setUTCDate(date.getUTCDate() + week * 7 + sunday);
 
 	// Go forward `TIME_SLOT_DURATION` for Sunday games plus `TIME_SLOT_DURATION` per time slot past the first.
-	date.setUTCHours(
-		date.getUTCHours() + TIME_SLOT_DURATION * (sunday + timeSlot0)
-	);
+	date.setUTCHours(date.getUTCHours() + TIME_SLOT_DURATION * timeSlot0);
+
+	// For season one only, go forward an additional `TIME_SLOT_DURATION` for Sunday games.
+	if (seasonId === SEASON_ONE_ID) {
+		date.setUTCHours(date.getUTCHours() + TIME_SLOT_DURATION * sunday);
+	}
 
 	// If the game is between March 9 and November 2 (inclusive), move it back one hour to account for daylight savings time in the United States and Canada.
 	const month = date.getUTCMonth();

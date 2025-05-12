@@ -7,6 +7,7 @@ import getFormField from "util/getFormField";
 import getTeamUrl from "util/getTeamUrl";
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
+import slugify from "util/slugify";
 import { teamTable } from "db/schema";
 
 /**
@@ -33,7 +34,8 @@ export default function UpdateTeamForm({
 		<Form
 			action={async (form) => {
 				"use server";
-				const slug = getFormField(form, "slug");
+				const rawSlug = getFormField(form, "slug");
+				const slug = rawSlug && slugify(rawSlug);
 				const poolString = getFormField(form, "pool");
 				await db
 					.update(teamTable)

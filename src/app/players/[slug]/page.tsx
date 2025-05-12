@@ -13,6 +13,7 @@ import { and, desc, eq, or } from "drizzle-orm";
 import AccountCard from "components/AccountCard";
 import AdminPanel from "./AdminPanel";
 import { BsDiscord } from "react-icons/bs";
+import { CiLink } from "react-icons/ci";
 import GameCard from "components/GameCard";
 import Image from "components/Image";
 import type { JSX } from "react";
@@ -50,8 +51,8 @@ export interface PlayersPageParams {
 export default async function Page(
 	props: PageProps<PlayersPageParams>
 ): Promise<JSX.Element> {
-	const { slug } = await props.params;
-	const decoded = decodeURIComponent(slug);
+	const { slug: encoded } = await props.params;
+	const decoded = decodeURIComponent(encoded);
 	const unfilteredRows = await db
 		.select()
 		.from(playerTable)
@@ -78,13 +79,10 @@ export default async function Page(
 			gameTable,
 			eq(gameResultTable.tournamentCode, gameTable.tournamentCode)
 		)
-		.where(
-			or(eq(playerTable.displayName, decoded), eq(playerTable.name, decoded))
-		);
+		.where(or(eq(playerTable.id, decoded), eq(playerTable.slug, decoded)));
 	const playerId = (
-		unfilteredRows.find(
-			({ player: { displayName } }) => displayName === decoded
-		) ?? unfilteredRows.find(({ player: { name } }) => name === decoded)
+		unfilteredRows.find(({ player: { id } }) => id === decoded) ??
+		unfilteredRows.find(({ player: { slug } }) => slug === decoded)
 	)?.player.id;
 	const rows = unfilteredRows.filter(({ player: { id } }) => id === playerId);
 	const [first] = rows;
@@ -145,7 +143,20 @@ export default async function Page(
 				<Image alt="" src={backgroundImageUrl} width={1215} height={717} />
 			)}
 			<header>
-				<h1>{player.displayName ?? player.name}</h1>
+				<h1>
+					{`${player.displayName ?? player.name} `}
+					<Link
+						href={getPlayerUrl({ id: player.id, slug: null })}
+						title="Permalink"
+					>
+						<CiLink />
+					</Link>
+					{player.slug && (
+						<Link href={getPlayerUrl(player)} title="Vanity URL">
+							<CiLink />
+						</Link>
+					)}
+				</h1>
 				<ul>
 					<span>
 						<BsDiscord />
@@ -242,17 +253,15 @@ export default async function Page(
 export const generateMetadata = async (
 	props: PageProps<PlayersPageParams>
 ): Promise<Metadata> => {
-	const { slug } = await props.params;
-	const decoded = decodeURIComponent(slug);
+	const { slug: encoded } = await props.params;
+	const decoded = decodeURIComponent(encoded);
 	const rows = await db
 		.select()
 		.from(playerTable)
-		.where(
-			or(eq(playerTable.displayName, decoded), eq(playerTable.name, decoded))
-		);
+		.where(or(eq(playerTable.id, decoded), eq(playerTable.slug, decoded)));
 	const player =
-		rows.find(({ displayName }) => displayName === decoded) ??
-		rows.find(({ name }) => name === decoded);
+		rows.find(({ id }) => id === decoded) ??
+		rows.find(({ slug }) => slug === decoded);
 
 	return player
 		? {
@@ -265,7 +274,7 @@ export const generateMetadata = async (
 			}
 		: {
 				description: "An unknown player in the Gauntlet Championship Series.",
-				openGraph: { url: getPlayerUrl({ displayName: decoded, name: "" }) },
+				openGraph: { url: getPlayerUrl({ id: decoded, slug: decoded }) },
 				title: "Unknown Player"
 			};
 };

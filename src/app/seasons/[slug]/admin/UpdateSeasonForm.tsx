@@ -8,6 +8,7 @@ import getSeasonUrl from "util/getSeasonUrl";
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { seasonTable } from "db/schema";
+import slugify from "util/slugify";
 
 /**
  * Properties that can be passed to an update season form.
@@ -33,7 +34,8 @@ export default function UpdateSeasonForm({
 		<Form
 			action={async (form) => {
 				"use server";
-				const slug = getFormField(form, "slug");
+				const rawSlug = getFormField(form, "slug");
+				const slug = rawSlug && slugify(rawSlug);
 				await db
 					.update(seasonTable)
 					.set({

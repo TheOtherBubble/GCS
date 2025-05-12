@@ -9,3 +9,9 @@ export const TIME_SLOT_DURATION = 2;
  * @public
  */
 export const TEAM_SIZE = 8;
+
+/**
+ * The ID of GCS season one.
+ * @public
+ */
+export const SEASON_ONE_ID = 7256514;

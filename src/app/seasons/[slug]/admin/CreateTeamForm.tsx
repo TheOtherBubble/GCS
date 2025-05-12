@@ -7,6 +7,7 @@ import domain from "util/domain";
 import getFormField from "util/getFormField";
 import getSeasonUrl from "util/getSeasonUrl";
 import { revalidatePath } from "next/cache";
+import slugify from "util/slugify";
 
 /**
  * Properties that can be passed to a create team form.
@@ -39,7 +40,7 @@ export default function CreateTeamForm({
 					name: getFormField(form, "name", true),
 					pool: parseInt(getFormField(form, "pool", true), 10),
 					seasonId: season.id,
-					slug: getFormField(form, "slug", true)
+					slug: slugify(getFormField(form, "slug", true))
 				});
 				revalidatePath(getSeasonUrl(season));
 			}}

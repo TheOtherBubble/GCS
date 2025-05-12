@@ -18,7 +18,7 @@ import getMatchDateTime from "./getMatchDateTime";
 export default function createForfeit(
 	match: Pick<
 		typeof matchTable.$inferSelect,
-		"round" | "timeSlot" | "blueTeamId" | "redTeamId"
+		"round" | "seasonId" | "timeSlot" | "blueTeamId" | "redTeamId"
 	>,
 	season: Pick<typeof seasonTable.$inferSelect, "startDate">,
 	blueWon: boolean

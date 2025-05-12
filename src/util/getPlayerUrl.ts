@@ -7,11 +7,11 @@ import type { playerTable } from "db/schema";
  * @public
  */
 export default function getPlayerUrl({
-	displayName,
-	name
+	slug,
+	id
 }: Pick<
 	typeof playerTable.$inferSelect,
-	"displayName" | "name"
->): `/players/${typeof displayName | typeof name}` {
-	return `/players/${encodeURIComponent(displayName ?? name)}`;
+	"slug" | "id"
+>): `/players/${typeof slug | typeof id}` {
+	return `/players/${encodeURIComponent(slug ?? id)}`;
 }

@@ -10,7 +10,10 @@ import getMatchDateTime from "./getMatchDateTime";
  * @public
  */
 export default function isMatchInProgress(
-	match: Pick<typeof matchTable.$inferSelect, "round" | "timeSlot">,
+	match: Pick<
+		typeof matchTable.$inferSelect,
+		"round" | "seasonId" | "timeSlot"
+	>,
 	season: Pick<typeof seasonTable.$inferSelect, "startDate">
 ): boolean {
 	const start = getMatchDateTime(match, season).valueOf();

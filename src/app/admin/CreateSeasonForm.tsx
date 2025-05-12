@@ -6,6 +6,7 @@ import getFormField from "util/getFormField";
 import hasRiotApiKey from "util/hasRiotApiKey";
 import makeTournament from "riot/makeTournament";
 import { seasonTable } from "db/schema";
+import slugify from "util/slugify";
 
 /**
  * Properties that can be passed to a create season form.
@@ -34,7 +35,7 @@ export default function CreateSeasonForm(
 				await db.insert(seasonTable).values({
 					id: await makeTournament(name),
 					name,
-					slug: getFormField(form, "vanityUrlSlug", true),
+					slug: slugify(getFormField(form, "vanityUrlSlug", true)),
 					startDate: getFormField(form, "startDate")
 				});
 				return void 0;
