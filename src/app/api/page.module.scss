@@ -1,38 +1,7 @@
 @use "../../styles/mixins";
 @use "../../styles/blob.module.scss";
 
-// Rulebook contents.
+// API documentation contents.
 article.content {
-	font-size: 1.2em;
-
-	// Update rulebook form.
-	& > form {
-		@extend .blob;
-
-		display: none;
-	}
-
-	@include mixins.gt-mobile using ($gt-mobile) {
-		@if $gt-mobile {
-			display: grid;
-			grid-template-columns: 1fr min(65ch, 100%) 1fr;
-
-			// Update rulebook form.
-			& > form {
-				display: grid;
-			}
-
-			// All elements.
-			& > * {
-				grid-column: 2;
-				overflow: auto hidden;
-			}
-
-			// Images.
-			& > p > img {
-				display: block;
-				margin: auto;
-			}
-		}
-	}
+	background-color: #ffffff;
 }
