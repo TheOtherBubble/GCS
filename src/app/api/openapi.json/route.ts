@@ -266,7 +266,7 @@ export const GET = (): NextResponse =>
 												description:
 													"The contents of the document in CommonMark syntax.",
 												title: "Text",
-												type: "string"
+												type: ["string", "null"]
 											}
 										},
 										required: ["id", "text"],
@@ -448,7 +448,7 @@ export const GET = (): NextResponse =>
 														id: {
 															description: "The ID of the team.",
 															title: "ID",
-															type: ["number", "null"]
+															type: "number"
 														},
 														isWinner: {
 															description:
@@ -1318,8 +1318,9 @@ export const GET = (): NextResponse =>
 														},
 														id: {
 															description: "The ID of the player.",
+															maxLength: 36,
 															title: "ID",
-															type: "number"
+															type: "string"
 														},
 														notes: {
 															description:
