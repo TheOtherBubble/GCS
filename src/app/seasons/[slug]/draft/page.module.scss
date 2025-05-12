@@ -46,6 +46,8 @@ div.content {
 					// Draft player forms.
 					& > form {
 						@extend .blob;
+
+						font-size: 0.75em;
 					}
 				}
 			}
@@ -93,6 +95,14 @@ div.content {
 				position: sticky;
 				top: calc(layout.$top + layout.$margin + $padding);
 				height: calc(100vh - layout.$top - layout.$margin * 2 - $padding * 2);
+			}
+		}
+	}
+
+	@include mixins.gt-full using ($gt-full) {
+		@if $gt-full {
+			& > div.draft > div > div > ol > form {
+				font-size: 1em;
 			}
 		}
 	}
