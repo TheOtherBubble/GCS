@@ -6,22 +6,22 @@ account
 - cacheDate
 - isPrimary
 - isVerified
-- name
+- name <-
 - playerId
-- puuid
+- puuid <-
 - rank
-- region
-- tagLine
+- region <-
+- tagLine <-
 - tier
 
 document
-- id
+- id <-
 - text
 
 game
-- id
+- id <-
 - matchId
-- tournamentCode
+- tournamentCode <-
 - duration (gameResult.duration)
 - riotId (gameResult.id)
 - map (gameResult.map)
@@ -74,8 +74,8 @@ match
 - redTeamId
 - round
 - seasonId
-- timeslot
-- games (game.id)
+- timeSlot
+- gameIds (game.id)
 
 player
 - id
@@ -92,14 +92,14 @@ player
 - slug
 - twitchId
 - youtubeId
-- accounts (account.puuid)
+- accountPuuids (account.puuid)
 - teams
  - id (teamPlayer.teamId)
  - isCaptain (teamPlayer.isCaptain)
 - seasons
  - draftedAt (draftPlayer.draftedAt)
  - notes (draftPlayer.notes)
- - pv (draftPlayer.pointValue)
+ - pointValue (draftPlayer.pointValue)
  - registeredAt (draftPlayer.registeredAt)
  - id (draftPlayer.seasonId)
 
@@ -110,14 +110,14 @@ season
 - playoffsTourneyId
 - slug
 - startDate
-- teams (team.id)
+- teamIds (team.id)
 - players
  - id (draftPlayer.playerId)
  - draftedAt (draftPlayer.draftedAt)
  - notes (draftPlayer.notes)
- - pv (draftPlayer.pointValue)
+ - pointValue (draftPlayer.pointValue)
  - registeredAt (draftPlayer.registeredAt)
-- matches (match.id)
+- matchIds (match.id)
 
 team
 - code
@@ -133,4 +133,4 @@ team
 - players
  - id (teamPlayer.playerId)
  - isCaptain (teamPlayer.isCaptain)
-- matches (match.id)
+- matchIds (match.id)
