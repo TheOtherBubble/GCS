@@ -1,6 +1,8 @@
 import { type accountTable, type playerTable } from "db/schema";
 import AddAccountForm from "./player/AddAccountForm";
 import { type JSX } from "react";
+import RemoveAccountForm from "./player/RemoveAccountForm";
+import SetPrimaryAccountForm from "./player/SetPrimaryAccountForm";
 import UpdatePlayerForm from "./player/UpdatePlayerForm";
 import UpdateSkinForm from "./player/UpdateSkinForm";
 
@@ -34,6 +36,12 @@ export default function PlayerPanel({
 				<h2>{"Player Panel"}</h2>
 			</header>
 			<AddAccountForm player={player} accounts={accounts} />
+			{accounts.length > 0 && (
+				<RemoveAccountForm player={player} accounts={accounts} />
+			)}
+			{accounts.length > 1 && (
+				<SetPrimaryAccountForm player={player} accounts={accounts} />
+			)}
 			<UpdatePlayerForm player={player} />
 			{player.bgChamp && (
 				<UpdateSkinForm player={player} backgroundChampionId={player.bgChamp} />
