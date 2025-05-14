@@ -39,6 +39,10 @@ export default async function Page(): Promise<JSX.Element> {
 		)
 		.innerJoin(playerTable, eq(accountTable.playerId, playerTable.id));
 	const resultsByPlayer = leftHierarchy(rows, "player", "playerGameResult");
+	const killsPerTeam = rows.reduce((map, { playerGameResult }) => {
+		const key = `${playerGameResult.gameResultId.toString()}-${playerGameResult.team.toString()}`;
+		return map.set(key, (map.get(key) ?? 0) + playerGameResult.kills);
+	}, new Map<string, number>());
 
 	return (
 		<>
@@ -49,7 +53,7 @@ export default async function Page(): Promise<JSX.Element> {
 			<div className={multiclass(style["leaderboards"], style["big"])}>
 				<div>
 					<header>
-						<h2>{"KDA (Average)"}</h2>
+						<h2>{"KDA"}</h2>
 					</header>
 					<ol>
 						{resultsByPlayer
@@ -83,14 +87,13 @@ export default async function Page(): Promise<JSX.Element> {
 				</div>
 				<div>
 					<header>
-						<h2>{"Damage (Per Minute)"}</h2>
+						<h2>{"DPM"}</h2>
 					</header>
 					<ol>
 						{resultsByPlayer
 							.map(({ value: player, children: results }) => ({
 								damage: results.reduce(
-									(total, { champDmg: championDamage }) =>
-										total + championDamage,
+									(total, { champDmg }) => total + champDmg,
 									0
 								),
 								ms: results.reduce(
@@ -116,7 +119,7 @@ export default async function Page(): Promise<JSX.Element> {
 				</div>
 				<div>
 					<header>
-						<h2>{"Deaths (Per Game)"}</h2>
+						<h2>{"Deaths/Game"}</h2>
 					</header>
 					<ol>
 						{resultsByPlayer
@@ -145,49 +148,84 @@ export default async function Page(): Promise<JSX.Element> {
 			<div className={style["leaderboards"]}>
 				<div>
 					<header>
-						<h2>{"Games Played"}</h2>
+						<h2>{"Tower Damage/Game"}</h2>
 					</header>
 					<ol>
 						{resultsByPlayer
 							.map(({ value: player, children: results }) => ({
 								games: results.length,
-								player
+								player,
+								towerDmg: results.reduce(
+									(total, { towerDmg }) => total + towerDmg,
+									0
+								)
 							}))
-							.sort(({ games: a }, { games: b }) => b - a)
+							.sort((a, b) => b.towerDmg / b.games - a.towerDmg / a.games)
 							.slice(0, 10)
-							.map(({ games, player }) => (
+							.map(({ towerDmg, games, player }) => (
 								<li key={player.id}>
 									<Link href={getPlayerUrl(player)}>
 										{player.displayName ?? player.name}
 									</Link>
-									{` - ${games.toLocaleString()}`}
+									{` - ${Math.floor(towerDmg / games).toLocaleString()}`}
 								</li>
 							))}
 					</ol>
 				</div>
 				<div>
 					<header>
-						<h2>{"Damage (Per Game)"}</h2>
+						<h2>{"Objective Steals"}</h2>
 					</header>
 					<ol>
 						{resultsByPlayer
 							.map(({ value: player, children: results }) => ({
-								damage: results.reduce(
-									(total, { champDmg: championDamage }) =>
-										total + championDamage,
+								objectivesStolen: results.reduce(
+									(total, { objectivesStolen }) => total + objectivesStolen,
 									0
 								),
-								games: results.length,
 								player
 							}))
-							.sort((a, b) => b.damage / b.games - a.damage / a.games)
+							.sort((a, b) => b.objectivesStolen - a.objectivesStolen)
 							.slice(0, 10)
-							.map(({ damage, games, player }) => (
+							.map(({ objectivesStolen, player }) => (
 								<li key={player.id}>
 									<Link href={getPlayerUrl(player)}>
 										{player.displayName ?? player.name}
 									</Link>
-									{` - ${Math.floor(damage / games).toLocaleString()}`}
+									{` - ${objectivesStolen.toLocaleString()}`}
+								</li>
+							))}
+					</ol>
+				</div>
+				<div>
+					<header>
+						<h2>{"CSM"}</h2>
+					</header>
+					<ol>
+						{resultsByPlayer
+							.map(({ value: player, children: results }) => ({
+								cs: results.reduce(
+									(total, { allyJgCs, enemyJgCs, laneCs, neutralCs, wardCs }) =>
+										total + allyJgCs + enemyJgCs + laneCs + neutralCs + wardCs,
+									0
+								),
+								ms: results.reduce(
+									(total, result) =>
+										total +
+										(rows.find((row) => row.playerGameResult.id === result.id)
+											?.gameResult.duration ?? 0),
+									0
+								),
+								player
+							}))
+							.sort((a, b) => b.cs / b.ms - a.cs / a.ms)
+							.slice(0, 10)
+							.map(({ cs, ms, player }) => (
+								<li key={player.id}>
+									<Link href={getPlayerUrl(player)}>
+										{player.displayName ?? player.name}
+									</Link>
+									{` - ${(cs / (ms / 1000 / 60)).toFixed(2)}`}
 								</li>
 							))}
 					</ol>
@@ -210,209 +248,102 @@ export default async function Page(): Promise<JSX.Element> {
 									<Link href={getPlayerUrl(player)}>
 										{player.displayName ?? player.name}
 									</Link>
-									{` - ${playerGameResult.champDmg.toLocaleString()} - `}
-									<Link
-										href={getGameUrl(game)}
-									>{`Game #${game.id.toString()}`}</Link>
+									{" - "}
+									<Link href={getGameUrl(game)}>
+										{playerGameResult.champDmg.toLocaleString()}
+									</Link>
 								</li>
 							))}
 					</ol>
 				</div>
 				<div>
 					<header>
-						<h2>{"Kills (Total)"}</h2>
+						<h2>{"KP"}</h2>
 					</header>
 					<ol>
 						{resultsByPlayer
 							.map(({ value: player, children: results }) => ({
-								kills: results.reduce((total, { kills }) => total + kills, 0),
+								gameKills: results.reduce(
+									(total, result) =>
+										total +
+										(killsPerTeam.get(
+											`${result.gameResultId.toString()}-${result.team.toString()}`
+										) ?? 0),
+									0
+								),
+								kp: results.reduce(
+									(total, { assists, kills }) => total + assists + kills,
+									0
+								),
 								player
 							}))
-							.sort(({ kills: a }, { kills: b }) => b - a)
+							.sort((a, b) => b.kp / b.gameKills - a.kp / a.gameKills)
 							.slice(0, 10)
-							.map(({ kills, player }) => (
+							.map(({ kp, gameKills, player }) => (
 								<li key={player.id}>
 									<Link href={getPlayerUrl(player)}>
 										{player.displayName ?? player.name}
 									</Link>
-									{` - ${kills.toLocaleString()}`}
+									{` - ${((kp / gameKills) * 100).toFixed(2)}%`}
 								</li>
 							))}
 					</ol>
 				</div>
 				<div>
 					<header>
-						<h2>{"Kills (Per Game)"}</h2>
+						<h2>{"Pentakills"}</h2>
+					</header>
+					<ol>
+						{resultsByPlayer
+							.map(({ value: player, children: results }) => ({
+								pentakills: results.reduce(
+									(total, { pentakills }) => total + pentakills,
+									0
+								),
+								player
+							}))
+							.filter(({ pentakills }) => pentakills > 0)
+							.sort((a, b) => b.pentakills - a.pentakills)
+							.slice(0, 10)
+							.map(({ pentakills, player }) => (
+								<li key={player.id}>
+									<Link href={getPlayerUrl(player)}>
+										{player.displayName ?? player.name}
+									</Link>
+									{` - ${pentakills.toLocaleString()}`}
+								</li>
+							))}
+					</ol>
+				</div>
+				<div>
+					<header>
+						<h2>{"Average Game Time"}</h2>
 					</header>
 					<ol>
 						{resultsByPlayer
 							.map(({ value: player, children: results }) => ({
 								games: results.length,
-								kills: results.reduce((total, { kills }) => total + kills, 0),
-								player
-							}))
-							.sort((a, b) => b.kills / b.games - a.kills / a.games)
-							.slice(0, 10)
-							.map(({ kills, games, player }) => (
-								<li key={player.id}>
-									<Link href={getPlayerUrl(player)}>
-										{player.displayName ?? player.name}
-									</Link>
-									{` - ${(kills / games).toFixed(2)}`}
-								</li>
-							))}
-					</ol>
-				</div>
-				<div>
-					<header>
-						<h2>{"Kills (Single Game)"}</h2>
-					</header>
-					<ol>
-						{rows
-							.sort(
-								(
-									{ playerGameResult: { kills: a } },
-									{ playerGameResult: { kills: b } }
-								) => b - a
-							)
-							.slice(0, 10)
-							.map(({ game, player, playerGameResult }) => (
-								<li key={playerGameResult.id}>
-									<Link href={getPlayerUrl(player)}>
-										{player.displayName ?? player.name}
-									</Link>
-									{` - ${playerGameResult.kills.toString()} - `}
-									<Link
-										href={getGameUrl(game)}
-									>{`Game #${game.id.toString()}`}</Link>
-								</li>
-							))}
-					</ol>
-				</div>
-				<div>
-					<header>
-						<h2>{"Deaths (Total)"}</h2>
-					</header>
-					<ol>
-						{resultsByPlayer
-							.map(({ value: player, children: results }) => ({
-								deaths: results.reduce(
-									(total, { deaths }) => total + deaths,
+								ms: results.reduce(
+									(total, result) =>
+										total +
+										(rows.find((row) => row.playerGameResult.id === result.id)
+											?.gameResult.duration ?? 0),
 									0
 								),
 								player
 							}))
-							.sort(({ deaths: a }, { deaths: b }) => b - a)
+							.sort((a, b) => a.ms / a.games - b.ms / b.games)
 							.slice(0, 10)
-							.map(({ deaths, player }) => (
+							.map(({ ms, games, player }) => (
 								<li key={player.id}>
 									<Link href={getPlayerUrl(player)}>
 										{player.displayName ?? player.name}
 									</Link>
-									{` - ${deaths.toLocaleString()}`}
-								</li>
-							))}
-					</ol>
-				</div>
-				<div>
-					<header>
-						<h2>{"Deaths (Single Game)"}</h2>
-					</header>
-					<ol>
-						{rows
-							.sort(
-								(
-									{ playerGameResult: { deaths: a } },
-									{ playerGameResult: { deaths: b } }
-								) => b - a
-							)
-							.slice(0, 10)
-							.map(({ game, player, playerGameResult }) => (
-								<li key={playerGameResult.id}>
-									<Link href={getPlayerUrl(player)}>
-										{player.displayName ?? player.name}
-									</Link>
-									{` - ${playerGameResult.deaths.toString()} - `}
-									<Link
-										href={getGameUrl(game)}
-									>{`Game #${game.id.toString()}`}</Link>
-								</li>
-							))}
-					</ol>
-				</div>
-				<div>
-					<header>
-						<h2>{"Assists (Total)"}</h2>
-					</header>
-					<ol>
-						{resultsByPlayer
-							.map(({ value: player, children: results }) => ({
-								assists: results.reduce(
-									(total, { assists }) => total + assists,
-									0
-								),
-								player
-							}))
-							.sort(({ assists: a }, { assists: b }) => b - a)
-							.slice(0, 10)
-							.map(({ assists, player }) => (
-								<li key={player.id}>
-									<Link href={getPlayerUrl(player)}>
-										{player.displayName ?? player.name}
-									</Link>
-									{` - ${assists.toLocaleString()}`}
-								</li>
-							))}
-					</ol>
-				</div>
-				<div>
-					<header>
-						<h2>{"Assists (Per Game)"}</h2>
-					</header>
-					<ol>
-						{resultsByPlayer
-							.map(({ value: player, children: results }) => ({
-								assists: results.reduce(
-									(total, { assists }) => total + assists,
-									0
-								),
-								games: results.length,
-								player
-							}))
-							.sort((a, b) => b.assists / b.games - a.assists / a.games)
-							.slice(0, 10)
-							.map(({ assists, games, player }) => (
-								<li key={player.id}>
-									<Link href={getPlayerUrl(player)}>
-										{player.displayName ?? player.name}
-									</Link>
-									{` - ${(assists / games).toFixed(2)}`}
-								</li>
-							))}
-					</ol>
-				</div>
-				<div>
-					<header>
-						<h2>{"Assists (Single Game)"}</h2>
-					</header>
-					<ol>
-						{rows
-							.sort(
-								(
-									{ playerGameResult: { assists: a } },
-									{ playerGameResult: { assists: b } }
-								) => b - a
-							)
-							.slice(0, 10)
-							.map(({ game, player, playerGameResult }) => (
-								<li key={playerGameResult.id}>
-									<Link href={getPlayerUrl(player)}>
-										{player.displayName ?? player.name}
-									</Link>
-									{` - ${playerGameResult.assists.toString()} - `}
-									<Link
-										href={getGameUrl(game)}
-									>{`Game #${game.id.toString()}`}</Link>
+									{` - ${Math.floor(ms / games / 1000 / 60).toString()}:${Math.floor(
+										(ms / games / 1000) % 60
+									)
+										.toString()
+										.padStart(2, "0")}`}
 								</li>
 							))}
 					</ol>
