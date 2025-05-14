@@ -2,18 +2,21 @@ import {
 	accountTable,
 	gameResultTable,
 	gameTable,
+	matchTable,
 	playerGameResultTable,
-	playerTable
+	playerTable,
+	seasonTable
 } from "db/schema";
+import { desc, eq } from "drizzle-orm";
 import type { JSX } from "react";
 import Link from "components/Link";
 import type { Metadata } from "next";
 import db from "db/db";
-import { eq } from "drizzle-orm";
 import getGameUrl from "util/getGameUrl";
 import getPlayerUrl from "util/getPlayerUrl";
 import leftHierarchy from "util/leftHierarchy";
 import multiclass from "util/multiclass";
+import { redirect } from "next/navigation";
 import style from "./page.module.scss";
 
 /**
@@ -22,9 +25,19 @@ import style from "./page.module.scss";
  * @public
  */
 export default async function Page(): Promise<JSX.Element> {
+	const [season] = await db
+		.select()
+		.from(seasonTable)
+		.orderBy(desc(seasonTable.startDate))
+		.limit(1);
+	if (!season) {
+		redirect("/schedule");
+	}
+
 	const rows = await db
 		.select()
-		.from(gameTable)
+		.from(matchTable)
+		.innerJoin(gameTable, eq(matchTable.id, gameTable.matchId))
 		.innerJoin(
 			gameResultTable,
 			eq(gameTable.tournamentCode, gameResultTable.tournamentCode)
@@ -37,7 +50,8 @@ export default async function Page(): Promise<JSX.Element> {
 			accountTable,
 			eq(playerGameResultTable.puuid, accountTable.puuid)
 		)
-		.innerJoin(playerTable, eq(accountTable.playerId, playerTable.id));
+		.innerJoin(playerTable, eq(accountTable.playerId, playerTable.id))
+		.where(eq(matchTable.seasonId, season.id));
 	const resultsByPlayer = leftHierarchy(rows, "player", "playerGameResult");
 	const killsPerTeam = rows.reduce((map, { playerGameResult }) => {
 		const key = `${playerGameResult.gameResultId.toString()}-${playerGameResult.team.toString()}`;
