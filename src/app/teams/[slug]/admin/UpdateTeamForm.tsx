@@ -37,11 +37,15 @@ export default function UpdateTeamForm({
 				const rawSlug = getFormField(form, "slug");
 				const slug = rawSlug && slugify(rawSlug);
 				const poolString = getFormField(form, "pool");
+				const draftOrderString = getFormField(form, "draftOrder");
 				await db
 					.update(teamTable)
 					.set({
 						code: getFormField(form, "code"),
 						color: getFormField(form, "color")?.substring(1), // Cut off pound.
+						draftOrder: draftOrderString
+							? parseInt(draftOrderString, 10)
+							: void 0,
 						isWinner: Boolean(getFormField(form, "isWinner")) || null,
 						logoUrl: getFormField(form, "logoUrl"),
 						name: getFormField(form, "name"),
