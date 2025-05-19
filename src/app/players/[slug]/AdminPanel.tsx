@@ -1,4 +1,9 @@
-import type { playerTable, teamPlayerTable, teamTable } from "db/schema";
+import type {
+	accountTable,
+	playerTable,
+	teamPlayerTable,
+	teamTable
+} from "db/schema";
 import AddToTeamForm from "./admin/AddToTeamForm";
 import BanPlayerForm from "./admin/BanPlayerForm";
 import ForceVerifyAccountsForm from "./player/ForceVerifyAccountsForm";
@@ -19,6 +24,9 @@ export interface AdminPanelProps
 
 	/** The teams that the player may join. */
 	teams?: (typeof teamTable.$inferSelect)[];
+
+	/** The player's accounts. */
+	accounts: (typeof accountTable.$inferSelect)[];
 }
 
 /**
@@ -31,6 +39,7 @@ export default function AdminPanel({
 	player,
 	teamPlayers,
 	teams,
+	accounts,
 	...props
 }: AdminPanelProps): JSX.Element {
 	return (
@@ -38,7 +47,9 @@ export default function AdminPanel({
 			<header>
 				<h2>{"Admin Panel"}</h2>
 			</header>
-			<ForceVerifyAccountsForm player={player} />
+			{accounts.filter(({ isVerified }) => !isVerified).length > 0 && (
+				<ForceVerifyAccountsForm player={player} />
+			)}
 			{teams && (
 				<AddToTeamForm
 					player={player}

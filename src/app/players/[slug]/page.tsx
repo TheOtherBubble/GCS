@@ -205,6 +205,7 @@ export default async function Page(
 							player={player}
 							teamPlayers={teamPlayers}
 							teams={latestSeasonTeams}
+							accounts={accounts}
 							className={style["panel"]}
 						/>
 					)}
