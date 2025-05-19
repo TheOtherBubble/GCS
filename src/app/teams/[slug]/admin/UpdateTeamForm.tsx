@@ -132,7 +132,7 @@ export default function UpdateTeamForm({
 			</p>
 			<p>
 				<label>
-					{"Slug"}
+					{"Vanity URL slug"}
 					<input
 						type="text"
 						name="slug"

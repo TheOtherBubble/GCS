@@ -99,7 +99,7 @@ export default function CreateTeamForm({
 			</p>
 			<p>
 				<label>
-					{"Slug"}
+					{"Vanity URL slug"}
 					<input type="text" name="slug" maxLength={0x20} required />
 				</label>
 			</p>

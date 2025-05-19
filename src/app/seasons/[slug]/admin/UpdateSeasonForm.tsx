@@ -72,7 +72,7 @@ export default function UpdateSeasonForm({
 			</p>
 			<p>
 				<label>
-					{"Slug"}
+					{"Vanity URL slug"}
 					<input type="text" name="slug" defaultValue={season.slug} />
 				</label>
 			</p>
