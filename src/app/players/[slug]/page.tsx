@@ -4,12 +4,9 @@ import {
 	gameTable,
 	playerGameResultTable,
 	playerTable,
-	seasonTable,
-	teamGameResultTable,
-	teamPlayerTable,
-	teamTable
+	teamGameResultTable
 } from "db/schema";
-import { and, desc, eq, or } from "drizzle-orm";
+import { and, eq, or } from "drizzle-orm";
 import AccountCard from "components/AccountCard";
 import AdminPanel from "./AdminPanel";
 import { BsDiscord } from "react-icons/bs";
@@ -112,30 +109,10 @@ export default async function Page(
 			};
 		});
 
-	// Get team player data.
-	const teamPlayers = await db
-		.select()
-		.from(teamPlayerTable)
-		.where(eq(teamPlayerTable.playerId, player.id));
-
 	// Get session user data.
 	const session = await auth();
 	const isAdmin = session?.user?.isAdmin ?? false;
 	const isPlayer = isAdmin || session?.user?.id === player.id;
-
-	// Get latest season data.
-	const seasonRows = isPlayer
-		? await db
-				.select()
-				.from(seasonTable)
-				.leftJoin(teamTable, eq(seasonTable.id, teamTable.seasonId))
-				.orderBy(desc(seasonTable.startDate))
-		: [];
-	const latestSeason = seasonRows[0]?.season;
-	const latestSeasonRows = seasonRows.filter(
-		({ season: { id } }) => id === latestSeason?.id
-	);
-	const latestSeasonTeams = leftHierarchy(latestSeasonRows, "team");
 
 	return (
 		<div className={style["content"]}>
@@ -203,8 +180,6 @@ export default async function Page(
 					{isAdmin && (
 						<AdminPanel
 							player={player}
-							teamPlayers={teamPlayers}
-							teams={latestSeasonTeams}
 							accounts={accounts}
 							className={style["panel"]}
 						/>
