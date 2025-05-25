@@ -13,6 +13,7 @@ import {
 import { and, eq, or } from "drizzle-orm";
 import AdminPanel from "./AdminPanel";
 import CaptainPanel from "./CaptainPanel";
+import GameCard from "components/GameCard";
 import type { JSX } from "react";
 import Link from "components/Link";
 import type { Metadata } from "next";
@@ -21,7 +22,9 @@ import TournamentCode from "components/TournamentCode";
 import { auth } from "db/auth";
 import db from "db/db";
 import getGameUrl from "util/getGameUrl";
+import getMaps from "riot/getMaps";
 import getMatchUrl from "util/getMatchUrl";
+import getQueues from "riot/getQueues";
 import leftHierarchy from "util/leftHierarchy";
 import style from "./page.module.scss";
 
@@ -67,8 +70,8 @@ export default async function Page(
 					)
 				)
 		: [];
-	const blueTeam = teams.find(({ id }) => id === match?.blueTeamId);
-	const redTeam = teams.find(({ id }) => id === match?.redTeamId);
+	const matchBlueTeam = teams.find(({ id }) => id === match?.blueTeamId);
+	const matchRedTeam = teams.find(({ id }) => id === match?.redTeamId);
 
 	// The tournament code is visible if the viewer is logged in and either the user is an administrator, the game isn't associated with a match, or the viewer is on a team in the associated match.
 	const session = await auth();
@@ -91,42 +94,42 @@ export default async function Page(
 					)
 			).length > 0);
 
+	const accountRows =
+		matchBlueTeam && matchRedTeam
+			? await db
+					.select()
+					.from(teamTable)
+					.innerJoin(teamPlayerTable, eq(teamTable.id, teamPlayerTable.teamId))
+					.innerJoin(playerTable, eq(teamPlayerTable.playerId, playerTable.id))
+					.innerJoin(accountTable, eq(playerTable.id, accountTable.playerId))
+					.where(
+						or(
+							eq(teamTable.id, matchBlueTeam.id),
+							eq(teamTable.id, matchRedTeam.id)
+						)
+					)
+			: [];
+	const allPlayers = accountRows.map(({ player }) => player);
+	const allAccounts = accountRows.map(({ account }) => account);
+
 	let captainPanel: JSX.Element | undefined = void 0;
 	if (session?.user) {
-		const accounts =
-			blueTeam && redTeam
-				? await db
-						.select()
-						.from(teamTable)
-						.innerJoin(
-							teamPlayerTable,
-							eq(teamTable.id, teamPlayerTable.teamId)
-						)
-						.innerJoin(
-							playerTable,
-							eq(teamPlayerTable.playerId, playerTable.id)
-						)
-						.innerJoin(accountTable, eq(playerTable.id, accountTable.playerId))
-						.where(
-							or(eq(teamTable.id, blueTeam.id), eq(teamTable.id, redTeam.id))
-						)
-				: [];
-		const isBlueCaptain = accounts.some(
+		const isBlueCaptain = accountRows.some(
 			({ teamPlayer: { playerId, isCaptain, teamId } }) =>
 				isCaptain &&
 				teamId === match?.blueTeamId &&
 				playerId === session.user?.id
 		);
-		const isRedCaptain = accounts.some(
+		const isRedCaptain = accountRows.some(
 			({ teamPlayer: { playerId, isCaptain, teamId } }) =>
 				isCaptain &&
 				teamId === match?.redTeamId &&
 				playerId === session.user?.id
 		);
-		const blueAccounts = accounts
+		const blueAccounts = accountRows
 			.filter(({ teamPlayer: { teamId } }) => teamId === match?.blueTeamId)
 			.map(({ account }) => account);
-		const redAccounts = accounts
+		const redAccounts = accountRows
 			.filter(({ teamPlayer: { teamId } }) => teamId === match?.redTeamId)
 			.map(({ account }) => account);
 
@@ -138,10 +141,10 @@ export default async function Page(
 					match={match ?? void 0}
 					season={season ?? void 0}
 					isBlueCaptain={session.user.isAdmin || isBlueCaptain}
-					blueTeam={blueTeam}
+					blueTeam={matchBlueTeam}
 					blueAccounts={blueAccounts}
 					isRedCaptain={session.user.isAdmin || isRedCaptain}
-					redTeam={redTeam}
+					redTeam={matchRedTeam}
 					redAccounts={redAccounts}
 				/>
 			) : (
@@ -149,7 +152,7 @@ export default async function Page(
 			);
 	}
 
-	const [results] = leftHierarchy(
+	const [gameResult] = leftHierarchy(
 		await db
 			.select()
 			.from(gameResultTable)
@@ -173,24 +176,16 @@ export default async function Page(
 		"playerGameResult"
 	);
 
-	if (!results) {
+	if (!gameResult) {
 		return (
 			<div className={style["content"]}>
 				<div />
 				<div className={style["main"]}>
-					<h1>{`Game #${game.id.toString()}${blueTeam && redTeam ? ` - ${blueTeam.name} vs ${redTeam.name}` : ""}`}</h1>
+					<h1>{`Game #${game.id.toString()}${matchBlueTeam && matchRedTeam ? ` - ${matchBlueTeam.name} vs ${matchRedTeam.name}` : ""}`}</h1>
 					{canViewTournamentCode && (
 						<TournamentCode tournamentCode={game.tournamentCode} />
 					)}
-					{match && (
-						<p>
-							{"Part of "}
-							<Link
-								href={getMatchUrl(match)}
-							>{`match #${match.id.toString()}`}</Link>
-							{". This game has not yet concluded."}
-						</p>
-					)}
+					{match && <p>{"This game has not yet concluded."}</p>}
 					{captainPanel}
 					{session?.user?.isAdmin && (
 						<AdminPanel className={style["panel"]} game={game} />
@@ -201,26 +196,97 @@ export default async function Page(
 		);
 	}
 
+	const [blueTeamResult, redTeamResult] = gameResult.children.sort(
+		({ value: { team: a } }, { value: { team: b } }) => a - b
+	);
+	const gameBlueTeam = [matchBlueTeam, matchRedTeam].find(
+		(team) => team?.id === blueTeamResult?.value.teamId
+	);
+	const gameRedTeam = [matchBlueTeam, matchRedTeam].find(
+		(team) => team?.id === redTeamResult?.value.teamId
+	);
+	const queue = (await getQueues()).find(
+		(value) => value.queueId === gameResult.value.queue
+	);
+
 	return (
 		<div className={style["content"]}>
-			<div />
-			<div className={style["main"]}>
-				<h1>{`Game #${game.id.toString()}${blueTeam && redTeam ? ` - ${blueTeam.name} vs ${redTeam.name}` : ""}`}</h1>
-				{match && (
-					<p>
-						{"Part of "}
-						<Link
-							href={getMatchUrl(match)}
-						>{`match #${match.id.toString()}`}</Link>
-						{". Game result data coming soon..."}
-					</p>
+			<div className={style["team"]}>
+				{gameBlueTeam && blueTeamResult && (
+					<>
+						<h2>{gameBlueTeam.name}</h2>
+						{blueTeamResult.children.map((playerGameResult) => (
+							<GameCard
+								key={playerGameResult.id}
+								game={game}
+								gameResult={gameResult.value}
+								teamGameResults={gameResult.children.map(({ value }) => value)}
+								playerGameResults={[playerGameResult]}
+								players={allPlayers}
+								accounts={allAccounts}
+								pov={playerGameResult.team}
+								extended
+							/>
+						))}
+					</>
 				)}
+			</div>
+			<div>
+				<header>
+					<h1>
+						{match && (
+							<>
+								<Link
+									href={getMatchUrl(match)}
+								>{`Match #${match.id.toString()}`}</Link>
+								{", "}
+							</>
+						)}
+						{`Game #${game.id.toString()}${matchBlueTeam && matchRedTeam ? ` - ${matchBlueTeam.name} vs ${matchRedTeam.name}` : ""}`}
+					</h1>
+				</header>
+				<div>
+					<p>
+						{`Duration: ${Math.floor(gameResult.value.duration / 1000 / 60).toString()}:${Math.floor(
+							(gameResult.value.duration / 1000) % 60
+						)
+							.toString()
+							.padStart(2, "0")}`}
+					</p>
+					<p>{`Game ID: ${gameResult.value.id.toString()}`}</p>
+					<p>{`Map: ${(await getMaps()).find((map) => map.mapId === gameResult.value.map)?.mapName ?? "Unknown"}`}</p>
+					<p>{`Mode: ${gameResult.value.mode}`}</p>
+					<p>{`Queue: ${queue ? `${queue.map}${queue.description ? ` - ${queue.description}` : ""}` : "Unknown"}`}</p>
+					<p>{`Region: ${gameResult.value.region}`}</p>
+					<p>{`Start time: ${new Date(gameResult.value.startTimestamp).toLocaleString()}`}</p>
+					<p>{`Type: ${gameResult.value.type}`}</p>
+					<p>{`Version: ${gameResult.value.version}`}</p>
+				</div>
 				{session?.user?.isAdmin && captainPanel}
 				{session?.user?.isAdmin && (
 					<AdminPanel className={style["panel"]} game={game} />
 				)}
 			</div>
-			<div />
+			<div className={style["team"]}>
+				{gameRedTeam && redTeamResult && (
+					<>
+						<h2>{gameRedTeam.name}</h2>
+						{redTeamResult.children.map((playerGameResult) => (
+							<GameCard
+								key={playerGameResult.id}
+								game={game}
+								gameResult={gameResult.value}
+								teamGameResults={gameResult.children.map(({ value }) => value)}
+								playerGameResults={[playerGameResult]}
+								players={allPlayers}
+								accounts={allAccounts}
+								pov={playerGameResult.team}
+								extended
+							/>
+						))}
+					</>
+				)}
+			</div>
 		</div>
 	);
 }

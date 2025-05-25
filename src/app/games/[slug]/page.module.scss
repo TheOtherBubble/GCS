@@ -19,11 +19,21 @@ div.content {
 		}
 	}
 
+	// Team columns.
+	& > div.team {
+		display: none;
+	}
+
 	@include mixins.gt-wide using ($gt-wide) {
 		@if $gt-wide {
 			display: grid;
 			grid-template-columns: 2fr 3fr 2fr;
 			gap: 10px;
+
+			// Team columns.
+			& > div.team {
+				display: flex;
+			}
 		}
 	}
 }

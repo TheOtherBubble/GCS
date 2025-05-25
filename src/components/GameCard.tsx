@@ -43,6 +43,9 @@ export interface GameCardProps extends Omit<LinkProps, "children" | "href"> {
 
 	/** The team (Riot ID) from whose point of view to display the game. If this is set, the background will be blue when this team wins or red when it doesn't. If this is set, players on this team will be listed first. */
 	pov?: number | undefined;
+
+	/** Whether or not to show all details on the card. Applicable only to individual player game result cards. */
+	extended?: boolean | undefined; // TODO
 }
 
 /**
@@ -59,6 +62,7 @@ export default async function GameCard({
 	players,
 	accounts,
 	pov,
+	extended,
 	className,
 	...props
 }: GameCardProps): Promise<JSX.Element> {
@@ -122,7 +126,74 @@ export default async function GameCard({
 				id === accounts?.find(({ puuid }) => puuid === result.puuid)?.playerId
 		);
 
-		return (
+		return extended ? (
+			<a
+				className={multiclass(className, style["extended-single"])}
+				href={getGameUrl(game)}
+				style={{ backgroundColor }}
+				{...props}
+			>
+				<header>
+					{champion && championIcon && (
+						<Image
+							alt={`${champion.name} icon.`}
+							src={championIcon}
+							width={128}
+							height={128}
+							className={style["champion"]}
+						/>
+					)}
+					<div>
+						{player ? (
+							<h3>{player.displayName ?? player.name}</h3>
+						) : (
+							<h3>{result.name}</h3>
+						)}
+						<p>{`${result.kills.toString()}/${result.deaths.toString()}/${result.assists.toString()}`}</p>
+						<p>{`Damage: ${result.champDmg.toLocaleString()}`}</p>
+						<p>{`Level: ${result.level.toString()}`}</p>
+						<p>{`Position: ${result.position}`}</p>
+					</div>
+				</header>
+				<div className={style["items"]}>
+					{[
+						result.item0,
+						result.item1,
+						result.item2,
+						result.item6,
+						result.item3,
+						result.item4,
+						result.item5
+					].map(async (item, i) => {
+						const src = item && (await getItemIcon(item));
+						return src ? (
+							<Image
+								key={i}
+								alt="Item icon."
+								src={src}
+								width={64}
+								height={64}
+							/>
+						) : (
+							<span /> // Grid placeholder.
+						);
+					})}
+				</div>
+				<div className={style["details"]}>
+					<p>{`CS: ${(result.laneCs + result.neutralCs).toLocaleString()}`}</p>
+					<ul>
+						<li>{`Lane: ${result.laneCs.toLocaleString()}`}</li>
+						<li>{`Ally jungle: ${result.allyJgCs.toLocaleString()}`}</li>
+						<li>{`Enemy jungle: ${result.enemyJgCs.toLocaleString()}`}</li>
+						<li>{`Other neutral: ${(result.neutralCs - result.allyJgCs - result.enemyJgCs).toLocaleString()}`}</li>
+					</ul>
+					<p>{`Ward kills: ${result.wardCs.toLocaleString()}`}</p>
+					<p>{`Tower damage: ${result.towerDmg.toLocaleString()}`}</p>
+					<p>{`Objective steals: ${result.objectivesStolen.toLocaleString()}`}</p>
+					<p>{`Pentakills: ${result.pentakills.toLocaleString()}`}</p>
+				</div>
+			</a>
+		) : (
 			<a
 				className={multiclass(className, style["single"])}
 				href={getGameUrl(game)}
