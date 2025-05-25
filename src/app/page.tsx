@@ -36,7 +36,7 @@ export default async function Page(): Promise<JSX.Element> {
 				<TwitchStream parent={raw} channel={streamData.user_login} muted />
 			) : (
 				<YoutubeVideo
-					id="Kr7lWQ04mmM"
+					id="qYLGDygZXnk"
 					autoPlay
 					fs={false}
 					ivLoadPolicy={false}

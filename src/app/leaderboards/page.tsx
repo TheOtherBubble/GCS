@@ -199,6 +199,7 @@ export default async function Page(): Promise<JSX.Element> {
 								),
 								player
 							}))
+							.filter(({ objectivesStolen }) => objectivesStolen > 0)
 							.sort((a, b) => b.objectivesStolen - a.objectivesStolen)
 							.slice(0, 10)
 							.map(({ objectivesStolen, player }) => (
@@ -219,8 +220,7 @@ export default async function Page(): Promise<JSX.Element> {
 						{resultsByPlayer
 							.map(({ value: player, children: results }) => ({
 								cs: results.reduce(
-									(total, { allyJgCs, enemyJgCs, laneCs, neutralCs, wardCs }) =>
-										total + allyJgCs + enemyJgCs + laneCs + neutralCs + wardCs,
+									(total, { laneCs, neutralCs }) => total + laneCs + neutralCs,
 									0
 								),
 								ms: results.reduce(
