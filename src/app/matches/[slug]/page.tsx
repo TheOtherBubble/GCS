@@ -181,6 +181,15 @@ export default async function Page(props: PageProps<MatchesPageParams>) {
 								)}
 								players={allPlayers}
 								accounts={allAccounts}
+								pov={
+									gameResult?.children
+										.flatMap(({ children }) => children)
+										.find(({ puuid: a }) =>
+											blueTeam.children
+												.flatMap(({ children }) => children)
+												.some(({ puuid: b }) => a === b)
+										)?.team
+								}
 							/>
 						))}
 				</ol>

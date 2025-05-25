@@ -40,6 +40,9 @@ export interface GameCardProps extends Omit<LinkProps, "children" | "href"> {
 
 	/** The accounts of the players in the game. */
 	accounts?: (typeof accountTable.$inferSelect)[] | undefined;
+
+	/** The team (Riot ID) from whose point of view to display the game. If this is set, the background will be blue when this team wins or red when it doesn't. If this is set, players on this team will be listed first. */
+	pov?: number | undefined;
 }
 
 /**
@@ -55,6 +58,7 @@ export default async function GameCard({
 	playerGameResults,
 	players,
 	accounts,
+	pov,
 	className,
 	...props
 }: GameCardProps): Promise<JSX.Element> {
@@ -71,14 +75,13 @@ export default async function GameCard({
 		);
 	}
 
-	const blueColor = "#00008d";
-	const redColor = "#550000";
-	const backgroundColor = teamGameResults.find(
-		({ isWinner, team }) => isWinner && team === 100
-	)
-		? blueColor
-		: teamGameResults.find(({ isWinner, team }) => isWinner && team === 200)
-			? redColor
+	const backgroundColor =
+		teamGameResults.length > 0
+			? teamGameResults.some(
+					({ isWinner, team }) => isWinner && team === (pov ?? 100)
+				)
+				? "#00008d"
+				: "#550000"
 			: void 0;
 
 	// Forfeited game.
@@ -111,12 +114,6 @@ export default async function GameCard({
 			throw new Error("Something impossible happened.");
 		}
 
-		const playerBackgroundColor = teamGameResults.find(
-			({ isWinner, team }) => isWinner && team === result.team
-		)
-			? blueColor
-			: redColor;
-
 		const champion = championsByKey.get(result.champ);
 		const championIcon = champion && (await getChampionIcon(champion.id));
 
@@ -129,7 +126,7 @@ export default async function GameCard({
 			<a
 				className={multiclass(className, style["single"])}
 				href={getGameUrl(game)}
-				style={{ backgroundColor: playerBackgroundColor }}
+				style={{ backgroundColor }}
 				{...props}
 			>
 				{champion && championIcon && (
@@ -181,7 +178,12 @@ export default async function GameCard({
 			{...props}
 		>
 			{playerGameResults
-				.sort((a, b) => a.team - b.team || sortPlayersStandard(a, b))
+				.sort(
+					(a, b) =>
+						(typeof pov === "number"
+							? (a.team === pov ? 100 : 200) - (b.team === pov ? 100 : 200)
+							: a.team - b.team) || sortPlayersStandard(a, b)
+				)
 				.map(async (result) => {
 					const champion = championsByKey.get(result.champ);
 					const championIcon = champion && (await getChampionIcon(champion.id));

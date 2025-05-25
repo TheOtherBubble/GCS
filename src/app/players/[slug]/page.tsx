@@ -208,6 +208,7 @@ export default async function Page(
 												playerGameResults={[playerGameResult]}
 												players={[player]}
 												accounts={accounts}
+												pov={playerGameResult.team}
 											/>
 										</li>
 									)
