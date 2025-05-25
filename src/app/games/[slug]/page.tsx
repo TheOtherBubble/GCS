@@ -146,6 +146,7 @@ export default async function Page(
 					isRedCaptain={session.user.isAdmin || isRedCaptain}
 					redTeam={matchRedTeam}
 					redAccounts={redAccounts}
+					overwriteEnabled={session.user.isAdmin}
 				/>
 			) : (
 				void 0

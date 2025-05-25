@@ -43,6 +43,9 @@ export interface SubmitResultsFormProps
 
 	/** The accounts of the players on the red team in the game's match. */
 	redAccounts: (typeof accountTable.$inferSelect)[];
+
+	/** Whether or not the user is allowed to overwrite existing game results. */
+	overwriteEnabled?: boolean | undefined;
 }
 
 /**
@@ -58,6 +61,7 @@ export default function SubmitResultsForm({
 	blueAccounts,
 	redTeam,
 	redAccounts,
+	overwriteEnabled,
 	...props
 }: SubmitResultsFormProps): JSX.Element {
 	const puuids = new Map([
@@ -71,6 +75,17 @@ export default function SubmitResultsForm({
 				"use server";
 				if (!hasRiotApiKey()) {
 					return "Missing Riot API key.";
+				}
+
+				// If the game has already been submitted, don't overwrite it.
+				if (!overwriteEnabled) {
+					const [existingResult] = await db
+						.select()
+						.from(gameResultTable)
+						.where(eq(gameResultTable.tournamentCode, game.tournamentCode));
+					if (existingResult) {
+						return "Results for this game have already been submitted.";
+					}
 				}
 
 				// Convert and store game results.

@@ -41,6 +41,9 @@ export interface CaptainPanelProps
 
 	/** The accounts of the players on the red team in the game's match. */
 	redAccounts?: (typeof accountTable.$inferSelect)[] | undefined;
+
+	/** Whether or not the user is allowed to overwrite existing game results. */
+	overwriteEnabled?: boolean | undefined;
 }
 
 /**
@@ -59,6 +62,7 @@ export default function CaptainPanel({
 	isRedCaptain,
 	redTeam,
 	redAccounts,
+	overwriteEnabled,
 	...props
 }: CaptainPanelProps): JSX.Element {
 	return (
@@ -74,6 +78,7 @@ export default function CaptainPanel({
 					blueAccounts={blueAccounts}
 					redTeam={redTeam}
 					redAccounts={redAccounts}
+					overwriteEnabled={overwriteEnabled}
 				/>
 			)}
 			{match && season && blueTeam && redTeam && isBlueCaptain && (
