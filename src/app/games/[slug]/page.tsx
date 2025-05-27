@@ -181,8 +181,20 @@ export default async function Page(
 		return (
 			<div className={style["content"]}>
 				<div />
-				<div className={style["main"]}>
-					<h1>{`Game #${game.id.toString()}${matchBlueTeam && matchRedTeam ? ` - ${matchBlueTeam.name} vs ${matchRedTeam.name}` : ""}`}</h1>
+				<div>
+					<header>
+						<h1>
+							{match && (
+								<>
+									<Link
+										href={getMatchUrl(match)}
+									>{`Match #${match.id.toString()}`}</Link>
+									{", "}
+								</>
+							)}
+							{`Game #${game.id.toString()}${matchBlueTeam && matchRedTeam ? ` - ${matchBlueTeam.name} vs ${matchRedTeam.name}` : ""}`}
+						</h1>
+					</header>
 					{canViewTournamentCode && (
 						<TournamentCode tournamentCode={game.tournamentCode} />
 					)}
