@@ -1,0 +1,5 @@
+@use "../../layout.module.scss" as layout;
+
+header.round {
+	scroll-margin-top: layout.$top;
+}

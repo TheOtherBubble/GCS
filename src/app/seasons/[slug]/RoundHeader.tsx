@@ -4,6 +4,8 @@ import { type JSX, type Ref, useEffect, useRef } from "react";
 import type { matchTable, seasonTable } from "db/schema";
 import LocalDate from "components/LocalDate";
 import getMatchDateTime from "util/getMatchDateTime";
+import multiclass from "util/multiclass";
+import style from "./round-header.module.scss";
 
 /**
  * Properties that can be passed to a round header.
@@ -38,6 +40,7 @@ export default function RoundHeader({
 	season,
 	doScrollTo,
 	doShowRound,
+	className,
 	...props
 }: RoundHeaderProps): JSX.Element {
 	const ref: Ref<HTMLElement | null> = useRef(null);
@@ -51,7 +54,11 @@ export default function RoundHeader({
 	}, [doScrollTo]);
 
 	return (
-		<header ref={ref} {...props}>
+		<header
+			ref={ref}
+			className={multiclass(style["round"], className)}
+			{...props}
+		>
 			{match ? (
 				<h3>
 					<LocalDate

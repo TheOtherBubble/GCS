@@ -28,7 +28,30 @@ export default async function saveGame(
 	game?: Pick<typeof gameTable.$inferSelect, "tournamentCode" | "id">,
 	platform: Platform = Platform.NA1
 ): Promise<void> {
-	// Determine the match ID and cluster.
+	// If the game is already saved to the GCS database, only update the game's tournament code (if necessary).
+	const [existingResult] = await db
+		.select()
+		.from(gameResultTable)
+		.where(
+			eq(gameResultTable.id, typeof id === "number" ? id : parseInt(id, 10))
+		)
+		.limit(1);
+	if (existingResult) {
+		if (
+			game &&
+			existingResult.tournamentCode &&
+			game.tournamentCode !== existingResult.tournamentCode
+		) {
+			await db
+				.update(gameTable)
+				.set({ tournamentCode: existingResult.tournamentCode })
+				.where(eq(gameTable.id, game.id));
+		}
+
+		return;
+	}
+
+	// Determine the match ID.
 	const matchId = makeMatchId(id, platform);
 	const cluster = getClusterForPlatform(platform);
 
