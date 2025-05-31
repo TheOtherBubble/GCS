@@ -14,7 +14,7 @@ export default function opgg(
 ): string {
 	const [account] = accounts;
 	if (!account) {
-		return "https://u.gg/";
+		return "https://op.gg/";
 	}
 
 	if (accounts.length <= 1) {
