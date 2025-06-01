@@ -34,7 +34,7 @@ export default async function Page(): Promise<JSX.Element> {
 		redirect("/schedule");
 	}
 
-	const rows = await db
+	const rowsWithBans = await db
 		.select()
 		.from(matchTable)
 		.innerJoin(gameTable, eq(matchTable.id, gameTable.matchId))
@@ -52,6 +52,11 @@ export default async function Page(): Promise<JSX.Element> {
 		)
 		.innerJoin(playerTable, eq(accountTable.playerId, playerTable.id))
 		.where(eq(matchTable.seasonId, season.id));
+	const rows = rowsWithBans.filter(
+		(row) =>
+			row.player.bannedUntil === null ||
+			new Date(row.player.bannedUntil).valueOf() < Date.now()
+	);
 	const resultsByPlayer = leftHierarchy(rows, "player", "playerGameResult");
 	const killsPerTeam = rows.reduce((map, { playerGameResult }) => {
 		const key = `${playerGameResult.gameResultId.toString()}-${playerGameResult.team.toString()}`;
