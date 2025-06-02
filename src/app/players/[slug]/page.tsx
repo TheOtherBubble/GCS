@@ -25,11 +25,11 @@ import db from "db/db";
 import getBackgroundImageUrl from "util/getBackgroundImageUrl";
 import getPlayerUrl from "util/getPlayerUrl";
 import leftHierarchy from "util/leftHierarchy";
+import opgg from "util/opgg";
 import { redirect } from "next/navigation";
 import sortAccountsByRank from "util/sortAccountsByRank";
 import style from "./page.module.scss";
 import ugg from "util/ugg";
-import opgg from "util/opgg";
 
 /**
  * Parameters that are passed to a player page.
