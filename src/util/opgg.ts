@@ -1,9 +1,9 @@
 import type { accountTable } from "db/schema";
 
 /**
- * Make a U.GG link for the given set of accounts.
+ * Make a OP.GG link for the given set of accounts.
  * @param accounts - The accounts to include in the U.GG link.
- * @returns A U.GG link.
+ * @returns A OP.GG link.
  * @public
  */
 export default function opgg(
